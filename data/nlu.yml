@@ -1,0 +1,766 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+    - hi angelina
+    - hey angelina
+    - Hello angelina
+    - Hi, how are you?
+    - Hello, hope you're doing well
+    - Hey, what's up?
+    - Good day
+    - Greetings
+    - Morning!
+    - Evening!
+    - Hi there, Angelina
+    - Hello, is anyone there?
+    - Hey, can you help me?
+    - Hi, I need some assistance
+    - Hello, I have a question
+    - Good morning, Angelina
+    - Hi! How's it going?
+    - Hey, nice to meet you
+    - Hello, I'm new here
+    - Hi, I'm looking for help with my medications
+    - Good afternoon, is this the medication assistant?
+    - Hey there, are you available?
+    - Hello! I hope I'm in the right place
+    - Hi, I'd like some information please
+    - Good evening, is now a good time to chat?
+    - Hey Angelina, got a minute?
+
+- intent: goodbye
+  examples: |
+    - good bye
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+    - thank you
+    - thanks, I'm done for now
+    - that's all I needed, thanks
+    - I'm all set, goodbye
+    - gotta go, thanks for your help
+    - I'm heading out, take care
+    - catch you later
+    - talk to you soon
+    - I'll be going now
+    - that's it for me, thanks
+    - closing the app now, bye
+    - logging off, thanks
+    - that'll be all, cheers
+    - ending the chat now
+    - finished for today, thanks
+    - wrapping up, have a good one
+    - time to sign off, bye
+    - I'm done, thanks for your assistance
+    - that covers everything, goodbye
+    - all done here, take care
+    - shutting down, thanks bot
+    - that's all the questions I had, bye
+    
+- intent: bot_challenge
+  examples: |
+    - Are you a bot?
+    - Are you a human?
+    - Am I talking to a bot?
+    - Am I talking to a human?
+    - What can you do?
+    - What are your limitations?
+    - How do you work?
+    - Are you AI?
+    - Is this an automated system?
+    - Are you a real person?
+    - Is there a human behind this chat?
+    - Are you a virtual assistant?
+    - Who am I talking to?
+    - Is this a chatbot or a person?
+    - Are you a computer program?
+    - How intelligent are you?
+    - Can you pass the Turing test?
+    - Are you capable of human-like thinking?
+    - What kind of AI are you?
+    - Do you have consciousness?
+    - Are you self-aware?
+    - Can you learn from our conversation?
+    - How advanced is your AI?
+    - Can you explain how your AI works?
+    - Are there any tasks you can't do?
+    - What are the ethical guidelines you follow?
+    - How do you process and understand my questions?
+
+
+- intent: list_medications
+  examples: |
+    - show me my medication list
+    - what are my medications
+    - list my medicines
+    - can i see my medication list?
+    - i want see my medication list
+    - what meds am I currently taking?
+    - can you tell me the medications I'm prescribed?
+    - I need a list of all the drugs I'm on
+    - give me my current prescriptions
+    - what medications I'm on?
+    - can I get a names of my medication?
+    - what prescriptions do I have right now?
+    - list down all the medicines I take
+    - show me my med list
+    - List all my prescriptions
+    - what medications am I on?
+    - display my current medications
+    - what's in my medicine cabinet?
+    - can you pull up my prescription list?
+    - I need to know what pills I'm taking
+    - show me all the drugs I'm prescribed
+    - may I see a list of my prescriptions?
+    - tell me about the meds I'm on
+    - what medications have I been prescribed?
+    - I want to review my medication list
+    - show me the drugs I'm currently taking
+    - give me an overview of my medications
+    - can you remind me what pills I'm on?
+    - I need to see my list of prescriptions
+    - I'd like to check my prescription list
+
+- intent: adding medication in medication list
+  examples: |
+    - I need to add medication in my list
+    - I need to add medication in my medication list
+    - I want to add new medication in my list
+    - i want to add another medication in medication list
+    - i have new medication to add in list
+    - I want to log a new medication in my medication list
+    - Can I include a medication to my medication tracker?
+    - Need to update my medication list with a new medication
+    - Track a new medication by adding it to my list
+    - I'd like to insert a new drug into my med tracker
+    - How do I input a recently prescribed medicine to my list?
+    - I need to update my medication log with a new entry
+    - I've got a new prescription to add to my medication tracker
+    - Need to include a newly prescribed drug in my med list
+    - Can you help me add a medication to my list?
+    - I want to record a new medication in my tracker
+    - I need to register a new medication in my list
+    - Could you update my medication list with this new drug?
+    - I'd like to incorporate a new medication into my tracker
+    - I want to input a new medication into my tracking system
+    - Can you assist me in adding a new drug to my medication record?
+
+- intent: medication_report
+  examples: |
+    - I need a medication report
+    - I'd like to review my medication report
+    - Can you show me a report of medications?
+    - Can you give me an overview of my medication history?
+    - Show me my medication report
+    - Can I see a list of medications I took
+    - Give me a report on my medication
+    - Can I access my medication log?
+    - Mind showing me my meds info?
+    - Provide a report of medications taken
+    - Can you pull up my medication history?
+    - I'd like to see a summary of my prescriptions
+    - I need to check report on my medication details
+    - Bring up my medication chart
+    - I need to review my drug history
+    - Give me access to my medication records
+    - Generate a report of my prescriptions
+    - What does my medication log say?
+    - Pull up my medication profile
+    - Fetch my medication information please
+    - I need to check my medication details
+    - Can you retrieve my drug report?
+    - Could you pull up my prescription record?
+    - Can I access my medication log?
+
+- intent: report of medication with timeframe
+  examples: |
+    - Can I see a list of medications I took this past [week](period)
+    - i want medication report of last [week](period)
+    - i want medication report of last [month](period)
+    - i want to see my last [week](period) report
+    - i want medication report of last [month](period)
+    - medication report for the past [month](period)
+    - give me my medication history for last [month](period)
+    - i want medication report of last [week](period)
+    - show me medication report for the past [week](period)
+    - can I get my medication report from last [week](period)
+    - What medications did I take in the last [week](period)?
+    - Can you provide a report of my medications from the previous [month](period)?
+    - I need to see my medication history for the past [week](period)
+    - Generate a medication report covering the last [month](period)
+    - List all the medications I've been on for the past [week](period)
+    - Give me an overview of my medications from the last [month](period)
+    - I'd like to review my medication usage for the previous [week](period)
+    - Could you pull up my medication record for the past [month](period)?
+    - What's my medication summary for the last [week](period)?
+    - Display my medication log for the previous [month](period)
+    - Can I get a rundown of my medications over the last [week](period)?
+    - Retrieve my medication data for the past [month](period)
+    - I want to check my medication details for the last [week](period)
+
+
+- intent: list of todays medication # adding time would be good
+  examples: |
+    - what are the medication for today
+    - Do I have any medications to take today
+    - Any medications scheduled for today
+    - What's the medication plan for the today
+    - Any medications I need to take today
+    - What is medication schedule for today
+    - What medications are due today
+    - Meds for today?
+    - Gotta take my pills, what's on the list?
+    - Time for my medicine routine.
+    - Need a reminder of what to take today.
+    - Today's medication schedule, please.
+    - Can you show me my medication list for today?
+    - What pills do I need to take today?
+    - Tell me about my medications for the day
+    - I need to see my daily med schedule
+    - What's on my medication agenda for today?
+    - Could you list my prescriptions for today?
+    - Show me today's medication regimen
+    - What drugs am I supposed to take today?
+    - Can I get a rundown of my meds for the day?
+    - What's my pill schedule looking like today?
+    - I'm due for my meds, what should I take?
+    - Give me a breakdown of today's medications
+    - What medicines are on my to-do list for today?
+    - Time for my daily meds check, what's the lineup?
+    - Remind me of my medication routine for today
+    - What's the pharmaceutical plan for the day?
+    - Can you pull up my medication schedule for today?
+    - What's my prescription plan for today?
+    - send me the medication that i need today
+
+- intent: notify_medication_taken
+  examples: |
+    - i have taken my medication today
+    - i took my medication
+    - i am notifying that I have taken my meds.
+    - I just took my medication.
+    - I have taken medication for today.
+    - I took my medication of today.
+    - I have taken my today's medication .
+    - I took today's medication.
+    - I took my medication this morning.
+    - Checked in for my medication.
+    - Just became a medication ninja!
+    - Medication taken as prescribed
+    - Swallowed my pills just now
+    - Finished taking my daily meds
+    - Medication mission accomplished
+    - Popped my pills for the day
+    - Daily dose consumed
+    - Meds are in my system now
+    - Completed my medication routine
+    - Prescription fulfilled for today
+    - Medicine intake successful
+    - Just downed my daily drugs
+    - Pill-popping session complete
+    - Medication regimen followed
+    - Swallowed my daily tablets
+    - Knocked back my meds
+    - Today's medication check!
+    - Pill duty done for the day
+    - Medication adherence achieved
+    - Dosed up for the day
+    - Gulped down my daily medicine
+
+- intent: Medication_Taken_time
+  examples: |
+    - Hey Angela, have I taken my meds today?
+    - Hi Angela, did I take my medication already?
+    - Angela, do you know if I took my pills this morning?
+    - Angela, did I miss a dose today?
+    - Hey, any idea when I last took my meds?
+    - Angela, was I on time with my meds today?
+    - Can you tell me if I remembered my medication, Angela?
+    - Hey Angela, did I forget my pills again?
+    - Angela, have I taken my dose today?
+    - Was it today I took my meds, Angela?
+    - Angela, when was my last dose?
+    - Angela, is it time for my next pill?
+    - Hey Angela, did I take my medication yesterday?
+    - Angela, have I taken anything in the last 24 hours?
+    - Angela, when did I last take my medication?
+    - Did I take my [Lisinopril](medication) today, Angela?
+    - Angela, what time did I have my [Mirtazapine](medication)?
+    - Angela, can you check if I took my [Metformin](medication)?
+    - Did I take [Prednisone](medication) earlier, Angela?
+    - Angela, did I already have my [Atorvastatin](medication)?
+    - Hey Angela, when was my last [Ibuprofen](medication)?
+    - Angela, did I take my [Amlodipine](medication) on time?
+    - Did I take [Omeprazole](medication) this morning, Angela?
+    - Angela, have I taken [Levothyroxine](medication) yet today?
+    - When was my last [Simvastatin](medication), Angela?
+    - Angela, did I take my [Gabapentin](medication) this afternoon?
+    - Did I remember my [Losartan](medication), Angela?
+    - Angela, did I take [Hydrochlorothiazide](medication) last night?
+    - Hey Angela, when did I last have my [Citalopram](medication)?
+    - Angela, did I take [Clopidogrel](medication) yesterday?
+    - Did I miss [Alprazolam](medication) this morning, Angela?
+    - Angela, when was my last [Lisinopril](medication) dose?
+    - Angela, have I taken [Metoprolol](medication) today?
+    - Angela, did I take [Sertraline](medication) in the past 24 hours?
+    - Angela, was my last [Bupropion](medication) dose last night?
+    - Did I already take [Zolpidem](medication) today, Angela?
+    - Angela, did I remember my [Warfarin](medication) yesterday?
+    - When did I take [Meloxicam](medication), Angela?
+    - Angela, did I have [Furosemide](medication) yesterday?
+    - Can you check if I had [Enalapril](medication) today, Angela?
+    - Angela, when did I last take [Escitalopram](medication)?
+
+- intent: Next_dose_date
+  examples: |
+    - Angela, what meds am I due to take next?
+    - What's my upcoming dose?
+    - When do I need to take my medication again?
+    - What medication is next on my schedule?
+    - When's the next time I need to take my pills?
+    - Could you check when my next dose is?
+    - Tell me the next dose I need to take.
+    - How much longer until my next dose?
+    - When is the next time I need to take medicine?
+    - Do I have any doses coming up soon?
+    - What’s the next medicine I need to take and when?
+    - Let me know the timing for my next dose.
+    - How soon is my next medication?
+    - Do I have a scheduled dose today or tomorrow?
+    - Is it time for my next dose yet?
+    - When is my next dose?
+    - Can you tell me the time for my next dose?
+    - Remind me of my next dose.
+    - I want to know the date and time of my next dose.
+    - When should I take my next set of pills?
+    - What day and time should I plan for my next medication?
+    - Approximately how long until my next medication intake?
+    - Notify me of the timing for the next dose.
+    - Any updates on when I should take my next medication?
+
+- intent: medication_stock_level
+  examples: |
+    - How many pills do I have left of [Lisinopril](medication)?
+    - What's my current stock of [Metformin](medication)?
+    - How much [Advil](medication) do I have remaining?
+    - Can you check how many doses of [Synthroid](medication) I have?
+    - What's the count on my [Lipitor](medication) tablets?
+    - Do I have any [Amoxicillin](medication) left?
+    - How many capsules of [Omeprazole](medication) are remaining?
+    - Check my [Sertraline](medication) supply please
+    - What's the status of my [Losartan](medication) stock?
+    - How many more doses of [Atorvastatin](medication) do I have?
+    - Are we running low on [Gabapentin](medication)?
+    - How many doses of [Mirtazapine](medication) do I have left?
+    - How much [Amlodipine](medication) is left in my prescription?
+    - Can you tell me the remaining quantity of [Levothyroxine](medication)?
+    - What's the current level of my [Metoprolol](medication) supply?
+    - How many [Simvastatin](medication) pills do I have on hand?
+    - Am I about to run out of [Escitalopram](medication)?
+    - What's left of my [Albuterol](medication) inhaler?
+    - How many days worth of [Metformin](medication) do I have?
+    - Is my [Pantoprazole](medication) supply getting low?
+    - Can you check if I need to refill my [Citalopram](medication)?
+    - How many tablets of [Ibuprofen](medication) are left in the bottle?
+    - What's the remaining count for my [Hydrocodone](medication)?
+    - Do I need to reorder [Fluoxetine](medication) soon?
+    - How many more doses of [Duloxetine](medication) can I take before running out?
+    - What's the status of my [Venlafaxine](medication) prescription?
+    - How much [Tramadol](medication) do I have left?
+    - Can you check the remaining quantity of [Bupropion](medication)?
+    - How many pills of [Alprazolam](medication) do I still have?
+    - What's my current supply of [Warfarin](medication) like?
+    - Am I close to finishing my [Prednisone](medication) course?
+
+
+- intent: refil_due # not working
+  examples: |
+    - When is my [Lisinopril](medication) refill due?
+    - What's the due date for refilling my [Metformin](medication)?
+    - Can you tell me when I need to refill my [Atorvastatin](medication)?
+    - When should I get a refill for [Levothyroxine](medication)?
+    - Is it time to refill my [Amlodipine](medication) yet?
+    - What's the refill date for my [Omeprazole](medication)?
+    - When do I need to get more [Sertraline](medication)?
+    - How soon can I refill my [Gabapentin](medication)?
+    - Check the refill date for my [Metoprolol](medication) please
+    - When am I due for a [Losartan](medication) refill?
+    - Can you look up when my [Escitalopram](medication) needs to be refilled?
+    - I'm running low on [Albuterol](medication), when can I refill it?
+    - What's the earliest date I can refill my [Pantoprazole](medication)?
+    - When will I be eligible for a [Fluoxetine](medication) refill?
+    - Can you check when my [Simvastatin](medication) is due for a refill?
+    - When can I get my [Metformin](medication) prescription refilled?
+    - What's the next refill date for my [Lisinopril](medication)?
+    - Is my [Atorvastatin](medication) ready for refill yet?
+    - How many days until I can refill my [Levothyroxine](medication)?
+    - Check the refill status of my [Amlodipine](medication)
+    - When will my [Omeprazole](medication) be available for refill?
+    - Am I due for a [Sertraline](medication) refill soon?
+    - Can you tell me the refill date for [Gabapentin](medication)?
+    - I'm almost out of [Metoprolol](medication), when's my next refill?
+    - What's the refill schedule for my [Losartan](medication)?
+    - When do I need to order more [Escitalopram](medication)?
+    - Is it time to refill my [Albuterol](medication) inhaler?
+    - How long until I can get more [Pantoprazole](medication)?
+    - When is my refil due for [mirtazaoine](medication)?
+    - When will my insurance allow a refill of [Fluoxetine](medication)?
+    - Can you check if my [Simvastatin](medication) is due for refill?
+    - Do I need to refill my [Hydrocodone](medication) soon?
+    - When's the next refill date for my [Citalopram](medication)?
+    - Is my [Duloxetine](medication) ready to be refilled?
+    - How much longer until I can refill my [Warfarin](medication)?
+    - Can you look up when I'm eligible for a [Tramadol](medication) refill?
+    - When should I request a refill for my [Bupropion](medication)?
+    - Is it too early to refill my [Venlafaxine](medication)?
+    - What date can I get more [Carvedilol](medication)?
+    - How soon until I can replenish my [Meloxicam](medication) supply?
+    - When does my [Furosemide](medication) become available for refill?
+
+# - intent: number_of_times_symptom_occurred
+#   examples: |
+#     - How many times did I experience [stomach pain](symptom) last [month](period)?
+#     - Can you tell me the number of times I reported [headaches](symptom) this [week](period)?
+#     - What's the count of [dizziness](symptom) episodes I logged in the past [week](period)?
+#     - How frequently did I record [fatigue](symptom) over the last [month](period)?
+#     - Can you provide the count of [coughing](symptom) incidents I reported last [week](period)?
+#     - What was the total number of times I logged [allergy](symptom) symptoms last [month](period)?
+#     - How many instances of [muscle pain](symptom) did I record in my notes for the past [month](period)?
+#     - Please give me the frequency of [shortness of breath](symptom) episodes I experienced in the last [month](period).
+#     - Can you tell me how often I mentioned [joint pain](symptom) in my symptom logs over the previous [month](period)?
+
+
+- intent: get_symptoms
+  examples: |
+    - What was the last symptom I logged?
+    - Can you tell me the time period for my last symptom entry?
+    - When did I last report my headache?
+    - What was the most recent symptom I recorded?
+    - How long ago did I log my last symptom?
+    - Can you remind me of the last symptom I noted and when?
+    - What was the last symptom I mentioned in my records?
+    - When did I last report feeling nauseous?
+    - What time period did I log my last fatigue symptom?
+    - Can you show me the last symptom I logged and its date?
+    - What symptoms did I log last [week](period)?
+    - Can you tell me the symptoms I recorded during the last [month](period)?
+    - What symptoms have I reported in the last [month](period)?
+    - Please show me the symptoms I logged this [week](period).
+    - What were the symptoms I noted last [month](period)?
+    - Can you list the symptoms I experienced over the last [week](period)?
+    - How many symptoms did I log in the previous [month](period)?
+    - What symptoms did I report last [week](period)?
+    - Can you summarize the symptoms I recorded in the last [week](period)?
+    - What symptoms did I document during the past [month](period)?
+
+
+- intent: get_new_symptoms
+  examples: |
+    - Can you record that I have a tummyache in the symptom diary?
+    - Please log that I am experiencing a headache.
+    - I want to note that I have a sore throat.
+    - Can you add that I've been feeling nauseous?
+    - Please record my symptoms of fatigue today.
+    - I need to log that I have muscle pain.
+    - Can you note that I've been feeling anxious lately?
+    - Please add my symptoms of dizziness to the diary.
+    - I want to record that I have a runny nose.
+    - Can you log that I experienced chest pain today?
+
+- intent: medication dosage
+  examples: |
+    - What's my current dose of [lisinopril](medication)?
+    - Can you tell me the dosage of [metformin](medication) I'm taking?
+    - How many milligrams of [atorvastatin](medication) am I on?
+    - What dose of [levothyroxine](medication) do I take daily?
+    - How much [insulin](medication) am I supposed to be taking?
+    - What's the strength of my [omeprazole](medication) prescription?
+    - Could you check my [warfarin](medication) dose?
+    - What's the recorded dosage for my [amlodipine](medication)?
+    - What does of [Cetamol](medication) do I take?
+    - How many units of [Lantus](medication) do I inject?
+    - What's my current [prednisone](medication) dose?
+    - Can you look up my [metoprolol](medication) dosage?
+    - How many tablets of [gabapentin](medication) do I take per day?
+    - What's the strength of [sertraline](medication) I'm on?
+    - How many milligrams of [ibuprofen](medication) can I take?
+    - What's my prescribed dose of [albuterol](medication)?
+    - What's my recorded dose for [aspirin](medication)?
+    - How many micrograms of [levothyroxine](medication) am I taking?
+    - Can you check my current [metformin](medication) dosage?
+    - What strength of [simvastatin](medication) do I have in my records?
+    - How many milligrams of [losartan](medication) am I prescribed?
+    - What's the dosage for my [escitalopram](medication)?
+    - How much [methotrexate](medication) should I be taking weekly?
+    - What's my current dose of [pantoprazole](medication)?
+    - How many units of [Novolog](medication) do I use with meals?
+    - What's the strength of [amoxicillin](medication) I'm supposed to take?
+    - Can you tell me the dose of [hydrocodone](medication) in my records?
+    - How many milligrams of [duloxetine](medication) am I on?
+    - What's my prescribed dosage for [fluoxetine](medication)?
+    - How much [carvedilol](medication) do I take twice daily?
+    - What's the recorded strength of my [atorvastatin](medication)?
+    - How many tablets of [metformin](medication) do I take per day?
+    - What's my current dose of [lisinopril](medication) in milligrams?
+    - Can you look up how much [venlafaxine](medication) I'm taking?
+    - What's the strength of [rosuvastatin](medication) I'm prescribed?
+    - How many milligrams of [sertraline](medication) do I take daily?
+
+- intent: Check Medication Taken
+  examples: |
+    - Did I take all my doses this [month](period)? 
+    - Have I missed any doses this [week](period)?
+    - Did I forget to take any doses in the last [month](period)?
+    - Have I taken all my medication for this [week](period)?
+    - Did I skip any doses [today](period)?
+    - Can you tell me if I missed a dose this [afternoon](period)?
+    - Did I forget my medication last [today](period)?
+    - Have I missed any of my doses in the past [month](period)?
+    - Did I take all my pills this [today](period)?
+    - Was there any dose I missed [today](period)?
+    - Have I skipped any medication this [today](period)?
+    - Did I leave out any doses [today](period)?
+    - Have I taken my medication this [week](period)?
+    - Can you tell me if I missed a dose this [month](period)?
+    - Did I miss taking my medication [today](period)?
+    - Have I been consistent with my doses this [week](period)?
+    - Was there any day this [week](period) I missed my dose?
+    - Did I miss any pills in the last [month](period)?
+
+- intent: medication_adherence
+  examples: |
+    - have I been taking my pills regularly?
+    - am I on track with my medications?
+    - how's my medication compliance been?
+    - show me my medication adherence
+    - have I been good with taking my meds?
+    - how consistent have I been with my pills?
+    - am I taking my medications as prescribed?
+    - how often have I missed my meds lately?
+    - give me my medication report
+    - check my pill adherence
+    - how well have I been following my medication schedule?
+    - what's my compliance rate for medications?
+    - have I been skipping my meds?
+    - show my medication tracking
+    - how many doses have I missed?
+    - am I staying on top of my medications?
+    - what does my med adherence look like?
+    - have I been consistent with my treatment?
+    - check my medication history
+    - how's my pill-taking been going?
+    - am I meeting my medication goals?
+    - what's my adherence percentage?
+    - have I been forgetting my meds?
+    - show me my dosing compliance
+    - how regular have I been with medications?
+    - am I following my prescription schedule?
+    - what's my medication performance?
+    - have I been taking everything as directed?
+    - how have I been doing with my meds this [month](time_period)?
+    - how am I doing with my medication this [week](time_period)?
+    - what's my medication score this [month](time_period)?
+    - how have I been with meds this [week](time_period)?
+    - show my medication adherence for last [month](time_period)
+    - what's my pill compliance [today](time_period)?
+    - how was my med adherence (time_period)?
+    - check my medication history for the last [week](time_period)
+    - am I on track with meds this [month](time_period)?
+    - show adherence for the last [month](time_period)
+    - how consistent have I been this [week](time_period)?
+    - what's my medication score for this [month](time_period)?
+    - have I been good with meds since last [week](time_period)?
+    - how's my medication compliance this [month](time_period)?
+    - what's my adherence rate over the [week](time_period)?
+    - am I taking my pills consistently this [week](time_period)?
+
+- intent: outofScope
+  examples: |
+    - how can i prevent myself from getting flu
+    - I think I have flu
+    - I have headache
+    - I have suffering from common cold
+    - tell me about cancer
+    - information on heart disease
+    - can you explain how cancer is treated?
+    - I have a sore throat.
+    - My stomach feels upset.
+    - I sprained my ankle.
+    - I need to find a doctor near me.
+    - Can you diagnose my illness?
+    - What are the symptoms of diabetes?
+    - How do I treat a sunburn?
+    - Is this rash normal?
+    - Can you recommend medication for allergies?
+    - What causes high blood pressure?
+    - How often should I get a physical exam?
+    - What vaccinations do I need?
+    - Is my blood sugar level normal?
+    - How can I lower my cholesterol?
+    - What's the difference between a cold and the flu?
+    - How do I know if I have asthma?
+    - What are the signs of a heart attack?
+    - How can I prevent osteoporosis?
+    - Is this mole cancerous?
+    - What are the side effects of this medication?
+    - How long does it take to recover from pneumonia?
+    - Should I be worried about these chest pains?
+    - What's causing my chronic fatigue?
+    - How do I manage my arthritis pain?
+    - What's the best treatment for depression?
+    - How do I know if I have anxiety disorder?
+    - Can you interpret my lab results?
+    - Is my blood pressure too high?
+    - What diet should I follow for diabetes?
+    - How can I treat my insomnia?
+    - Are these symptoms signs of pregnancy?
+    - What's causing my chronic back pain?
+    - How often should I get a mammogram?
+    - Is this bump on my skin normal?
+    - What are the early signs of Alzheimer's?
+    - How do I manage my ADHD symptoms?
+    - Can you recommend exercises for sciatica?
+    - What's the recovery time for a broken bone?
+    - How do I know if I need glasses?
+    - What causes migraines and how can I prevent them?
+    - Is my child developing normally?
+    - How can I boost my immune system?
+    - What are the signs of vitamin deficiency?
+    - Should I be concerned about these mood swings?
+    - What are the early signs of skin cancer?
+    - How can I manage my chronic pain?
+    - Is my thyroid functioning normally?
+    - What's the best way to quit smoking?
+    - How do I know if I have food allergies?
+    - Can you explain my MRI results?
+    - What causes night sweats?
+    - How do I treat a yeast infection?
+    - Is my child's fever too high?
+    - What are the symptoms of menopause?
+    - How can I lower my risk of stroke?
+    - What's causing my frequent urination?
+    - How do I know if I have a concussion?
+    - What are the side effects of chemotherapy?
+    - How can I manage my bipolar disorder?
+    - What's the best treatment for eczema?
+    - How do I know if I need a hip replacement?
+    - What causes vertigo and how is it treated?
+    - How can I improve my fertility?
+    - What are the signs of a hormonal imbalance?
+    - How do I know if I have celiac disease?
+    - What's causing my persistent cough?
+    - Is my child's growth rate normal?
+    - How can I manage my psoriasis symptoms?
+    - What are the early signs of multiple sclerosis?
+    - How do I treat a bee sting allergy?
+    - What causes kidney stones and how are they treated?
+    - How can I lower my blood sugar naturally?
+    - What are the symptoms of sleep apnea?
+    - How do I know if I have a herniated disc?
+    - What's the best diet for managing IBS?
+    - How can I prevent osteoarthritis?
+    - What causes tinnitus and how is it managed?
+    - How do I know if I'm at risk for heart disease?
+    - What are the signs of postpartum depression?
+    - How can I treat my plantar fasciitis?
+    - What causes recurring UTIs?
+    - How do I manage my COPD symptoms?
+    - What are the long-term effects of concussions?
+    - How can I improve my gut health?
+    - Why do I have a runny nose?
+    - How do I stop a nosebleed?
+    - What should I do for a burn?
+    - Is my fever normal?
+    - Why does my back hurt?
+    - How can I sleep better?
+    - What causes hiccups?
+    - Is this rash dangerous?
+    - Why am I always tired?
+    - How do I get rid of a wart?
+    - What's causing my dizziness?
+    - How can I stop snoring?
+    - Why do my joints ache?
+    - Is it safe to crack my knuckles?
+    - How do I treat a bee sting?
+    - Why do I get headaches often?
+    - How can I improve my posture?
+    - What causes bad breath?
+    - How do I know if I need braces?
+    - Why do I get leg cramps at night?
+    - What's the weather like today?
+    - Can you tell me a joke?
+    - How do I bake a chocolate cake?
+    - What's your favorite movie?
+    - Where can I find the best pizza in town?
+    - How do I change a flat tire?
+    - What's the capital of France?
+    - Can you recommend a good book to read?
+    - What's the latest news in technology?
+    - How do I start a garden?
+    - What are some fun activities to do on the weekend?
+    - Can you play some music for me?
+    - What's the best way to learn a new language?
+    - How do I take care of a pet goldfish?
+    - What are some interesting facts about space?
+    - How can I improve my photography skills?
+    - What's the meaning of life?
+    - Can you help me with my math homework?
+    - What are the rules of chess?
+    - How do I meditate effectively?
+    - What is the weather like today?
+    - Tell me something about today's weather.
+    - Do you think it will rain tomorrow?
+    - How hot does it get in the summer?
+    - What's your favorite season?
+    - What's the temperature outside right now?
+    - How hot will it get this afternoon?
+    - Is it going to snow tomorrow in New York?
+    - What's the humidity level today?
+    - What's the UV index for tomorrow?
+    - Will there be a thunderstorm this weekend?
+    - What time is the sunset today?
+    - How strong will the winds be tonight?
+    - Can you tell me the weather for next week?
+    - Do I need an umbrella for today?
+    - What's the weather like in Tokyo right now?
+    - Will there be heavy rain in the afternoon?
+    - hey I have pain in my leg.
+    - My head hurts a lot.
+    - I feel dizzy and nauseous.
+    - I have a rash on my arm.
+    - hey I can't sleep at night.
+    - My back has been sore for days.
+    - I think I have a fever.
+    - My throat is sore, and I can't talk.
+    - I have a toothache.
+    - There's a sharp pain in my chest.
+    - I feel tired all the time.
+    - I injured my ankle while running.
+    - My vision is blurry sometimes.
+    - I'm experiencing stomach cramps.
+    - I can't breathe properly.
+    - I need advice for my migraines.
+    - My knees ache whenever I stand up.
+    - There's a bump on my neck.
+    - I have pain in my lower back.
+    - I've been coughing a lot recently.
+    - I have a tingling sensation in my fingers.

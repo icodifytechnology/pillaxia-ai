@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-medication",
+      "2": "I-medication",
+      "3": "L-medication",
+      "4": "U-medication",
+      "5": "B-medication_name",
+      "6": "I-medication_name",
+      "7": "L-medication_name",
+      "8": "U-medication_name",
+      "9": "B-period",
+      "10": "I-period",
+      "11": "L-period",
+      "12": "U-period",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-medication": 1,
+      "I-medication": 2,
+      "L-medication": 3,
+      "U-medication": 4,
+      "B-medication_name": 5,
+      "I-medication_name": 6,
+      "L-medication_name": 7,
+      "U-medication_name": 8,
+      "B-period": 9,
+      "I-period": 10,
+      "L-period": 11,
+      "U-period": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]

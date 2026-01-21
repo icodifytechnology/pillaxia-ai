@@ -1,0 +1,52 @@
+{
+  "lookup": {
+    "rules": {
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"list of todays medication\"}}]": "action_todays_medication",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"list of todays medication\"}}, {\"prev_action\": {\"action_name\": \"action_todays_medication\"}, \"user\": {\"intent\": \"list of todays medication\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"greet\"}}]": "action_greet",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"greet\"}}, {\"prev_action\": {\"action_name\": \"action_greet\"}, \"user\": {\"intent\": \"greet\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"outofScope\"}}]": "action_custom_fallback",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"outofScope\"}}, {\"prev_action\": {\"action_name\": \"action_custom_fallback\"}, \"user\": {\"intent\": \"outofScope\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"goodbye\"}}]": "action_goodbye",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"goodbye\"}}, {\"prev_action\": {\"action_name\": \"action_goodbye\"}, \"user\": {\"intent\": \"goodbye\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"Medication_Taken_time\"}}]": "action_medication_taken",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"Medication_Taken_time\"}}, {\"prev_action\": {\"action_name\": \"action_medication_taken\"}, \"user\": {\"intent\": \"Medication_Taken_time\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}]": "action_symptoms",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}, {\"prev_action\": {\"action_name\": \"action_symptoms\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"get_new_symptoms\"}}]": "action_new_symptom",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"get_new_symptoms\"}}, {\"prev_action\": {\"action_name\": \"action_new_symptom\"}, \"user\": {\"intent\": \"get_new_symptoms\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_stock_level\"}}]": "action_stock_level",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_stock_level\"}}, {\"prev_action\": {\"action_name\": \"action_stock_level\"}, \"user\": {\"intent\": \"medication_stock_level\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"bot_challenge\"}}]": "action_iamabot",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"bot_challenge\"}}, {\"prev_action\": {\"action_name\": \"action_iamabot\"}, \"user\": {\"intent\": \"bot_challenge\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"report of medication with timeframe\"}}]": "action_medication_report_with_timeframe",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"report of medication with timeframe\"}}, {\"prev_action\": {\"action_name\": \"action_medication_report_with_timeframe\"}, \"user\": {\"intent\": \"report of medication with timeframe\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"get_medication_dosage\"}}]": "action_medication_dosage",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"get_medication_dosage\"}}, {\"prev_action\": {\"action_name\": \"action_medication_dosage\"}, \"user\": {\"intent\": \"get_medication_dosage\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"refil_due\"}}]": "action_refil_information",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"refil_due\"}}, {\"prev_action\": {\"action_name\": \"action_refil_information\"}, \"user\": {\"intent\": \"refil_due\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"notify_medication_taken\"}}]": "action_medication_tracker",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"notify_medication_taken\"}}, {\"prev_action\": {\"action_name\": \"action_medication_tracker\"}, \"user\": {\"intent\": \"notify_medication_taken\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_report\"}}]": "action_medication_report",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_report\"}}, {\"prev_action\": {\"action_name\": \"action_medication_report\"}, \"user\": {\"intent\": \"medication_report\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"Next_dose_date\"}}]": "action_next_dose",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"Next_dose_date\"}}, {\"prev_action\": {\"action_name\": \"action_next_dose\"}, \"user\": {\"intent\": \"Next_dose_date\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"list_medications\"}}]": "action_list_medication_name",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"list_medications\"}}, {\"prev_action\": {\"action_name\": \"action_list_medication_name\"}, \"user\": {\"intent\": \"list_medications\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"adding medication in medication list\"}}]": "action_add_medication",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"adding medication in medication list\"}}, {\"prev_action\": {\"action_name\": \"action_add_medication\"}, \"user\": {\"intent\": \"adding medication in medication list\"}}]": "action_listen"
+    },
+    "rule_only_slots": [],
+    "rule_only_loops": [],
+    "rules_for_loop_unhappy_path": {},
+    "rules_not_in_stories": [
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}, {\"prev_action\": {\"action_name\": \"action_symptoms\"}, \"user\": {\"intent\": \"last_symptom_logged\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_stock_level\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"medication_stock_level\"}}, {\"prev_action\": {\"action_name\": \"action_stock_level\"}, \"user\": {\"intent\": \"medication_stock_level\"}}]",
+      "predicting default action with intent restart",
+      "predicting default action with intent session_start",
+      "predicting default action with intent back"
+    ]
+  }
+}
