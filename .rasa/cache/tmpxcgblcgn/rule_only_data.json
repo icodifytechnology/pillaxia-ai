@@ -1,7 +1,0 @@
-{
-  "rule_only_slots": [],
-  "rule_only_loops": [
-    "form_add_medication1",
-    "form_add_medication2"
-  ]
-}
