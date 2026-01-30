@@ -18,7 +18,7 @@ rules:
 
 - rule: Adding medication
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
 
 - rule: List Medications
@@ -38,41 +38,41 @@ rules:
 
 - rule: Custom Fallback
   steps: 
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
 
 - rule: todays medication
   steps: 
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - rule: medication report with timeframe
   steps:
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
-# - rule: Get symptoms
-#   steps:
-#     - intent: number_of_times_symptom_occured
-#     - action: action_symptoms_occured
-
-
-- rule: get refil period
+- rule: Get symptoms
   steps:
-   - intent: refil_due
-   - action: action_refil_information
+    - intent: number_of_times_symptom_occured
+    - action: action_symptoms_occured
+
+
+- rule: get refill period
+  steps:
+   - intent: refill_due
+   - action: action_refill_information
 
 
 - rule: get next dose
   steps:
-   - intent: Next_dose_date
+   - intent: next_dose_date
    - action: action_next_dose
 
 
-# - rule: get medication taken time
-#   steps:
-#    - intent: Medication_Taken_time
-#    - action: action_medication_taken
+- rule: get medication taken time
+  steps:
+   - intent: medication_taken_time
+   - action: action_medication_taken
 
 
 - rule: get new symptoms
@@ -81,9 +81,9 @@ rules:
    - action: action_new_symptom
 
 
-- rule: get medication dosage
+- rule: get medication_dosage
   steps:
-   - intent: medication dosage
+   - intent: medication_dosage
    - action: action_medication_dosage
 
 
@@ -100,7 +100,7 @@ rules:
 
 - rule: time of medication intake
   steps:
-  - intent: Medication_Taken_time
+  - intent: medication_taken_time
   - action: action_medication_taken
 
 - rule: Medication Adherence
@@ -110,5 +110,5 @@ rules:
 
 - rule: check mediation taken time
   steps:
-  - intent: Check Medication Taken
+  - intent: check_medication_taken
   - action: action_check_medication

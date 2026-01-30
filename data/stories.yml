@@ -4,7 +4,7 @@ stories:
 
 - story: Add Medication and Check List
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications 
   - action: action_list_medication_name
@@ -15,14 +15,14 @@ stories:
   steps:
   - intent: medication_report
   - action: action_medication_report
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
 
 - story: Greet and add medication
   steps:
   - intent: greet
   - action: action_greet
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
 
 - story: medication report and list medication
@@ -34,49 +34,49 @@ stories:
 
 - story: Adding medication and list medication
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
 
 - story: Adding medication and goodbye
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: goodbye
   - action: action_goodbye
 
 - story: medication report with timeframe
   steps:
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: todays medication and medication report with timeframe
   steps: 
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: out of scope, todays medication, medication report
   steps: 
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: medication_report
   - action: action_medication_report
 
 - story: medication report, out of scope
   steps: 
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
 
 - story: todays medication, medication report
   steps: 
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: medication_report
   - action: action_medication_report
@@ -85,7 +85,7 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
 
 - story: List medications and goodbye
@@ -99,7 +99,7 @@ stories:
   steps:
   - intent: bot_challenge
   - action: action_iamabot
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Notify medication taken and get report
@@ -120,9 +120,9 @@ stories:
 
 - story: Add medication and get today's list
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, medication report, and goodbye
@@ -138,9 +138,9 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, list medications, and medication report
@@ -156,21 +156,21 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: Greet, out of scope, and goodbye
   steps:
   - intent: greet
   - action: action_greet
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
   - intent: goodbye
   - action: action_goodbye
 
 - story: Add medication, list medications, and notify taken
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
@@ -181,16 +181,16 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, add medication, and list medications
   steps:
   - intent: bot_challenge
   - action: action_iamabot
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
@@ -199,7 +199,7 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
   - intent: medication_report
   - action: action_medication_report
@@ -208,16 +208,16 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: goodbye
   - action: action_goodbye
 
 - story: Add medication, report with timeframe, and bot challenge
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: bot_challenge
   - action: action_iamabot
@@ -237,9 +237,9 @@ stories:
   steps:
   - intent: bot_challenge
   - action: action_iamabot
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: goodbye
   - action: action_goodbye
@@ -248,11 +248,11 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: List medications, notify taken, out of scope, and today's list
@@ -261,9 +261,9 @@ stories:
   - action: action_list_medication_name
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, medication report, add medication, and goodbye
@@ -272,7 +272,7 @@ stories:
   - action: action_iamabot
   - intent: medication_report
   - action: action_medication_report
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: goodbye
   - action: action_goodbye
@@ -281,7 +281,7 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: notify_medication_taken
   - action: action_medication_tracker
@@ -290,11 +290,11 @@ stories:
 
 - story: Add medication, bot challenge, today's list, and report
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: bot_challenge
   - action: action_iamabot
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: medication_report
   - action: action_medication_report
@@ -303,9 +303,9 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: goodbye
   - action: action_goodbye
@@ -314,13 +314,13 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, notify taken, report, add medication, and goodbye
@@ -331,7 +331,7 @@ stories:
   - action: action_medication_tracker
   - intent: medication_report
   - action: action_medication_report
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: goodbye
   - action: action_goodbye
@@ -340,11 +340,11 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: medication_report
   - action: action_medication_report
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: goodbye
   - action: action_goodbye
@@ -357,16 +357,16 @@ stories:
   - action: action_list_medication_name
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
 
 - story: Report with timeframe, add medication, today's list, bot challenge
   steps:
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: bot_challenge
   - action: action_iamabot
@@ -386,13 +386,13 @@ stories:
 
 - story: Add medication, out of scope, report with timeframe, today's list
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
 
 - story: Bot challenge, notify taken, add medication, list medications
@@ -401,7 +401,7 @@ stories:
   - action: action_iamabot
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
@@ -412,9 +412,9 @@ stories:
   - action: action_greet
   - intent: medication_report
   - action: action_medication_report
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
   - intent: goodbye
   - action: action_goodbye
@@ -423,7 +423,7 @@ stories:
   steps:
   - intent: list_medications
   - action: action_list_medication_name
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: notify_medication_taken
   - action: action_medication_tracker
@@ -432,11 +432,11 @@ stories:
 
 - story: Add medication, today's list, out of scope, report, goodbye
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
   - intent: medication_report
   - action: action_medication_report
@@ -451,7 +451,7 @@ stories:
   - action: action_iamabot
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: get symptoms and new one
@@ -463,14 +463,14 @@ stories:
 
 # - story: get medication taken time and next dose
 #   steps:
-#   - intent: Medication_Taken_time
+#   - intent: medication_taken_time
 #   - action: action_medication_taken
-#   - intent: Next_dose_date
+#   - intent: next_dose_date
 #   - action: action_next_dose
 
 - story: Next Dose Date Inquiry
   steps:
-  - intent: Next_dose_date
+  - intent: next_dose_date
   - slot_was_set:
       - medication: Ibuprofen
   - action: action_next_dose
@@ -488,7 +488,7 @@ stories:
 
 - story: report_medication_timeframe
   steps:
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - slot_was_set:
       - period: week
   - action: action_medication_report_with_timeframe
@@ -497,14 +497,14 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: Check Medication Taken
+  - intent: check_medication_taken
   - action: action_check_medication
 
 - story: get medication taken time and check mediation taken time
   steps:
-  - intent: Medication_Taken_time
+  - intent: medication_taken_time
   - action: action_medication_taken
-  - intent: Check Medication Taken
+  - intent: check_medication_taken
   - action: action_check_medication
 
 
@@ -514,21 +514,21 @@ stories:
   - action: action_greet
   - intent: medication_report
   - action: action_medication_report
-  - intent: Check Medication Taken
+  - intent: check_medication_taken
   - action: action_check_medication
   - intent: goodbye
   - action: action_goodbye
 
 - story: Add and list medications
   steps:
-  - intent: adding medication in medication list
+  - intent: add_medication
   - action: action_add_medication
   - intent: list_medications
   - action: action_list_medication_name
 
 - story: Medication report with timeframe
   steps:
-  - intent: report of medication with timeframe
+  - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: medication_report
   - action: action_medication_report
@@ -537,20 +537,20 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: Check Medication Taken
+  - intent: check_medication_taken
   - action: action_check_medication
 
 - story: List today's medication and next dose
   steps:
-  - intent: list of todays medication
+  - intent: list_of_todays_medication
   - action: action_todays_medication
-  - intent: Next_dose_date
+  - intent: next_dose_date
   - action: action_next_dose
 
 - story: Check refill and stock level
   steps:
-  - intent: refil_due
-  - action: action_refil_information
+  - intent: refill_due
+  - action: action_refill_information
   - intent: medication_stock_level
   - action: action_stock_level
 
@@ -565,12 +565,12 @@ stories:
 
 - story: Handle out-of-scope queries
   steps:
-  - intent: outofScope
+  - intent: out_of_scope
   - action: action_custom_fallback
 
 - story: Check next dose and medication report
   steps:
-  - intent: Next_dose_date
+  - intent: next_dose_date
   - action: action_next_dose
   - intent: medication_report
   - action: action_medication_report
@@ -579,8 +579,8 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: refil_due
-  - action: action_refil_information
+  - intent: refill_due
+  - action: action_refill_information
 
 
 - story: Check medication stock and symptoms

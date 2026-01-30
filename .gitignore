@@ -164,3 +164,7 @@ cython_debug/
 
 # rasa
 .rasa/
+
+# models
+
+models/

@@ -29,39 +29,52 @@ client = OpenAI(api_key=openai_api_key)
 
 DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
 
-class Greet(Action):
-    def name(self):
-        return "action_greet"
-    
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        try:
-            messages = ["Hi there. It's such a pleasure to have you here. How can we help you?",
-                        "Hello, how can we assist you?",
-                        "Nice to meet you! How can I assist?",
-                        "Greetings! How may I be of service?",
-                        "Hi! How can I make your day better?",
-                        "Welcome! How can I help you today?",
-                        "Hi there! Need a hand?",
-                        "Hello! What can I do for you?"]
-            reply = random.choice(messages)
-            attachment={
-                "query_response": reply,
-			    "data":[],
-			    "type":"string",
-			    "status": "success"
-            }
-        except Exception as e:
-            reply = "Error!"
-            attachment={
-                "query_response": reply,
-			    "data":[],
-			    "type":"string",
-			    "status": "failed"
-            }
+
+# Global response function
+def send_response(dispatcher, tracker, reply, attachment):
+    input_channel = tracker.get_latest_input_channel()
+
+    if input_channel == "cmdline":
+        dispatcher.utter_message(text=reply)
+    else:
         dispatcher.utter_message(attachment=attachment)
-        return
+
+
+class Greet(Action):
+    def name(self) -> Text:
+        return "action_greet"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        messages = [
+            "Hi there. It's such a pleasure to have you here. How can we help you?",
+            "Hello, how can we assist you?",
+            "Nice to meet you! How can I assist?",
+            "Greetings! How may I be of service?",
+            "Hi! How can I make your day better?",
+            "Welcome! How can I help you today?",
+            "Hi there! Need a hand?",
+            "Hello! What can I do for you?",
+        ]
+
+        reply = random.choice(messages)
+
+        attachment = {
+            "query_response": reply,
+            "data": [],
+            "type": "string",
+            "status": "success",
+        }
+
+        send_response(dispatcher, tracker, reply, attachment)
+
+        return []
+
 
 class GoodBye(Action):
     def name(self):
@@ -92,7 +105,7 @@ class GoodBye(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
 
 class IAmABot(Action):
@@ -123,7 +136,8 @@ class IAmABot(Action):
                 "type":"string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return[]
 
 
@@ -155,7 +169,8 @@ class ActionAddMedication(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return []
 
 class actionmedicationname(Action):
@@ -204,7 +219,8 @@ class actionmedicationname(Action):
 		    }
             raise RasaException("Error fetching medication data")
         
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return []
     
 class ActionMedicationReport(Action):
@@ -214,6 +230,7 @@ class ActionMedicationReport(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
         try:
                 url = 'https://api.pillaxia.com/api/v1/medication-tracker/list'
                 header = {
@@ -222,6 +239,7 @@ class ActionMedicationReport(Action):
                 response = requests.post(url,headers=header)
                 response_data = response.json()
                 data = response_data['result']['items']
+                
                 report= [
                             {
                                 'name': item['reminder'],
@@ -245,7 +263,8 @@ class ActionMedicationReport(Action):
                                 "type":"string",
                                 "status": "failed"
                 } 
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return []
     
 class ActionMedicationReportWithTimeframe(Action):
@@ -311,7 +330,8 @@ class ActionMedicationReportWithTimeframe(Action):
                         "status": "failed"
             }
  
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return []
     
 class ActionTodaysMedication(Action):
@@ -366,7 +386,8 @@ class ActionTodaysMedication(Action):
                     "type": "string",
                     "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
+
         return []
         
 class ActionMedicationTracker(Action):
@@ -444,7 +465,7 @@ class ActionMedicationTracker(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return []
 
 class actionMedicationDosage(Action):
@@ -488,14 +509,14 @@ class actionMedicationDosage(Action):
                         "status": "failed"
                     }
         except Exception as ex:
-            reply = "Failed to get your medication dosage"
+            reply = "Failed to get your medication_dosage"
             attachment = {
 		    	    "query_response": reply,
 		    	    "data": [],
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return []
 
 class MedicationTaken(Action):
@@ -565,7 +586,7 @@ class MedicationTaken(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         
         # if medication_name: 
         #     return [SlotSet("medication", None)]
@@ -620,7 +641,7 @@ class MedicationTaken(Action):
 # 		    	"type":"string",
 # 		    	"status": "success"
 #             }
-#         dispatcher.utter_message(attachment=attachment)
+#         send_response(dispatcher, tracker, reply, attachment)
 #         return []
 
 class actionNextDose(Action):
@@ -657,7 +678,7 @@ class actionNextDose(Action):
                         # Update next_med if it's the soonest upcoming one
                         if not next_med or med_time < datetime.strptime(next_med["time"], "%H:%M:%S"):
                             next_med = {"name": data["medication"], "time": earliest_time}
-
+                
                 if next_med:
                     time_obj = datetime.strptime(next_med['time'], "%H:%M:%S")
 
@@ -687,67 +708,15 @@ class actionNextDose(Action):
                 "type":"string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
 
     
-class actionStockLevel(Action):
-   def name(self):
-       return "action_stock_level"
-  
-   def run(self, dispatcher: CollectingDispatcher,
-           tracker: Tracker,
-           domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-       medication_name = tracker.get_slot('medication')
-       url = 'https://api.pillaxia.com/api/v1/user-medications/list'
-       header = {
-                   "Authorization" : f"Bearer {tracker.sender_id}"
-               }
-       try:
-           response = requests.post(url,headers=header)
-           response_data = response.json()["result"]["items"]
-           for data in response_data:
-               if data["code"].lower() == medication_name.lower():
-                   stock_level = data["stock_level"]
+ 
 
-           if stock_level >= 0:
-               messages = [ f"Your current supply of {medication_name} is",
-                            f"The quantity of {medication_name} you have left is",
-                            f"Your available doses of {medication_name} are",
-                            f"The remaining stock of {medication_name} in your possession is",
-                            f"Your {medication_name} count stands at",
-                            f"The number of {medication_name} doses you still have is",
-                            f"Your inventory of {medication_name} shows"]
-               reply = random.choice(messages)
-               attachment = {
-                   "query_response": f"{reply} {stock_level}",
-                   "data": [],
-                   "type": "string",
-                   "status": "success"
-               }
-           else:
-               reply = f"You do not have recorded medication with the name {medication_name}"
-               attachment = {
-                   "query_response": reply,
-                   "data": [],
-                   "type": "string",
-                   "status": "failed"
-               }
-          
-       except Exception as ex:
-            reply = "Failed to get information about left dosage. Please try again!!"
-            attachment = {
-               "query_response": reply,
-               "data":[],
-               "type":"string",
-               "status": "failed"
-           }
-       dispatcher.utter_message(attachment=attachment)
-       return [SlotSet("medication", None)]
-
-class actionRefilInformation(Action):
+class actionRefillInformation(Action):
     def name(self):
-        return "action_refil_information"
+        return "action_refill_information"
     
     def run(self, dispatcher: CollectingDispatcher, 
             tracker: Tracker, 
@@ -757,7 +726,7 @@ class actionRefilInformation(Action):
             header = {
                         "Authorization" : f"Bearer {tracker.sender_id}"
                     }
-            refil_info = {}
+            refill_info = {}
         # try:
             response = requests.post(url,headers=header)
             response_data = response.json()["result"]["items"]
@@ -799,7 +768,7 @@ class actionRefilInformation(Action):
 		#     	"status": "failed"
         #     }
         # finally:
-            dispatcher.utter_message(attachment=attachment)
+            send_response(dispatcher, tracker, reply, attachment)
         
             return [SlotSet("medication", None)]
     
@@ -863,7 +832,7 @@ class actionNewSymptom(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
 
 
@@ -927,7 +896,7 @@ class actionSymptions(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
     
 class checkMedication(Action):
@@ -981,7 +950,7 @@ class checkMedication(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
     
 class actionactionMedicationAdherence(Action):
@@ -1021,7 +990,7 @@ class actionactionMedicationAdherence(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        send_response(dispatcher, tracker, reply, attachment)
         return[]
     
     def get_adherence_response(self, percentage):
@@ -1083,11 +1052,75 @@ class actionactionMedicationAdherence(Action):
                 return random.choice(responses).format(adherence_percentage=percentage)
         return f"Your adherence is {percentage}%. Want to see your visual report?"
     
+
+# ----- fixed this code below  ------    
+
+# class actionCustomFallback(Action):
+#     def name(self):
+#         return "action_custom_fallback"       
+        
+#     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+#         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
+#                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
+#                     2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
+#                     3.If a user asks for medication recommendations, respond with: "I'm a simple medical assistant chatbot, and I'm not allowed to suggest any medication. Please consult a doctor or pharmacist for proper guidance."
+#                     4.Keep responses short, precise, and conversational, mimicking natural human interactions.
+#                     5.Emphasize the importance of consulting a doctor or pharmacist for medication advice.
+#                     6.Avoid giving specific dosages to prevent misuse.
+#                     7.Provide general information about side effects but direct users to reliable sources like medication leaflets or healthcare professionals for detailed guidance.
+#                     8.Do not assist with non-medical queries.
+#                     9.Offer only relevant information, ensuring it aligns with the user's needs.
+#                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
+
+#                 """
+
+#         try:
+#             user_query = tracker.latest_message['text']
+#             response = client.chat.completions.create(
+#                 model = "gpt-4o",
+#                 messages=[
+#                     {"role": "system", "content": prompt},
+#                     {"role": "user", "content": "What's the best medication for my cough?"},
+#                     {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
+#                     {"role": "user","content": user_query}
+#                 ]
+#             )
+#             data = response.choices[0].message.content
+#             attachment = {
+# 		    	"query_response": data,
+# 		    	"data":[],
+# 		    	"type":"string",
+# 		    	"status": "success"
+# 		    }
+#         except openai.OpenAIError as e:
+#             error_message = e.args[0].split("message': '")[1].split("',")[0] if "message" in str(e) else "Unknown error occurred."
+#             messages = ["Sorry, I can't process your request right now due to high demand. Please try again later.",
+#                     "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
+#                     ]
+#             attachment = {
+#                 "query_response": random.choice(messages),
+#                 "error": error_message,
+#                 "data": [],
+#                 "type": "string",
+#                 "status": "failed"
+#             }
+#         except Exception as e:
+#             data = "Can you rephrase it."
+#             attachment = {
+# 		    	"query_response": data,
+#                 "error": str(e),
+# 		    	"data":[],
+# 		    	"type":"string",
+# 		    	"status": "failed"
+# 		    }
+#         send_response(dispatcher, tracker, reply, attachment)
+#         return []
+        
 class actionCustomFallback(Action):
     def name(self):
         return "action_custom_fallback"       
         
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
                     2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
@@ -1100,47 +1133,57 @@ class actionCustomFallback(Action):
                     9.Offer only relevant information, ensuring it aligns with the user's needs.
                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
 
-                """
-
+                """  
+        
         try:
             user_query = tracker.latest_message['text']
             response = client.chat.completions.create(
-                model = "gpt-4o",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": "What's the best medication for my cough?"},
                     {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
-                    {"role": "user","content": user_query}
+                    {"role": "user", "content": user_query}
                 ]
             )
             data = response.choices[0].message.content
+
+            reply = data  
+
             attachment = {
-		    	"query_response": data,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "success"
-		    }
+                "query_response": data,
+                "data": [],
+                "type": "string",
+                "status": "success"
+            }
+
         except openai.OpenAIError as e:
             error_message = e.args[0].split("message': '")[1].split("',")[0] if "message" in str(e) else "Unknown error occurred."
-            messages = ["Sorry, I can't process your request right now due to high demand. Please try again later.",
-                    "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
-                    ]
+            messages = [
+                "Sorry, I can't process your request right now due to high demand. Please try again later.",
+                "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
+            ]
+
+            reply = random.choice(messages)  
+
             attachment = {
-                "query_response": random.choice(messages),
+                "query_response": reply,
                 "error": error_message,
                 "data": [],
                 "type": "string",
                 "status": "failed"
             }
+
         except Exception as e:
-            data = "Can you rephrase it."
+            reply = "Can you rephrase it."  
+
             attachment = {
-		    	"query_response": data,
+                "query_response": reply,
                 "error": str(e),
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "failed"
-		    }
-        dispatcher.utter_message(attachment=attachment)
+                "data": [],
+                "type": "string",
+                "status": "failed"
+            }
+
+        send_response(dispatcher, tracker, reply, attachment)
         return []
-        

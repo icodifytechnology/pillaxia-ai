@@ -1,23 +1,24 @@
 version: '3.1'
+
 intents:
-- goodbye
 - greet
-- adding medication in medication list
+- goodbye
 - bot_challenge
+- add_medication
 - list_medications
 - medication_report
-- report of medication with timeframe
+- report_of_medication_with_timeframe
 - notify_medication_taken
-- outofScope
-- list of todays medication
-- refil_due
-- Next_dose_date
-- Medication_Taken_time
+- out_of_scope
+- list_of_todays_medication
+- refill_due
+- next_dose_date
+- medication_taken_time
 - get_symptoms
 - get_new_symptoms
+- medication_dosage
 - medication_stock_level
-- medication dosage
-- Check Medication Taken
+- check_medication_taken
 - medication_adherence
 
 actions:
@@ -28,23 +29,22 @@ actions:
 - action_list_medication_name
 - action_medication_report
 - action_medication_report_with_timeframe
-- action_custom_fallback
 - action_medication_tracker
+- action_custom_fallback
 - action_todays_medication
-- action_refil_information
+- action_refill_information
 - action_next_dose
 - action_medication_taken
+- action_symptoms
 - action_new_symptom
 - action_medication_dosage
 - action_stock_level
-- action_symptoms
 - action_check_medication
 - action_medication_adherence
 
 entities:
 - period
 - medication
-
 
 slots:
   period:
