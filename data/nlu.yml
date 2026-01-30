@@ -1217,7 +1217,6 @@ nlu:
     - am I staying on top of my medications?
     - what does my med adherence look like?
     - have I been consistent with my treatment?
-    - check my medication history
     - how's my pill-taking been going?
     - am I meeting my medication goals?
     - what's my adherence percentage?
@@ -1234,7 +1233,6 @@ nlu:
     - show my medication adherence for last [month](time_period)
     - what's my pill compliance [today](time_period)?
     - how was my med adherence (time_period)?
-    - check my medication history for the last [week](time_period)
     - am I on track with meds this [month](time_period)?
     - show adherence for the last [month](time_period)
     - how consistent have I been this [week](time_period)?

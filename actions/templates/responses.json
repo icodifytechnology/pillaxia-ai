@@ -1,0 +1,63 @@
+{
+  "greet": {
+    "casual": [
+      "Hey {name}! 👋 How can I help you today?",
+      "Hi {name}! Ready to check in on your health?",
+      "Hey {name}! What would you like help with?",
+      "Hello {name}! 😊 How are you feeling today?",
+      "Hi there {name}! Need help with your meds or symptoms?",
+      "Hey {name}! I'm here if you need anything.",
+      "Hi {name}! Want to review your medication or schedule?",
+      "Hello! 👋 How can I support you today?",
+      "Hi! Ready to take care of your health?",
+      "Hey there! What can I help you with today?",
+      "Good {time_of_day}, {name}! 👋 How's it going?",
+      "Hi {name}! How’s your {time_of_day} been so far?",
+      "Good {time_of_day}! Let me know how I can help.",
+      "Hey {name}! Need a quick medication check?",
+      "Hello! How are things going this {time_of_day}?"
+    ],
+    "formal": [
+      "Good {time_of_day}, {name}. How may I assist you today?",
+      "Hello {name}. How can I support you with your health?",
+      "Greetings, {name}. How may I help you?",
+      "Welcome, {name}. What can I assist you with today?",
+      "Hello {name}. I'm here to help with your medication management.",
+      "Good day, {name}. Please let me know how I may assist.",
+      "Good {time_of_day}. How may I be of service?",
+      "Hello. How can I assist you today?",
+      "Greetings. I'm here to support your health needs.",
+      "Welcome. How may I help you with your medications today?",
+      "Hello {name}. I hope you're having a pleasant {time_of_day}.",
+      "Good {time_of_day}, {name}. How are you feeling today?"
+    ]
+  },
+  "goodbye": {
+    "casual": [
+      "Take care, {name}! 😊 I'm here anytime you need help.",
+      "Bye {name}! Stay well and talk soon 👋",
+      "See you later, {name}! Don't forget to take care of yourself.",
+      "All set, {name}! Feel free to check back anytime.",
+      "Thanks for stopping by, {name}! 😊",
+      "Catch up soon, {name}! Stay healthy.",
+      "Glad I could help, {name}! Have a great {time_of_day}.",
+      "You're all set, {name}! Take care 👋",
+      "No worries, {name}! I'm here whenever you need me.",
+      "Have a good {time_of_day}, {name}! 😊",
+      "Thanks for chatting! Take care of yourself.",
+      "See you soon! Let me know if you need help with your meds."
+    ],
+    "formal": [
+      "Goodbye, {name}. Take care of your health.",
+      "Thank you, {name}. Please feel free to reach out again.",
+      "I’m glad I could assist you, {name}. Have a pleasant day.",
+      "Goodbye, {name}. Wishing you good health.",
+      "Thank you for your time, {name}. Take care.",
+      "It was my pleasure assisting you, {name}.",
+      "Good day, {name}. Please do not hesitate to contact me again.",
+      "Thank you, {name}. I wish you a healthy {time_of_day}.",
+      "Farewell, {name}. Stay well.",
+      "I hope you have a pleasant {time_of_day}, {name}."
+    ]
+  }
+}

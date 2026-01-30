@@ -1,10 +1,3 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
 from dotenv import load_dotenv
 
 from datetime import date, timedelta, datetime
@@ -13,6 +6,9 @@ from dateutil.relativedelta import relativedelta
 import random
 import requests
 from typing import Any, Text, Dict, List
+
+from .helpers.response_builder import ResponseBuilder
+from .helpers.api_client import api_client
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
@@ -40,75 +36,59 @@ def send_response(dispatcher, tracker, reply, attachment):
         dispatcher.utter_message(attachment=attachment)
 
 
-class Greet(Action):
+class ActionGreet(Action):
+    """Personalized greeting action with name extraction and time awareness"""
+    
     def name(self) -> Text:
         return "action_greet"
-
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-
-        messages = [
-            "Hi there. It's such a pleasure to have you here. How can we help you?",
-            "Hello, how can we assist you?",
-            "Nice to meet you! How can I assist?",
-            "Greetings! How may I be of service?",
-            "Hi! How can I make your day better?",
-            "Welcome! How can I help you today?",
-            "Hi there! Need a hand?",
-            "Hello! What can I do for you?",
-        ]
-
-        reply = random.choice(messages)
-
-        attachment = {
-            "query_response": reply,
-            "data": [],
-            "type": "string",
-            "status": "success",
-        }
-
-        send_response(dispatcher, tracker, reply, attachment)
-
-        return []
-
-
-class GoodBye(Action):
-    def name(self):
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        token = tracker.sender_id
+        
+        # Create response builder with user token
+        builder = ResponseBuilder(token)
+        
+        # Build personalized greeting with name and time of day
+        reply = builder.build_response("greet")
+        
+        # Send the response to user
+        dispatcher.utter_message(text=reply)
+        
+        # Store user name in slot for future reference in conversation
+        events = []
+        name = builder.user_profile.get_user_name()
+        if name:
+            events.append(SlotSet("user_name", name))
+        
+        return events
+    
+class ActionGoodbye(Action):
+    """Personalized goodbye action with user's name"""
+    
+    def name(self) -> Text:
         return "action_goodbye"
     
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        try:
-            messages = ["Thank you😁, I am happy to help you👋.",
-                        "I hope I was helpful for you👋😁.",
-                        "You're welcome! 😊 Have a great day!",
-                        "Happy to help. Best wishes! 👋",
-                        "No problem! 😊 Feel free to reach out again.",
-                        "It was my pleasure assisting you. Don't hesitate to ask if you need anything else. 😊"]
-            reply = random.choice(messages)
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "success"
-		    }
-        except Exception as e:
-            reply = "Error!"
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "failed"
-		    }
-        send_response(dispatcher, tracker, reply, attachment)
-        return[]
+        
+        token = tracker.sender_id
+        
+        # Create response builder with user token
+        builder = ResponseBuilder(token)
+        
+        # Build personalized goodbye message
+        reply = builder.build_response("goodbye")
+        
+        # Send the response to user
+        dispatcher.utter_message(text=reply)
+        
+        return []
 
-class IAmABot(Action):
+class ActionIamabot(Action):
     def name(self):
         return "action_iamabot"
     
@@ -173,7 +153,7 @@ class ActionAddMedication(Action):
 
         return []
 
-class actionmedicationname(Action):
+class ActionListMedicationName(Action):
     def name(self):
         return "action_list_medication_name"
     
@@ -468,7 +448,7 @@ class ActionMedicationTracker(Action):
         send_response(dispatcher, tracker, reply, attachment)
         return []
 
-class actionMedicationDosage(Action):
+class ActionMedicationDosage(Action):
     def name(self):
         return "action_medication_dosage"
     
@@ -519,7 +499,7 @@ class actionMedicationDosage(Action):
         send_response(dispatcher, tracker, reply, attachment)
         return []
 
-class MedicationTaken(Action):
+class ActionMedicationTaken(Action):
     def name(self):
         return "action_medication_taken"
     
@@ -644,7 +624,7 @@ class MedicationTaken(Action):
 #         send_response(dispatcher, tracker, reply, attachment)
 #         return []
 
-class actionNextDose(Action):
+class ActionNextDose(Action):
    def name(self):
        return "action_next_dose"
   
@@ -714,7 +694,7 @@ class actionNextDose(Action):
     
  
 
-class actionRefillInformation(Action):
+class ActionRefillInformation(Action):
     def name(self):
         return "action_refill_information"
     
@@ -805,7 +785,7 @@ class actionRefillInformation(Action):
 #             pass
         
         
-class actionNewSymptom(Action):
+class ActionNewSymptom(Action):
     def name(self):
         return "action_new_symptom"
     
@@ -836,7 +816,7 @@ class actionNewSymptom(Action):
         return[]
 
 
-class actionSymptions(Action):
+class ActionSymptoms(Action):
     def name(self):
         return "action_symptoms"
     
@@ -899,7 +879,7 @@ class actionSymptions(Action):
         send_response(dispatcher, tracker, reply, attachment)
         return[]
     
-class checkMedication(Action):
+class ActionCheckMedication(Action):
     def name(self):
         return "action_check_medication" 
     
@@ -953,7 +933,7 @@ class checkMedication(Action):
         send_response(dispatcher, tracker, reply, attachment)
         return[]
     
-class actionactionMedicationAdherence(Action):
+class ActionMedicationAdherence(Action):
     def name(self):
         return "action_medication_adherence"
     
@@ -1052,71 +1032,8 @@ class actionactionMedicationAdherence(Action):
                 return random.choice(responses).format(adherence_percentage=percentage)
         return f"Your adherence is {percentage}%. Want to see your visual report?"
     
-
-# ----- fixed this code below  ------    
-
-# class actionCustomFallback(Action):
-#     def name(self):
-#         return "action_custom_fallback"       
         
-#     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-#         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
-#                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
-#                     2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
-#                     3.If a user asks for medication recommendations, respond with: "I'm a simple medical assistant chatbot, and I'm not allowed to suggest any medication. Please consult a doctor or pharmacist for proper guidance."
-#                     4.Keep responses short, precise, and conversational, mimicking natural human interactions.
-#                     5.Emphasize the importance of consulting a doctor or pharmacist for medication advice.
-#                     6.Avoid giving specific dosages to prevent misuse.
-#                     7.Provide general information about side effects but direct users to reliable sources like medication leaflets or healthcare professionals for detailed guidance.
-#                     8.Do not assist with non-medical queries.
-#                     9.Offer only relevant information, ensuring it aligns with the user's needs.
-#                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
-
-#                 """
-
-#         try:
-#             user_query = tracker.latest_message['text']
-#             response = client.chat.completions.create(
-#                 model = "gpt-4o",
-#                 messages=[
-#                     {"role": "system", "content": prompt},
-#                     {"role": "user", "content": "What's the best medication for my cough?"},
-#                     {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
-#                     {"role": "user","content": user_query}
-#                 ]
-#             )
-#             data = response.choices[0].message.content
-#             attachment = {
-# 		    	"query_response": data,
-# 		    	"data":[],
-# 		    	"type":"string",
-# 		    	"status": "success"
-# 		    }
-#         except openai.OpenAIError as e:
-#             error_message = e.args[0].split("message': '")[1].split("',")[0] if "message" in str(e) else "Unknown error occurred."
-#             messages = ["Sorry, I can't process your request right now due to high demand. Please try again later.",
-#                     "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
-#                     ]
-#             attachment = {
-#                 "query_response": random.choice(messages),
-#                 "error": error_message,
-#                 "data": [],
-#                 "type": "string",
-#                 "status": "failed"
-#             }
-#         except Exception as e:
-#             data = "Can you rephrase it."
-#             attachment = {
-# 		    	"query_response": data,
-#                 "error": str(e),
-# 		    	"data":[],
-# 		    	"type":"string",
-# 		    	"status": "failed"
-# 		    }
-#         send_response(dispatcher, tracker, reply, attachment)
-#         return []
-        
-class actionCustomFallback(Action):
+class ActionCustomFallback(Action):
     def name(self):
         return "action_custom_fallback"       
         

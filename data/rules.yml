@@ -51,10 +51,10 @@ rules:
   - intent: report_of_medication_with_timeframe
   - action: action_medication_report_with_timeframe
 
-- rule: Get symptoms
-  steps:
-    - intent: number_of_times_symptom_occured
-    - action: action_symptoms_occured
+# - rule: Get symptoms
+#   steps:
+#     - intent: number_of_times_symptom_occured
+#     - action: action_symptoms_occured
 
 
 - rule: get refill period
