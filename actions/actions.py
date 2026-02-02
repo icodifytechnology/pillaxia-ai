@@ -1,23 +1,26 @@
 from dotenv import load_dotenv
+from typing import Any, Text, Dict, List
+import logging
+from abc import ABC, abstractmethod
 
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 
-import random
 import requests
-from typing import Any, Text, Dict, List
-
-from .helpers.response_builder import ResponseBuilder
-from .helpers.api_client import api_client
-
 from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, SessionStarted
 from rasa_sdk.executor import CollectingDispatcher
 from rasa.shared.exceptions import RasaException
 import openai
 from openai import OpenAI
 import os
+import random
+
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 openai_api_key = os.getenv("openai_api_key")
 
@@ -25,102 +28,243 @@ client = OpenAI(api_key=openai_api_key)
 
 DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
 
-
-# Global response function
-def send_response(dispatcher, tracker, reply, attachment):
-    input_channel = tracker.get_latest_input_channel()
-
-    if input_channel == "cmdline":
-        dispatcher.utter_message(text=reply)
-    else:
-        dispatcher.utter_message(attachment=attachment)
+# Debug utility function
+def debug_separator(title: str = "DEBUG") -> str:
+    """Create formatted debug separator"""
+    return f"\n{'='*60}\n=== {title} ===\n{'='*60}"
 
 
-class ActionGreet(Action):
-    """Personalized greeting action with name extraction and time awareness"""
+class BaseAction(Action, ABC):
+    """Abstract base class for all actions that need user preferences"""
+    
+    @abstractmethod
+    def name(self) -> Text:
+        """Action name - must be implemented by child classes"""
+        pass
+    
+    def ensure_slots_loaded(self, tracker: Tracker) -> List[SlotSet]:
+        """
+        Ensures user preference slots are loaded.
+        Returns empty list if already loaded.
+        """
+        logger.debug("Checking if slots need loading...")
+        
+        # Check if ANY of the slots are missing
+        required_slots = ["user_name", "user_timezone", "preferred_tone"]
+        for slot in required_slots:
+            if tracker.get_slot(slot) is None:
+                logger.info(f"Slot '{slot}' is missing, loading all slots")
+                
+                # Import locally to avoid circular issues
+                from .helpers.slot_loader import SlotLoader
+                if not hasattr(self, '_slot_loader'):
+                    self._slot_loader = SlotLoader(tracker.sender_id)
+                return self._slot_loader.load_all_slots(tracker)
+        
+        logger.debug("All slots already loaded")
+        return []
+    
+    @abstractmethod
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Template method that ensures slots are loaded before the action logic runs.
+        Override this instead of run() in child classes.
+        """
+        pass
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[SlotSet]:
+        
+        # Always load slots first if needed
+        slot_events = self.ensure_slots_loaded(tracker)
+        
+        # Run the actual action logic
+        action_events = self.run_with_slots(dispatcher, tracker, domain)
+        
+        # Combine events
+        return slot_events + action_events
+
+
+# Import helpers AFTER defining BaseAction to avoid circular imports
+from .helpers.response_builder import ResponseBuilder
+from .helpers.slot_loader import SlotLoader
+
+
+class ActionSessionStart(BaseAction):
+    """Initializes session and loads user preferences"""
+    
+    def name(self) -> Text:
+        return "action_session_start"
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Handle session start with slots already loaded
+        """
+        logger.info(debug_separator("ActionSessionStart"))
+        
+        # Send welcome message
+        try:
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            welcome = builder.build_response("greet")
+            dispatcher.utter_message(text=welcome)
+            logger.info(f"Sent welcome message: '{welcome}'")
+        except Exception as e:
+            logger.error(f"Error sending welcome message: {e}", exc_info=True)
+            dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
+        
+        return []
+    
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Override run to handle session start specially
+        """
+        logger.info("Starting session initialization")
+        
+        # Load all user slots at session start
+        slot_loader = SlotLoader(tracker.sender_id)
+        slot_events = slot_loader.load_all_slots(tracker)
+        
+        # Log loaded slots WITHOUT isinstance check
+        for event in slot_events:
+            # Directly access attributes - assume they're SlotSet objects
+            try:
+                logger.debug(f"Loaded slot: {event.key} = {event.value}")
+            except AttributeError:
+                # If not a SlotSet, log what it is
+                logger.debug(f"Loaded event (not SlotSet): {type(event)} - {event}")
+        
+        # Run the actual action logic
+        action_events = self.run_with_slots(dispatcher, tracker, domain)
+        
+        # Combine all events
+        all_events = slot_events + [SessionStarted()] + action_events
+        logger.info(f"Session initialization complete with {len(all_events)} events")
+        
+        return all_events
+
+class ActionGreet(BaseAction):
+    """Personalized greeting action"""
     
     def name(self) -> Text:
         return "action_greet"
     
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Greet the user (slots are already loaded by base class)
+        """
+        logger.info(debug_separator("ActionGreet"))
         
         token = tracker.sender_id
         
-        # Create response builder with user token
-        builder = ResponseBuilder(token)
+        # Debug: Show what we have in slots
+        logger.debug(f"Slots for greeting:")
+        logger.debug(f"  user_name: '{tracker.get_slot('user_name')}'")
+        logger.debug(f"  preferred_tone: '{tracker.get_slot('preferred_tone')}'")
+        logger.debug(f"  user_timezone: '{tracker.get_slot('user_timezone')}'")
         
-        # Build personalized greeting with name and time of day
-        reply = builder.build_response("greet")
+        # Build and send greeting
+        try:
+            builder = ResponseBuilder(token, tracker)
+            reply = builder.build_response("greet")
+            dispatcher.utter_message(text=reply)
+            logger.info(f"Sent greeting: '{reply}'")
+        except Exception as e:
+            logger.error(f"Error building greeting: {e}", exc_info=True)
+            dispatcher.utter_message(text="Hello! Nice to see you.")
         
-        # Send the response to user
-        dispatcher.utter_message(text=reply)
-        
-        # Store user name in slot for future reference in conversation
-        events = []
-        name = builder.user_profile.get_user_name()
-        if name:
-            events.append(SlotSet("user_name", name))
-        
-        return events
-    
-class ActionGoodbye(Action):
-    """Personalized goodbye action with user's name"""
+        return []
+
+
+class ActionGoodbye(BaseAction):
+    """Personalized goodbye action"""
     
     def name(self) -> Text:
         return "action_goodbye"
     
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Say goodbye to the user
+        """
+        logger.info(debug_separator("ActionGoodbye"))
         
         token = tracker.sender_id
         
-        # Create response builder with user token
-        builder = ResponseBuilder(token)
+        # Debug current slots
+        logger.debug(f"Current slot values:")
+        for slot in ["user_name", "preferred_tone", "user_timezone"]:
+            logger.debug(f"  {slot}: '{tracker.get_slot(slot)}'")
         
-        # Build personalized goodbye message
-        reply = builder.build_response("goodbye")
-        
-        # Send the response to user
-        dispatcher.utter_message(text=reply)
+        # Build personalized goodbye
+        try:
+            builder = ResponseBuilder(token, tracker)
+            reply = builder.build_response("goodbye")
+            dispatcher.utter_message(text=reply)
+            logger.info(f"Sent goodbye: '{reply}'")
+        except Exception as e:
+            logger.error(f"Error building goodbye: {e}", exc_info=True)
+            dispatcher.utter_message(text="Goodbye! Take care.")
         
         return []
-
+    
 class ActionIamabot(Action):
-    def name(self):
+    """Handles questions about bot identity - no personalization needed"""
+    
+    def name(self) -> Text:
         return "action_iamabot"
     
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.debug(f"Processing bot identity query from user: {tracker.sender_id[:20]}...")
+        
+        # Bot identity responses - static as this is meta-conversation
+        BOT_IDENTITY_RESPONSES = [
+            "I’m an AI health assistant — not a human — but I’m here to help you manage medications and health-related tasks.",
+            "You’re chatting with an AI assistant. I’m here to help with medicine reminders, schedules, and related questions.",
+            "I’m not a real person, but I can help you stay on track with your medications and health routines.",
+            "This is an automated health assistant. I’m here to support you with medication reminders and basic health information.",
+            "I’m an AI system designed to understand your messages and help with medicines and healthcare tasks.",
+            "I don’t have feelings or consciousness, but I can understand what you’re asking and help where I can.",
+            "I’m a virtual assistant focused on medication management and health support.",
+            "You’re talking to an AI assistant. My role is to help you manage medicines safely and consistently.",
+            "I work by processing your questions and responding with helpful information related to health and medications.",
+            "I’m software, not a human — but I’m designed to be clear, helpful, and reliable for health-related support.",
+            "I’m an AI health assistant. I can help with reminders, medication tracking, and general guidance.",
+            "I’m not able to think or feel like a person, but I can still help you with medication-related needs.",
+            "This chat is automated, but I’m here to make managing your medications easier.",
+            "I’m an AI assistant created to support people with their medicines and health routines.",
+            "I don’t replace a doctor or a human, but I can help you stay organized and informed about your medications.",
+            "I’m here to assist with health-related tasks like reminders, schedules, and basic questions.",
+            "I understand your messages and respond based on what I’m designed to help with — mainly medications and healthcare support.",
+            "I’m an AI assistant built to help with medication reminders and everyday health support."
+        ]
+        
         try:
-            messages = ["You got me! I am a large language model powered by Rasa, but I try my best to be helpful. What can I assist you with today?",
-                        "I plead the fifth! But seriously, I'm here to answer your questions and complete tasks as instructed.",
-                        "I am a chatbot powered by Rasa, designed to simulate conversation and provide information.",
-                        "Top secret! Okay, fine. I'm a language model here to help you with your requests. How can I assist you today?",
-                        "Hello there! I'm a chatbot designed to provide information and complete tasks. What can I do for you?"]
-            reply = random.choice(messages)
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "success"
-            }
+            reply = random.choice(BOT_IDENTITY_RESPONSES)
+            logger.debug(f"Selected bot identity response: '{reply[:50]}...'")
+            
+            # Only send text response since this is a simple identity message
+            dispatcher.utter_message(text=reply)
+            
         except Exception as e:
-            reply = "Error!"
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "failed"
-            }
-        send_response(dispatcher, tracker, reply, attachment)
-
-        return[]
-
-
+            logger.error(f"Error in action_iamabot: {e}", exc_info=True)
+            error_message = "I'm having trouble responding right now. I'm a chatbot here to help you!"
+            dispatcher.utter_message(text=error_message)
+        
+        logger.debug("Bot identity query handled successfully")
+        return []
 
 class ActionAddMedication(Action):
     def name(self):
@@ -149,7 +293,7 @@ class ActionAddMedication(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
 
         return []
 
@@ -199,7 +343,7 @@ class ActionListMedicationName(Action):
 		    }
             raise RasaException("Error fetching medication data")
         
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
 
         return []
     
@@ -243,7 +387,7 @@ class ActionMedicationReport(Action):
                                 "type":"string",
                                 "status": "failed"
                 } 
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
 
         return []
     
@@ -310,7 +454,7 @@ class ActionMedicationReportWithTimeframe(Action):
                         "status": "failed"
             }
  
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
 
         return []
     
@@ -366,7 +510,7 @@ class ActionTodaysMedication(Action):
                     "type": "string",
                     "status": "failed"
             }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
 
         return []
         
@@ -445,7 +589,7 @@ class ActionMedicationTracker(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return []
 
 class ActionMedicationDosage(Action):
@@ -496,7 +640,7 @@ class ActionMedicationDosage(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return []
 
 class ActionMedicationTaken(Action):
@@ -566,7 +710,7 @@ class ActionMedicationTaken(Action):
                 "type": "string",
                 "status": "failed"
             }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         
         # if medication_name: 
         #     return [SlotSet("medication", None)]
@@ -621,7 +765,7 @@ class ActionMedicationTaken(Action):
 # 		    	"type":"string",
 # 		    	"status": "success"
 #             }
-#         send_response(dispatcher, tracker, reply, attachment)
+#         dispatcher.utter_message(text=reply)
 #         return []
 
 class ActionNextDose(Action):
@@ -688,7 +832,7 @@ class ActionNextDose(Action):
                 "type":"string",
                 "status": "failed"
             }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return[]
 
     
@@ -748,7 +892,7 @@ class ActionRefillInformation(Action):
 		#     	"status": "failed"
         #     }
         # finally:
-            send_response(dispatcher, tracker, reply, attachment)
+            dispatcher.utter_message(text=reply)
         
             return [SlotSet("medication", None)]
     
@@ -812,7 +956,7 @@ class ActionNewSymptom(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return[]
 
 
@@ -876,7 +1020,7 @@ class ActionSymptoms(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
 class ActionCheckMedication(Action):
@@ -930,7 +1074,7 @@ class ActionCheckMedication(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
 class ActionMedicationAdherence(Action):
@@ -970,7 +1114,7 @@ class ActionMedicationAdherence(Action):
                 "type": "string",
                 "status": "failed"
             }
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
     def get_adherence_response(self, percentage):
@@ -1102,5 +1246,5 @@ class ActionCustomFallback(Action):
                 "status": "failed"
             }
 
-        send_response(dispatcher, tracker, reply, attachment)
+        dispatcher.utter_message(text=reply)
         return []

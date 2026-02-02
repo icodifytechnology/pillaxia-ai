@@ -22,6 +22,7 @@ intents:
   - medication_adherence
 
 actions:
+  - action_session_start
   - action_greet
   - action_goodbye
   - action_iamabot
@@ -50,7 +51,7 @@ slots:
   preferred_tone:
     type: categorical
     values: [casual, formal]
-    initial_value: formal
+    initial_value: null
     mappings:
       - type: custom
       
@@ -58,6 +59,12 @@ slots:
     type: text
     initial_value: null
     influence_conversation: false
+    mappings:
+      - type: custom
+  
+  user_timezone:  
+    type: text
+    initial_value: null
     mappings:
       - type: custom
       
