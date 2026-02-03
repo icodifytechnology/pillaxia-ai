@@ -67,3 +67,92 @@ class MedicationManager:
             logger.error(f"Failed to save medication: {message}")
         
         return success, message
+    
+    def get_medication_tracking(self, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:
+        """Get medication tracking data with date filtering"""
+        logger.debug(f"Getting tracking data from {start_date} to {end_date}")
+        
+        tracking_data = api_client.get_medication_tracking(
+            self.token, 
+            start_date=start_date, 
+            end_date=end_date
+        )
+        
+        if tracking_data:
+            items = tracking_data.get("items", [])
+            logger.debug(f"Got {len(items)} tracking entries")
+            
+            # Log sample for debugging
+            if items:
+                sample = items[0]
+                logger.debug(f"Sample entry: {sample.get('reminder')} - "
+                            f"Tracked: {'Yes' if sample.get('tracked_at') else 'No'}")
+        
+        return tracking_data
+
+    def get_recent_tracking(self, days: int = 7) -> List[Dict[str, Any]]:
+        """Get recent tracking data (last N days)"""
+        logger.debug(f"Getting last {days} days of tracking")
+        
+        from datetime import datetime, timedelta
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+        
+        tracking_data = self.get_medication_tracking(start_date=start_date, end_date=end_date)
+        if tracking_data:
+            return tracking_data.get("items", [])
+        return []
+
+    def analyze_tracking_compliance(self, tracking_data: List[Dict] = None) -> Dict[str, Any]:
+        """Analyze tracking data and return compliance statistics"""
+        logger.debug("Analyzing tracking compliance")
+        
+        if tracking_data is None:
+            tracking_data = self.get_recent_tracking(days=30)
+        
+        if not tracking_data:
+            logger.debug("No tracking data to analyze")
+            return {"total": 0, "taken": 0, "missed": 0, "compliance_rate": 0}
+        
+        total = len(tracking_data)
+        taken = sum(1 for item in tracking_data if item.get('tracked_at'))
+        missed = total - taken
+        compliance_rate = (taken / total * 100) if total > 0 else 0
+        
+        # Group by medication
+        medication_stats = {}
+        for item in tracking_data:
+            med_name = item.get('reminder', 'Unknown')
+            if med_name not in medication_stats:
+                medication_stats[med_name] = {'total': 0, 'taken': 0}
+            
+            medication_stats[med_name]['total'] += 1
+            if item.get('tracked_at'):
+                medication_stats[med_name]['taken'] += 1
+        
+        logger.debug(f"Compliance analysis: {taken}/{total} taken ({compliance_rate:.1f}%)")
+        
+        return {
+            'total': total,
+            'taken': taken,
+            'missed': missed,
+            'compliance_rate': round(compliance_rate, 1),
+            'medication_stats': medication_stats,
+            'data_points': total
+        }
+
+    def get_todays_tracking(self) -> List[Dict[str, Any]]:
+        """Get today's medication tracking data"""
+        logger.debug("Fetching today's tracking data")
+        tracking_data = self.get_medication_tracking()
+        if tracking_data:
+            return tracking_data.get("items", [])
+        return []
+
+    def _get_auth_headers(self) -> Dict[str, str]:
+        """Helper to get authentication headers"""
+        return {
+            "Authorization": f"Bearer {self.token}",
+            "Content-Type": "application/json",
+            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
+        }

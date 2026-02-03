@@ -92,15 +92,19 @@ class PillaxiaAPIClient:
         
         return None, 500, "Max retries exceeded"
     
-    def get_user_profile(self, token: str) -> Optional[Dict[str, Any]]:
-        """Get user profile with authentication"""
-        logger.info(f"Fetching user profile for token: {token[:20]}...")
-        
-        headers = {
+    def _get_auth_headers(self, token: str) -> Dict[str, str]:
+        """Get authentication headers for API requests"""
+        return {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
             "User-Agent": "Pillaxia-Rasa-Bot/1.0"
         }
+    
+    def get_user_profile(self, token: str) -> Optional[Dict[str, Any]]:
+        """Get user profile with authentication"""
+        logger.info(f"Fetching user profile for token: {token[:20]}...")
+        
+        headers = self._get_auth_headers(token)
         
         data, status_code, error = self._make_request(
             "GET",
@@ -135,11 +139,7 @@ class PillaxiaAPIClient:
         """Get user's medication list"""
         logger.info(f"Fetching medications for token: {token[:20]}...")
 
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
-        }
+        headers = self._get_auth_headers(token)
 
         data, status_code, error = self._make_request(
             "POST",  
@@ -160,6 +160,35 @@ class PillaxiaAPIClient:
             logger.error(f"Failed to fetch medications: {error}")
             return None
      
+    def get_medication_tracking(self, token: str, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:
+        """Get medication tracking data (when meds were taken/missed)"""
+        logger.info(f"Fetching medication tracking for token: {token[:20]}...")
+        
+        headers = self._get_auth_headers(token)
+        
+        # Build params for date filtering
+        params = {}
+        if start_date:
+            params["start_date"] = start_date
+        if end_date:
+            params["end_date"] = end_date
+        
+        data, status_code, error = self._make_request(
+            "POST",  # Your API uses POST for this endpoint
+            "/medication-tracker/list",
+            headers=headers,
+            params=params  # Pass dates as query params
+        )
+        
+        if status_code == 200 and data:
+            result = data.get("result", {})
+            items_count = len(result.get("items", []))
+            logger.info(f"✓ Fetched {items_count} tracking entries")
+            return result
+        else:
+            logger.error(f"✗ Failed to fetch tracking: {error}")
+            return None
+    
     def save_user_medication(self, token: str, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
         """Save/update a user medication"""
         logger.info(f"Saving medication for token: {token[:20]}...")

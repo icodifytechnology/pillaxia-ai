@@ -334,49 +334,126 @@ class ActionListMedicationName(BaseAction):
         
         return []
     
-class ActionMedicationReport(Action):
-    def name(self):
+class ActionMedicationReport(BaseAction):
+    """Generate personalized medication tracking report"""
+    
+    def name(self) -> Text:
         return "action_medication_report"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Generating medication tracking report")
         
         try:
-                url = 'https://api.pillaxia.com/api/v1/medication-tracker/list'
-                header = {
-                    "Authorization" : f"Bearer {tracker.sender_id}"
-                }
-                response = requests.post(url,headers=header)
-                response_data = response.json()
-                data = response_data['result']['items']
-                
-                report= [
-                            {
-                                'name': item['reminder'],
-                                # 'reminder_id': item['reminder_id'],
-                                'value':  f"Reminded at {item['reminder_at']}, {str('Taken at: ' + item['tracked_at'] if item['tracked_at'] is not None else 'Medication not taken')}"
-                                # 'tracked_at': item['tracked_at'
-                            } for item in data
-                        ]
-                reply = "Your Medication Report"
-                attachment = {
-                                "query_response": reply,
-                                "data":report,
-                                "type":"array",
-                                "status": "success"
-                }
-        except requests.exceptions.RequestException as e:
-                reply = "Failed to get your medication report!"
-                attachment = {
-                                "query_response": str(e),
-                                "data":[],
-                                "type":"string",
-                                "status": "failed"
-                } 
-        dispatcher.utter_message(text=reply)
-
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
+            
+            # Get tracking data (default: last 30 days)
+            tracking_data = med_manager.get_recent_tracking(days=30)
+            
+            if not tracking_data:
+                logger.debug("No tracking data found")
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response("no_tracking_data")
+                dispatcher.utter_message(text=reply)
+                return []
+            
+            # Analyze compliance
+            stats = med_manager.analyze_tracking_compliance(tracking_data)
+            logger.debug(f"Report stats: {stats}")
+            
+            # Get medication names for context
+            medication_names = med_manager.get_medication_names()
+            logger.debug(f"User has {len(medication_names)} medications in list")
+            
+            # Build personalized response
+            reply = self._build_report_response(tracker, stats, medication_names)
+            
+            dispatcher.utter_message(text=reply)
+            logger.info(f"✓ Report generated: {stats['taken']}/{stats['total']} taken")
+            
+        except Exception as e:
+            logger.error(f"✗ Error generating report: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't generate your medication report.")
+        
         return []
+    
+    def _build_report_response(self, tracker: Tracker, stats: Dict, medication_names: List[str]) -> str:
+        """Build personalized report response"""
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        
+        # Find most problematic medication
+        problematic_meds = []
+        problematic_note = ""
+
+        if stats['medication_stats']:
+            total_meds = len(stats['medication_stats'])
+            problematic_meds = []
+
+            # Identify meds with low compliance
+            for med_name, med_stats in stats['medication_stats'].items():
+                if med_stats['total'] > 0:
+                    med_compliance = (med_stats['taken'] / med_stats['total'] * 100)
+                    if med_compliance < 70:  # Less than 70% compliance
+                        problematic_meds.append((med_name, med_compliance))
+
+            # Generate a refined problematic note
+            problematic_note = ""
+            if problematic_meds:
+                # Calculate how many meds are problematic
+                num_problematic = len(problematic_meds)
+                percent_problematic = (num_problematic / total_meds) * 100
+
+                # Sort meds by lowest compliance
+                problematic_meds.sort(key=lambda x: x[1])  # ascending order
+                med_names = [m[0] for m in problematic_meds]
+
+                if percent_problematic == 100:
+                    problematic_note = "It seems you haven't been taking any of your medications on time. Let's try to improve that!"
+                elif percent_problematic >= 70:
+                    problematic_note = f"Almost all of your medications ({', '.join(med_names)}) need more attention."
+                elif percent_problematic >= 40:
+                    if num_problematic == 1:
+                        problematic_note = f"Try to be more consistent with your {med_names[0]}."
+                    elif num_problematic == 2:
+                        problematic_note = f"Focus on taking {med_names[0]} and {med_names[1]} more regularly."
+                    else:
+                        problematic_note = f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]}."
+                else:  # less than 40% of meds problematic
+                    if num_problematic == 1:
+                        problematic_note = f"You mostly did well, but keep an eye on your {med_names[0]}."
+                    else:
+                        problematic_note = f"You mostly took your medications on time. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
+        
+        # Determine time period text
+        day_text = self._get_time_period_text(30)  # 30 days = "month"
+        
+        return builder.build_response(
+            "medication_report",
+            total=stats['total'],
+            taken=stats['taken'],
+            missed=stats['missed'],
+            compliance_rate=stats['compliance_rate'],
+            day=day_text,
+            medication_count=len(medication_names),
+            problematic_meds=problematic_meds or "None",
+            problematic_note=problematic_note
+        )
+    
+    def _get_time_period_text(self, days: int) -> str:
+        """Convert days to human-readable time period"""
+        if days == 1:
+            return "day"
+        elif days == 7:
+            return "week"
+        elif days == 30:
+            return "month"
+        elif days == 90:
+            return "3 months"
+        else:
+            return f"{days} days"
     
 class ActionMedicationReportWithTimeframe(Action):
     def name(self):
