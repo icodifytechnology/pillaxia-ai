@@ -59,5 +59,26 @@
       "Farewell, {name}. Stay well.",
       "I hope you have a pleasant {time_of_day}, {name}."
     ]
-  }
+  },
+  "list_medications": {
+  "casual": [
+    "Here’s what you’re currently taking: {medications}",
+    "These are the medications I have on your list: {medications}",
+    "You’re currently taking: {medications}",
+    "Here’s your medication list: {medications}",
+    "I’ve got these meds saved for you: {medications}",
+    "This is what I see in your medication list: {medications}",
+    "Here are your current meds: {medications}",
+    "You’ve got these medications listed: {medications}",
+    "Here’s what you’re taking right now, {name}: {medications}",
+    "This is what I have saved for you, {name}: {medications}"
+  ],
+  "formal": [
+    "{name}, your current medication list includes: {medications}",
+    "According to your records, you are taking the following medications: {medications}",
+    "Here is an overview of your prescribed medications: {medications}",
+    "{name}, these are the medications currently recorded in your profile: {medications}",
+    "Based on your saved information, your medications are: {medications}"
+  ]
+}
 }

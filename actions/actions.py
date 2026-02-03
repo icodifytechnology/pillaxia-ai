@@ -297,54 +297,41 @@ class ActionAddMedication(Action):
 
         return []
 
-class ActionListMedicationName(Action):
+class ActionListMedicationName(BaseAction):  
     def name(self):
         return "action_list_medication_name"
     
-    def run(self, dispatcher: CollectingDispatcher, 
-            tracker: Tracker, 
-            domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        url = "https://api.pillaxia.com/api/v1/user-medications/list"
-        header = {
-                "Authorization" : f"Bearer {tracker.sender_id}"    
-            }
+        logger.info("Listing medication names")
         
-        try: 
-            response = requests.post(url, headers=header)
-            response_data = response.json()
-            if response_data["message"] and "result" in response_data:
-                responses = response_data["result"]["items"]    
-            medicationNames = [response["name"] for response in responses]
+        try:
+            # Use the MedicationManager
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
             
-            messages = [
-                "Your Medication Names are",
-                "Here are your Medication Names:",
-                "Your Medications include:",
-                "The Medications you're taking are:",
-                "Your prescribed Medications are:"
-            ]
-
-            reply = random.choice(messages) + ", ".join([str(med) for med in medicationNames])
+            medication_names = med_manager.get_medication_names()
             
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "success"
-		    }                      
-        except requests.exceptions.RequestException as e:
-            reply = "Failed to Get Medication Names"
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "Failed"
-		    }
-            raise RasaException("Error fetching medication data")
+            if not medication_names:
+                logger.debug("No medications found for user")
+                reply = "You don't have any medications in your list."
+            else:
+                # Use ResponseBuilder for personalization
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response(
+                    "list_medications",
+                    medications=", ".join(medication_names)
+                )
+                logger.debug(f"Found {len(medication_names)} medications")
+            
+            dispatcher.utter_message(text=reply)
+            
+        except Exception as e:
+            logger.error(f"Error listing medications: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't retrieve your medication list.")
         
-        dispatcher.utter_message(text=reply)
-
         return []
     
 class ActionMedicationReport(Action):

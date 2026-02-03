@@ -131,6 +131,62 @@ class PillaxiaAPIClient:
             logger.error(f"Failed to fetch profile: {error}")
             return None
     
+    def get_user_medications(self, token: str) -> Optional[Dict[str, Any]]:
+        """Get user's medication list"""
+        logger.info(f"Fetching medications for token: {token[:20]}...")
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
+        }
+
+        data, status_code, error = self._make_request(
+            "POST",  
+            "/user-medications/list",  
+            headers=headers
+        )
+
+        if status_code == 200 and data:
+            result = data.get("result")
+            if result:
+                logger.info(f"Medications fetched successfully - {result.get('count', 0)} items")
+                logger.debug(f"Medication data structure: {list(result.keys())}")
+                return result
+            else:
+                logger.warning("API response missing 'result' key for medications")
+                return None
+        else:
+            logger.error(f"Failed to fetch medications: {error}")
+            return None
+     
+    def save_user_medication(self, token: str, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+        """Save/update a user medication"""
+        logger.info(f"Saving medication for token: {token[:20]}...")
+        logger.debug(f"Medication data: {medication_data}")
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
+        }
+
+        data, status_code, error = self._make_request(
+            "POST",
+            "/user-medications/save",  
+            headers=headers,
+            json=medication_data
+        )
+
+        if status_code == 200:
+            logger.info("Medication saved successfully")
+            if data and "message" in data:
+                return True, data.get("message")
+            return True, "Medication saved successfully"
+        else:
+            logger.error(f"Failed to save medication: {error}")
+            return False, error
+        
     def health_check(self) -> bool:
         """Check if API is reachable"""
         try:
