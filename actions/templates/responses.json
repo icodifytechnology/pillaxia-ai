@@ -1,0 +1,138 @@
+{
+  "greet": {
+    "casual": [
+      "Hey {name}! 👋 How can I help you today?",
+      "Hi {name}! Ready to check in on your health?",
+      "Hey {name}! What would you like help with?",
+      "Hello {name}! 😊 How are you feeling today?",
+      "Hi there {name}! Need help with your meds or symptoms?",
+      "Hey {name}! I'm here if you need anything.",
+      "Hi {name}! Want to review your medication or schedule?",
+      "Hello! 👋 How can I support you today?",
+      "Hi! Ready to take care of your health?",
+      "Hey there! What can I help you with today?",
+      "Good {time_of_day}, {name}! 👋 How's it going?",
+      "Hi {name}! How’s your {time_of_day} been so far?",
+      "Good {time_of_day}! Let me know how I can help.",
+      "Hey {name}! Need a quick medication check?",
+      "Hello! How are things going this {time_of_day}?"
+    ],
+    "formal": [
+      "Good {time_of_day}, {name}. How may I assist you today?",
+      "Hello {name}. How can I support you with your health?",
+      "Greetings, {name}. How may I help you?",
+      "Welcome, {name}. What can I assist you with today?",
+      "Hello {name}. I'm here to help with your medication management.",
+      "Good day, {name}. Please let me know how I may assist.",
+      "Good {time_of_day}. How may I be of service?",
+      "Hello. How can I assist you today?",
+      "Greetings. I'm here to support your health needs.",
+      "Welcome. How may I help you with your medications today?",
+      "Hello {name}. I hope you're having a pleasant {time_of_day}.",
+      "Good {time_of_day}, {name}. How are you feeling today?"
+    ]
+  },
+  "goodbye": {
+    "casual": [
+      "Take care, {name}! 😊 I'm here anytime you need help.",
+      "Bye {name}! Stay well and talk soon 👋",
+      "See you later, {name}! Don't forget to take care of yourself.",
+      "All set, {name}! Feel free to check back anytime.",
+      "Thanks for stopping by, {name}! 😊",
+      "Catch up soon, {name}! Stay healthy.",
+      "Glad I could help, {name}! Have a great {time_of_day}.",
+      "You're all set, {name}! Take care 👋",
+      "No worries, {name}! I'm here whenever you need me.",
+      "Have a good {time_of_day}, {name}! 😊",
+      "Thanks for chatting! Take care of yourself.",
+      "See you soon! Let me know if you need help with your meds."
+    ],
+    "formal": [
+      "Goodbye, {name}. Take care of your health.",
+      "Thank you, {name}. Please feel free to reach out again.",
+      "I’m glad I could assist you, {name}. Have a pleasant day.",
+      "Goodbye, {name}. Wishing you good health.",
+      "Thank you for your time, {name}. Take care.",
+      "It was my pleasure assisting you, {name}.",
+      "Good day, {name}. Please do not hesitate to contact me again.",
+      "Thank you, {name}. I wish you a healthy {time_of_day}.",
+      "Farewell, {name}. Stay well.",
+      "I hope you have a pleasant {time_of_day}, {name}."
+    ]
+  },
+  "list_medications": {
+  "casual": [
+    "Here’s what you’re currently taking: {medications}",
+    "These are the medications I have on your list: {medications}",
+    "You’re currently taking: {medications}",
+    "Here’s your medication list: {medications}",
+    "I’ve got these meds saved for you: {medications}",
+    "This is what I see in your medication list: {medications}",
+    "Here are your current meds: {medications}",
+    "You’ve got these medications listed: {medications}",
+    "Here’s what you’re taking right now, {name}: {medications}",
+    "This is what I have saved for you, {name}: {medications}"
+  ],
+  "formal": [
+    "{name}, your current medication list includes: {medications}",
+    "According to your records, you are taking the following medications: {medications}",
+    "Here is an overview of your prescribed medications: {medications}",
+    "{name}, these are the medications currently recorded in your profile: {medications}",
+    "Based on your saved information, your medications are: {medications}"
+  ]
+},
+"medication_report": {
+  "casual": [
+    "Over the last month, you took {taken} out of {total} meds ({compliance_rate}% adherence). {problematic_note}",
+    "Here's your 30-day med summary: {taken}/{total} taken ({compliance_rate}% on track). {problematic_note}",
+    "You managed to take {taken} of {total} medications this month. {problematic_note}",
+    "Monthly medication check: {taken}/{total} meds taken ({compliance_rate}% compliance). {problematic_note}",
+    "In the past 30 days, {taken} out of {total} meds were taken. {problematic_note}",
+    "Looking at the last month, your adherence is {compliance_rate}% with {taken} of {total} medications taken. {problematic_note}",
+    "Here’s your medication report for the past month: {taken}/{total} meds taken. {problematic_note}",
+    "{taken} of {total} medications were taken over the last 30 days ({compliance_rate}% adherence). {problematic_note}"
+  ],
+  "formal": [
+    "Your medication compliance report for the last 30 days: {taken} of {total} medications taken ({compliance_rate}% adherence). {problematic_note}",
+    "Medication tracking summary for the past month: {taken} taken, {missed} missed. Overall compliance: {compliance_rate}%. {problematic_note}",
+    "Based on records from the last 30 days, {taken}/{total} medications were taken ({compliance_rate}% adherence). {problematic_note}",
+    "Here is your 30-day medication summary: {taken} of {total} medications taken. Compliance rate: {compliance_rate}%. {problematic_note}",
+    "Over the past month, your adherence rate is {compliance_rate}%, with {taken} of {total} medications taken. {problematic_note}"
+  ]
+},
+
+  "no_tracking_data": {
+    "casual": [
+      "I couldn’t find any medication tracking data for the past month.",
+      "No recent records of your medications are available.",
+      "It seems there’s no medication tracking information for the last 30 days.",
+      "Medication tracking data is not available for this period.",
+      "No logs found for your medication intake recently."
+    ],
+    "formal": [
+      "No medication tracking records are available for the past month.",
+      "Recent medication data could not be located in the records.",
+      "There is no tracking information for your medications over the last 30 days.",
+      "Medication records for this period are currently unavailable.",
+      "No data on your medication adherence could be found for the past month."
+    ]
+  },
+
+  "medication_report_with_timeframe": {
+  "casual": [
+    "For the past {day}, you took {taken}/{total} medications ({compliance_rate}% adherence).{problematic_note}",
+    "Your {day} med summary: {taken} out of {total} meds taken. {problematic_note}",
+    "In the last {day}, you completed {taken}/{total} meds. {problematic_note}",
+    "Looking at your meds over the {day}: {taken}/{total} taken ({compliance_rate}% compliance). {problematic_note}",
+    "{taken} of your {total} medications were taken during this {day}. {problematic_note}",
+    "Medication update for the last {day}: {taken}/{total} meds taken. {problematic_note}"
+  ],
+  "formal": [
+    "Medication compliance report for the past {timeframe}: {taken} of {total} medications taken ({compliance_rate}% adherence). {problematic_note}",
+    "Your {timeframe} medication summary: {taken} taken, {missed} missed. Overall compliance: {compliance_rate}%. {problematic_note}",
+    "Based on records from the last {timeframe}, {taken}/{total} medications were taken ({compliance_rate}% adherence). {problematic_note}",
+    "Here is your medication report for the past {timeframe}: {taken} taken, {missed} missed. Compliance: {compliance_rate}%. {problematic_note}",
+    "During the {timeframe}, your adherence rate is {compliance_rate}%, with {taken} of {total} medications taken. {problematic_note}"
+  ]
+}
+}

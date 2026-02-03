@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rasa Core Visualisation</title>
+    <script src="https://dagrejs.github.io/project/dagre-d3/latest/dagre-d3.min.js"></script>
+    <script src="https://dagrejs.github.io/project/dagre/latest/dagre.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://dagrejs.github.io/project/graphlib-dot/v0.6.3/graphlib-dot.js"></script>
+</head>
+<body>
+<div id="errormsg" style="color: #b00"></div>
+<svg>
+    <style id="graph-style">
+        .node.invisible > rect {
+            display: none;
+        }
+
+        .node.start > rect {
+            fill: #7f7;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node.end > rect {
+            fill: #f77;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node:not(.active) > rect, .node:not(.active) > .label {
+            opacity: 0.4;
+        }
+
+        .edgePath:not(.active) path {
+            opacity: 0.4;
+        }
+
+        .node.ellipsis > rect {
+            fill: #CCC;
+        }
+
+        .node.intent > rect {
+            fill: #7ff;
+        }
+
+        .node.dashed > rect {
+            stroke-dasharray: 5;
+        }
+
+        text {
+            font-weight: 300;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+            font-size: 14px;
+            color: #1f1d1d;
+        }
+
+        .node rect {
+            stroke: #444;
+            fill: #fff;
+            stroke-width: 1.5px;
+        }
+
+        .edgePath path {
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        svg {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            height: 100%;
+            width: 100%
+        }
+    </style>
+    <g></g>
+</svg>
+<script>
+
+  function serveGraph() {
+    let oldInputGraphValue;
+
+    const url = 'visualization.dot';
+    const refreshInterval = 500;
+
+    // trigger a refresh by fetching an updated graph
+    setInterval(function () {
+      fetch(url).then(r => r.text()).then(dot => {
+        document.getElementById('errormsg').innerHTML = '';
+        if (oldInputGraphValue === dot) return;
+
+        oldInputGraphValue = dot;
+        drawGraph(dot);
+      }).catch(err => {
+        document.getElementById('errormsg').innerHTML =
+          'Failed to update plot. (' + err.message + ')';
+      });
+    }, refreshInterval);
+  }
+
+  function drawGraph(graph) {
+    let g = graphlibDot.read(graph);
+    // Set margins, if not present
+    if (!g.graph().hasOwnProperty("marginx") &&
+      !g.graph().hasOwnProperty("marginy")) {
+      g.graph().marginx = 20;
+      g.graph().marginy = 20;
+    }
+    g.graph().transition = function (selection) {
+      return selection.transition().duration(300);
+    };
+    // Render the graph into svg g
+    d3.select("svg g").call(render, g);
+  }
+  // Set up zoom support
+  const svg = d3.select("svg"),
+    inner = d3.select("svg g"),
+    zoom = d3.zoom().on("zoom", function () {
+      inner.attr("transform", d3.event.transform);
+    });
+  svg.call(zoom);
+
+  // Create and configure the renderer
+  const render = dagreD3.render();
+
+  let isClient = false;
+  isClient = true;
+
+  if (isClient) {
+    // Mark all nodes and their edges as active
+    cssRules = document.getElementById('graph-style').sheet.cssRules;
+    cssRules[3].style.opacity = 1;
+    cssRules[4].style.opacity = 1;
+
+    let graph;
+    graph = `digraph  {
+0 [class="start active", fillcolor=green, fontsize=12, label=START, style=filled];
+"-1" [class=end, fillcolor=red, fontsize=12, label=END, style=filled];
+1 [class="", fontsize=12, label=action_add_medication];
+2 [class="", fontsize=12, label=action_list_medication_name];
+3 [class="", fontsize=12, label=action_medication_tracker];
+4 [class="", fontsize=12, label=action_medication_report];
+5 [class="", fontsize=12, label=action_custom_fallback];
+6 [class="", fontsize=12, label=action_greet];
+7 [class="", fontsize=12, label=action_add_medication];
+8 [class="", fontsize=12, label=action_list_medication_name];
+9 [class="", fontsize=12, label=action_medication_report];
+13 [class="", fontsize=12, label=action_goodbye];
+14 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+15 [class="", fontsize=12, label=action_todays_medication];
+17 [class="", fontsize=12, label=action_custom_fallback];
+18 [class="", fontsize=12, label=action_todays_medication];
+20 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+26 [class="", fontsize=12, label=action_iamabot];
+27 [class="", fontsize=12, label=action_todays_medication];
+28 [class="", fontsize=12, label=action_medication_tracker];
+31 [class="", fontsize=12, label=action_list_medication_name];
+36 [class="", fontsize=12, label=action_medication_report];
+42 [class="", fontsize=12, label=action_list_medication_name];
+47 [class="", fontsize=12, label=action_custom_fallback];
+50 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+53 [class="", fontsize=12, label=action_add_medication];
+54 [class="", fontsize=12, label=action_list_medication_name];
+56 [class="", fontsize=12, label=action_custom_fallback];
+59 [class="", fontsize=12, label=action_todays_medication];
+62 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+63 [class="", fontsize=12, label=action_iamabot];
+66 [class="", fontsize=12, label=action_medication_tracker];
+74 [class="", fontsize=12, label=action_add_medication];
+77 [class="", fontsize=12, label=action_medication_tracker];
+82 [class="", fontsize=12, label=action_add_medication];
+86 [class="", fontsize=12, label=action_medication_tracker];
+89 [class="", fontsize=12, label=action_iamabot];
+90 [class="", fontsize=12, label=action_todays_medication];
+94 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+98 [class="", fontsize=12, label=action_list_medication_name];
+103 [class="", fontsize=12, label=action_medication_report];
+108 [class="", fontsize=12, label=action_medication_report];
+116 [class="", fontsize=12, label=action_add_medication];
+117 [class="", fontsize=12, label=action_todays_medication];
+121 [class="", fontsize=12, label=action_list_medication_name];
+122 [class="", fontsize=12, label=action_medication_report];
+125 [class="", fontsize=12, label=action_custom_fallback];
+126 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+129 [class="", fontsize=12, label=action_medication_tracker];
+130 [class="", fontsize=12, label=action_add_medication];
+138 [class="", fontsize=12, label=action_medication_report_with_timeframe];
+139 [class="", fontsize=12, label=action_medication_tracker];
+142 [class="", fontsize=12, label=action_todays_medication];
+143 [class="", fontsize=12, label=action_custom_fallback];
+147 [class="", fontsize=12, label=action_iamabot];
+148 [class="", fontsize=12, label=action_medication_tracker];
+150 [class="", fontsize=12, label=action_symptoms];
+151 [class="", fontsize=12, label=action_new_symptom];
+152 [class="", fontsize=12, label=action_next_dose];
+157 [class="", fontsize=12, label=action_check_medication];
+158 [class="", fontsize=12, label=action_medication_taken];
+161 [class="", fontsize=12, label=action_medication_report];
+162 [class="", fontsize=12, label=action_check_medication];
+170 [class="", fontsize=12, label=action_refill_information];
+171 [class="", fontsize=12, label=action_stock_level];
+173 [class="", fontsize=12, label=action_next_dose];
+176 [class="", fontsize=12, label=action_refill_information];
+177 [class="", fontsize=12, label=action_stock_level];
+178 [class="", fontsize=12, label=action_symptoms];
+179 [class="", fontsize=12, label=action_medication_adherence];
+181 [class="", fontsize=12, label=action_medication_adherence];
+186 [class="", fontsize=12, label="..."];
+195 [class="", fontsize=12, label=action_medication_dosage];
+201 [class="", fontsize=12, label=action_medication_taken];
+207 [class="", fontsize=12, label=action_greet];
+213 [class="", fontsize=12, label=action_add_medication];
+224 [class=intent, fillcolor=lightblue, label="i want to add another medication in medication list", shape=rect, style=filled];
+225 [class=intent, fillcolor=lightblue, label="Can you pull up my medication history?", shape=rect, style=filled];
+226 [class=intent, fillcolor=lightblue, label="Hey there, are you available?", shape=rect, style=filled];
+227 [class=intent, fillcolor=lightblue, label="list down all the medicines I take", shape=rect, style=filled];
+228 [class=intent, fillcolor=lightblue, label="I want to check my medication details for the last week", shape=rect, style=filled];
+229 [class=intent, fillcolor=lightblue, label="Time for my daily meds check, what's the lineup?", shape=rect, style=filled];
+230 [class=intent, fillcolor=lightblue, label="How do I manage my ADHD symptoms?", shape=rect, style=filled];
+231 [class=intent, fillcolor=lightblue, label="I need to see my medication history for the past week", shape=rect, style=filled];
+232 [class=intent, fillcolor=lightblue, label="What are your limitations?", shape=rect, style=filled];
+233 [class=intent, fillcolor=lightblue, label="I have taken my today's medication .", shape=rect, style=filled];
+234 [class=intent, fillcolor=lightblue, label="Can you list the symptoms I experienced over the last week?", shape=rect, style=filled];
+235 [class=intent, fillcolor=lightblue, label="When do I need to take my medication again?", shape=rect, style=filled];
+236 [class=intent, fillcolor=lightblue, label="When was my last Simvastatin, Angela?", shape=rect, style=filled];
+237 [class=intent, fillcolor=lightblue, label="Is it too early to refill my Venlafaxine?", shape=rect, style=filled];
+238 [class=intent, fillcolor=lightblue, label="Can you tell me the time for my next dose?", shape=rect, style=filled];
+239 [class=intent, fillcolor=lightblue, label="Is my Pantoprazole supply getting low?", shape=rect, style=filled];
+240 [class=intent, fillcolor=lightblue, label="am I following my prescription schedule?", shape=rect, style=filled];
+241 [class=intent, fillcolor=lightblue, label="Is it going to snow tomorrow in New York?", shape=rect, style=filled];
+242 [class=intent, fillcolor=lightblue, label="show me all the drugs I'm prescribed", shape=rect, style=filled];
+243 [class=intent, fillcolor=lightblue, label="all done here, take care", shape=rect, style=filled];
+244 [class=intent, fillcolor=lightblue, label="What medications did I take in the last week?", shape=rect, style=filled];
+245 [class=intent, fillcolor=lightblue, label="Are there any tasks you can't do?", shape=rect, style=filled];
+246 [class=intent, fillcolor=lightblue, label="I'm experiencing stomach cramps.", shape=rect, style=filled];
+247 [class=intent, fillcolor=lightblue, label="Meds for today?", shape=rect, style=filled];
+248 [class=intent, fillcolor=lightblue, label="Can you pull up my medication schedule for today?", shape=rect, style=filled];
+249 [class=intent, fillcolor=lightblue, label="Pill-popping session complete", shape=rect, style=filled];
+250 [class=intent, fillcolor=lightblue, label="Can you explain my MRI results?", shape=rect, style=filled];
+251 [class=intent, fillcolor=lightblue, label="My back has been sore for days.", shape=rect, style=filled];
+252 [class=intent, fillcolor=lightblue, label="Can I include a medication to my medication tracker?", shape=rect, style=filled];
+253 [class=intent, fillcolor=lightblue, label="what medications have I been prescribed?", shape=rect, style=filled];
+254 [class=intent, fillcolor=lightblue, label="I can't breathe properly.", shape=rect, style=filled];
+255 [class=intent, fillcolor=lightblue, label="Give me an overview of my medications from the last month", shape=rect, style=filled];
+256 [class=intent, fillcolor=lightblue, label="Gotta take my pills, what's on the list?", shape=rect, style=filled];
+257 [class=intent, fillcolor=lightblue, label="Can I see a list of medications I took", shape=rect, style=filled];
+258 [class=intent, fillcolor=lightblue, label="Are there any tasks you can't do?", shape=rect, style=filled];
+259 [class=intent, fillcolor=lightblue, label="Did I miss taking my medication today?", shape=rect, style=filled];
+260 [class=intent, fillcolor=lightblue, label="I'd like to see a summary of my prescriptions", shape=rect, style=filled];
+261 [class=intent, fillcolor=lightblue, label="check my medication history", shape=rect, style=filled];
+262 [class=intent, fillcolor=lightblue, label="Can you show me a report of medications?", shape=rect, style=filled];
+263 [class=intent, fillcolor=lightblue, label="Daily dose consumed", shape=rect, style=filled];
+264 [class=intent, fillcolor=lightblue, label="may I see a list of my prescriptions?", shape=rect, style=filled];
+265 [class=intent, fillcolor=lightblue, label="Can I see a list of medications I took", shape=rect, style=filled];
+266 [class=intent, fillcolor=lightblue, label="Any medications I need to take today", shape=rect, style=filled];
+267 [class=intent, fillcolor=lightblue, label="Mind showing me my meds info?", shape=rect, style=filled];
+268 [class=intent, fillcolor=lightblue, label="I took today's medication.", shape=rect, style=filled];
+269 [class=intent, fillcolor=lightblue, label="Can I get a rundown of my medications over the last week?", shape=rect, style=filled];
+270 [class=intent, fillcolor=lightblue, label="bye bye", shape=rect, style=filled];
+271 [class=intent, fillcolor=lightblue, label="What medications did I take in the last week?", shape=rect, style=filled];
+272 [class=intent, fillcolor=lightblue, label="I'd like to review my medication report", shape=rect, style=filled];
+273 [class=intent, fillcolor=lightblue, label="What medication is next on my schedule?", shape=rect, style=filled];
+274 [class=intent, fillcolor=lightblue, label="Can I get a rundown of my meds for the day?", shape=rect, style=filled];
+275 [class=intent, fillcolor=lightblue, label="I need to check report on my medication details", shape=rect, style=filled];
+276 [class=intent, fillcolor=lightblue, label="logging off, thanks", shape=rect, style=filled];
+277 [class=intent, fillcolor=lightblue, label="How can I improve my fertility?", shape=rect, style=filled];
+278 [class=intent, fillcolor=lightblue, label="Can I include a medication to my medication tracker?", shape=rect, style=filled];
+279 [class=intent, fillcolor=lightblue, label="Mind showing me my meds info?", shape=rect, style=filled];
+280 [class=intent, fillcolor=lightblue, label="Could you list my prescriptions for today?", shape=rect, style=filled];
+281 [class=intent, fillcolor=lightblue, label="I'd like to review my medication report", shape=rect, style=filled];
+282 [class=intent, fillcolor=lightblue, label="i want see my medication list", shape=rect, style=filled];
+283 [class=intent, fillcolor=lightblue, label="i want to add another medication in medication list", shape=rect, style=filled];
+284 [class=intent, fillcolor=lightblue, label="i am notifying that I have taken my meds.", shape=rect, style=filled];
+285 [class=intent, fillcolor=lightblue, label="Pill-popping session complete", shape=rect, style=filled];
+286 [class=intent, fillcolor=lightblue, label="Can you pull up my medication history?", shape=rect, style=filled];
+287 [class=intent, fillcolor=lightblue, label="What's my medication summary for the last week?", shape=rect, style=filled];
+288 [class=intent, fillcolor=lightblue, label="I feel dizzy and nauseous.", shape=rect, style=filled];
+289 [class=intent, fillcolor=lightblue, label="When does my Furosemide become available for refill?", shape=rect, style=filled];
+290 [class=intent, fillcolor=lightblue, label="Have I missed any of my doses in the past month?", shape=rect, style=filled];
+291 [class=intent, fillcolor=lightblue, label="how's my pill-taking been going?", shape=rect, style=filled];
+292 [class=intent, fillcolor=lightblue, label="talk to you soon", shape=rect, style=filled];
+293 [class=intent, fillcolor=lightblue, label="Swallowed my pills just now", shape=rect, style=filled];
+294 [class=intent, fillcolor=lightblue, label="that'll be all, cheers", shape=rect, style=filled];
+295 [class=intent, fillcolor=lightblue, label="Track a new medication by adding it to my list", shape=rect, style=filled];
+296 [class=intent, fillcolor=lightblue, label="I need to check my medication details", shape=rect, style=filled];
+297 [class=intent, fillcolor=lightblue, label="Today's medication check!", shape=rect, style=filled];
+298 [class=intent, fillcolor=lightblue, label="gotta go, thanks for your help", shape=rect, style=filled];
+299 [class=intent, fillcolor=lightblue, label="i want to add another medication in medication list", shape=rect, style=filled];
+300 [class=intent, fillcolor=lightblue, label="What pills do I need to take today?", shape=rect, style=filled];
+301 [class=intent, fillcolor=lightblue, label="Knocked back my meds", shape=rect, style=filled];
+302 [class=intent, fillcolor=lightblue, label="list down all the medicines I take", shape=rect, style=filled];
+303 [class=intent, fillcolor=lightblue, label="What's my prescription plan for today?", shape=rect, style=filled];
+304 [class=intent, fillcolor=lightblue, label="I need to review my drug history", shape=rect, style=filled];
+305 [class=intent, fillcolor=lightblue, label="can I get my medication report from last week", shape=rect, style=filled];
+306 [class=intent, fillcolor=lightblue, label="closing the app now, bye", shape=rect, style=filled];
+307 [class=intent, fillcolor=lightblue, label="Can you learn from our conversation?", shape=rect, style=filled];
+308 [class=intent, fillcolor=lightblue, label="What does my medication log say?", shape=rect, style=filled];
+309 [class=intent, fillcolor=lightblue, label="Bring up my medication chart", shape=rect, style=filled];
+310 [class=intent, fillcolor=lightblue, label="Display my medication log for the previous month", shape=rect, style=filled];
+311 [class=intent, fillcolor=lightblue, label="hey I can't sleep at night.", shape=rect, style=filled];
+312 [class=intent, fillcolor=lightblue, label="What's the best way to learn a new language?", shape=rect, style=filled];
+313 [class=intent, fillcolor=lightblue, label="gotta go, thanks for your help", shape=rect, style=filled];
+314 [class=intent, fillcolor=lightblue, label="give me an overview of my medications", shape=rect, style=filled];
+315 [class=intent, fillcolor=lightblue, label="i want see my medication list", shape=rect, style=filled];
+316 [class=intent, fillcolor=lightblue, label="Any medications scheduled for today", shape=rect, style=filled];
+317 [class=intent, fillcolor=lightblue, label="What does my medication log say?", shape=rect, style=filled];
+318 [class=intent, fillcolor=lightblue, label="thanks, I'm done for now", shape=rect, style=filled];
+319 [class=intent, fillcolor=lightblue, label="I have suffering from common cold", shape=rect, style=filled];
+320 [class=intent, fillcolor=lightblue, label="i have new medication to add in list", shape=rect, style=filled];
+321 [class=intent, fillcolor=lightblue, label="Today's medication schedule, please.", shape=rect, style=filled];
+322 [class=intent, fillcolor=lightblue, label="What's my prescription plan for today?", shape=rect, style=filled];
+323 [class=intent, fillcolor=lightblue, label="Is this an automated system?", shape=rect, style=filled];
+324 [class=intent, fillcolor=lightblue, label="Pull up my medication profile", shape=rect, style=filled];
+325 [class=intent, fillcolor=lightblue, label="I'm heading out, take care", shape=rect, style=filled];
+326 [class=intent, fillcolor=lightblue, label="Could you pull up my medication record for the past month?", shape=rect, style=filled];
+327 [class=intent, fillcolor=lightblue, label="Do I have any medications to take today", shape=rect, style=filled];
+328 [class=intent, fillcolor=lightblue, label="Could you update my medication list with this new drug?", shape=rect, style=filled];
+329 [class=intent, fillcolor=lightblue, label="show me my medication list", shape=rect, style=filled];
+330 [class=intent, fillcolor=lightblue, label="Pill duty done for the day", shape=rect, style=filled];
+331 [class=intent, fillcolor=lightblue, label="What are your limitations?", shape=rect, style=filled];
+332 [class=intent, fillcolor=lightblue, label="What causes kidney stones and how are they treated?", shape=rect, style=filled];
+333 [class=intent, fillcolor=lightblue, label="Can you pull up my medication history?", shape=rect, style=filled];
+334 [class=intent, fillcolor=lightblue, label="Pill-popping session complete", shape=rect, style=filled];
+335 [class=intent, fillcolor=lightblue, label="Can you provide a report of my medications from the previous month?", shape=rect, style=filled];
+336 [class=intent, fillcolor=lightblue, label="Can you note that I've been feeling anxious lately?", shape=rect, style=filled];
+337 [class=intent, fillcolor=lightblue, label="Did I miss taking my medication today?", shape=rect, style=filled];
+338 [class=intent, fillcolor=lightblue, label="Did I miss taking my medication today?", shape=rect, style=filled];
+339 [class=intent, fillcolor=lightblue, label="shutting down, thanks bot", shape=rect, style=filled];
+340 [class=intent, fillcolor=lightblue, label="How many doses of Mirtazapine do I have left?", shape=rect, style=filled];
+341 [class=intent, fillcolor=lightblue, label="Show me my medication report", shape=rect, style=filled];
+342 [class=intent, fillcolor=lightblue, label="What was the most recent symptom I recorded?", shape=rect, style=filled];
+343 [class=intent, fillcolor=lightblue, label="good bye", shape=rect, style=filled];
+344 [class=intent, fillcolor=lightblue, label="Can I get a rundown of my medications over the last week?", shape=rect, style=filled];
+345 [class=intent, fillcolor=lightblue, label="Can you tell me when I need to refill my Atorvastatin?", shape=rect, style=filled];
+346 [class=intent, fillcolor=lightblue, label="Can you tell me the time for my next dose?", shape=rect, style=filled];
+347 [class=intent, fillcolor=lightblue, label="Can you note that I've been feeling anxious lately?", shape=rect, style=filled];
+348 [class=intent, fillcolor=lightblue, label="What strength of simvastatin do I have in my records?", shape=rect, style=filled];
+349 [class=intent, fillcolor=lightblue, label="What's my current supply of Warfarin like?", shape=rect, style=filled];
+350 [class=intent, fillcolor=lightblue, label="What time period did I log my last fatigue symptom?", shape=rect, style=filled];
+351 [class=intent, fillcolor=lightblue, label="Did I take Prednisone earlier, Angela?", shape=rect, style=filled];
+352 [class=intent, fillcolor=lightblue, label="have I been skipping my meds?", shape=rect, style=filled];
+353 [class=intent, fillcolor=lightblue, label="Have I been consistent with my doses this week?", shape=rect, style=filled];
+354 [class=intent, fillcolor=lightblue, label="Good afternoon, is this the medication assistant?", shape=rect, style=filled];
+355 [class=intent, fillcolor=lightblue, label="wrapping up, have a good one", shape=rect, style=filled];
+356 [class=intent, fillcolor=lightblue, label="What can you do?", shape=rect, style=filled];
+357 [class=intent, fillcolor=lightblue, label="Need to include a newly prescribed drug in my med list", shape=rect, style=filled];
+358 [class=intent, fillcolor=lightblue, label="show me my medication list", shape=rect, style=filled];
+359 [class=intent, fillcolor=lightblue, label="Give me a report on my medication", shape=rect, style=filled];
+360 [class=intent, fillcolor=lightblue, label="Daily dose consumed", shape=rect, style=filled];
+361 [class=intent, fillcolor=lightblue, label="I have a sore throat.", shape=rect, style=filled];
+362 [class=intent, fillcolor=lightblue, label="Gotta take my pills, what's on the list?", shape=rect, style=filled];
+0 -> 186  [class="", key=NONE, label=""];
+0 -> 224  [class="", key=0];
+0 -> 225  [class="", key=0];
+0 -> 226  [class="", key=0];
+0 -> 227  [class="", key=0];
+0 -> 228  [class="", key=0];
+0 -> 229  [class="", key=0];
+0 -> 230  [class="", key=0];
+0 -> 231  [class="", key=0];
+0 -> 232  [class="", key=0];
+0 -> 233  [class="", key=0];
+0 -> 234  [class="", key=0];
+0 -> 235  [class="", key=0];
+0 -> 236  [class="", key=0];
+0 -> 237  [class="", key=0];
+0 -> 238  [class="", key=0];
+0 -> 239  [class="", key=0];
+0 -> 240  [class="", key=0];
+0 -> 241  [class="", key=0];
+1 -> 242  [class="", key=0];
+1 -> 243  [class="", key=0];
+1 -> 244  [class="", key=0];
+1 -> 245  [class="", key=0];
+1 -> 246  [class="", key=0];
+1 -> 247  [class="", key=0];
+1 -> 248  [class="", key=0];
+2 -> "-1"  [class="", key=NONE, label=""];
+2 -> 249  [class="", key=0];
+3 -> "-1"  [class="", key=NONE, label=""];
+4 -> 250  [class="", key=0];
+4 -> 251  [class="", key=0];
+5 -> "-1"  [class="", key=NONE, label=""];
+6 -> 252  [class="", key=0];
+6 -> 253  [class="", key=0];
+6 -> 254  [class="", key=0];
+6 -> 255  [class="", key=0];
+6 -> 256  [class="", key=0];
+6 -> 257  [class="", key=0];
+6 -> 258  [class="", key=0];
+6 -> 259  [class="", key=0];
+6 -> 260  [class="", key=0];
+6 -> 261  [class="", key=0];
+6 -> 262  [class="", key=0];
+6 -> 263  [class="", key=0];
+7 -> "-1"  [class="", key=NONE, label=""];
+7 -> 264  [class="", key=0];
+7 -> 265  [class="", key=0];
+7 -> 266  [class="", key=0];
+8 -> 267  [class="", key=0];
+8 -> 268  [class="", key=0];
+8 -> 269  [class="", key=0];
+8 -> 270  [class="", key=0];
+9 -> "-1"  [class="", key=NONE, label=""];
+13 -> "-1"  [class="", key=NONE, label=""];
+14 -> "-1"  [class="", key=NONE, label=""];
+15 -> 271  [class="", key=0];
+15 -> 272  [class="", key=0];
+15 -> 273  [class="", key=0];
+17 -> 274  [class="", key=0];
+18 -> "-1"  [class="", key=NONE, label=""];
+18 -> 275  [class="", key=0];
+18 -> 276  [class="", key=0];
+20 -> 277  [class="", key=0];
+20 -> 278  [class="", key=0];
+20 -> 279  [class="", key=0];
+26 -> 280  [class="", key=0];
+26 -> 281  [class="", key=0];
+26 -> 282  [class="", key=0];
+26 -> 283  [class="", key=0];
+26 -> 284  [class="", key=0];
+26 -> 285  [class="", key=0];
+27 -> "-1"  [class="", key=NONE, label=""];
+28 -> 286  [class="", key=0];
+28 -> 287  [class="", key=0];
+28 -> 288  [class="", key=0];
+28 -> 289  [class="", key=0];
+28 -> 290  [class="", key=0];
+28 -> 291  [class="", key=0];
+31 -> 292  [class="", key=0];
+31 -> 293  [class="", key=0];
+36 -> 294  [class="", key=0];
+36 -> 295  [class="", key=0];
+42 -> 296  [class="", key=0];
+42 -> 297  [class="", key=0];
+47 -> 298  [class="", key=0];
+47 -> 299  [class="", key=0];
+50 -> 300  [class="", key=0];
+50 -> 301  [class="", key=0];
+53 -> 302  [class="", key=0];
+53 -> 303  [class="", key=0];
+54 -> "-1"  [class="", key=NONE, label=""];
+56 -> 304  [class="", key=0];
+56 -> 305  [class="", key=0];
+59 -> 306  [class="", key=0];
+62 -> 307  [class="", key=0];
+63 -> "-1"  [class="", key=NONE, label=""];
+66 -> 308  [class="", key=0];
+66 -> 309  [class="", key=0];
+74 -> 310  [class="", key=0];
+77 -> 311  [class="", key=0];
+77 -> 312  [class="", key=0];
+82 -> 313  [class="", key=0];
+86 -> 314  [class="", key=0];
+86 -> 315  [class="", key=0];
+89 -> 316  [class="", key=0];
+90 -> 317  [class="", key=0];
+94 -> 318  [class="", key=0];
+98 -> 319  [class="", key=0];
+103 -> 320  [class="", key=0];
+108 -> 321  [class="", key=0];
+116 -> 322  [class="", key=0];
+117 -> 323  [class="", key=0];
+121 -> 324  [class="", key=0];
+122 -> 325  [class="", key=0];
+125 -> 326  [class="", key=0];
+126 -> 327  [class="", key=0];
+129 -> 328  [class="", key=0];
+130 -> 329  [class="", key=0];
+138 -> 330  [class="", key=0];
+139 -> 331  [class="", key=0];
+142 -> 332  [class="", key=0];
+143 -> 333  [class="", key=0];
+147 -> 334  [class="", key=0];
+148 -> 335  [class="", key=0];
+150 -> 336  [class="", key=0];
+151 -> "-1"  [class="", key=NONE, label=""];
+152 -> "-1"  [class="", key=NONE, label=""];
+157 -> "-1"  [class="", key=NONE, label=""];
+158 -> 337  [class="", key=0];
+161 -> 338  [class="", key=0];
+162 -> 339  [class="", key=0];
+170 -> 340  [class="", key=0];
+171 -> "-1"  [class="", key=NONE, label=""];
+173 -> 341  [class="", key=0];
+176 -> "-1"  [class="", key=NONE, label=""];
+177 -> 342  [class="", key=0];
+178 -> "-1"  [class="", key=NONE, label=""];
+179 -> "-1"  [class="", key=NONE, label=""];
+181 -> 343  [class="", key=0];
+186 -> 344  [class="", key=0];
+186 -> 345  [class="", key=0];
+186 -> 346  [class="", key=0];
+186 -> 347  [class="", key=0];
+186 -> 348  [class="", key=0];
+186 -> 349  [class="", key=0];
+186 -> 350  [class="", key=0];
+186 -> 351  [class="", key=0];
+186 -> 352  [class="", key=0];
+186 -> 353  [class="", key=0];
+186 -> 354  [class="", key=0];
+186 -> 355  [class="", key=0];
+186 -> 356  [class="", key=0];
+186 -> 357  [class="", key=0];
+186 -> 358  [class="", key=0];
+186 -> 359  [class="", key=0];
+186 -> 360  [class="", key=0];
+186 -> 361  [class="", key=0];
+186 -> 362  [class="", key=0];
+195 -> "-1"  [class="", key=NONE, label=""];
+201 -> "-1"  [class="", key=NONE, label=""];
+207 -> "-1"  [class="", key=NONE, label=""];
+213 -> "-1"  [class="", key=NONE, label=""];
+224 -> 1  [class="", key=0];
+225 -> 4  [class="", key=0];
+226 -> 6  [class="", key=0];
+227 -> 8  [class="", key=0];
+228 -> 14  [class="", key=0];
+229 -> 15  [class="", key=0];
+230 -> 17  [class="", key=0];
+231 -> 20  [class="", key=0];
+232 -> 26  [class="", key=0];
+233 -> 28  [class="", key=0];
+234 -> 150  [class="", key=0];
+235 -> 152  [class="", key=0];
+236 -> 158  [class="", key=0];
+237 -> 170  [class="", key=0];
+238 -> 173  [class="", key=0];
+239 -> 177  [class="", key=0];
+240 -> 179  [class="", key=0];
+241 -> 5  [class="", key=0];
+242 -> 2  [class="", key=0];
+243 -> 13  [class="", key=0];
+244 -> 62  [class="", key=0];
+245 -> 89  [class="", key=0];
+246 -> 125  [class="", key=0];
+247 -> 142  [class="", key=0];
+248 -> 27  [class="", key=0];
+249 -> 3  [class="", key=0];
+250 -> 5  [class="", key=0];
+251 -> 17  [class="", key=0];
+252 -> 7  [class="", key=0];
+253 -> 31  [class="", key=0];
+254 -> 47  [class="", key=0];
+255 -> 50  [class="", key=0];
+256 -> 59  [class="", key=0];
+257 -> 4  [class="", key=0];
+258 -> 147  [class="", key=0];
+259 -> 157  [class="", key=0];
+260 -> 161  [class="", key=0];
+261 -> 181  [class="", key=0];
+262 -> 9  [class="", key=0];
+263 -> 86  [class="", key=0];
+264 -> 98  [class="", key=0];
+265 -> 108  [class="", key=0];
+266 -> 27  [class="", key=0];
+267 -> 9  [class="", key=0];
+268 -> 77  [class="", key=0];
+269 -> 138  [class="", key=0];
+270 -> 13  [class="", key=0];
+271 -> 14  [class="", key=0];
+272 -> 9  [class="", key=0];
+273 -> 152  [class="", key=0];
+274 -> 18  [class="", key=0];
+275 -> 9  [class="", key=0];
+276 -> 13  [class="", key=0];
+277 -> 5  [class="", key=0];
+278 -> 116  [class="", key=0];
+279 -> 9  [class="", key=0];
+280 -> 27  [class="", key=0];
+281 -> 36  [class="", key=0];
+282 -> 42  [class="", key=0];
+283 -> 53  [class="", key=0];
+284 -> 129  [class="", key=0];
+285 -> 66  [class="", key=0];
+286 -> 9  [class="", key=0];
+287 -> 14  [class="", key=0];
+288 -> 56  [class="", key=0];
+289 -> 176  [class="", key=0];
+290 -> 157  [class="", key=0];
+291 -> 179  [class="", key=0];
+292 -> 13  [class="", key=0];
+293 -> 66  [class="", key=0];
+294 -> 13  [class="", key=0];
+295 -> 82  [class="", key=0];
+296 -> 9  [class="", key=0];
+297 -> 77  [class="", key=0];
+298 -> 13  [class="", key=0];
+299 -> 74  [class="", key=0];
+300 -> 27  [class="", key=0];
+301 -> 86  [class="", key=0];
+302 -> 54  [class="", key=0];
+303 -> 59  [class="", key=0];
+304 -> 9  [class="", key=0];
+305 -> 94  [class="", key=0];
+306 -> 13  [class="", key=0];
+307 -> 63  [class="", key=0];
+308 -> 9  [class="", key=0];
+309 -> 103  [class="", key=0];
+310 -> 14  [class="", key=0];
+311 -> 17  [class="", key=0];
+312 -> 5  [class="", key=0];
+313 -> 13  [class="", key=0];
+314 -> 54  [class="", key=0];
+315 -> 121  [class="", key=0];
+316 -> 90  [class="", key=0];
+317 -> 9  [class="", key=0];
+318 -> 13  [class="", key=0];
+319 -> 17  [class="", key=0];
+320 -> 82  [class="", key=0];
+321 -> 59  [class="", key=0];
+322 -> 117  [class="", key=0];
+323 -> 63  [class="", key=0];
+324 -> 122  [class="", key=0];
+325 -> 13  [class="", key=0];
+326 -> 126  [class="", key=0];
+327 -> 27  [class="", key=0];
+328 -> 130  [class="", key=0];
+329 -> 54  [class="", key=0];
+330 -> 139  [class="", key=0];
+331 -> 63  [class="", key=0];
+332 -> 143  [class="", key=0];
+333 -> 122  [class="", key=0];
+334 -> 148  [class="", key=0];
+335 -> 14  [class="", key=0];
+336 -> 151  [class="", key=0];
+337 -> 157  [class="", key=0];
+338 -> 162  [class="", key=0];
+339 -> 13  [class="", key=0];
+340 -> 171  [class="", key=0];
+341 -> 9  [class="", key=0];
+342 -> 178  [class="", key=0];
+343 -> 13  [class="", key=0];
+344 -> 14  [class="", key=0];
+345 -> 176  [class="", key=0];
+346 -> 152  [class="", key=0];
+347 -> 151  [class="", key=0];
+348 -> 195  [class="", key=0];
+349 -> 171  [class="", key=0];
+350 -> 178  [class="", key=0];
+351 -> 201  [class="", key=0];
+352 -> 179  [class="", key=0];
+353 -> 157  [class="", key=0];
+354 -> 207  [class="", key=0];
+355 -> 13  [class="", key=0];
+356 -> 63  [class="", key=0];
+357 -> 213  [class="", key=0];
+358 -> 54  [class="", key=0];
+359 -> 9  [class="", key=0];
+360 -> 3  [class="", key=0];
+361 -> 5  [class="", key=0];
+362 -> 27  [class="", key=0];
+}
+`;
+    drawGraph(graph);
+  } else {
+    serveGraph();
+  }
+
+
+</script>
+</body>
+</html>

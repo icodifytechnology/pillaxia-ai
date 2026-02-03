@@ -1,27 +1,26 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
 from dotenv import load_dotenv
+from typing import Any, Text, Dict, List
+import logging
+from abc import ABC, abstractmethod
 
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 
-import random
 import requests
-from typing import Any, Text, Dict, List
-
 from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, SessionStarted
 from rasa_sdk.executor import CollectingDispatcher
 from rasa.shared.exceptions import RasaException
 import openai
 from openai import OpenAI
 import os
+import random
+
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 openai_api_key = os.getenv("openai_api_key")
 
@@ -29,104 +28,243 @@ client = OpenAI(api_key=openai_api_key)
 
 DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
 
-class Greet(Action):
-    def name(self):
+# Debug utility function
+def debug_separator(title: str = "DEBUG") -> str:
+    """Create formatted debug separator"""
+    return f"\n{'='*60}\n=== {title} ===\n{'='*60}"
+
+
+class BaseAction(Action, ABC):
+    """Abstract base class for all actions that need user preferences"""
+    
+    @abstractmethod
+    def name(self) -> Text:
+        """Action name - must be implemented by child classes"""
+        pass
+    
+    def ensure_slots_loaded(self, tracker: Tracker) -> List[SlotSet]:
+        """
+        Ensures user preference slots are loaded.
+        Returns empty list if already loaded.
+        """
+        logger.debug("Checking if slots need loading...")
+        
+        # Check if ANY of the slots are missing
+        required_slots = ["user_name", "user_timezone", "preferred_tone"]
+        for slot in required_slots:
+            if tracker.get_slot(slot) is None:
+                logger.info(f"Slot '{slot}' is missing, loading all slots")
+                
+                # Import locally to avoid circular issues
+                from .helpers.slot_loader import SlotLoader
+                if not hasattr(self, '_slot_loader'):
+                    self._slot_loader = SlotLoader(tracker.sender_id)
+                return self._slot_loader.load_all_slots(tracker)
+        
+        logger.debug("All slots already loaded")
+        return []
+    
+    @abstractmethod
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Template method that ensures slots are loaded before the action logic runs.
+        Override this instead of run() in child classes.
+        """
+        pass
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[SlotSet]:
+        
+        # Always load slots first if needed
+        slot_events = self.ensure_slots_loaded(tracker)
+        
+        # Run the actual action logic
+        action_events = self.run_with_slots(dispatcher, tracker, domain)
+        
+        # Combine events
+        return slot_events + action_events
+
+
+# Import helpers AFTER defining BaseAction to avoid circular imports
+from .helpers.response_builder import ResponseBuilder
+from .helpers.slot_loader import SlotLoader
+
+
+class ActionSessionStart(BaseAction):
+    """Initializes session and loads user preferences"""
+    
+    def name(self) -> Text:
+        return "action_session_start"
+    
+    # def run_with_slots(self, dispatcher: CollectingDispatcher,
+    #                   tracker: Tracker,
+    #                   domain: Dict[Text, Any]) -> List[SlotSet]:
+    #     """
+    #     Handle session start with slots already loaded
+    #     """
+    #     logger.info(debug_separator("ActionSessionStart"))
+        
+    #     # Send welcome message
+    #     try:
+    #         builder = ResponseBuilder(tracker.sender_id, tracker)
+    #         welcome = builder.build_response("greet")
+    #         dispatcher.utter_message(text=welcome)
+    #         logger.info(f"Sent welcome message: '{welcome}'")
+    #     except Exception as e:
+    #         logger.error(f"Error sending welcome message: {e}", exc_info=True)
+    #         dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
+        
+    #     return []
+    
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Override run to handle session start specially
+        """
+        logger.info("Starting session initialization")
+        
+        # Load all user slots at session start
+        slot_loader = SlotLoader(tracker.sender_id)
+        slot_events = slot_loader.load_all_slots(tracker)
+        
+        # Log loaded slots WITHOUT isinstance check
+        for event in slot_events:
+            # Directly access attributes - assume they're SlotSet objects
+            try:
+                logger.debug(f"Loaded slot: {event.key} = {event.value}")
+            except AttributeError:
+                # If not a SlotSet, log what it is
+                logger.debug(f"Loaded event (not SlotSet): {type(event)} - {event}")
+        
+        # Run the actual action logic
+        action_events = self.run_with_slots(dispatcher, tracker, domain)
+        
+        # Combine all events
+        all_events = slot_events + [SessionStarted()] + action_events
+        logger.info(f"Session initialization complete with {len(all_events)} events")
+        
+        return all_events
+
+class ActionGreet(BaseAction):
+    """Personalized greeting action"""
+    
+    def name(self) -> Text:
         return "action_greet"
     
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Greet the user (slots are already loaded by base class)
+        """
+        logger.info(debug_separator("ActionGreet"))
+        
+        token = tracker.sender_id
+        
+        # Debug: Show what we have in slots
+        logger.debug(f"Slots for greeting:")
+        logger.debug(f"  user_name: '{tracker.get_slot('user_name')}'")
+        logger.debug(f"  preferred_tone: '{tracker.get_slot('preferred_tone')}'")
+        logger.debug(f"  user_timezone: '{tracker.get_slot('user_timezone')}'")
+        
+        # Build and send greeting
         try:
-            messages = ["Hi there. It's such a pleasure to have you here. How can we help you?",
-                        "Hello, how can we assist you?",
-                        "Nice to meet you! How can I assist?",
-                        "Greetings! How may I be of service?",
-                        "Hi! How can I make your day better?",
-                        "Welcome! How can I help you today?",
-                        "Hi there! Need a hand?",
-                        "Hello! What can I do for you?"]
-            reply = random.choice(messages)
-            attachment={
-                "query_response": reply,
-			    "data":[],
-			    "type":"string",
-			    "status": "success"
-            }
+            builder = ResponseBuilder(token, tracker)
+            reply = builder.build_response("greet")
+            dispatcher.utter_message(text=reply)
+            logger.info(f"Sent greeting: '{reply}'")
         except Exception as e:
-            reply = "Error!"
-            attachment={
-                "query_response": reply,
-			    "data":[],
-			    "type":"string",
-			    "status": "failed"
-            }
-        dispatcher.utter_message(attachment=attachment)
-        return
+            logger.error(f"Error building greeting: {e}", exc_info=True)
+            dispatcher.utter_message(text="Hello! Nice to see you.")
+        
+        return []
 
-class GoodBye(Action):
-    def name(self):
+
+class ActionGoodbye(BaseAction):
+    """Personalized goodbye action"""
+    
+    def name(self) -> Text:
         return "action_goodbye"
     
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Say goodbye to the user
+        """
+        logger.info(debug_separator("ActionGoodbye"))
+        
+        token = tracker.sender_id
+        
+        # Debug current slots
+        logger.debug(f"Current slot values:")
+        for slot in ["user_name", "preferred_tone", "user_timezone"]:
+            logger.debug(f"  {slot}: '{tracker.get_slot(slot)}'")
+        
+        # Build personalized goodbye
         try:
-            messages = ["Thank you😁, I am happy to help you👋.",
-                        "I hope I was helpful for you👋😁.",
-                        "You're welcome! 😊 Have a great day!",
-                        "Happy to help. Best wishes! 👋",
-                        "No problem! 😊 Feel free to reach out again.",
-                        "It was my pleasure assisting you. Don't hesitate to ask if you need anything else. 😊"]
-            reply = random.choice(messages)
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "success"
-		    }
+            builder = ResponseBuilder(token, tracker)
+            reply = builder.build_response("goodbye")
+            dispatcher.utter_message(text=reply)
+            logger.info(f"Sent goodbye: '{reply}'")
         except Exception as e:
-            reply = "Error!"
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "failed"
-		    }
-        dispatcher.utter_message(attachment=attachment)
-        return[]
-
-class IAmABot(Action):
-    def name(self):
+            logger.error(f"Error building goodbye: {e}", exc_info=True)
+            dispatcher.utter_message(text="Goodbye! Take care.")
+        
+        return []
+    
+class ActionIamabot(Action):
+    """Handles questions about bot identity - no personalization needed"""
+    
+    def name(self) -> Text:
         return "action_iamabot"
     
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.debug(f"Processing bot identity query from user: {tracker.sender_id[:20]}...")
+        
+        # Bot identity responses - static as this is meta-conversation
+        BOT_IDENTITY_RESPONSES = [
+            "I’m an AI health assistant — not a human — but I’m here to help you manage medications and health-related tasks.",
+            "You’re chatting with an AI assistant. I’m here to help with medicine reminders, schedules, and related questions.",
+            "I’m not a real person, but I can help you stay on track with your medications and health routines.",
+            "This is an automated health assistant. I’m here to support you with medication reminders and basic health information.",
+            "I’m an AI system designed to understand your messages and help with medicines and healthcare tasks.",
+            "I don’t have feelings or consciousness, but I can understand what you’re asking and help where I can.",
+            "I’m a virtual assistant focused on medication management and health support.",
+            "You’re talking to an AI assistant. My role is to help you manage medicines safely and consistently.",
+            "I work by processing your questions and responding with helpful information related to health and medications.",
+            "I’m software, not a human — but I’m designed to be clear, helpful, and reliable for health-related support.",
+            "I’m an AI health assistant. I can help with reminders, medication tracking, and general guidance.",
+            "I’m not able to think or feel like a person, but I can still help you with medication-related needs.",
+            "This chat is automated, but I’m here to make managing your medications easier.",
+            "I’m an AI assistant created to support people with their medicines and health routines.",
+            "I don’t replace a doctor or a human, but I can help you stay organized and informed about your medications.",
+            "I’m here to assist with health-related tasks like reminders, schedules, and basic questions.",
+            "I understand your messages and respond based on what I’m designed to help with — mainly medications and healthcare support.",
+            "I’m an AI assistant built to help with medication reminders and everyday health support."
+        ]
+        
         try:
-            messages = ["You got me! I am a large language model powered by Rasa, but I try my best to be helpful. What can I assist you with today?",
-                        "I plead the fifth! But seriously, I'm here to answer your questions and complete tasks as instructed.",
-                        "I am a chatbot powered by Rasa, designed to simulate conversation and provide information.",
-                        "Top secret! Okay, fine. I'm a language model here to help you with your requests. How can I assist you today?",
-                        "Hello there! I'm a chatbot designed to provide information and complete tasks. What can I do for you?"]
-            reply = random.choice(messages)
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "success"
-            }
+            reply = random.choice(BOT_IDENTITY_RESPONSES)
+            logger.debug(f"Selected bot identity response: '{reply[:50]}...'")
+            
+            # Only send text response since this is a simple identity message
+            dispatcher.utter_message(text=reply)
+            
         except Exception as e:
-            reply = "Error!"
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "failed"
-            }
-        dispatcher.utter_message(attachment=attachment)
-        return[]
-
-
+            logger.error(f"Error in action_iamabot: {e}", exc_info=True)
+            error_message = "I'm having trouble responding right now. I'm a chatbot here to help you!"
+            dispatcher.utter_message(text=error_message)
+        
+        logger.debug("Bot identity query handled successfully")
+        return []
 
 class ActionAddMedication(Action):
     def name(self):
@@ -155,164 +293,378 @@ class ActionAddMedication(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
+
         return []
 
-class actionmedicationname(Action):
+class ActionListMedicationName(BaseAction):  
     def name(self):
         return "action_list_medication_name"
     
-    def run(self, dispatcher: CollectingDispatcher, 
-            tracker: Tracker, 
-            domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        url = "https://api.pillaxia.com/api/v1/user-medications/list"
-        header = {
-                "Authorization" : f"Bearer {tracker.sender_id}"    
-            }
+        logger.info("Listing medication names")
         
-        try: 
-            response = requests.post(url, headers=header)
-            response_data = response.json()
-            if response_data["message"] and "result" in response_data:
-                responses = response_data["result"]["items"]    
-            medicationNames = [response["name"] for response in responses]
-            
-            messages = [
-                "Your Medication Names are",
-                "Here are your Medication Names:",
-                "Your Medications include:",
-                "The Medications you're taking are:",
-                "Your prescribed Medications are:"
-            ]
-
-            reply = random.choice(messages) + ", ".join([str(med) for med in medicationNames])
-            
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "success"
-		    }                      
-        except requests.exceptions.RequestException as e:
-            reply = "Failed to Get Medication Names"
-            attachment = {
-		    	"query_response": reply,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "Failed"
-		    }
-            raise RasaException("Error fetching medication data")
-        
-        dispatcher.utter_message(attachment=attachment)
-        return []
-    
-class ActionMedicationReport(Action):
-    def name(self):
-        return "action_medication_report"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         try:
-                url = 'https://api.pillaxia.com/api/v1/medication-tracker/list'
-                header = {
-                    "Authorization" : f"Bearer {tracker.sender_id}"
-                }
-                response = requests.post(url,headers=header)
-                response_data = response.json()
-                data = response_data['result']['items']
-                report= [
-                            {
-                                'name': item['reminder'],
-                                # 'reminder_id': item['reminder_id'],
-                                'value':  f"Reminded at {item['reminder_at']}, {str('Taken at: ' + item['tracked_at'] if item['tracked_at'] is not None else 'Medication not taken')}"
-                                # 'tracked_at': item['tracked_at'
-                            } for item in data
-                        ]
-                reply = "Your Medication Report"
-                attachment = {
-                                "query_response": reply,
-                                "data":report,
-                                "type":"array",
-                                "status": "success"
-                }
-        except requests.exceptions.RequestException as e:
-                reply = "Failed to get your medication report!"
-                attachment = {
-                                "query_response": str(e),
-                                "data":[],
-                                "type":"string",
-                                "status": "failed"
-                } 
-        dispatcher.utter_message(attachment=attachment)
-        return []
-    
-class ActionMedicationReportWithTimeframe(Action):
-    def name(self):
-        return "action_medication_report_with_timeframe"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        today = date.today()
-        period = tracker.get_slot("period")       
-        if period.lower() == "week":
-                start_date = today - timedelta(days = 7)
-        elif period.lower() == "month":
-                start_date = today - timedelta(days = 30)
-
-        url = 'https://api.pillaxia.com/api/v1/medication-tracker/list'
-        header = {
-            "Authorization" : f"Bearer {tracker.sender_id}"
-        }
-        try:
-            response = requests.post(url,headers=header)
-            data = response.json()["result"]["items"]
-            filtered_items = []
-
-            for item in data:
-                if item["tracked_at"] != None:
-                    Date = datetime.strptime(item["tracked_at"], '%Y-%m-%d %H:%M:%S').date()
-                    if Date <= today and Date >= start_date:
-                        filtered_items.append(item)
+            # Use the MedicationManager
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
             
-            if len(filtered_items) == 0:
-                reply = f"There is no records for last {period}"
-                attachment = {
-                    "query_response": reply,
-                    "data":[],
-                    "type":"string",
-                    "status": "failed"
-                }
+            medication_names = med_manager.get_medication_names()
+            
+            if not medication_names:
+                logger.debug("No medications found for user")
+                reply = "You don't have any medications in your list."
             else:
-                for item in filtered_items:
-                    report= [{
-                                'name': item['reminder'],
-                                # 'reminder_id': item['reminder_id'],
-                                'value':  f"Reminded at {item['reminder_at']}, {str('Taken at: ' + item['tracked_at'] if item['tracked_at'] is not None else 'Medication not taken')}"
-                                # 'tracked_at': item['tracked_at'
-                            } for item in filtered_items ]
-                    
-                        
-                reply = "Here's your medication report:"
-                attachment = {
-                            "query_response": reply,
-                            "data":report,
-                            "type":"array",
-                            "status": "success"
-                            }
+                # Use ResponseBuilder for personalization
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response(
+                    "list_medications",
+                    medications=", ".join(medication_names)
+                )
+                logger.debug(f"Found {len(medication_names)} medications")
+            
+            dispatcher.utter_message(text=reply)
+            
         except Exception as e:
-            reply = "Failed!"
-            attachment = {
-                        "query_response": reply,
-                        "data":[],
-                        "type":"string",
-                        "status": "failed"
-            }
- 
-        dispatcher.utter_message(attachment=attachment)
+            logger.error(f"Error listing medications: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't retrieve your medication list.")
+        
         return []
+    
+class ActionMedicationReport(BaseAction):
+    """Generate personalized medication tracking report"""
+    
+    def name(self) -> Text:
+        return "action_medication_report"
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Generating medication tracking report")
+        
+        try:
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
+            
+            # Get tracking data (default: last 30 days)
+            tracking_data = med_manager.get_recent_tracking(days=30)
+            
+            if not tracking_data:
+                logger.debug("No tracking data found")
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response("no_tracking_data")
+                dispatcher.utter_message(text=reply)
+                return []
+            
+            # Analyze compliance for summary
+            stats = med_manager.analyze_tracking_compliance(tracking_data)
+            logger.debug(f"Report stats: {stats}")
+            
+            # Get medication names for context
+            medication_names = med_manager.get_medication_names()
+            logger.debug(f"User has {len(medication_names)} medications in list")
+            
+            # Build personalized response with summary AND list
+            attachment = self._build_combined_report(tracker, stats, tracking_data, medication_names)
+            
+            dispatcher.utter_message(attachment=attachment)
+            logger.info(f"✓ Report generated: {stats['taken']}/{stats['total']} taken")
+            
+        except Exception as e:
+            logger.error(f"✗ Error generating report: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't generate your medication report.")
+        
+        return []
+    
+    def _build_combined_report(self, tracker: Tracker, stats: Dict, 
+                              tracking_data: List[Dict], medication_names: List[str]) -> Dict:
+        """Build combined report with summary and recent entries"""
+        
+        # 1. Build the summary text (with problematic note)
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        
+        # Find most problematic medication for note
+        problematic_note = ""
+        if stats.get('medication_stats'):
+            total_meds = len(stats['medication_stats'])
+            problematic_meds = []
+
+            # Identify meds with low compliance
+            for med_name, med_stats in stats['medication_stats'].items():
+                if med_stats.get('total', 0) > 0:
+                    med_compliance = (med_stats['taken'] / med_stats['total'] * 100)
+                    if med_compliance < 70:
+                        problematic_meds.append((med_name, med_compliance))
+
+            # Generate problematic note
+            if problematic_meds:
+                num_problematic = len(problematic_meds)
+                percent_problematic = (num_problematic / total_meds) * 100
+                problematic_meds.sort(key=lambda x: x[1])
+                med_names = [m[0] for m in problematic_meds]
+
+                if percent_problematic == 100:
+                    problematic_note = "It seems you haven't been taking any of your medications on time. Let's try to improve that!"
+                elif percent_problematic >= 70:
+                    problematic_note = f"Almost all of your medications ({', '.join(med_names)}) need more attention."
+                elif percent_problematic >= 40:
+                    if num_problematic == 1:
+                        problematic_note = f"Try to be more consistent with your {med_names[0]}."
+                    elif num_problematic == 2:
+                        problematic_note = f"Focus on taking {med_names[0]} and {med_names[1]} more regularly."
+                    else:
+                        problematic_note = f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]}."
+                else:
+                    if num_problematic == 1:
+                        problematic_note = f"You mostly did well, but keep an eye on your {med_names[0]}."
+                    else:
+                        problematic_note = f"You mostly took your medications on time. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
+        
+        # Build summary text
+        summary_text = builder.build_response(
+            "medication_report",
+            total=stats['total'],
+            taken=stats['taken'],
+            missed=stats['missed'],
+            compliance_rate=stats['compliance_rate'],
+            day="month",
+            medication_count=len(medication_names),
+            problematic_meds="None",
+            problematic_note=problematic_note
+        )
+        
+        # 2. Build recent entries list (limit to last 10 for readability)
+        recent_entries = tracking_data[:10]  # Show only last 10 entries
+        
+        report_data = []
+        for item in recent_entries:
+            reminder_at = item.get('reminder_at', 'Unknown time')
+            tracked_at = item.get('tracked_at')
+            
+            # Format the time strings
+            if reminder_at:
+                try:
+                    # Extract just date and time (without seconds if present)
+                    reminder_time = reminder_at.split()[1][:5] if ' ' in reminder_at else reminder_at[:5]
+                    reminder_date = reminder_at.split()[0] if ' ' in reminder_at else ""
+                    reminder_str = f"{reminder_date} {reminder_time}" if reminder_date else reminder_time
+                except:
+                    reminder_str = reminder_at
+            else:
+                reminder_str = "Unknown time"
+            
+            # Determine status
+            if tracked_at:
+                try:
+                    tracked_time = tracked_at.split()[1][:5] if ' ' in tracked_at else tracked_at[:5]
+                    status = f"Taken at {tracked_time}"
+                except:
+                    status = "Taken"
+            else:
+                status = "Medication not taken"
+            
+            report_data.append({
+                'name': item.get('reminder', 'Unknown medication'),
+                'value': f"Reminded at {reminder_str}, {status}"
+            })
+        
+        # Add note if there are more entries
+        if len(tracking_data) > 10:
+            report_data.append({
+                'name': 'Note',
+                'value': f"... and {len(tracking_data) - 10} more entries this month"
+            })
+        
+        # 3. Return combined response in attachment format
+        return {
+            "query_response": summary_text,
+            "data": report_data,
+            "type": "array",
+            "status": "success"
+        }
+    
+    def _get_time_period_text(self, days: int) -> str:
+        """Convert days to human-readable time period"""
+        if days == 1:
+            return "day"
+        elif days == 7:
+            return "week"
+        elif days == 30:
+            return "month"
+        elif days == 90:
+            return "3 months"
+        else:
+            return f"{days} days"
+    
+class ActionMedicationReportWithTimeframe(BaseAction):
+    """Generate medication report for specific timeframe (week/month)"""
+    
+    def name(self) -> Text:
+        return "action_medication_report_with_timeframe"
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Generating medication report with timeframe")
+        
+        try:
+            # Get period from slot
+            period = tracker.get_slot("period")
+            if not period:
+                logger.warning("No period specified, defaulting to month")
+                period = "month"
+            
+            logger.debug(f"Generating report for period: {period}")
+            
+            # Get medication manager
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
+            
+            # Determine days based on period
+            if period.lower() == "month":
+                days = 30 
+            elif period.lower() == "today":
+                days = 1
+            else:
+                days = 7
+        
+            # Get tracking data for the specified period
+            tracking_data = med_manager.get_recent_tracking(days=days)
+            
+            if not tracking_data:
+                logger.debug(f"No tracking data found for last {period}")
+                reply = f"I couldn't find any medication tracking data for the past {period}."
+                dispatcher.utter_message(text=reply)
+                return []
+            
+            # Analyze compliance
+            stats = med_manager.analyze_tracking_compliance(tracking_data)
+            logger.debug(f"Report stats for {period}: {stats}")
+            
+            # Get medication names for context
+            medication_names = med_manager.get_medication_names()
+            
+            # Build combined report
+            attachment = self._build_combined_report(tracker, stats, tracking_data, medication_names, period)
+            
+            dispatcher.utter_message(attachment=attachment)
+            logger.info(f"✓ {period.capitalize()} report generated: {stats['taken']}/{stats['total']} taken")
+            
+        except Exception as e:
+            logger.error(f"✗ Error generating {period} report: {e}", exc_info=True)
+            dispatcher.utter_message(text=f"Sorry, I couldn't generate your {period} medication report.")
+        
+        return []
+    
+    def _build_combined_report(self, tracker: Tracker, stats: Dict, 
+                              tracking_data: List[Dict], medication_names: List[str], period: str) -> Dict:
+        """Build combined report with summary and recent entries for timeframe"""
+        
+        # 1. Build the summary text
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        
+        # Generate problematic note
+        problematic_note = ""
+        if stats.get('medication_stats'):
+            total_meds = len(stats['medication_stats'])
+            problematic_meds = []
+
+            for med_name, med_stats in stats['medication_stats'].items():
+                if med_stats.get('total', 0) > 0:
+                    compliance = (med_stats['taken'] / med_stats['total']) * 100
+                    if compliance < 70:
+                        problematic_meds.append((med_name, compliance))
+
+            if problematic_meds:
+                num_problematic = len(problematic_meds)
+                percent_problematic = (num_problematic / total_meds) * 100
+                problematic_meds.sort(key=lambda x: x[1])
+                med_names = [m[0] for m in problematic_meds]
+
+                if percent_problematic == 100:
+                    problematic_note = f"It seems you haven't been taking any of your medications on time this {period}."
+                elif percent_problematic >= 70:
+                    problematic_note = f"Almost all of your medications ({', '.join(med_names)}) need more attention this {period}."
+                elif percent_problematic >= 40:
+                    if num_problematic == 1:
+                        problematic_note = f"Try to be more consistent with your {med_names[0]} this {period}."
+                    elif num_problematic == 2:
+                        problematic_note = f"Focus on taking {med_names[0]} and {med_names[1]} more regularly this {period}."
+                    else:
+                        problematic_note = f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]} this {period}."
+                else:
+                    if num_problematic == 1:
+                        problematic_note = f"You mostly did well this {period}, but keep an eye on your {med_names[0]}."
+                    else:
+                        problematic_note = f"You mostly took your medications on time this {period}. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
+        
+        # Build summary text
+        summary_text = builder.build_response(
+            "medication_report",
+            total=stats['total'],
+            taken=stats['taken'],
+            missed=stats['missed'],
+            compliance_rate=stats['compliance_rate'],
+            day=period,
+            medication_count=len(medication_names),
+            problematic_meds="None",
+            problematic_note=problematic_note
+        )
+        
+        # 2. Build recent entries list
+        # Show more entries for week, fewer for month
+        max_entries = 15 if period.lower() == "week" else 10
+        
+        recent_entries = tracking_data[:max_entries]
+        report_data = []
+        
+        for item in recent_entries:
+            reminder_at = item.get('reminder_at', 'Unknown time')
+            tracked_at = item.get('tracked_at')
+            
+            # Format time
+            if reminder_at and ' ' in reminder_at:
+                date_part, time_part = reminder_at.split(' ', 1)
+                time_short = time_part[:5] if len(time_part) >= 5 else time_part
+                reminder_str = f"{date_part} {time_short}"
+            else:
+                reminder_str = reminder_at or "Unknown time"
+            
+            # Status
+            if tracked_at:
+                if ' ' in tracked_at:
+                    _, tracked_time = tracked_at.split(' ', 1)
+                    time_short = tracked_time[:5] if len(tracked_time) >= 5 else tracked_time
+                    status = f"Taken at {time_short}"
+                else:
+                    status = "Taken"
+            else:
+                status = "Medication not taken"
+            
+            report_data.append({
+                'name': item.get('reminder', 'Unknown medication'),
+                'value': f"Reminded at {reminder_str}, {status}"
+            })
+        
+        # Add note if truncated
+        if len(tracking_data) > max_entries:
+            report_data.append({
+                'name': 'Note',
+                'value': f"... and {len(tracking_data) - max_entries} more entries this {period}"
+            })
+        
+        # 3. Return combined response
+        return {
+            "query_response": summary_text,
+            "data": report_data,
+            "type": "array",
+            "status": "success"
+        }
     
 class ActionTodaysMedication(Action):
     def name(self):
@@ -366,7 +718,8 @@ class ActionTodaysMedication(Action):
                     "type": "string",
                     "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
+
         return []
         
 class ActionMedicationTracker(Action):
@@ -444,10 +797,10 @@ class ActionMedicationTracker(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return []
 
-class actionMedicationDosage(Action):
+class ActionMedicationDosage(Action):
     def name(self):
         return "action_medication_dosage"
     
@@ -488,17 +841,17 @@ class actionMedicationDosage(Action):
                         "status": "failed"
                     }
         except Exception as ex:
-            reply = "Failed to get your medication dosage"
+            reply = "Failed to get your medication_dosage"
             attachment = {
 		    	    "query_response": reply,
 		    	    "data": [],
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return []
 
-class MedicationTaken(Action):
+class ActionMedicationTaken(Action):
     def name(self):
         return "action_medication_taken"
     
@@ -565,7 +918,7 @@ class MedicationTaken(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         
         # if medication_name: 
         #     return [SlotSet("medication", None)]
@@ -620,134 +973,67 @@ class MedicationTaken(Action):
 # 		    	"type":"string",
 # 		    	"status": "success"
 #             }
-#         dispatcher.utter_message(attachment=attachment)
+#         dispatcher.utter_message(text=reply)
 #         return []
 
-class actionNextDose(Action):
-   def name(self):
-       return "action_next_dose"
+class ActionNextDose(Action):
+    def name(self):
+        return "action_next_dose"
   
-   def run(self, dispatcher: CollectingDispatcher,
-           tracker: Tracker,
-           domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-        todays_time = str(datetime.today().strftime("%H:%M:%S"))
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+        
+        from datetime import datetime
+        import requests
+
+        todays_time = datetime.today().strftime("%H:%M:%S")
         current_time = datetime.now().strftime("%H:%M:%S")
         url = "https://api.pillaxia.com/api/v1/medication-reminders/list"
-        header = {
-                    "Authorization" : f"Bearer {tracker.sender_id}"
-                }
+        headers = {"Authorization": f"Bearer {tracker.sender_id}"}
+        
+        reply = "Sorry, we couldn't access your medication information."  # default reply
+        
         try:
-            response = requests.post(url,headers=header)
-            response_data = response.json()["result"]
-            if response_data.get("count") != 0:
-                medication_detail = []
+            response = requests.post(url, headers=headers)
+            response_data = response.json().get("result", {})
+
+            if response_data.get("count", 0) != 0:
                 next_med = None
                 now = datetime.strptime(current_time, "%H:%M:%S")
 
-                for data in response_data.get("items"):
-                    # Geting all future times
+                for data in response_data.get("items", []):
                     future_times = [
-                        t for t in data["reminder_time"]
+                        t for t in data.get("reminder_time", [])
                         if t >= todays_time and datetime.strptime(t, "%H:%M:%S") > now
                     ]
                     if future_times:
                         earliest_time = min(future_times, key=lambda t: datetime.strptime(t, "%H:%M:%S"))
                         med_time = datetime.strptime(earliest_time, "%H:%M:%S")
 
-                        # Update next_med if it's the soonest upcoming one
                         if not next_med or med_time < datetime.strptime(next_med["time"], "%H:%M:%S"):
                             next_med = {"name": data["medication"], "time": earliest_time}
 
                 if next_med:
                     time_obj = datetime.strptime(next_med['time'], "%H:%M:%S")
-
-                    # Formating time as 'HH:MM PM'
-                    formatted_time_full = time_obj.strftime("%-I:%M %p")  # Use %-I for removing leading zero (Linux/macOS)
-
-                    message = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
-                    attachment = {
-                                    "query_response": message,
-                                    "data": [],
-                                    "type": "string",
-                                    "status": "success"
-                                }
+                    formatted_time_full = time_obj.strftime("%-I:%M %p")  # HH:MM AM/PM
+                    reply = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
+                else:
+                    reply = "Looks like you don’t have any meds scheduled for the rest of today."
             else:
-                message = "Looks like you don’t have any meds scheduled!"
-                attachment = {
-                                    "query_response": message,
-                                    "data": [],
-                                    "type": "string",
-                                    "status": "failed"
-                                }
+                reply = "Looks like you don’t have any meds scheduled!"
+        
         except Exception as ex:
-            reply = "Sorry, we couldn't access your medication information."
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "failed"
-            }
-        dispatcher.utter_message(attachment=attachment)
-        return[]
+            # reply already has a default error message
+            pass
+        
+        dispatcher.utter_message(text=reply)
+        return []
 
-    
-class actionStockLevel(Action):
-   def name(self):
-       return "action_stock_level"
-  
-   def run(self, dispatcher: CollectingDispatcher,
-           tracker: Tracker,
-           domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-       medication_name = tracker.get_slot('medication')
-       url = 'https://api.pillaxia.com/api/v1/user-medications/list'
-       header = {
-                   "Authorization" : f"Bearer {tracker.sender_id}"
-               }
-       try:
-           response = requests.post(url,headers=header)
-           response_data = response.json()["result"]["items"]
-           for data in response_data:
-               if data["code"].lower() == medication_name.lower():
-                   stock_level = data["stock_level"]
 
-           if stock_level >= 0:
-               messages = [ f"Your current supply of {medication_name} is",
-                            f"The quantity of {medication_name} you have left is",
-                            f"Your available doses of {medication_name} are",
-                            f"The remaining stock of {medication_name} in your possession is",
-                            f"Your {medication_name} count stands at",
-                            f"The number of {medication_name} doses you still have is",
-                            f"Your inventory of {medication_name} shows"]
-               reply = random.choice(messages)
-               attachment = {
-                   "query_response": f"{reply} {stock_level}",
-                   "data": [],
-                   "type": "string",
-                   "status": "success"
-               }
-           else:
-               reply = f"You do not have recorded medication with the name {medication_name}"
-               attachment = {
-                   "query_response": reply,
-                   "data": [],
-                   "type": "string",
-                   "status": "failed"
-               }
-          
-       except Exception as ex:
-            reply = "Failed to get information about left dosage. Please try again!!"
-            attachment = {
-               "query_response": reply,
-               "data":[],
-               "type":"string",
-               "status": "failed"
-           }
-       dispatcher.utter_message(attachment=attachment)
-       return [SlotSet("medication", None)]
-
-class actionRefilInformation(Action):
+class ActionRefillInformation(Action):
     def name(self):
-        return "action_refil_information"
+        return "action_refill_information"
     
     def run(self, dispatcher: CollectingDispatcher, 
             tracker: Tracker, 
@@ -757,7 +1043,7 @@ class actionRefilInformation(Action):
             header = {
                         "Authorization" : f"Bearer {tracker.sender_id}"
                     }
-            refil_info = {}
+            refill_info = {}
         # try:
             response = requests.post(url,headers=header)
             response_data = response.json()["result"]["items"]
@@ -799,7 +1085,7 @@ class actionRefilInformation(Action):
 		#     	"status": "failed"
         #     }
         # finally:
-            dispatcher.utter_message(attachment=attachment)
+            dispatcher.utter_message(text=reply)
         
             return [SlotSet("medication", None)]
     
@@ -836,7 +1122,7 @@ class actionRefilInformation(Action):
 #             pass
         
         
-class actionNewSymptom(Action):
+class ActionNewSymptom(Action):
     def name(self):
         return "action_new_symptom"
     
@@ -863,11 +1149,10 @@ class actionNewSymptom(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return[]
 
-
-class actionSymptions(Action):
+class ActionSymptoms(Action):
     def name(self):
         return "action_symptoms"
     
@@ -927,10 +1212,10 @@ class actionSymptions(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
-class checkMedication(Action):
+class ActionCheckMedication(Action):
     def name(self):
         return "action_check_medication" 
     
@@ -981,10 +1266,10 @@ class checkMedication(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
-class actionactionMedicationAdherence(Action):
+class ActionMedicationAdherence(Action):
     def name(self):
         return "action_medication_adherence"
     
@@ -1021,7 +1306,7 @@ class actionactionMedicationAdherence(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(attachment=attachment)
+        dispatcher.utter_message(text=reply)
         return[]
     
     def get_adherence_response(self, percentage):
@@ -1083,11 +1368,12 @@ class actionactionMedicationAdherence(Action):
                 return random.choice(responses).format(adherence_percentage=percentage)
         return f"Your adherence is {percentage}%. Want to see your visual report?"
     
-class actionCustomFallback(Action):
+        
+class ActionCustomFallback(Action):
     def name(self):
         return "action_custom_fallback"       
         
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
                     2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
@@ -1100,47 +1386,57 @@ class actionCustomFallback(Action):
                     9.Offer only relevant information, ensuring it aligns with the user's needs.
                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
 
-                """
-
+                """  
+        
         try:
             user_query = tracker.latest_message['text']
             response = client.chat.completions.create(
-                model = "gpt-4o",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": "What's the best medication for my cough?"},
                     {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
-                    {"role": "user","content": user_query}
+                    {"role": "user", "content": user_query}
                 ]
             )
             data = response.choices[0].message.content
+
+            reply = data  
+
             attachment = {
-		    	"query_response": data,
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "success"
-		    }
+                "query_response": data,
+                "data": [],
+                "type": "string",
+                "status": "success"
+            }
+
         except openai.OpenAIError as e:
             error_message = e.args[0].split("message': '")[1].split("',")[0] if "message" in str(e) else "Unknown error occurred."
-            messages = ["Sorry, I can't process your request right now due to high demand. Please try again later.",
-                    "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
-                    ]
+            messages = [
+                "Sorry, I can't process your request right now due to high demand. Please try again later.",
+                "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
+            ]
+
+            reply = random.choice(messages)  
+
             attachment = {
-                "query_response": random.choice(messages),
+                "query_response": reply,
                 "error": error_message,
                 "data": [],
                 "type": "string",
                 "status": "failed"
             }
+
         except Exception as e:
-            data = "Can you rephrase it."
+            reply = "Can you rephrase it."  
+
             attachment = {
-		    	"query_response": data,
+                "query_response": reply,
                 "error": str(e),
-		    	"data":[],
-		    	"type":"string",
-		    	"status": "failed"
-		    }
-        dispatcher.utter_message(attachment=attachment)
+                "data": [],
+                "type": "string",
+                "status": "failed"
+            }
+
+        dispatcher.utter_message(text=reply)
         return []
-        

@@ -1,111 +1,299 @@
 version: "3.1"
+
 nlu:
 - intent: greet
   examples: |
-    - hey
     - hello
     - hi
+    - hey
+    - greetings
+    - good day
+    - hi there
+    - hey there
     - hello there
     - good morning
+    - good afternoon  
     - good evening
-    - moin
-    - hey there
-    - let's go
+    - morning
+    - evening
+    - goodmorning     
+    - goodevening     
+    - hi angela
+    - hey angela
+    - hello angela
+    - hi there angela
+    - good morning angela
+    - yo
+    - sup
+    - yo there
     - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
-    - hi angelina
-    - hey angelina
-    - Hello angelina
-    - Hi, how are you?
-    - Hello, hope you're doing well
-    - Hey, what's up?
-    - Good day
-    - Greetings
-    - Morning!
-    - Evening!
-    - Hi there, Angelina
-    - Hello, is anyone there?
-    - Hey, can you help me?
-    - Hi, I need some assistance
-    - Hello, I have a question
-    - Good morning, Angelina
-    - Hi! How's it going?
-    - Hey, nice to meet you
-    - Hello, I'm new here
-    - Hi, I'm looking for help with my medications
-    - Good afternoon, is this the medication assistant?
-    - Hey there, are you available?
-    - Hello! I hope I'm in the right place
-    - Hi, I'd like some information please
-    - Good evening, is now a good time to chat?
-    - Hey Angelina, got a minute?
+    - hey buddy
+    - hey friend
+    - hi mate
+    - hey!
+    - hi!
+    - hello!
+    - hi :)
+    - hello :)
+    - hey :)
+    - hi, how are you?
+    - hello, how are you?
+    - hey, how are you?
+    - hey, what's up?
+    - hi, what's up?
+    - what's up?
+    - hello, is anyone there?
+    - hey, are you there?
+    - hi, anyone here?
+    - hello?
+    - hey, can you hear me?
+    - hello, hope you're doing well
+    - hey, hope you're doing well
+    - hi, hope you're having a good day
+    - hello, hope you're okay
+    - hello, can you help me?
+    - hi, I need some assistance
+    - hey, can you assist me?
+    - hello, I have a question
+    - hi, could you help me please?
+    - hello, quick question
+    - hey, quick question
+    - hi, I'm looking for help with my medications
+    - hello, is this the medication assistant?
+    - hi, I'd like some information please
+    - good evening, is now a good time to chat?
+    - hey angela, got a minute?
+    - hi, are you available right now?
+    - hello, can we talk?
+    - hey, nice to meet you
+    - hello, I'm new here
+    - hello, is this the right place?
+    - hi there, is this angela?
+    - hello bot
+    - hi assistant
+    - hii
+    - hiii
+    - helloo
+    - moin  
 
 - intent: goodbye
   examples: |
-    - good bye
-    - cee you later
-    - good night
     - bye
     - goodbye
-    - have a nice day
-    - see you around
     - bye bye
+    - good bye
     - see you later
-    - thank you
-    - thanks, I'm done for now
-    - that's all I needed, thanks
-    - I'm all set, goodbye
-    - gotta go, thanks for your help
-    - I'm heading out, take care
+    - see ya
+    - see ya later
+    - see you around
+    - see you next time
+    - until next time
+    - catch ya later
     - catch you later
-    - talk to you soon
+    - later
+    - talk later
+    - talk soon
+    - ttyl
+    - gotta go
+    - gotta run
+    - gotta go now
+    - heading out now
+    - I'm off now
+    - I'm done here
+    - I'm done
+    - I'm all set
     - I'll be going now
+    - I'm heading out
+    - good night
+    - good night!
+    - night
+    - gn
+    - take care
+    - take care, bye
+    - have a good one
+    - have a great day
+    - have a nice day
+    - have a nice evening
+    - cheers
+    - cheers!
+    - cheers, bye
+    - thank you
+    - thanks
+    - thanks, bye
+    - thank you, bye
+    - thanks a lot, bye
+    - thanks for the help
+    - appreciate it, bye
+    - much appreciated, thanks
+    - ok bye
+    - alright, bye
+    - cool, thanks bye
+    - that's it, bye
+    - that's all, thanks
+    - that's all I needed, thanks
     - that's it for me, thanks
-    - closing the app now, bye
-    - logging off, thanks
     - that'll be all, cheers
-    - ending the chat now
+    - that covers everything, goodbye
+    - all good, bye
+    - all done here
+    - all done here, take care
+    - done for now
     - finished for today, thanks
     - wrapping up, have a good one
+    - signing off
+    - signing off, bye
     - time to sign off, bye
-    - I'm done, thanks for your assistance
-    - that covers everything, goodbye
-    - all done here, take care
+    - logging out now
+    - logging off, thanks
+    - closing this now
+    - closing the app now, bye
+    - ending the chat now
+    - exiting the chat
     - shutting down, thanks bot
     - that's all the questions I had, bye
+    - I'm done, thanks for your assistance
+    - gotta go, thanks for your help
+    - I'm done for now
+    - thanks, I'm done for now
+    - ok that's all
     
 - intent: bot_challenge
   examples: |
-    - Are you a bot?
-    - Are you a human?
-    - Am I talking to a bot?
-    - Am I talking to a human?
-    - What can you do?
-    - What are your limitations?
-    - How do you work?
-    - Are you AI?
-    - Is this an automated system?
-    - Are you a real person?
-    - Is there a human behind this chat?
-    - Are you a virtual assistant?
-    - Who am I talking to?
-    - Is this a chatbot or a person?
-    - Are you a computer program?
-    - How intelligent are you?
-    - Can you pass the Turing test?
-    - Are you capable of human-like thinking?
-    - What kind of AI are you?
-    - Do you have consciousness?
-    - Are you self-aware?
-    - Can you learn from our conversation?
-    - How advanced is your AI?
-    - Can you explain how your AI works?
-    - Are there any tasks you can't do?
-    - What are the ethical guidelines you follow?
-    - How do you process and understand my questions?
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+    - is this a bot?
+    - is this a human?
+    - are you real?
+    - are you a real person?
+    - are you actually a human?
+    - is this a real person chatting?
+    - am i chatting with a real person?
+    - who am I talking to?
+    - who are you?
+    - who are you really?
+    - what are you?
+    - what are you exactly?
+    - what am i chatting with?
+    - are you a bot or real?
+    - are you ai or human?
+    - is this a chatbot or a person?
+    - is this an automated system?
+    - is this automated?
+    - is this just a bot?
+    - am i talking to software?
+    - are you AI?
+    - are you some kind of ai?
+    - are you a virtual assistant?
+    - are you a real assistant?
+    - are you a computer program?
+    - what kind of bot are you?
+    - what kind of assistant are you?
+    - what kind of AI are you?
+    - what can you do?
+    - what are your limitations?
+    - what are you allowed to do?
+    - what can you not do?
+    - what are the things you can't do?
+    - are there any tasks you can't do?
+    - are there things you can't answer?
+    - do you have any limits?
+    - how do you work?
+    - how does this work?
+    - how do you answer my questions?
+    - how do you process and understand my questions?
+    - what are you powered by?
+    - how are you trained?
+    - are you trained on data?
+    - do you follow rules?
+    - do you understand what i'm saying?
+    - do you actually understand me?
+    - how intelligent are you?
+    - how smart are you?
+    - how intelligent are you really?
+    - how advanced is your AI?
+    - can you pass the Turing test?
+    - are you capable of human-like thinking?
+    - do you think like a human?
+    - can you think on your own?
+    - can you make decisions?
+    - do you have consciousness?
+    - are you self-aware?
+    - do you have feelings?
+    - do you have emotions?
+    - are you just pretending to be human?
+    - can you learn from our conversation?
+    - can you learn from me?
+    - do you remember past chats?
+    - can you explain how your AI works?
+    - is there a human behind this chat?
+    - is anyone real behind this?
+    - is a human checking these messages?
+    - is there a real person seeing this?
+    - are you monitored by humans?
+    - what are the ethical guidelines you follow?
+    - can i talk to a human instead?
 
+- intent: add_medication
+  examples: |
+    - add a medication
+    - add medicine to my list
+    - add a new med
+    - add another medicine
+    - add meds
+    - add medication please
+    - add medicine now
+    - i need to add a medicine
+    - i want to add a pill
+    - i need to add something to my medication list
+    - i got a new medicine
+    - i have a new prescription
+    - i was prescribed a new medication
+    - i just got prescribed a new medicine
+    - i want to add a medication i just got
+    - can you add my new prescription?
+    - i've got a new prescription to add to my medication tracker
+    - i need to log a new medicine
+    - i want to log a new medication in my medication list
+    - log another medication
+    - i want to track a new medication
+    - track a new medication by adding it to my list
+    - track another medicine
+    - i want to start tracking a new pill
+    - start tracking a new medication
+    - i need to enter a new medicine
+    - i want to enter a medication
+    - how do i input a recently prescribed medicine to my list?
+    - i want to input a new medication into my tracking system
+    - i need to register a new medicine
+    - i want to register a new medication in my list
+    - i need to update my meds
+    - update my medication list
+    - i need to update my medication list with a new medication
+    - i need to update my medication log with a new entry
+    - modify my medication list to add a drug
+    - include a medication in my list
+    - need to include a newly prescribed drug in my med list
+    - i'd like to incorporate a new medication into my tracker
+    - save a new medication
+    - put a new medicine in my list
+    - i'd like to insert a new drug into my med tracker
+    - can you help me add a medication to my list?
+    - help me add a medication
+    - can you assist me in adding a new drug to my medication record?
+    - could you update my medication list with this new drug?
+    - can i add a new medicine?
+    - can i include a medication to my medication tracker?
+    - please add a new medicine to my list
+    - add this medication to my tracker
+    - add a drug to my medication list
+    - i need to add medication in my list
+    - i need to add medication in my medication list
+    - i want to add new medication in my list
+    - i want to add another medication in medication list
+    - i have new medication to add in list
+    - i want to record a new medication in my tracker
 
 - intent: list_medications
   examples: |
@@ -139,30 +327,45 @@ nlu:
     - can you remind me what pills I'm on?
     - I need to see my list of prescriptions
     - I'd like to check my prescription list
-
-- intent: adding medication in medication list
-  examples: |
-    - I need to add medication in my list
-    - I need to add medication in my medication list
-    - I want to add new medication in my list
-    - i want to add another medication in medication list
-    - i have new medication to add in list
-    - I want to log a new medication in my medication list
-    - Can I include a medication to my medication tracker?
-    - Need to update my medication list with a new medication
-    - Track a new medication by adding it to my list
-    - I'd like to insert a new drug into my med tracker
-    - How do I input a recently prescribed medicine to my list?
-    - I need to update my medication log with a new entry
-    - I've got a new prescription to add to my medication tracker
-    - Need to include a newly prescribed drug in my med list
-    - Can you help me add a medication to my list?
-    - I want to record a new medication in my tracker
-    - I need to register a new medication in my list
-    - Could you update my medication list with this new drug?
-    - I'd like to incorporate a new medication into my tracker
-    - I want to input a new medication into my tracking system
-    - Can you assist me in adding a new drug to my medication record?
+    - show my medications
+    - show my meds
+    - list my meds
+    - what meds do i have?
+    - what medicines do i take?
+    - which medications am i taking?
+    - what pills am i on?
+    - what pills do i take?
+    - can you show me my meds?
+    - can i see my meds?
+    - pull up my meds
+    - pull up my medication list
+    - open my medication list
+    - check my medication list
+    - review my meds
+    - review my medications
+    - go through my medication list
+    - show me everything i take
+    - what am i taking right now?
+    - what medicines am i on right now?
+    - what prescriptions do i have?
+    - do i have any medications listed?
+    - what medications are saved?
+    - what meds are in my list?
+    - show saved medications
+    - list saved medications
+    - see my saved meds
+    - display my meds
+    - remind me what medicines i take
+    - tell me what medications i have
+    - what drugs are on my list?
+    - show my prescription list
+    - open my prescriptions
+    - view my prescriptions
+    - i want to see my prescriptions
+    - let me see my meds
+    - show all my medicines
+    - list all my meds please
+    - can you list my medicines?
 
 - intent: medication_report
   examples: |
@@ -189,18 +392,53 @@ nlu:
     - I need to check my medication details
     - Can you retrieve my drug report?
     - Could you pull up my prescription record?
-    - Can I access my medication log?
+    - show my medication report
+    - show my medication history
+    - show my medication records
+    - i want my medication report
+    - i need to see my medication history
+    - can you show my med history?
+    - can i check my medication report?
+    - pull up my medication report
+    - pull up my medication history
+    - open my medication report
+    - review my medication history
+    - review my medication records
+    - i want to review my meds report
+    - give me a summary of my medications
+    - give me a summary of what i've taken
+    - show a summary of my meds
+    - how has my medication been tracked?
+    - what does my medication history look like?
+    - what meds have i taken so far?
+    - what medications did i take before?
+    - show medicines i've taken
+    - show past medications
+    - list medications i've taken
+    - show my medication usage
+    - show my medication activity
+    - show my medication data
+    - get my medication details
+    - get my medication information
+    - access my medication history
+    - access my medication records
+    - fetch my medication history
+    - retrieve my medication log
+    - check my medication log
+    - check my medication history
+    - check my meds report
+    - can i see my medication summary?
+    - can you generate my medication report?
+    - i need a report of my meds
 
-- intent: report of medication with timeframe
+- intent: medication_report_with_timeframe
   examples: |
     - Can I see a list of medications I took this past [week](period)
     - i want medication report of last [week](period)
     - i want medication report of last [month](period)
     - i want to see my last [week](period) report
-    - i want medication report of last [month](period)
     - medication report for the past [month](period)
     - give me my medication history for last [month](period)
-    - i want medication report of last [week](period)
     - show me medication report for the past [week](period)
     - can I get my medication report from last [week](period)
     - What medications did I take in the last [week](period)?
@@ -216,9 +454,42 @@ nlu:
     - Can I get a rundown of my medications over the last [week](period)?
     - Retrieve my medication data for the past [month](period)
     - I want to check my medication details for the last [week](period)
+    - show my medication report for this [week](period)
+    - show my medication report for this [month](period)
+    - show my meds from last [week](period)
+    - show my meds from last [month](period)
+    - show medications taken in the past [week](period)
+    - show medications taken in the past [month](period)
+    - i need my medication history for this [week](period)
+    - i need my medication history for this [month](period)
+    - give me my meds report for last [week](period)
+    - give me my meds report for last [month](period)
+    - can you show my medication usage for the last [week](period)?
+    - can you show my medication usage for the last [month](period)?
+    - what meds did i take this [week](period)?
+    - what meds did i take this [month](period)?
+    - what medications did i take over the past [week](period)?
+    - what medications did i take over the past [month](period)?
+    - list my medications for last [week](period)
+    - list my medications for last [month](period)
+    - pull up my medication history from last [week](period)
+    - pull up my medication history from last [month](period)
+    - review my medication report for last [week](period)
+    - review my medication report for last [month](period)
+    - check my medication log for the past [week](period)
+    - check my medication log for the past [month](period)
+    - can i see my meds report for this [week](period)?
+    - can i see my meds report for this [month](period)?
+    - show my medication summary for the past [week](period)
+    - show my medication summary for the past [month](period)
+    - give me a summary of my meds for last [week](period)
+    - give me a summary of my meds for last [month](period)
+    - retrieve my medication report for the previous [week](period)
+    - retrieve my medication report for the previous [month](period)
+    - fetch my medication history for last [week](period)
+    - fetch my medication history for last [month](period)
 
-
-- intent: list of todays medication # adding time would be good
+- intent: list_of_todays_medication
   examples: |
     - what are the medication for today
     - Do I have any medications to take today
@@ -251,6 +522,46 @@ nlu:
     - Can you pull up my medication schedule for today?
     - What's my prescription plan for today?
     - send me the medication that i need today
+    - show me today's medications
+    - show my meds for today
+    - list my meds for today
+    - what meds do i have today?
+    - what medicines do i need today?
+    - what pills am i taking today?
+    - can you show today's med schedule?
+    - pull up my meds for today
+    - check my medications for today
+    - review my medication plan for today
+    - do i have any meds today?
+    - am i supposed to take any meds today?
+    - what do i need to take today?
+    - remind me what meds i have today
+    - what medications are due today?
+    - what meds are scheduled today?
+    - what meds should i take now?
+    - what medication should i take right now?
+    - what meds are next today?
+    - what meds are coming up today?
+    - what medications do i still need to take today?
+    - what meds have i not taken today?
+    - show remaining meds for today
+    - show today's remaining medications
+    - what's left for today?
+    - what meds are left today?
+    - do i have anything to take later today?
+    - what meds do i take later today?
+    - what should i take this morning?
+    - what meds do i have this morning?
+    - what medications are scheduled for the morning?
+    - what should i take this afternoon?
+    - what meds are scheduled for the afternoon?
+    - what should i take this evening?
+    - what meds are scheduled for tonight?
+    - what's my med schedule for tonight?
+    - tell me my medication times for today
+    - show today's medication times
+    - when do i need to take my meds today?
+    - at what time do i take my meds today?
 
 - intent: notify_medication_taken
   examples: |
@@ -285,8 +596,51 @@ nlu:
     - Medication adherence achieved
     - Dosed up for the day
     - Gulped down my daily medicine
+    - i just took my meds
+    - meds taken
+    - took my pills
+    - taken my medication
+    - i finished my medicine
+    - my medication is done
+    - completed my pills for today
+    - all meds taken
+    - i’ve taken my medication
+    - done with today's meds
+    - took my pills this morning
+    - took my meds this afternoon
+    - meds done for today
+    - checked off my medication
+    - medication intake done
+    - pill taken
+    - pills finished
+    - i swallowed my meds
+    - i’ve swallowed my tablets
+    - daily meds completed
+    - finished my daily dose
+    - completed my medicine routine
+    - taken my prescription for today
+    - med check complete
+    - daily pills consumed
+    - i’m done with meds
+    - pills done
+    - medication logged as taken
+    - marked meds as taken
+    - dosing complete
+    - meds taken successfully
+    - i finished my morning pills
+    - i finished my evening meds
+    - meds checked in
+    - i’m up to date with meds
+    - my meds for today are done
+    - all pills down
+    - meds intake recorded
+    - daily medicine logged
+    - pill routine done
+    - meds mission complete
+    - i took my meds on time
+    - just completed my meds
 
-- intent: Medication_Taken_time
+- intent: medication_taken_time
   examples: |
     - Hey Angela, have I taken my meds today?
     - Hi Angela, did I take my medication already?
@@ -329,8 +683,54 @@ nlu:
     - Angela, did I have [Furosemide](medication) yesterday?
     - Can you check if I had [Enalapril](medication) today, Angela?
     - Angela, when did I last take [Escitalopram](medication)?
+    - Hey Angela, did I take my meds today?
+    - Hi Angela, did I remember my medication?
+    - Angela, have I taken my pills yet?
+    - Angela, did I forget my dose today?
+    - Hey, do you know if I took my meds?
+    - Angela, when did I last take my meds?
+    - Can you tell me if I took my medication today, Angela?
+    - Did I take my meds this morning?
+    - Angela, was I on schedule with my pills?
+    - Did I already take my [Lisinopril](medication) today?
+    - Angela, did I miss my [Metformin](medication) dose?
+    - When did I last take my [Atorvastatin](medication), Angela?
+    - Angela, can you check if I took my [Mirtazapine](medication) this morning?
+    - Did I take my [Prednisone](medication) this afternoon?
+    - Angela, did I already have my [Ibuprofen](medication) today?
+    - Hey Angela, what time did I take my [Amlodipine](medication)?
+    - Angela, did I take my [Omeprazole](medication) on time?
+    - Did I remember my [Levothyroxine](medication) today?
+    - Angela, have I missed any [Simvastatin](medication) doses?
+    - Angela, what time was my last [Gabapentin](medication)?
+    - Did I take my [Losartan](medication) earlier today?
+    - Angela, did I take my [Hydrochlorothiazide](medication) last night?
+    - Hey Angela, did I have my [Citalopram](medication) dose today?
+    - Angela, did I already take my [Clopidogrel](medication)?
+    - Did I miss my [Alprazolam](medication) dose this morning?
+    - Angela, what time did I take my last [Lisinopril](medication)?
+    - Angela, did I take my [Metoprolol](medication) today?
+    - Did I take my [Sertraline](medication) in the last 24 hours?
+    - Was my last [Bupropion](medication) dose yesterday night, Angela?
+    - Did I already take my [Zolpidem](medication) today?
+    - Angela, did I remember my [Warfarin](medication) yesterday?
+    - When was my last [Meloxicam](medication) dose?
+    - Angela, did I take my [Furosemide](medication) yesterday?
+    - Can you check if I had my [Enalapril](medication) today?
+    - Angela, when did I last take [Escitalopram](medication)?
+    - Did I take my pills for today yet?
+    - Angela, what doses have I taken today?
+    - Did I take my morning meds already?
+    - Angela, have I taken all my meds today?
+    - Did I take my afternoon pills yet?
+    - Angela, check if I took my evening meds
+    - Did I miss any doses today, Angela?
+    - Angela, confirm if I took my [medication] today
+    - When was my last dose of [medication], Angela?
+    - Angela, did I take my [medication] on schedule?
+    - Can you tell me if I took my [medication] today?
 
-- intent: Next_dose_date
+- intent: next_dose_date
   examples: |
     - Angela, what meds am I due to take next?
     - What's my upcoming dose?
@@ -356,6 +756,46 @@ nlu:
     - Approximately how long until my next medication intake?
     - Notify me of the timing for the next dose.
     - Any updates on when I should take my next medication?
+    - when is my next med?
+    - what's my next medication?
+    - when do i take my next pill?
+    - when is my next pill due?
+    - tell me my next dose
+    - what dose is coming up?
+    - when should i take my next dose?
+    - when is the next medicine scheduled?
+    - what meds do i have to take next?
+    - can you tell me my next pill time?
+    - when's the next time for my meds?
+    - next dose timing, please
+    - when is my next medication due?
+    - when should i take my meds again?
+    - how long until my next dose?
+    - how soon is my next dose?
+    - any upcoming medications?
+    - when is my next scheduled dose?
+    - remind me when i need to take my next pill
+    - what's coming up next in my medication schedule?
+    - when do i have to take my meds again?
+    - tell me when my next medication is due
+    - what's my next scheduled medicine?
+    - can you notify me of my next dose?
+    - what time should i take my next dose?
+    - what's the next medication on my plan?
+    - when do i take my next set of pills?
+    - when's the next time i have to take medicine?
+    - what's the next pill i need to take?
+    - when is the following medication due?
+    - upcoming dose timing?
+    - what’s my next scheduled pill?
+    - when’s the next dose coming up?
+    - can you tell me the time of my next dose?
+    - when should i plan for my next medication?
+    - alert me about my next dose
+    - what’s the timing for my next medication?
+    - next meds time?
+    - what medication comes next?
+    - when is my next intake?
 
 - intent: medication_stock_level
   examples: |
@@ -390,9 +830,47 @@ nlu:
     - How many pills of [Alprazolam](medication) do I still have?
     - What's my current supply of [Warfarin](medication) like?
     - Am I close to finishing my [Prednisone](medication) course?
+    - how many pills of [Lisinopril](medication) do i have left?
+    - how many doses of [Metformin](medication) are left?
+    - what's left of my [Advil](medication)?
+    - check my remaining [Synthroid](medication)
+    - how many tablets of [Lipitor](medication) are left?
+    - do i have enough [Amoxicillin](medication)?
+    - how many capsules of [Omeprazole](medication) remain?
+    - show me my [Sertraline](medication) stock
+    - how much [Losartan](medication) is left?
+    - do i have enough [Atorvastatin](medication) for the week?
+    - am i running low on [Gabapentin](medication)?
+    - how many [Mirtazapine](medication) pills are left?
+    - how much [Amlodipine](medication) do i have left?
+    - check the remaining [Levothyroxine](medication)
+    - what's my [Metoprolol](medication) supply like?
+    - how many [Simvastatin](medication) tablets are on hand?
+    - do i need a refill for [Escitalopram](medication)?
+    - how much [Albuterol](medication) do i have left?
+    - how many days of [Metformin](medication) remain?
+    - is my [Pantoprazole](medication) supply low?
+    - do i need to reorder [Citalopram](medication)?
+    - how many [Ibuprofen](medication) tablets do i have left?
+    - what's remaining for my [Hydrocodone](medication)?
+    - am i almost out of [Fluoxetine](medication)?
+    - how many more [Duloxetine](medication) doses can i take?
+    - check my [Venlafaxine](medication) stock
+    - how much [Tramadol](medication) do i have?
+    - remaining [Bupropion](medication) doses?
+    - how many [Alprazolam](medication) pills are left?
+    - what's my [Warfarin](medication) supply like?
+    - am i close to finishing [Prednisone](medication)?
+    - do i have enough [Metformin](medication) to last the week?
+    - how many [Levothyroxine](medication) doses do i still have?
+    - can you check my [Lisinopril](medication) remaining quantity?
+    - do i need to top up [Atorvastatin](medication)?
+    - am i low on [Gabapentin](medication)?
+    - show remaining doses of [Mirtazapine](medication)
+    - how much [Omeprazole](medication) do i have left for today?
+    - check if i need a refill for [Ibuprofen](medication)
 
-
-- intent: refil_due # not working
+- intent: refill_due
   examples: |
     - When is my [Lisinopril](medication) refill due?
     - What's the due date for refilling my [Metformin](medication)?
@@ -435,6 +913,38 @@ nlu:
     - What date can I get more [Carvedilol](medication)?
     - How soon until I can replenish my [Meloxicam](medication) supply?
     - When does my [Furosemide](medication) become available for refill?
+    - when is my [Lisinopril](medication) refill due?
+    - what's the next refill date for my [Metformin](medication)?
+    - can i refill my [Atorvastatin](medication) yet?
+    - when should i get a refill for [Levothyroxine](medication)?
+    - is it time to refill my [Amlodipine](medication)?
+    - when can i refill my [Omeprazole](medication)?
+    - do i need to refill my [Sertraline](medication) soon?
+    - how long until i can refill my [Gabapentin](medication)?
+    - check the refill date for my [Metoprolol](medication)
+    - when am i due for a [Losartan](medication) refill?
+    - can you tell me when my [Escitalopram](medication) needs refilling?
+    - when will i be eligible for a [Fluoxetine](medication) refill?
+    - can i refill my [Simvastatin](medication) now?
+    - how many days until i can refill my [Levothyroxine](medication)?
+    - is my [Atorvastatin](medication) ready for refill yet?
+    - when can i order more [Metformin](medication)?
+    - what's the refill schedule for my [Lisinopril](medication)?
+    - am i due for a [Gabapentin](medication) refill?
+    - can you check my [Warfarin](medication) refill date?
+    - when should i request a refill for my [Bupropion](medication)?
+    - is it too early to refill [Venlafaxine](medication)?
+    - do i need to refill my [Duloxetine](medication)?
+    - can you tell me if [Carvedilol](medication) is ready for refill?
+    - when will my [Meloxicam](medication) supply be available for refill?
+    - check if i can refill my [Furosemide](medication)
+    - when can i get more [Pantoprazole](medication)?
+    - can i refill my [Citalopram](medication) today?
+    - am i allowed to refill [Tramadol](medication) yet?
+    - when is my next [Albuterol](medication) refill?
+    - what's the earliest i can refill my [Mirtazapine](medication)?
+    - do i need to refill [Hydrocodone](medication) soon?
+    - when can i get my [Levothyroxine](medication) prescription refilled?
 
 # - intent: number_of_times_symptom_occurred
 #   examples: |
@@ -471,6 +981,38 @@ nlu:
     - What symptoms did I report last [week](period)?
     - Can you summarize the symptoms I recorded in the last [week](period)?
     - What symptoms did I document during the past [month](period)?
+    - show me my last symptom
+    - what was the last symptom i logged?
+    - when did i last log a symptom?
+    - what did i report last?
+    - can you tell me my most recent symptom?
+    - remind me of my last symptom entry
+    - what symptoms did i record last?
+    - when did i last report feeling unwell?
+    - what was the last symptom i mentioned?
+    - what did i log for symptoms last [week](period)?
+    - show my symptoms for the past [month](period)
+    - what symptoms did i log this [week](period)?
+    - can you summarize my symptoms from last [month](period)?
+    - list the symptoms i reported in the last [week](period)
+    - what symptoms did i have last [month](period)?
+    - what symptoms have i recorded over the past [month](period)?
+    - show me the symptoms i experienced in the last [week](period)
+    - can you remind me what i reported last [month](period)?
+    - how many symptoms did i log this [week](period)?
+    - what symptoms were recorded in the previous [month](period)?
+    - what symptoms did i note over the last [week](period)?
+    - summarize the symptoms i logged last [month](period)
+    - can you show all symptoms from last [week](period)?
+    - give me my last symptom and when it was logged
+    - show the last symptom i recorded and its date
+    - can you tell me when i logged my last symptom?
+    - what symptoms did i document last [month](period)?
+    - what symptoms did i note this [week](period)?
+    - show all symptoms i logged in the last [month](period)
+    - can you give me an overview of symptoms recorded last [week](period)?
+    - remind me what my last symptom was
+    - list all symptoms i reported this [week](period)
 
 
 - intent: get_new_symptoms
@@ -485,8 +1027,44 @@ nlu:
     - Please add my symptoms of dizziness to the diary.
     - I want to record that I have a runny nose.
     - Can you log that I experienced chest pain today?
+    - log that I have a headache
+    - record that I'm feeling dizzy
+    - add my nausea to the symptom diary
+    - note that I have fatigue today
+    - log my chest pain
+    - record that I have a sore throat
+    - I want to add that I have muscle aches
+    - add that I feel anxious
+    - note my runny nose
+    - log my stomach ache
+    - please record my headache
+    - can you add my dizziness to the diary?
+    - I need to log that I feel tired
+    - record my back pain for today
+    - log that I have nausea and vomiting
+    - add my sore throat symptom
+    - please note that I have chills
+    - record that I feel short of breath
+    - log my joint pain
+    - I want to add that I'm feeling lightheaded
+    - add my headache and fatigue to the diary
+    - can you record my muscle cramps?
+    - note that I've been having nausea since morning
+    - log my dizziness and balance issues
+    - add my symptom of cough today
+    - record that I feel anxious and stressed
+    - log my abdominal pain
+    - please add that I have a mild fever
+    - note my tiredness and lack of energy
+    - record that I'm experiencing chest discomfort
+    - log my cold symptoms
+    - add that I have bloating today
+    - record that I have joint stiffness
+    - log my symptom of heart palpitations
+    - note that I'm feeling weak today
+    - add my headache and nausea combo
 
-- intent: medication dosage
+- intent: medication_dosage
   examples: |
     - What's my current dose of [lisinopril](medication)?
     - Can you tell me the dosage of [metformin](medication) I'm taking?
@@ -524,8 +1102,51 @@ nlu:
     - Can you look up how much [venlafaxine](medication) I'm taking?
     - What's the strength of [rosuvastatin](medication) I'm prescribed?
     - How many milligrams of [sertraline](medication) do I take daily?
+    - what's my dose of [Lisinopril](medication)?
+    - how much [Metformin](medication) am i taking?
+    - can you tell me the dose of [Atorvastatin](medication)?
+    - how many mg of [Levothyroxine](medication) do i take?
+    - what's the strength of my [Insulin](medication)?
+    - check my [Omeprazole](medication) dosage
+    - how many units of [Lantus](medication) do i inject?
+    - what's the current [Prednisone](medication) dose?
+    - can you look up my [Metoprolol](medication) dose?
+    - how many tablets of [Gabapentin](medication) should i take daily?
+    - what's the strength of [Sertraline](medication)?
+    - how many mg of [Ibuprofen](medication) am i allowed?
+    - what's the prescribed dose of [Albuterol](medication)?
+    - what dose of [Aspirin](medication) do i take?
+    - how many micrograms of [Levothyroxine](medication) do i use?
+    - can you tell me the dosage of [Metformin](medication) in my records?
+    - what's the dose of [Simvastatin](medication)?
+    - how much [Losartan](medication) am i taking?
+    - what’s the daily dose of [Escitalopram](medication)?
+    - how much [Methotrexate](medication) per week?
+    - what’s my [Pantoprazole](medication) dose today?
+    - how many units of [Novolog](medication) do i inject with meals?
+    - what's the strength of [Amoxicillin](medication) i'm supposed to take?
+    - can you check the [Hydrocodone](medication) dose in my records?
+    - how many mg of [Duloxetine](medication) do i take?
+    - what's my prescribed dose for [Fluoxetine](medication)?
+    - how much [Carvedilol](medication) do i take per day?
+    - what's the recorded strength of [Atorvastatin](medication)?
+    - how many tablets of [Metformin](medication) am i supposed to take daily?
+    - what's my current [Lisinopril](medication) dose in mg?
+    - can you tell me how much [Venlafaxine](medication) i'm taking?
+    - what's the strength of [Rosuvastatin](medication) i'm on?
+    - how many mg of [Sertraline](medication) do i take daily?
+    - what's my current dose of [Ibuprofen](medication) today?
+    - check my [Prednisone](medication) strength
+    - how many pills of [Omeprazole](medication) should i take?
+    - can you tell me my [Metoprolol](medication) dosage?
+    - what's the daily amount of [Gabapentin](medication) i should take?
+    - what's my recorded dose of [Lisinopril](medication)?
+    - how much [Atorvastatin](medication) do i take each day?
+    - can you remind me the dose of [Escitalopram](medication)?
+    - what's the dose and strength of [Levothyroxine](medication)?
+    - check how many mg of [Metformin](medication) i take
 
-- intent: Check Medication Taken
+- intent: check_medication_taken
   examples: |
     - Did I take all my doses this [month](period)? 
     - Have I missed any doses this [week](period)?
@@ -545,6 +1166,36 @@ nlu:
     - Have I been consistent with my doses this [week](period)?
     - Was there any day this [week](period) I missed my dose?
     - Did I miss any pills in the last [month](period)?
+    - did i take all my doses today?
+    - have i missed any doses this week?
+    - did i forget any medication this month?
+    - have i taken all my meds today?
+    - did i skip any pills this morning?
+    - can you tell me if i missed a dose this week?
+    - did i take my medication as prescribed today?
+    - have i been consistent with my meds this month?
+    - did i miss a dose yesterday?
+    - did i take all my pills this afternoon?
+    - was there any dose i forgot today?
+    - did i miss taking my meds this week?
+    - can you check if i missed a dose this morning?
+    - have i taken everything i should this month?
+    - did i miss any doses in the last 7 days?
+    - did i skip any medication in the past week?
+    - can you tell me if i forgot my meds today?
+    - have i been keeping up with my doses this week?
+    - did i take all my medications this evening?
+    - did i forget to take my [Lisinopril](medication) today?
+    - did i take my [Metformin](medication) on time?
+    - have i missed any [Atorvastatin](medication) doses this week?
+    - was there any dose of [Levothyroxine](medication) i missed today?
+    - did i take my [Gabapentin](medication) this morning?
+    - can you check if i skipped my [Sertraline](medication) today?
+    - have i missed any pills in my [Pantoprazole](medication) schedule this week?
+    - did i take all my prescribed medication this month?
+    - check if i missed any doses in the past [month](period)
+    - did i forget to take any pills this week?
+    - have i completed my medication for today?
 
 - intent: medication_adherence
   examples: |
@@ -556,17 +1207,14 @@ nlu:
     - how consistent have I been with my pills?
     - am I taking my medications as prescribed?
     - how often have I missed my meds lately?
-    - give me my medication report
     - check my pill adherence
     - how well have I been following my medication schedule?
     - what's my compliance rate for medications?
     - have I been skipping my meds?
-    - show my medication tracking
     - how many doses have I missed?
     - am I staying on top of my medications?
     - what does my med adherence look like?
     - have I been consistent with my treatment?
-    - check my medication history
     - how's my pill-taking been going?
     - am I meeting my medication goals?
     - what's my adherence percentage?
@@ -583,7 +1231,6 @@ nlu:
     - show my medication adherence for last [month](time_period)
     - what's my pill compliance [today](time_period)?
     - how was my med adherence (time_period)?
-    - check my medication history for the last [week](time_period)
     - am I on track with meds this [month](time_period)?
     - show adherence for the last [month](time_period)
     - how consistent have I been this [week](time_period)?
@@ -592,8 +1239,51 @@ nlu:
     - how's my medication compliance this [month](time_period)?
     - what's my adherence rate over the [week](time_period)?
     - am I taking my pills consistently this [week](time_period)?
+    - have i been taking my pills on time?
+    - am i keeping up with my medications?
+    - how consistent am i with my meds?
+    - show me my med adherence stats
+    - have i missed any doses recently?
+    - am i following my medication schedule?
+    - check how well i've been taking my meds
+    - what’s my compliance with prescriptions?
+    - have i been regular with my medications?
+    - show my pill-taking record
+    - how many doses did i skip this week?
+    - am i on track with my treatment?
+    - give me a report of my medication consistency
+    - what's my med adherence for today?
+    - how have i been doing with my pills this week?
+    - show my adherence for the last month
+    - am i taking all my medications as prescribed?
+    - what does my pill compliance look like this week?
+    - how regular have i been with meds over the last month?
+    - have i been forgetting any pills lately?
+    - show how consistent i’ve been with my meds
+    - what's my adherence percentage for this week?
+    - how many pills have i taken this month?
+    - have i been following my prescription correctly?
+    - check my medication performance this [week](time_period)
+    - show my med adherence for the past [month](time_period)
+    - am i taking my meds properly this [week](time_period)?
+    - what’s my medication consistency this [month](time_period)?
+    - how well am i keeping up with my pills today?
+    - show how many doses i missed in the last [week](time_period)
+    - what’s my compliance score for the past [month](time_period)?
+    - have i been consistent with my doses this [week](time_period)?
+    - show a summary of my pill adherence today
+    - how am i doing with my medication schedule this [month](time_period)?
+    - did i take all my meds on time this [week](time_period)?
+    - can you check my adherence for the last [month](time_period)?
+    - how many doses did i miss this [week](time_period)?
+    - show my compliance history over the last [month](time_period)
+    - am i staying consistent with my medications this [week](time_period)?
+    - how good have i been at taking my pills this [month](time_period)?
+    - what's my adherence rate for today?
+    - summarize my medication consistency this [week](time_period)
+    - check my pill compliance this [month](time_period)
 
-- intent: outofScope
+- intent: out_of_scope
   examples: |
     - how can i prevent myself from getting flu
     - I think I have flu
