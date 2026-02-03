@@ -7,7 +7,7 @@ intents:
   - add_medication
   - list_medications
   - medication_report
-  - report_of_medication_with_timeframe
+  - medication_report_with_timeframe
   - notify_medication_taken
   - out_of_scope
   - list_of_todays_medication
@@ -86,10 +86,9 @@ slots:
       - type: from_entity
         entity: period
         values:
-          - today
           - week
           - month
-          
+
   medication:
     type: text
     mappings:

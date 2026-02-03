@@ -48,14 +48,14 @@ stories:
 
 - story: medication report with timeframe
   steps:
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: todays medication and medication report with timeframe
   steps: 
   - intent: list_of_todays_medication
   - action: action_todays_medication
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: out of scope, todays medication, medication report
@@ -69,7 +69,7 @@ stories:
 
 - story: medication report, out of scope
   steps: 
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: out_of_scope
   - action: action_custom_fallback
@@ -156,7 +156,7 @@ stories:
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: Greet, out of scope, and goodbye
@@ -181,7 +181,7 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: list_of_todays_medication
   - action: action_todays_medication
@@ -217,7 +217,7 @@ stories:
   steps:
   - intent: add_medication
   - action: action_add_medication
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: bot_challenge
   - action: action_iamabot
@@ -252,7 +252,7 @@ stories:
   - action: action_custom_fallback
   - intent: add_medication
   - action: action_add_medication
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: List medications, notify taken, out of scope, and today's list
@@ -281,7 +281,7 @@ stories:
   steps:
   - intent: greet
   - action: action_greet
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: notify_medication_taken
   - action: action_medication_tracker
@@ -305,7 +305,7 @@ stories:
   - action: action_medication_tracker
   - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: goodbye
   - action: action_goodbye
@@ -362,7 +362,7 @@ stories:
 
 - story: Report with timeframe, add medication, today's list, bot challenge
   steps:
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: add_medication
   - action: action_add_medication
@@ -390,7 +390,7 @@ stories:
   - action: action_add_medication
   - intent: out_of_scope
   - action: action_custom_fallback
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: list_of_todays_medication
   - action: action_todays_medication
@@ -423,7 +423,7 @@ stories:
   steps:
   - intent: list_medications
   - action: action_list_medication_name
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: notify_medication_taken
   - action: action_medication_tracker
@@ -451,7 +451,7 @@ stories:
   - action: action_iamabot
   - intent: notify_medication_taken
   - action: action_medication_tracker
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 - story: get symptoms and new one
@@ -488,7 +488,7 @@ stories:
 
 - story: report_medication_timeframe
   steps:
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - slot_was_set:
       - period: week
   - action: action_medication_report_with_timeframe
@@ -528,7 +528,7 @@ stories:
 
 - story: Medication report with timeframe
   steps:
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
   - intent: medication_report
   - action: action_medication_report

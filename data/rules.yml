@@ -48,7 +48,7 @@ rules:
 
 - rule: medication report with timeframe
   steps:
-  - intent: report_of_medication_with_timeframe
+  - intent: medication_report_with_timeframe
   - action: action_medication_report_with_timeframe
 
 # - rule: Get symptoms

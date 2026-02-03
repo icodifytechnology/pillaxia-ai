@@ -81,30 +81,25 @@
     "Based on your saved information, your medications are: {medications}"
   ]
 },
-  "medication_report": {
-    "casual": [
-      "You took {taken} out of {total} meds today ({compliance_rate}% on track). {problematic_note}",
-      "Today's medication summary: {taken}/{total} taken ({compliance_rate}% compliance). {problematic_note}",
-      "{taken} of your {total} meds were taken today. {problematic_note}",
-      "Medication update: {taken}/{total} meds completed ({compliance_rate}% adherence). {problematic_note}",
-      "{name}, here’s your {day} med report: {taken} taken, {missed} missed. {problematic_note}",
-      "Today's record shows {taken}/{total} meds taken. {problematic_note}",
-      "You’ve taken {taken} of {total} medications today ({compliance_rate}% on track). {problematic_note}",
-      "Summary for today: {taken} out of {total} meds taken. {problematic_note}",
-      "For {day}, you took {taken}/{total} medications ({compliance_rate}% adherence). {problematic_note}"
-    ],
-    "formal": [
-      "{name}, your {day} medication report: {taken} of {total} taken. Compliance rate: {compliance_rate}%. {problematic_note}",
-      "Medication tracking for {day}: {taken} taken, {missed} missed. Overall compliance: {compliance_rate}%. {problematic_note}",
-      "Based on {day}'s records, {taken} out of {total} medications were taken ({compliance_rate}% adherence). {problematic_note}",
-      "Here is the medication summary for {day}: {taken} taken, {missed} missed. Adherence rate: {compliance_rate}%. {problematic_note}",
-      "{name}, your {day} medication adherence is {compliance_rate}%, with {taken} of {total} medications taken. {problematic_note}",
-      "For {day}, {taken}/{total} medications were taken. Compliance: {compliance_rate}%. {problematic_note}",
-      "Medication report for {day}: {taken}/{total} medications taken ({compliance_rate}% adherence). {problematic_note}",
-      "The records for {day} indicate {taken} of {total} medications were taken ({compliance_rate}% compliance). {problematic_note}",
-      "Summary of {day}: {taken}/{total} medications taken. Adherence rate: {compliance_rate}%. {problematic_note}"
-    ]
-  },
+"medication_report": {
+  "casual": [
+    "Over the last month, you took {taken} out of {total} meds ({compliance_rate}% adherence). {problematic_note}",
+    "Here's your 30-day med summary: {taken}/{total} taken ({compliance_rate}% on track). {problematic_note}",
+    "You managed to take {taken} of {total} medications this month. {problematic_note}",
+    "Monthly medication check: {taken}/{total} meds taken ({compliance_rate}% compliance). {problematic_note}",
+    "In the past 30 days, {taken} out of {total} meds were taken. {problematic_note}",
+    "Looking at the last month, your adherence is {compliance_rate}% with {taken} of {total} medications taken. {problematic_note}",
+    "Here’s your medication report for the past month: {taken}/{total} meds taken. {problematic_note}",
+    "{taken} of {total} medications were taken over the last 30 days ({compliance_rate}% adherence). {problematic_note}"
+  ],
+  "formal": [
+    "Your medication compliance report for the last 30 days: {taken} of {total} medications taken ({compliance_rate}% adherence). {problematic_note}",
+    "Medication tracking summary for the past month: {taken} taken, {missed} missed. Overall compliance: {compliance_rate}%. {problematic_note}",
+    "Based on records from the last 30 days, {taken}/{total} medications were taken ({compliance_rate}% adherence). {problematic_note}",
+    "Here is your 30-day medication summary: {taken} of {total} medications taken. Compliance rate: {compliance_rate}%. {problematic_note}",
+    "Over the past month, your adherence rate is {compliance_rate}%, with {taken} of {total} medications taken. {problematic_note}"
+  ]
+},
 
   "no_tracking_data": {
     "casual": [
@@ -121,5 +116,23 @@
       "Medication records for this period are currently unavailable.",
       "No data on your medication adherence could be found for the past month."
     ]
-  }
+  },
+
+  "medication_report_with_timeframe": {
+  "casual": [
+    "For the past {day}, you took {taken}/{total} medications ({compliance_rate}% adherence). {problematic_note}",
+    "Your {day} med summary: {taken} out of {total} meds taken. {problematic_note}",
+    "In the last {day}, you completed {taken}/{total} meds. {problematic_note}",
+    "Looking at your meds over the {day}: {taken}/{total} taken ({compliance_rate}% compliance). {problematic_note}",
+    "{taken} of your {total} medications were taken during this {day}. {problematic_note}",
+    "Medication update for the last {day}: {taken}/{total} meds taken. {problematic_note}"
+  ],
+  "formal": [
+    "Medication compliance report for the past {timeframe}: {taken} of {total} medications taken ({compliance_rate}% adherence). {problematic_note}",
+    "Your {timeframe} medication summary: {taken} taken, {missed} missed. Overall compliance: {compliance_rate}%. {problematic_note}",
+    "Based on records from the last {timeframe}, {taken}/{total} medications were taken ({compliance_rate}% adherence). {problematic_note}",
+    "Here is your medication report for the past {timeframe}: {taken} taken, {missed} missed. Compliance: {compliance_rate}%. {problematic_note}",
+    "During the {timeframe}, your adherence rate is {compliance_rate}%, with {taken} of {total} medications taken. {problematic_note}"
+  ]
+}
 }

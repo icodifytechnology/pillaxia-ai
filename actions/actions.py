@@ -455,72 +455,102 @@ class ActionMedicationReport(BaseAction):
         else:
             return f"{days} days"
     
-class ActionMedicationReportWithTimeframe(Action):
-    def name(self):
+class ActionMedicationReportWithTimeframe(BaseAction):
+    """Generate medication report for specific timeframe (week/month)"""
+    
+    def name(self) -> Text:
         return "action_medication_report_with_timeframe"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        today = date.today()
-        period = tracker.get_slot("period")       
-        if period.lower() == "week":
-                start_date = today - timedelta(days = 7)
-        elif period.lower() == "month":
-                start_date = today - timedelta(days = 30)
-
-        url = 'https://api.pillaxia.com/api/v1/medication-tracker/list'
-        header = {
-            "Authorization" : f"Bearer {tracker.sender_id}"
-        }
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Generating medication report with timeframe")
+        
         try:
-            response = requests.post(url,headers=header)
-            data = response.json()["result"]["items"]
-            filtered_items = []
-
-            for item in data:
-                if item["tracked_at"] != None:
-                    Date = datetime.strptime(item["tracked_at"], '%Y-%m-%d %H:%M:%S').date()
-                    if Date <= today and Date >= start_date:
-                        filtered_items.append(item)
+            # Get period from slot
+            period = tracker.get_slot("period")
+            if not period:
+                logger.warning("No period specified, defaulting to month")
+                period = "month"
             
-            if len(filtered_items) == 0:
-                reply = f"There is no records for last {period}"
-                attachment = {
-                    "query_response": reply,
-                    "data":[],
-                    "type":"string",
-                    "status": "failed"
-                }
+            logger.debug(f"Generating report for period: {period}")
+            
+            # Get medication manager
+            from .helpers.medication_manager import MedicationManager
+            med_manager = MedicationManager(tracker.sender_id)
+            
+            # Determine days based on period
+            if period.lower() == "month":
+                days = 30 
+            elif period.lower() == "today":
+                days = 1
             else:
-                for item in filtered_items:
-                    report= [{
-                                'name': item['reminder'],
-                                # 'reminder_id': item['reminder_id'],
-                                'value':  f"Reminded at {item['reminder_at']}, {str('Taken at: ' + item['tracked_at'] if item['tracked_at'] is not None else 'Medication not taken')}"
-                                # 'tracked_at': item['tracked_at'
-                            } for item in filtered_items ]
-                    
-                        
-                reply = "Here's your medication report:"
-                attachment = {
-                            "query_response": reply,
-                            "data":report,
-                            "type":"array",
-                            "status": "success"
-                            }
+                days = 7
+        
+            # Get tracking data for the specified period
+            tracking_data = med_manager.get_recent_tracking(days=days)
+            
+            if not tracking_data:
+                logger.debug(f"No tracking data found for last {period}")
+                reply = f"I couldn't find any medication tracking data for the past {period}."
+                dispatcher.utter_message(text=reply)
+                return []
+            
+            # Analyze compliance
+            stats = med_manager.analyze_tracking_compliance(tracking_data)
+            logger.debug(f"Report stats for {period}: {stats}")
+            
+            # Get medication names for context
+            medication_names = med_manager.get_medication_names()
+            
+            # Build personalized response
+            reply = self._build_report_response(tracker, stats, medication_names, period)
+            
+            dispatcher.utter_message(text=reply)
+            logger.info(f"✓ {period.capitalize()} report generated: {stats['taken']}/{stats['total']} taken")
+            
         except Exception as e:
-            reply = "Failed!"
-            attachment = {
-                        "query_response": reply,
-                        "data":[],
-                        "type":"string",
-                        "status": "failed"
-            }
- 
-        dispatcher.utter_message(text=reply)
-
+            logger.error(f"✗ Error generating {period} report: {e}", exc_info=True)
+            dispatcher.utter_message(text=f"Sorry, I couldn't generate your {period} medication report.")
+        
         return []
+    
+    def _build_report_response(self, tracker: Tracker, stats: Dict, 
+                              medication_names: List[str], period: str) -> str:
+        """Build personalized report response for specific timeframe"""
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        
+        # Find most problematic medication
+        problematic_meds = []
+        problematic_note = ""
+
+        if stats['medication_stats']:
+            for med_name, med_stats in stats['medication_stats'].items():
+                if med_stats['total'] > 0:
+                    med_compliance = (med_stats['taken'] / med_stats['total'] * 100)
+                    if med_compliance < 70:
+                        problematic_meds.append((med_name, med_compliance))
+
+            # Simple problematic note for now
+            if problematic_meds:
+                med_names = [m[0] for m in problematic_meds]
+                if len(med_names) == 1:
+                    problematic_note = f"Try to be more consistent with your {med_names[0]} this {period}."
+                else:
+                    problematic_note = f"Pay attention to {', '.join(med_names)} this {period}."
+        
+        return builder.build_response(
+            "medication_report_with_timeframe",  
+            total=stats['total'],
+            taken=stats['taken'],
+            missed=stats['missed'],
+            compliance_rate=stats['compliance_rate'],
+            day=period,  # This will be "week" or "month"
+            medication_count=len(medication_names),
+            problematic_meds=problematic_meds or "None",
+            problematic_note=problematic_note
+        )
     
 class ActionTodaysMedication(Action):
     def name(self):
@@ -833,74 +863,59 @@ class ActionMedicationTaken(Action):
 #         return []
 
 class ActionNextDose(Action):
-   def name(self):
-       return "action_next_dose"
+    def name(self):
+        return "action_next_dose"
   
-   def run(self, dispatcher: CollectingDispatcher,
-           tracker: Tracker,
-           domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-        todays_time = str(datetime.today().strftime("%H:%M:%S"))
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
+        
+        from datetime import datetime
+        import requests
+
+        todays_time = datetime.today().strftime("%H:%M:%S")
         current_time = datetime.now().strftime("%H:%M:%S")
         url = "https://api.pillaxia.com/api/v1/medication-reminders/list"
-        header = {
-                    "Authorization" : f"Bearer {tracker.sender_id}"
-                }
+        headers = {"Authorization": f"Bearer {tracker.sender_id}"}
+        
+        reply = "Sorry, we couldn't access your medication information."  # default reply
+        
         try:
-            response = requests.post(url,headers=header)
-            response_data = response.json()["result"]
-            if response_data.get("count") != 0:
-                medication_detail = []
+            response = requests.post(url, headers=headers)
+            response_data = response.json().get("result", {})
+
+            if response_data.get("count", 0) != 0:
                 next_med = None
                 now = datetime.strptime(current_time, "%H:%M:%S")
 
-                for data in response_data.get("items"):
-                    # Geting all future times
+                for data in response_data.get("items", []):
                     future_times = [
-                        t for t in data["reminder_time"]
+                        t for t in data.get("reminder_time", [])
                         if t >= todays_time and datetime.strptime(t, "%H:%M:%S") > now
                     ]
                     if future_times:
                         earliest_time = min(future_times, key=lambda t: datetime.strptime(t, "%H:%M:%S"))
                         med_time = datetime.strptime(earliest_time, "%H:%M:%S")
 
-                        # Update next_med if it's the soonest upcoming one
                         if not next_med or med_time < datetime.strptime(next_med["time"], "%H:%M:%S"):
                             next_med = {"name": data["medication"], "time": earliest_time}
-                
+
                 if next_med:
                     time_obj = datetime.strptime(next_med['time'], "%H:%M:%S")
-
-                    # Formating time as 'HH:MM PM'
-                    formatted_time_full = time_obj.strftime("%-I:%M %p")  # Use %-I for removing leading zero (Linux/macOS)
-
-                    message = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
-                    attachment = {
-                                    "query_response": message,
-                                    "data": [],
-                                    "type": "string",
-                                    "status": "success"
-                                }
+                    formatted_time_full = time_obj.strftime("%-I:%M %p")  # HH:MM AM/PM
+                    reply = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
+                else:
+                    reply = "Looks like you don’t have any meds scheduled for the rest of today."
             else:
-                message = "Looks like you don’t have any meds scheduled!"
-                attachment = {
-                                    "query_response": message,
-                                    "data": [],
-                                    "type": "string",
-                                    "status": "failed"
-                                }
+                reply = "Looks like you don’t have any meds scheduled!"
+        
         except Exception as ex:
-            reply = "Sorry, we couldn't access your medication information."
-            attachment = {
-                "query_response": reply,
-                "data":[],
-                "type":"string",
-                "status": "failed"
-            }
+            # reply already has a default error message
+            pass
+        
         dispatcher.utter_message(text=reply)
-        return[]
+        return []
 
-    
- 
 
 class ActionRefillInformation(Action):
     def name(self):
@@ -1022,7 +1037,6 @@ class ActionNewSymptom(Action):
 		    }
         dispatcher.utter_message(text=reply)
         return[]
-
 
 class ActionSymptoms(Action):
     def name(self):
