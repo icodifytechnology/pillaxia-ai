@@ -120,7 +120,7 @@
 
   "medication_report_with_timeframe": {
   "casual": [
-    "For the past {day}, you took {taken}/{total} medications ({compliance_rate}% adherence). {problematic_note}",
+    "For the past {day}, you took {taken}/{total} medications ({compliance_rate}% adherence).{problematic_note}",
     "Your {day} med summary: {taken} out of {total} meds taken. {problematic_note}",
     "In the last {day}, you completed {taken}/{total} meds. {problematic_note}",
     "Looking at your meds over the {day}: {taken}/{total} taken ({compliance_rate}% compliance). {problematic_note}",

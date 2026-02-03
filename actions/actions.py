@@ -99,25 +99,25 @@ class ActionSessionStart(BaseAction):
     def name(self) -> Text:
         return "action_session_start"
     
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                      tracker: Tracker,
-                      domain: Dict[Text, Any]) -> List[SlotSet]:
-        """
-        Handle session start with slots already loaded
-        """
-        logger.info(debug_separator("ActionSessionStart"))
+    # def run_with_slots(self, dispatcher: CollectingDispatcher,
+    #                   tracker: Tracker,
+    #                   domain: Dict[Text, Any]) -> List[SlotSet]:
+    #     """
+    #     Handle session start with slots already loaded
+    #     """
+    #     logger.info(debug_separator("ActionSessionStart"))
         
-        # Send welcome message
-        try:
-            builder = ResponseBuilder(tracker.sender_id, tracker)
-            welcome = builder.build_response("greet")
-            dispatcher.utter_message(text=welcome)
-            logger.info(f"Sent welcome message: '{welcome}'")
-        except Exception as e:
-            logger.error(f"Error sending welcome message: {e}", exc_info=True)
-            dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
+    #     # Send welcome message
+    #     try:
+    #         builder = ResponseBuilder(tracker.sender_id, tracker)
+    #         welcome = builder.build_response("greet")
+    #         dispatcher.utter_message(text=welcome)
+    #         logger.info(f"Sent welcome message: '{welcome}'")
+    #     except Exception as e:
+    #         logger.error(f"Error sending welcome message: {e}", exc_info=True)
+    #         dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
         
-        return []
+    #     return []
     
     def run(self, dispatcher: CollectingDispatcher,
         tracker: Tracker,
@@ -516,37 +516,84 @@ class ActionMedicationReportWithTimeframe(BaseAction):
         
         return []
     
-    def _build_report_response(self, tracker: Tracker, stats: Dict, 
-                              medication_names: List[str], period: str) -> str:
-        """Build personalized report response for specific timeframe"""
+    def _build_report_response(
+        self,
+        tracker: Tracker,
+        stats: Dict,
+        medication_names: List[str],
+        period: str
+    ) -> str:
+        """Build personalized report response for a specific timeframe (week/month)"""
+
         builder = ResponseBuilder(tracker.sender_id, tracker)
-        
-        # Find most problematic medication
+
         problematic_meds = []
         problematic_note = ""
 
-        if stats['medication_stats']:
-            for med_name, med_stats in stats['medication_stats'].items():
-                if med_stats['total'] > 0:
-                    med_compliance = (med_stats['taken'] / med_stats['total'] * 100)
-                    if med_compliance < 70:
-                        problematic_meds.append((med_name, med_compliance))
+        if stats.get("medication_stats"):
+            total_meds = len(stats["medication_stats"])
 
-            # Simple problematic note for now
+            # Identify meds with low compliance
+            for med_name, med_stats in stats["medication_stats"].items():
+                if med_stats.get("total", 0) > 0:
+                    compliance = (med_stats["taken"] / med_stats["total"]) * 100
+                    if compliance < 70:
+                        problematic_meds.append((med_name, compliance))
+
             if problematic_meds:
+                num_problematic = len(problematic_meds)
+                percent_problematic = (num_problematic / total_meds) * 100
+
+                # Sort by lowest compliance first
+                problematic_meds.sort(key=lambda x: x[1])
                 med_names = [m[0] for m in problematic_meds]
-                if len(med_names) == 1:
-                    problematic_note = f"Try to be more consistent with your {med_names[0]} this {period}."
-                else:
-                    problematic_note = f"Pay attention to {', '.join(med_names)} this {period}."
-        
+
+                if percent_problematic == 100:
+                    problematic_note = (
+                        f"It looks like none of your medications were taken consistently this {period}. "
+                        f"Let’s try to get things back on track."
+                    )
+
+                elif percent_problematic >= 70:
+                    problematic_note = (
+                        f"Most of your medications need more consistency this {period}, "
+                        f"especially {', '.join(med_names)}."
+                    )
+
+                elif percent_problematic >= 40:
+                    if num_problematic == 1:
+                        problematic_note = (
+                            f"Try to be a bit more consistent with your {med_names[0]} this {period}."
+                        )
+                    elif num_problematic == 2:
+                        problematic_note = (
+                            f"Your {med_names[0]} and {med_names[1]} could use more regular intake this {period}."
+                        )
+                    else:
+                        problematic_note = (
+                            f"A few medications need extra attention this {period}: "
+                            f"{', '.join(med_names[:-1])} and {med_names[-1]}."
+                        )
+
+                else:  # less than 40% problematic
+                    if num_problematic == 1:
+                        problematic_note = (
+                            f"You did well overall this {period}. Just keep an eye on your {med_names[0]}."
+                        )
+                    else:
+                        problematic_note = (
+                            f"Overall adherence looks good this {period}. "
+                            f"A few medications like {', '.join(med_names[:-1])} and {med_names[-1]} "
+                            f"could be taken more consistently."
+                        )
+
         return builder.build_response(
-            "medication_report_with_timeframe",  
-            total=stats['total'],
-            taken=stats['taken'],
-            missed=stats['missed'],
-            compliance_rate=stats['compliance_rate'],
-            day=period,  # This will be "week" or "month"
+            "medication_report_with_timeframe",
+            total=stats["total"],
+            taken=stats["taken"],
+            missed=stats["missed"],
+            compliance_rate=stats["compliance_rate"],
+            day=period,  # "week" or "month"
             medication_count=len(medication_names),
             problematic_meds=problematic_meds or "None",
             problematic_note=problematic_note
