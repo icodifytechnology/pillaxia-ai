@@ -430,9 +430,6 @@ nlu:
     - can i see my medication summary?
     - can you generate my medication report?
     - i need a report of my meds
-
-- intent: medication_report_with_timeframe
-  examples: |
     - Can I see a list of medications I took this past [week](period)
     - i want medication report of last [week](period)
     - i want medication report of last [month](period)

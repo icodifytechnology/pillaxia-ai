@@ -24,7 +24,7 @@ rules:
 - rule: List Medications
   steps:
   - intent: list_medications
-  - action: action_list_medication_name
+  - action: action_list_medications
 
 - rule: give medication report
   steps:
@@ -45,11 +45,6 @@ rules:
   steps: 
   - intent: list_of_todays_medication
   - action: action_todays_medication
-
-- rule: medication report with timeframe
-  steps:
-  - intent: medication_report_with_timeframe
-  - action: action_medication_report_with_timeframe
 
 # - rule: Get symptoms
 #   steps:

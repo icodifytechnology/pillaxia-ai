@@ -11,6 +11,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet, SessionStarted
 from rasa_sdk.executor import CollectingDispatcher
 from rasa.shared.exceptions import RasaException
+from .helpers.medication_manager import MedicationManager
 import openai
 from openai import OpenAI
 import os
@@ -99,25 +100,25 @@ class ActionSessionStart(BaseAction):
     def name(self) -> Text:
         return "action_session_start"
     
-    # def run_with_slots(self, dispatcher: CollectingDispatcher,
-    #                   tracker: Tracker,
-    #                   domain: Dict[Text, Any]) -> List[SlotSet]:
-    #     """
-    #     Handle session start with slots already loaded
-    #     """
-    #     logger.info(debug_separator("ActionSessionStart"))
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                      tracker: Tracker,
+                      domain: Dict[Text, Any]) -> List[SlotSet]:
+        """
+        Handle session start with slots already loaded
+        """
+        logger.info(debug_separator("ActionSessionStart"))
         
-    #     # Send welcome message
-    #     try:
-    #         builder = ResponseBuilder(tracker.sender_id, tracker)
-    #         welcome = builder.build_response("greet")
-    #         dispatcher.utter_message(text=welcome)
-    #         logger.info(f"Sent welcome message: '{welcome}'")
-    #     except Exception as e:
-    #         logger.error(f"Error sending welcome message: {e}", exc_info=True)
-    #         dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
+        # Send welcome message
+        try:
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            welcome = builder.build_response("greet")
+            dispatcher.utter_message(text=welcome)
+            logger.info(f"Sent welcome message: '{welcome}'")
+        except Exception as e:
+            logger.error(f"Error sending welcome message: {e}", exc_info=True)
+            dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
         
-    #     return []
+        return []
     
     def run(self, dispatcher: CollectingDispatcher,
         tracker: Tracker,
@@ -297,32 +298,32 @@ class ActionAddMedication(Action):
 
         return []
 
-class ActionListMedicationName(BaseAction):  
-    def name(self):
-        return "action_list_medication_name"
+class ActionListMedications(Action):
+    """List all medication names for the user."""
     
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                      tracker: Tracker,
-                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def name(self) -> Text:
+        return "action_list_medications"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         logger.info("Listing medication names")
         
         try:
-            # Use the MedicationManager
-            from .helpers.medication_manager import MedicationManager
             med_manager = MedicationManager(tracker.sender_id)
-            
             medication_names = med_manager.get_medication_names()
             
             if not medication_names:
                 logger.debug("No medications found for user")
-                reply = "You don't have any medications in your list."
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response("no_medications")
             else:
-                # Use ResponseBuilder for personalization
                 builder = ResponseBuilder(tracker.sender_id, tracker)
                 reply = builder.build_response(
                     "list_medications",
-                    medications=", ".join(medication_names)
+                    medications=", ".join(medication_names),
+                    count=len(medication_names)
                 )
                 logger.debug(f"Found {len(medication_names)} medications")
             
@@ -333,212 +334,44 @@ class ActionListMedicationName(BaseAction):
             dispatcher.utter_message(text="Sorry, I couldn't retrieve your medication list.")
         
         return []
-    
-class ActionMedicationReport(BaseAction):
-    """Generate personalized medication tracking report"""
+
+class ActionMedicationReport(Action):
+    """Generate medication tracking report for specified or default timeframe."""
     
     def name(self) -> Text:
         return "action_medication_report"
     
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                      tracker: Tracker,
-                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         logger.info("Generating medication tracking report")
         
         try:
-            from .helpers.medication_manager import MedicationManager
-            med_manager = MedicationManager(tracker.sender_id)
-            
-            # Get tracking data (default: last 30 days)
-            tracking_data = med_manager.get_recent_tracking(days=30)
-            
-            if not tracking_data:
-                logger.debug("No tracking data found")
-                builder = ResponseBuilder(tracker.sender_id, tracker)
-                reply = builder.build_response("no_tracking_data")
-                dispatcher.utter_message(text=reply)
-                return []
-            
-            # Analyze compliance for summary
-            stats = med_manager.analyze_tracking_compliance(tracking_data)
-            logger.debug(f"Report stats: {stats}")
-            
-            # Get medication names for context
-            medication_names = med_manager.get_medication_names()
-            logger.debug(f"User has {len(medication_names)} medications in list")
-            
-            # Build personalized response with summary AND list
-            attachment = self._build_combined_report(tracker, stats, tracking_data, medication_names)
-            
-            dispatcher.utter_message(attachment=attachment)
-            logger.info(f"✓ Report generated: {stats['taken']}/{stats['total']} taken")
-            
-        except Exception as e:
-            logger.error(f"✗ Error generating report: {e}", exc_info=True)
-            dispatcher.utter_message(text="Sorry, I couldn't generate your medication report.")
-        
-        return []
-    
-    def _build_combined_report(self, tracker: Tracker, stats: Dict, 
-                              tracking_data: List[Dict], medication_names: List[str]) -> Dict:
-        """Build combined report with summary and recent entries"""
-        
-        # 1. Build the summary text (with problematic note)
-        builder = ResponseBuilder(tracker.sender_id, tracker)
-        
-        # Find most problematic medication for note
-        problematic_note = ""
-        if stats.get('medication_stats'):
-            total_meds = len(stats['medication_stats'])
-            problematic_meds = []
-
-            # Identify meds with low compliance
-            for med_name, med_stats in stats['medication_stats'].items():
-                if med_stats.get('total', 0) > 0:
-                    med_compliance = (med_stats['taken'] / med_stats['total'] * 100)
-                    if med_compliance < 70:
-                        problematic_meds.append((med_name, med_compliance))
-
-            # Generate problematic note
-            if problematic_meds:
-                num_problematic = len(problematic_meds)
-                percent_problematic = (num_problematic / total_meds) * 100
-                problematic_meds.sort(key=lambda x: x[1])
-                med_names = [m[0] for m in problematic_meds]
-
-                if percent_problematic == 100:
-                    problematic_note = "It seems you haven't been taking any of your medications on time. Let's try to improve that!"
-                elif percent_problematic >= 70:
-                    problematic_note = f"Almost all of your medications ({', '.join(med_names)}) need more attention."
-                elif percent_problematic >= 40:
-                    if num_problematic == 1:
-                        problematic_note = f"Try to be more consistent with your {med_names[0]}."
-                    elif num_problematic == 2:
-                        problematic_note = f"Focus on taking {med_names[0]} and {med_names[1]} more regularly."
-                    else:
-                        problematic_note = f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]}."
-                else:
-                    if num_problematic == 1:
-                        problematic_note = f"You mostly did well, but keep an eye on your {med_names[0]}."
-                    else:
-                        problematic_note = f"You mostly took your medications on time. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
-        
-        # Build summary text
-        summary_text = builder.build_response(
-            "medication_report",
-            total=stats['total'],
-            taken=stats['taken'],
-            missed=stats['missed'],
-            compliance_rate=stats['compliance_rate'],
-            day="month",
-            medication_count=len(medication_names),
-            problematic_meds="None",
-            problematic_note=problematic_note
-        )
-        
-        # 2. Build recent entries list (limit to last 10 for readability)
-        recent_entries = tracking_data[:10]  # Show only last 10 entries
-        
-        report_data = []
-        for item in recent_entries:
-            reminder_at = item.get('reminder_at', 'Unknown time')
-            tracked_at = item.get('tracked_at')
-            
-            # Format the time strings
-            if reminder_at:
-                try:
-                    # Extract just date and time (without seconds if present)
-                    reminder_time = reminder_at.split()[1][:5] if ' ' in reminder_at else reminder_at[:5]
-                    reminder_date = reminder_at.split()[0] if ' ' in reminder_at else ""
-                    reminder_str = f"{reminder_date} {reminder_time}" if reminder_date else reminder_time
-                except:
-                    reminder_str = reminder_at
-            else:
-                reminder_str = "Unknown time"
-            
-            # Determine status
-            if tracked_at:
-                try:
-                    tracked_time = tracked_at.split()[1][:5] if ' ' in tracked_at else tracked_at[:5]
-                    status = f"Taken at {tracked_time}"
-                except:
-                    status = "Taken"
-            else:
-                status = "Medication not taken"
-            
-            report_data.append({
-                'name': item.get('reminder', 'Unknown medication'),
-                'value': f"Reminded at {reminder_str}, {status}"
-            })
-        
-        # Add note if there are more entries
-        if len(tracking_data) > 10:
-            report_data.append({
-                'name': 'Note',
-                'value': f"... and {len(tracking_data) - 10} more entries this month"
-            })
-        
-        # 3. Return combined response in attachment format
-        return {
-            "query_response": summary_text,
-            "data": report_data,
-            "type": "array",
-            "status": "success"
-        }
-    
-    def _get_time_period_text(self, days: int) -> str:
-        """Convert days to human-readable time period"""
-        if days == 1:
-            return "day"
-        elif days == 7:
-            return "week"
-        elif days == 30:
-            return "month"
-        elif days == 90:
-            return "3 months"
-        else:
-            return f"{days} days"
-    
-class ActionMedicationReportWithTimeframe(BaseAction):
-    """Generate medication report for specific timeframe (week/month)"""
-    
-    def name(self) -> Text:
-        return "action_medication_report_with_timeframe"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                      tracker: Tracker,
-                      domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        logger.info("Generating medication report with timeframe")
-        
-        try:
-            # Get period from slot
-            period = tracker.get_slot("period")
-            if not period:
-                logger.warning("No period specified, defaulting to month")
-                period = "month"
-            
+            # Get period from slot or default
+            period = tracker.get_slot("period") or "month"
             logger.debug(f"Generating report for period: {period}")
             
-            # Get medication manager
-            from .helpers.medication_manager import MedicationManager
+            # Map period to days
+            days_map = {
+                "today": 1,
+                "day": 1,
+                "week": 7,
+                "month": 30,
+                "3 months": 90,
+                "year": 365
+            }
+            days = days_map.get(period.lower(), 30)
+            
             med_manager = MedicationManager(tracker.sender_id)
             
-            # Determine days based on period
-            if period.lower() == "month":
-                days = 30 
-            elif period.lower() == "today":
-                days = 1
-            else:
-                days = 7
-        
-            # Get tracking data for the specified period
+            # Get tracking data
             tracking_data = med_manager.get_recent_tracking(days=days)
             
             if not tracking_data:
                 logger.debug(f"No tracking data found for last {period}")
-                reply = f"I couldn't find any medication tracking data for the past {period}."
+                builder = ResponseBuilder(tracker.sender_id, tracker)
+                reply = builder.build_response("no_tracking_data", day=period)
                 dispatcher.utter_message(text=reply)
                 return []
             
@@ -546,125 +379,46 @@ class ActionMedicationReportWithTimeframe(BaseAction):
             stats = med_manager.analyze_tracking_compliance(tracking_data)
             logger.debug(f"Report stats for {period}: {stats}")
             
-            # Get medication names for context
+            # Get medication names
             medication_names = med_manager.get_medication_names()
             
-            # Build combined report
-            attachment = self._build_combined_report(tracker, stats, tracking_data, medication_names, period)
+            # Generate problematic medication note
+            problematic_note = med_manager.analyze_problematic_medications(stats, period)
+            
+            # Build summary response
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            summary_text = builder.build_response(
+                "medication_report",
+                total=stats['total'],
+                taken=stats['taken'],
+                missed=stats['missed'],
+                compliance_rate=stats['compliance_rate'],
+                day=period,
+                medication_count=len(medication_names),
+                problematic_meds="None",
+                problematic_note=problematic_note
+            )
+            
+            # Build report data
+            max_entries = 15 if period.lower() == "week" else 10
+            report_data = med_manager.build_report_data(tracking_data, max_entries, period)
+            
+            # Send combined response
+            attachment = {
+                "query_response": summary_text,
+                "data": report_data,
+                "type": "array",
+                "status": "success"
+            }
             
             dispatcher.utter_message(attachment=attachment)
             logger.info(f"✓ {period.capitalize()} report generated: {stats['taken']}/{stats['total']} taken")
             
         except Exception as e:
-            logger.error(f"✗ Error generating {period} report: {e}", exc_info=True)
-            dispatcher.utter_message(text=f"Sorry, I couldn't generate your {period} medication report.")
+            logger.error(f"✗ Error generating report: {e}", exc_info=True)
+            dispatcher.utter_message(text=f"Sorry, I couldn't generate your medication report.")
         
         return []
-    
-    def _build_combined_report(self, tracker: Tracker, stats: Dict, 
-                              tracking_data: List[Dict], medication_names: List[str], period: str) -> Dict:
-        """Build combined report with summary and recent entries for timeframe"""
-        
-        # 1. Build the summary text
-        builder = ResponseBuilder(tracker.sender_id, tracker)
-        
-        # Generate problematic note
-        problematic_note = ""
-        if stats.get('medication_stats'):
-            total_meds = len(stats['medication_stats'])
-            problematic_meds = []
-
-            for med_name, med_stats in stats['medication_stats'].items():
-                if med_stats.get('total', 0) > 0:
-                    compliance = (med_stats['taken'] / med_stats['total']) * 100
-                    if compliance < 70:
-                        problematic_meds.append((med_name, compliance))
-
-            if problematic_meds:
-                num_problematic = len(problematic_meds)
-                percent_problematic = (num_problematic / total_meds) * 100
-                problematic_meds.sort(key=lambda x: x[1])
-                med_names = [m[0] for m in problematic_meds]
-
-                if percent_problematic == 100:
-                    problematic_note = f"It seems you haven't been taking any of your medications on time this {period}."
-                elif percent_problematic >= 70:
-                    problematic_note = f"Almost all of your medications ({', '.join(med_names)}) need more attention this {period}."
-                elif percent_problematic >= 40:
-                    if num_problematic == 1:
-                        problematic_note = f"Try to be more consistent with your {med_names[0]} this {period}."
-                    elif num_problematic == 2:
-                        problematic_note = f"Focus on taking {med_names[0]} and {med_names[1]} more regularly this {period}."
-                    else:
-                        problematic_note = f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]} this {period}."
-                else:
-                    if num_problematic == 1:
-                        problematic_note = f"You mostly did well this {period}, but keep an eye on your {med_names[0]}."
-                    else:
-                        problematic_note = f"You mostly took your medications on time this {period}. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
-        
-        # Build summary text
-        summary_text = builder.build_response(
-            "medication_report",
-            total=stats['total'],
-            taken=stats['taken'],
-            missed=stats['missed'],
-            compliance_rate=stats['compliance_rate'],
-            day=period,
-            medication_count=len(medication_names),
-            problematic_meds="None",
-            problematic_note=problematic_note
-        )
-        
-        # 2. Build recent entries list
-        # Show more entries for week, fewer for month
-        max_entries = 15 if period.lower() == "week" else 10
-        
-        recent_entries = tracking_data[:max_entries]
-        report_data = []
-        
-        for item in recent_entries:
-            reminder_at = item.get('reminder_at', 'Unknown time')
-            tracked_at = item.get('tracked_at')
-            
-            # Format time
-            if reminder_at and ' ' in reminder_at:
-                date_part, time_part = reminder_at.split(' ', 1)
-                time_short = time_part[:5] if len(time_part) >= 5 else time_part
-                reminder_str = f"{date_part} {time_short}"
-            else:
-                reminder_str = reminder_at or "Unknown time"
-            
-            # Status
-            if tracked_at:
-                if ' ' in tracked_at:
-                    _, tracked_time = tracked_at.split(' ', 1)
-                    time_short = tracked_time[:5] if len(tracked_time) >= 5 else tracked_time
-                    status = f"Taken at {time_short}"
-                else:
-                    status = "Taken"
-            else:
-                status = "Medication not taken"
-            
-            report_data.append({
-                'name': item.get('reminder', 'Unknown medication'),
-                'value': f"Reminded at {reminder_str}, {status}"
-            })
-        
-        # Add note if truncated
-        if len(tracking_data) > max_entries:
-            report_data.append({
-                'name': 'Note',
-                'value': f"... and {len(tracking_data) - max_entries} more entries this {period}"
-            })
-        
-        # 3. Return combined response
-        return {
-            "query_response": summary_text,
-            "data": report_data,
-            "type": "array",
-            "status": "success"
-        }
     
 class ActionTodaysMedication(Action):
     def name(self):

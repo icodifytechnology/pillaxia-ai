@@ -1,5 +1,15 @@
 """
-User Profile Manager with caching and timezone handling
+USER PROFILE MANAGER
+====================
+Manages user profile with caching, timezone handling, and personalization.
+
+Key: 
+- Cached profile access
+- Timezone-aware greetings
+- Name extraction with fallbacks
+- Tone preference handling
+
+Connected to: actions.py (personalization), domain.yml (slots)
 """
 
 import logging
@@ -12,164 +22,126 @@ logger = logging.getLogger(__name__)
 
 
 class UserProfile:
-    """Manages user profile data including name, timezone, and preferences"""
+    """Manages user profile data with caching and personalization."""
     
     def __init__(self, token: str):
+        """Initialize with user token. Token masked in logs."""
         self.token = token
-        self._profile = None  # Cache for profile data
+        self._profile = None  # Profile cache
         logger.debug(f"UserProfile initialized with token: {token[:20]}...")
     
     def get_profile(self) -> Optional[dict]:
-        """Get user profile from API, cached to avoid repeated calls"""
+        """Get profile from API (cached)."""
         if self._profile is None:
-            logger.debug(f"Cache miss - fetching profile from API")
+            logger.debug("Cache miss - fetching profile")
             self._profile = api_client.get_user_profile(self.token)
-            if self._profile:
-                logger.debug(f"Profile fetched and cached successfully")
-            else:
-                logger.warning(f"Failed to fetch profile")
-        else:
-            logger.debug(f"Cache hit - using cached profile data")
+            logger.debug(f"Profile {'fetched' if self._profile else 'failed'}")
         return self._profile
     
     def get_user_name(self, tracker=None) -> Optional[str]:
         """
-        Get user's name with priority:
-        1. Existing slot value
-        2. API call
-        3. Default
+        Get user's name.
+        Priority: 1. Slot value, 2. Profile fields, 3. None
         """
-        logger.debug(f"Getting user name (tracker provided: {tracker is not None})")
-        
-        # Check slot first if tracker provided
+        # Check slot first
         if tracker:
-            slot_value = tracker.get_slot("user_name")
-            if slot_value:
-                logger.debug(f"Using name from slot: '{slot_value}'")
-                return slot_value
+            slot_name = tracker.get_slot("user_name")
+            if slot_name:
+                return slot_name
         
-        # If no tracker or empty slot, check API
+        # Check profile
         profile = self.get_profile()
         if not profile:
-            logger.debug(f"No profile available for name extraction")
             return None
         
-        logger.debug(f"Extracting name from profile fields")
+        # Try name fields in order
         name_fields = ["full_name", "user_name", "name", "username", "email"]
-        
         for field in name_fields:
             if field in profile and profile[field]:
                 raw_name = str(profile[field]).strip()
-                logger.debug(f"Found '{field}' in profile: '{raw_name}'")
-                
                 if not raw_name or raw_name.lower() in ["null", "none"]:
-                    logger.debug(f"'{field}' is empty/null, skipping")
                     continue
                 
+                # Extract from email if needed
                 if "@" in raw_name:
                     raw_name = raw_name.split("@")[0]
-                    logger.debug(f"Extracted from email: '{raw_name}'")
                 
-                first_name = raw_name.split()[0].capitalize()
-                logger.info(f"Extracted name: '{first_name}'")
-                return first_name
+                # Return capitalized first name
+                return raw_name.split()[0].capitalize()
         
-        logger.debug(f"No name found in profile")
         return None
     
     def get_timezone(self, tracker=None) -> str:
         """
-        Get user's timezone, checking slot first, then API.
+        Get user's timezone.
+        Priority: 1. Slot, 2. Profile, 3. UTC
         """
-        logger.debug(f"Getting timezone (tracker provided: {tracker is not None})")
-        
-        # 1. Check slot first
+        # Check slot
         if tracker:
-            tz_from_slot = tracker.get_slot("user_timezone")
-            if tz_from_slot:
-                logger.debug(f"Using timezone from slot: '{tz_from_slot}'")
-                return tz_from_slot
+            tz_slot = tracker.get_slot("user_timezone")
+            if tz_slot:
+                return tz_slot
         
-        # 2. Check API profile
+        # Check profile
         profile = self.get_profile()
         if profile and "timezone" in profile:
             tz = profile["timezone"]
             if tz and str(tz).strip().lower() not in ["null", "none", ""]:
-                cleaned_tz = str(tz).strip()
-                logger.debug(f"Using timezone from API: '{cleaned_tz}'")
-                return cleaned_tz
-            else:
-                logger.debug(f"Timezone in profile is empty/null")
+                return str(tz).strip()
         
-        logger.debug(f"No valid timezone found, defaulting to UTC")
+        # Default
         return "UTC"
     
     def get_local_time_of_day(self, tracker=None) -> str:
         """
-        Calculate time of day based on user's timezone.
+        Calculate local time of day based on user's timezone.
+        Returns: "morning", "afternoon", "evening", or "night"
         """
-        logger.debug(f"Calculating local time of day")
-        
         try:
             tz_str = self.get_timezone(tracker)
-            logger.debug(f"Raw timezone: '{tz_str}'")
             
-            # Convert "Nepal Time" to pytz-compatible format
+            # Handle "Nepal Time" special case
             if tz_str == "Nepal Time":
                 tz_str = "Asia/Kathmandu"
-                logger.debug(f"Converted 'Nepal Time' to '{tz_str}'")
             
             # Get timezone object
             if tz_str in pytz.all_timezones:
                 user_tz = pytz.timezone(tz_str)
-                logger.debug(f"Valid timezone: '{tz_str}'")
             else:
-                logger.warning(f"Invalid timezone '{tz_str}', defaulting to UTC")
                 user_tz = pytz.timezone("UTC")
             
-            # Get current time in user's timezone
-            user_time = datetime.now(user_tz)
-            hour = user_time.hour
-            logger.debug(f"User's local time: {user_time.strftime('%Y-%m-%d %H:%M:%S')} (hour: {hour})")
-            
-            # Determine time of day
+            # Calculate hour and determine time of day
+            hour = datetime.now(user_tz).hour
             if 5 <= hour < 12:
-                result = "morning"
+                return "morning"
             elif 12 <= hour < 17:
-                result = "afternoon"
+                return "afternoon"
             elif 17 <= hour < 21:
-                result = "evening"
+                return "evening"
             else:
-                result = "night"
-            
-            logger.debug(f"Time of day calculation: {hour} -> {result}")
-            return result
+                return "night"
                 
         except Exception as e:
-            logger.error(f"Error calculating time of day: {e}", exc_info=True)
+            logger.error(f"Error calculating time of day: {e}")
             return "day"
     
     def get_preferred_tone(self, tracker=None) -> str:
         """
         Get user's preferred communication tone.
+        Returns: "casual" or "formal" (defaults to casual)
         """
-        logger.debug(f"Getting preferred tone (tracker provided: {tracker is not None})")
-        
-        # 1. Check slot first
+        # Check slot
         if tracker:
-            tone_from_slot = tracker.get_slot("preferred_tone")
-            if tone_from_slot in ["casual", "formal"]:
-                logger.debug(f"Using tone from slot: '{tone_from_slot}'")
-                return tone_from_slot
+            tone_slot = tracker.get_slot("preferred_tone")
+            if tone_slot in ["casual", "formal"]:
+                return tone_slot
         
-        # 2. Check API (when backend adds preferred_tone field)
+        # Check profile
         profile = self.get_profile()
         if profile and "preferred_tone" in profile:
             tone = str(profile["preferred_tone"]).strip().lower()
             if tone in ["casual", "formal"]:
-                logger.debug(f"Using tone from API: '{tone}'")
                 return tone
         
-        # 3. Default
-        logger.debug(f"Using default tone: 'casual'")
+        # Default
         return "casual"
