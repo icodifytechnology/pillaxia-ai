@@ -113,5 +113,101 @@
     "Medication records for this {day} are currently unavailable.",
     "No data on your medication adherence could be found for the past {day}."
   ]
+},
+  "no_health_records": {
+    "casual": [
+      "I don't see any health records in your profile yet, {name}.",
+      "Looks like you haven't added any health records so far, {name}.",
+      "Your health history is looking pretty blank right now, {name}. Want to add some records?",
+      "No health records found for you yet, {name}.",
+      "Your health records folder is empty at the moment, {name}."
+    ],
+    "formal": [
+      "There are no health records currently available in your profile, {name}.",
+      "Your health records database appears to be empty at this time.",
+      "No medical history records are present in your profile currently.",
+      "Health records have not been documented in your profile yet.",
+      "The health records section of your profile is currently unpopulated."
+    ]
+  },
+  "health_records_list": {
+    "casual": [
+      "Here's what I found in your health records, {name}: {records}.",
+      "I see {count} health records for you. Some recent ones include {records}.",
+      "Your health profile shows {count} records, {name}. You've got things like {records}.",
+      "Checking your medical history... Found {count} records including {records}.",
+      "You've got {count} health records on file, {name}! Things like {records}."
+    ],
+    "formal": [
+      "Your profile contains {count} health records, including: {records}.",
+      "I have retrieved {count} health records from your medical history. Notable entries: {records}.",
+      "Based on your health records database, you have {count} documented records such as {records}.",
+      "Your medical profile shows {count} health records. Recent documentation includes {records}.",
+      "There are {count} health records in your profile. Examples from your medical history: {records}."
+    ]
+  },
+  "health_records_with_dates": {
+    "casual": [
+      "Looking at your health timeline, {name}... You've got {count} records. Recently, you had {records}.",
+      "Your health history shows {count} entries. Recently, you had {records}.",
+      "I found {count} health records for you, {name}! Here are some recent ones: {records}.",
+      "Checking your medical journey... {count} records total. Recent highlights: {records}.",
+      "You have {count} health moments documented, {name}. Some from not too long ago: {records}."
+    ],
+    "formal": [
+      "Your health records summary shows {count} total entries. Recent documentation includes: {records}.",
+      "There are {count} health records in your profile. Among the more recent entries: {records}.",
+      "Your medical history contains {count} records. Recent additions to your profile: {records}.",
+      "I have accessed {count} health records from your profile. Recent medical documentation: {records}.",
+      "Your health records database contains {count} entries. Recent health events include: {records}."
+    ]
+  },
+    "health_records_single_recent": {
+    "casual": [
+      "Hey {name}, your most recent health record is {record}.",
+      "Your latest health update was {record}, {name}.",
+      "I see your most recent medical entry is {record}, {name}.",
+      "Checking in on your health... Your last recorded event was {record}.",
+      "The newest addition to your health history is {record}, {name}."
+    ],
+    "formal": [
+      "Your most recent health record documents {record}, {name}.",
+      "The latest entry in your medical history is {record}.",
+      "According to your most recent health documentation: {record}.",
+      "Your newest health record indicates: {record}.",
+      "The most current health event in your profile is {record}."
+    ]
+  },
+  "health_records_by_type": {
+    "casual": [
+      "I notice you have several {record_type} records, {name}. Things like {records}.",
+      "Your {record_type} history shows entries like {records}, {name}.",
+      "Looking at your {record_type} records specifically: {records}.",
+      "For {record_type} tests/procedures, you've had things like {records}, {name}.",
+      "Your {record_type} documentation includes {records}."
+    ],
+    "formal": [
+      "Your {record_type} records include: {records}.",
+      "Documentation for {record_type} in your profile shows: {records}.",
+      "Regarding {record_type}, your health records indicate: {records}.",
+      "Your medical history contains these {record_type} entries: {records}.",
+      "The {record_type} section of your health records documents: {records}."
+    ]
+  },
+  "health_records_summary": {
+    "casual": [
+      "Here are your health records - {count} entries in total.",
+      "Found {count} health records in your profile.",
+      "Your health history shows {count} records.",
+      "I've pulled up {count} health records for you."
+    ],
+    "formal": [
+      "Your health records summary: {count} total entries.",
+      "There are {count} health records documented in your profile.",
+      "Health records database contains {count} entries.",
+      "A total of {count} health records are available in your profile."
+    ]
+  }
 }
-}
+
+

@@ -486,6 +486,33 @@ nlu:
     - fetch my medication history for last [week](period)
     - fetch my medication history for last [month](period)
 
+- intent: get_health_records
+  examples: |
+    - show my health records
+    - my medical history
+    - health records
+    - medical reports
+    - lab results
+    - test reports
+    - view my health data
+    - show health information
+    - what's in my health record
+    - can I see my medical history?
+    - I'd like to review my health records
+    - show me my lab results
+    - bring up my test reports
+    - give me a summary of my medical history
+    - display my health information
+    - what tests have I done so far?
+    - can you fetch my health records?
+    - I'd like to check my medical reports
+    - pull up my health data
+    - do I have any recent lab results?
+    - show a summary of my past tests
+    - what’s recorded in my health history?
+    - give me an overview of my health records
+    - let me see my medical information
+
 - intent: list_of_todays_medication
   examples: |
     - what are the medication for today

@@ -31,6 +31,11 @@ rules:
   - intent: medication_report
   - action: action_medication_report
 
+- rule: Show health records
+  steps:
+  - intent: get_health_records
+  - action: action_get_health_records
+  
 - rule: medication taken
   steps:
   - intent: notify_medication_taken

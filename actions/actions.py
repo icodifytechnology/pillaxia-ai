@@ -419,7 +419,152 @@ class ActionMedicationReport(Action):
             dispatcher.utter_message(text=f"Sorry, I couldn't generate your medication report.")
         
         return []
+
+class ActionGetHealthRecords(Action):
+    """Action to fetch and show health records."""
     
+    def name(self) -> Text:
+        return "action_get_health_records"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Starting action_get_health_records")
+        
+        try:
+            from .helpers.health_records_manager import HealthRecordsManager
+            from .helpers.response_builder import ResponseBuilder
+            
+            # Create ResponseBuilder ONCE at the beginning
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            
+            # Get records
+            logger.debug("Creating HealthRecordsManager")
+            manager = HealthRecordsManager(tracker.sender_id)
+            records_data = manager.get_all_records()
+            
+            # Debug: Log what we got from API
+            logger.debug(f"Records data type: {type(records_data)}")
+            logger.debug(f"Records data keys: {list(records_data.keys()) if records_data else 'None'}")
+            
+            # Check if we have any data at all
+            if not records_data:
+                logger.info("No records data returned from API")
+                reply = builder.build_response("no_health_records")  # Use existing builder
+                dispatcher.utter_message(text=reply)
+                return [SlotSet("health_records_available", False)]
+            
+            items = records_data.get("items", [])
+            total_count = records_data.get("count", 0)
+            
+            logger.debug(f"Total count from API: {total_count}")
+            logger.debug(f"Items list length: {len(items)}")
+            
+            # Check if items list is empty
+            if not items:
+                logger.info("Items list is empty (count might be 0)")
+                reply = builder.build_response("no_health_records")  # Use existing builder
+                dispatcher.utter_message(text=reply)
+                return [SlotSet("health_records_available", False)]
+            
+            # Debug: Show first item structure
+            if items:
+                first_item = items[0]
+                logger.debug(f"First item keys: {list(first_item.keys())}")
+                logger.debug(f"First item name: {first_item.get('name')}")
+                logger.debug(f"First item date: {first_item.get('diagnosis_date')}")
+            
+            # Prepare data for response
+            recent_records = manager.get_recent_records(limit=3)
+            
+            logger.debug(f"Recent records count: {len(recent_records)}")
+            
+            # Get unique record types
+            record_types = manager.get_record_types()
+            logger.debug(f"Record types found: {record_types}")
+            
+            # Check if records have dates
+            has_dates = any(record.get("diagnosis_date") for record in items[:3])
+            logger.debug(f"Records have dates: {has_dates}")
+            
+            # Format records for display
+            if recent_records:
+                record_strings = []
+                for record in recent_records:
+                    name = record.get("name", "Health Record")
+                    date_str = record.get("diagnosis_date", "")
+                    formatted_date = manager.format_record_date(date_str)
+                    
+                    if formatted_date != "Unknown date":
+                        record_strings.append(f"{name} ({formatted_date})")
+                    else:
+                        record_strings.append(name)
+                record_list = ", ".join(record_strings)
+                logger.debug(f"Formatted recent records: {record_list}")
+            else:
+                record_names = [r.get("name", "Record") for r in items[:3]]
+                record_list = ", ".join(record_names)
+                logger.debug(f"Simple record list: {record_list}")
+            
+            # Choose template based on context
+            logger.debug(f"Choosing template: total_count={total_count}, record_types={len(record_types)}, has_dates={has_dates}")
+            
+            # NOTE: ResponseBuilder will automatically add 'name' parameter
+            # from UserProfile, so we don't need to pass it explicitly
+            if total_count == 1:
+                logger.debug("Using single record template")
+                record = items[0]
+                name = record.get("name", "Health Record")
+                date_str = record.get("diagnosis_date", "")
+                formatted_date = manager.format_record_date(date_str)
+                
+                if formatted_date != "Unknown date":
+                    record_str = f"{name} ({formatted_date})"
+                else:
+                    record_str = name
+                    
+                reply = builder.build_response(
+                    "health_records_single_recent",
+                    record=record_str  
+                )
+                
+            elif len(record_types) == 1 and len(items) > 1:
+                logger.debug(f"Using by-type template: {record_types[0]}")
+                reply = builder.build_response(
+                    "health_records_by_type",
+                    record_type=record_types[0],
+                    records=record_list,
+                    count=total_count
+                )
+                
+            elif has_dates and recent_records:
+                logger.debug("Using with-dates template")
+                reply = builder.build_response(
+                    "health_records_with_dates",
+                    records=record_list,
+                    count=total_count,
+                    recent_count=len(recent_records)
+                )
+                
+            else:
+                logger.debug("Using generic list template")
+                reply = builder.build_response(
+                    "health_records_list",
+                    records=record_list,
+                    count=total_count
+                )
+            
+            logger.debug(f"Final response: {reply}")
+            dispatcher.utter_message(text=reply)
+            logger.info(f"Successfully returned {total_count} health records")
+            return [SlotSet("health_records_available", True)]
+            
+        except Exception as e:
+            logger.error(f"Error getting health records: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't access your health records.")
+            return []
+        
 class ActionTodaysMedication(Action):
     def name(self):
         return "action_todays_medication"

@@ -132,6 +132,37 @@ class PillaxiaAPIClient:
             message = data.get("message") if data else "Medication saved successfully"
             return True, message
         return False, error
+    
+    def get_health_records(self, token: str, page: int = 1, page_size: int = 10) -> Optional[Dict[str, Any]]:
+        """
+        Get user's health records from API.
+        
+        Args:
+            token: User authentication token
+            page: Page number (default: 1)
+            page_size: Records per page (default: 10)
+        
+        Returns:
+            Health records data with items list or None on error
+        """
+        # Prepare request body matching API example
+        request_body = {
+            "page": page,
+            "pageSize": page_size,
+            "sorts": [],
+            "searchColumnFilters": []
+        }
+        
+        data, status_code, error = self._make_request(
+            "POST",
+            "/health-records/list",
+            headers=self._get_auth_headers(token),
+            json=request_body
+        )
+        
+        if status_code == 200 and data:
+            return data.get("result")
+        return None
         
     def health_check(self) -> bool:
         """Check if API is reachable (public endpoint)."""
