@@ -175,9 +175,12 @@ class ActionGreet(BaseAction):
         # Build and send greeting
         try:
             builder = ResponseBuilder(token, tracker)
-            reply = builder.build_response("greet")
-            dispatcher.utter_message(text=reply)
-            logger.info(f"Sent greeting: '{reply}'")
+        
+            # Simple greeting - no data array
+            attachment = builder.build_response("greet")
+            dispatcher.utter_message(attachment=attachment)
+
+            logger.info(f"Sent greeting: '{attachment}'")
         except Exception as e:
             logger.error(f"Error building greeting: {e}", exc_info=True)
             dispatcher.utter_message(text="Hello! Nice to see you.")
@@ -209,9 +212,9 @@ class ActionGoodbye(BaseAction):
         # Build personalized goodbye
         try:
             builder = ResponseBuilder(token, tracker)
-            reply = builder.build_response("goodbye")
-            dispatcher.utter_message(text=reply)
-            logger.info(f"Sent goodbye: '{reply}'")
+            attachment = builder.build_response("goodbye")
+            dispatcher.utter_message(attachment=attachment)
+            logger.info(f"Sent goodbye: '{attachment}'")
         except Exception as e:
             logger.error(f"Error building goodbye: {e}", exc_info=True)
             dispatcher.utter_message(text="Goodbye! Take care.")
@@ -253,11 +256,11 @@ class ActionIamabot(Action):
         ]
         
         try:
-            reply = random.choice(BOT_IDENTITY_RESPONSES)
-            logger.debug(f"Selected bot identity response: '{reply[:50]}...'")
+            attachment = random.choice(BOT_IDENTITY_RESPONSES)
+            logger.debug(f"Selected bot identity response: '{attachment[:50]}...'")
             
             # Only send text response since this is a simple identity message
-            dispatcher.utter_message(text=reply)
+            dispatcher.utter_message(attachment=attachment)
             
         except Exception as e:
             logger.error(f"Error in action_iamabot: {e}", exc_info=True)
@@ -280,6 +283,7 @@ class ActionAddMedication(Action):
                        "Please fill out the form to include this medication in your records.",
                        "Add this medication to your list by completing the following form."]
             reply = random.choice(messages)
+            
             attachment = {
 		    	"query_response": reply,
 		    	"data":"/add-med-layout ",
@@ -294,7 +298,7 @@ class ActionAddMedication(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
 
         return []
 
@@ -317,17 +321,17 @@ class ActionListMedications(Action):
             if not medication_names:
                 logger.debug("No medications found for user")
                 builder = ResponseBuilder(tracker.sender_id, tracker)
-                reply = builder.build_response("no_medications")
+                attachment = builder.build_response("no_medications")
             else:
                 builder = ResponseBuilder(tracker.sender_id, tracker)
-                reply = builder.build_response(
+                attachment = builder.build_response(
                     "list_medications",
                     medications=", ".join(medication_names),
                     count=len(medication_names)
                 )
                 logger.debug(f"Found {len(medication_names)} medications")
             
-            dispatcher.utter_message(text=reply)
+            dispatcher.utter_message(attachment=attachment)
             
         except Exception as e:
             logger.error(f"Error listing medications: {e}", exc_info=True)
@@ -372,7 +376,7 @@ class ActionMedicationReport(Action):
                 logger.debug(f"No tracking data found for last {period}")
                 builder = ResponseBuilder(tracker.sender_id, tracker)
                 reply = builder.build_response("no_tracking_data", day=period)
-                dispatcher.utter_message(text=reply)
+                dispatcher.utter_message(text=reply["query_response"])
                 return []
             
             # Analyze compliance
@@ -387,7 +391,7 @@ class ActionMedicationReport(Action):
             
             # Build summary response
             builder = ResponseBuilder(tracker.sender_id, tracker)
-            summary_text = builder.build_response(
+            response = builder.build_response(
                 "medication_report",
                 total=stats['total'],
                 taken=stats['taken'],
@@ -403,15 +407,11 @@ class ActionMedicationReport(Action):
             max_entries = 15 if period.lower() == "week" else 10
             report_data = med_manager.build_report_data(tracking_data, max_entries, period)
             
-            # Send combined response
-            attachment = {
-                "query_response": summary_text,
-                "data": report_data,
-                "type": "array",
-                "status": "success"
-            }
+            # Add the report data to the response
+            response["data"] = report_data
+            response["type"] = "array"  # Ensure type is array when we have data
             
-            dispatcher.utter_message(attachment=attachment)
+            dispatcher.utter_message(attachment=response)
             logger.info(f"✓ {period.capitalize()} report generated: {stats['taken']}/{stats['total']} taken")
             
         except Exception as e:
@@ -451,8 +451,8 @@ class ActionGetHealthRecords(Action):
             # Check if we have any data at all
             if not records_data:
                 logger.info("No records data returned from API")
-                reply = builder.build_response("no_health_records")  # Use existing builder
-                dispatcher.utter_message(text=reply)
+                attachment = builder.build_response("no_health_records")  # Use existing builder
+                dispatcher.utter_message(attachment=attachment)
                 return [SlotSet("health_records_available", False)]
             
             items = records_data.get("items", [])
@@ -464,8 +464,8 @@ class ActionGetHealthRecords(Action):
             # Check if items list is empty
             if not items:
                 logger.info("Items list is empty (count might be 0)")
-                reply = builder.build_response("no_health_records")  # Use existing builder
-                dispatcher.utter_message(text=reply)
+                attachment = builder.build_response("no_health_records")  # Use existing builder
+                dispatcher.utter_message(attachment=attachment)
                 return [SlotSet("health_records_available", False)]
             
             # Debug: Show first item structure
@@ -524,14 +524,14 @@ class ActionGetHealthRecords(Action):
                 else:
                     record_str = name
                     
-                reply = builder.build_response(
+                attachment = builder.build_response(
                     "health_records_single_recent",
                     record=record_str  
                 )
                 
             elif len(record_types) == 1 and len(items) > 1:
                 logger.debug(f"Using by-type template: {record_types[0]}")
-                reply = builder.build_response(
+                attachment = builder.build_response(
                     "health_records_by_type",
                     record_type=record_types[0],
                     records=record_list,
@@ -540,7 +540,7 @@ class ActionGetHealthRecords(Action):
                 
             elif has_dates and recent_records:
                 logger.debug("Using with-dates template")
-                reply = builder.build_response(
+                attachment = builder.build_response(
                     "health_records_with_dates",
                     records=record_list,
                     count=total_count,
@@ -549,20 +549,20 @@ class ActionGetHealthRecords(Action):
                 
             else:
                 logger.debug("Using generic list template")
-                reply = builder.build_response(
+                attachment = builder.build_response(
                     "health_records_list",
                     records=record_list,
                     count=total_count
                 )
             
-            logger.debug(f"Final response: {reply}")
-            dispatcher.utter_message(text=reply)
+            logger.debug(f"Final response: {attachment}")
+            dispatcher.utter_message(attachment=attachment)
             logger.info(f"Successfully returned {total_count} health records")
             return [SlotSet("health_records_available", True)]
             
         except Exception as e:
             logger.error(f"Error getting health records: {e}", exc_info=True)
-            dispatcher.utter_message(text="Sorry, I couldn't access your health records.")
+            dispatcher.utter_message(attachment=builder.build_response("no_health_records"))
             return []
         
 class ActionTodaysMedication(Action):
@@ -617,7 +617,7 @@ class ActionTodaysMedication(Action):
                     "type": "string",
                     "status": "failed"
             }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
 
         return []
         
@@ -696,7 +696,7 @@ class ActionMedicationTracker(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return []
 
 class ActionMedicationDosage(Action):
@@ -747,7 +747,7 @@ class ActionMedicationDosage(Action):
 		    	    "type":"string",
 		    	    "status": "failed"
 		        }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return []
 
 class ActionMedicationTaken(Action):
@@ -817,7 +817,7 @@ class ActionMedicationTaken(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         
         # if medication_name: 
         #     return [SlotSet("medication", None)]
@@ -872,7 +872,7 @@ class ActionMedicationTaken(Action):
 # 		    	"type":"string",
 # 		    	"status": "success"
 #             }
-#         dispatcher.utter_message(text=reply)
+#         dispatcher.utter_message(attachment=attachment)
 #         return []
 
 class ActionNextDose(Action):
@@ -916,17 +916,17 @@ class ActionNextDose(Action):
                 if next_med:
                     time_obj = datetime.strptime(next_med['time'], "%H:%M:%S")
                     formatted_time_full = time_obj.strftime("%-I:%M %p")  # HH:MM AM/PM
-                    reply = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
+                    attachment = f"You're scheduled to take your {next_med['name']} at {formatted_time_full}. I'll remind you when it's time!"
                 else:
-                    reply = "Looks like you don’t have any meds scheduled for the rest of today."
+                    attachment = "Looks like you don’t have any meds scheduled for the rest of today."
             else:
-                reply = "Looks like you don’t have any meds scheduled!"
+                attachment = "Looks like you don’t have any meds scheduled!"
         
         except Exception as ex:
             # reply already has a default error message
             pass
         
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return []
 
 
@@ -984,7 +984,7 @@ class ActionRefillInformation(Action):
 		#     	"status": "failed"
         #     }
         # finally:
-            dispatcher.utter_message(text=reply)
+            dispatcher.utter_message(attachment=attachment)
         
             return [SlotSet("medication", None)]
     
@@ -1048,7 +1048,7 @@ class ActionNewSymptom(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return[]
 
 class ActionSymptoms(Action):
@@ -1111,7 +1111,7 @@ class ActionSymptoms(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return[]
     
 class ActionCheckMedication(Action):
@@ -1165,7 +1165,7 @@ class ActionCheckMedication(Action):
                     "type":"string",
                     "status": "failed"
                 }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return[]
     
 class ActionMedicationAdherence(Action):
@@ -1205,7 +1205,7 @@ class ActionMedicationAdherence(Action):
                 "type": "string",
                 "status": "failed"
             }
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return[]
     
     def get_adherence_response(self, percentage):
@@ -1337,5 +1337,5 @@ class ActionCustomFallback(Action):
                 "status": "failed"
             }
 
-        dispatcher.utter_message(text=reply)
+        dispatcher.utter_message(attachment=attachment)
         return []

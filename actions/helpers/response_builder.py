@@ -14,7 +14,7 @@ Used by: actions.py for all user responses
 """
 
 import logging
-from typing import Any
+from typing import Any, Optional, List, Dict as TypedDict
 from .template_manager import TemplateManager
 from .user_profile import UserProfile
 
@@ -31,8 +31,24 @@ class ResponseBuilder:
         self.tracker = tracker
         logger.debug(f"ResponseBuilder initialized for token: {token[:20]}...")
     
-    def build_response(self, intent: str, **context: Any) -> str:
-        """Build personalized response for intent with context."""
+    def build_response(self, intent: str, data: Optional[List[TypedDict[str, Any]]] = None, **context: Any) -> TypedDict[str, Any]:
+        """
+        Build structured response in consistent attachment format.
+        
+        Args:
+            intent: Template intent name
+            data: Optional list of data items (for array responses)
+            **context: Template placeholders
+            
+        Returns:
+            Dictionary with consistent attachment structure:
+            {
+                "query_response": "formatted text from template",
+                "type": "text" or "array",
+                "status": "success",
+                "data": [...]  # optional, only if data provided
+            }
+        """
         # Get personalization data
         tone = self.user_profile.get_preferred_tone(self.tracker)
         name = self.user_profile.get_user_name(self.tracker) or ""
@@ -45,7 +61,21 @@ class ResponseBuilder:
             **context
         }
         
-        return self.template_manager.get_response(intent, tone, **placeholders)
+        # Get text response from template
+        text_response = self.template_manager.get_response(intent, tone, **placeholders)
+        
+        # Build consistent attachment structure
+        response = {
+            "query_response": text_response,
+            "type": "array" if data is not None else "text",
+            "status": "success"
+        }
+        
+        # Add data array if provided
+        if data is not None:
+            response["data"] = data
+        
+        return response
     
     def build_error_response(self, error_type: str = "default", **context) -> str:
         """Build error response. Falls back to default_error if specific intent not found."""
