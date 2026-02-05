@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 import requests
 from rasa_sdk import Action, Tracker
-from rasa_sdk.events import SlotSet, SessionStarted
+from rasa_sdk.events import SlotSet, SessionStarted, FollowupAction, ActionExecuted
 from rasa_sdk.executor import CollectingDispatcher
 from rasa.shared.exceptions import RasaException
 from .helpers.medication_manager import MedicationManager
@@ -101,48 +101,23 @@ class ActionSessionStart(BaseAction):
         return "action_session_start"
     
     def run_with_slots(self, dispatcher: CollectingDispatcher,
-                      tracker: Tracker,
-                      domain: Dict[Text, Any]) -> List[SlotSet]:
-        """
-        Handle session start with slots already loaded
-        """
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    
         logger.info(debug_separator("ActionSessionStart"))
         
-        # Send welcome message
-        try:
-            builder = ResponseBuilder(tracker.sender_id, tracker)
-            response = builder.build_response("greet")  # Get the response
-            
-            # Check if it's a string (simple response) or dict (structured)
-            if isinstance(response, dict):
-                # It's already structured, send as attachment
-                dispatcher.utter_message(attachment=response)
-                logger.info(f"Sent welcome message as attachment")
-            else:
-                # It's a string, wrap it in the standard format
-                attachment = {
-                    "query_response": response,
-                    "type": "text",
-                    "status": "success"
-                }
-                dispatcher.utter_message(attachment=attachment)
-                logger.info(f"Sent welcome message: '{response}'")
-                
-        except Exception as e:
-            logger.error(f"Error sending welcome message: {e}", exc_info=True)
-            # Send error in standard format too
-            attachment = {
-                "query_response": "Hello! Welcome to Pillaxia.",
-                "type": "text",
-                "status": "success"
-            }
-            dispatcher.utter_message(attachment=attachment)
+        # Add an action_listen event to create the right state for rule matching
+        events = []
         
-        return []
+        # Add a fake action_listen to help rule matching
+        events.append(ActionExecuted("action_listen"))
+        
+        logger.info("Session initialized with action_listen for rule matching")
+        return events
     
     def run(self, dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain: Dict[Text, Any]) -> List[SlotSet]:
+        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         """
         Override run to handle session start specially
         """

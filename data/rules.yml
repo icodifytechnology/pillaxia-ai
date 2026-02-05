@@ -1,6 +1,13 @@
 version: "3.1"
 
 rules:
+
+- rule: Start session at conversation beginning
+  conversation_start: true  
+  steps:
+    - action: action_session_start
+  wait_for_user_input: false
+
 - rule: Greet anytime the user Greets
   steps:
   - intent: greet
