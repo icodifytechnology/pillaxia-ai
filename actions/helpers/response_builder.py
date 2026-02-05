@@ -1,9 +1,20 @@
 """
-Response Builder for personalized responses
+RESPONSE BUILDER
+================
+Builds personalized responses by combining templates with user data.
+
+Key:
+- Integrates UserProfile for personalization
+- Uses TemplateManager for response formatting
+- Supports error responses with fallbacks
+- All responses include name, time_of_day, tone
+
+Dependencies: .template_manager, .user_profile, logging
+Used by: actions.py for all user responses
 """
 
 import logging
-from typing import Dict, Any
+from typing import Any, Optional, List, Dict as TypedDict
 from .template_manager import TemplateManager
 from .user_profile import UserProfile
 
@@ -11,57 +22,66 @@ logger = logging.getLogger(__name__)
 
 
 class ResponseBuilder:
-    """Builds personalized responses by combining templates with user data"""
+    """Builds personalized responses using templates and user data."""
     
     def __init__(self, token: str, tracker=None):
+        """Initialize with user token and optional tracker."""
         self.user_profile = UserProfile(token)
         self.template_manager = TemplateManager()
         self.tracker = tracker
-        logger.debug(f"ResponseBuilder initialized with token: {token[:20]}...")
+        logger.debug(f"ResponseBuilder initialized for token: {token[:20]}...")
     
-    def build_response(self, intent: str, **context: Any) -> str:
+    def build_response(self, intent: str, data: Optional[List[TypedDict[str, Any]]] = None, **context: Any) -> TypedDict[str, Any]:
         """
-        Build a personalized response for the given intent.
-        """
-        logger.debug(f"Building response for intent: '{intent}'")
-        logger.debug(f"Context: {context}")
+        Build structured response in consistent attachment format.
         
-        # Get user's preferred tone
+        Args:
+            intent: Template intent name
+            data: Optional list of data items (for array responses)
+            **context: Template placeholders
+            
+        Returns:
+            Dictionary with consistent attachment structure:
+            {
+                "query_response": "formatted text from template",
+                "type": "text" or "array",
+                "status": "success",
+                "data": [...]  # optional, only if data provided
+            }
+        """
+        # Get personalization data
         tone = self.user_profile.get_preferred_tone(self.tracker)
-        logger.debug(f"Using tone: '{tone}'")
-        
-        # Get user's first name
-        user_name = self.user_profile.get_user_name(self.tracker) or ""
-        logger.debug(f"Using name: '{user_name}'")
-        
-        # Get time of day
+        name = self.user_profile.get_user_name(self.tracker) or ""
         time_of_day = self.user_profile.get_local_time_of_day(self.tracker) or "day"
-        logger.debug(f"Using time_of_day: '{time_of_day}'")
         
-        # Prepare placeholders
+        # Combine with action context
         placeholders = {
-            "name": user_name,
+            "name": name,
             "time_of_day": time_of_day,
             **context
         }
-        logger.debug(f"Final placeholders: {placeholders}")
         
-        # Get and return formatted response
-        response = self.template_manager.get_response(intent, tone, **placeholders)
-        logger.debug(f"Final response: '{response}'")
+        # Get text response from template
+        text_response = self.template_manager.get_response(intent, tone, **placeholders)
+        
+        # Build consistent attachment structure
+        response = {
+            "query_response": text_response,
+            "type": "array" if data is not None else "text",
+            "status": "success"
+        }
+        
+        # Add data array if provided
+        if data is not None:
+            response["data"] = data
         
         return response
     
     def build_error_response(self, error_type: str = "default", **context) -> str:
-        """
-        Build error response with appropriate error template.
-        """
-        logger.debug(f"Building error response for: '{error_type}'")
-        
+        """Build error response. Falls back to default_error if specific intent not found."""
         intent = f"{error_type}_error" if error_type != "default" else "default_error"
         
         if intent not in self.template_manager.get_all_intents():
-            logger.warning(f"Intent '{intent}' not found, using 'default_error'")
             intent = "default_error"
         
         return self.build_response(intent, **context)

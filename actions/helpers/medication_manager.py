@@ -1,100 +1,79 @@
+"""
+MEDICATION MANAGER
+==================
+Manages user medication data with caching, tracking, and compliance analysis.
+
+Key:
+- Cached medication access
+- Tracking data retrieval
+- Compliance analysis
+- Case-insensitive medication lookup
+
+Dependencies: .api_client, logging, datetime
+Used by: actions.py for medication-related operations
+"""
+
 import logging
 from typing import Dict, Any, List, Optional, Tuple
+from datetime import datetime, timedelta
 from .api_client import api_client
 
 logger = logging.getLogger(__name__)
 
-class MedicationManager:
-    """Manages user medication data"""
 
+class MedicationManager:
+    """Manages user medication data with caching and analysis."""
+    
     def __init__(self, token: str):
+        """Initialize with user token for medication access."""
         self.token = token
         self._medications_cache = None
         logger.debug(f"MedicationManager initialized for token: {token[:20]}...")
 
     def get_all_medications(self) -> Optional[Dict[str, Any]]:
-        """Get all user medications, cached"""
+        """Get all user medications (cached)."""
         if self._medications_cache is None:
-            logger.debug("Cache miss - fetching medications from API")
             self._medications_cache = api_client.get_user_medications(self.token)
-            if self._medications_cache:
-                logger.debug(f"Fetched {self._medications_cache.get('count', 0)} medications")
-            else:
-                logger.warning("No medications data received")
-        else:
-            logger.debug("Cache hit - using cached medications")
-        
         return self._medications_cache
     
     def get_medication_by_name(self, medication_name: str) -> Optional[Dict[str, Any]]:
-        """Get specific medication by name (case-insensitive)"""
-        logger.debug(f"Looking for medication: '{medication_name}'")
-        
-        medications_data = self.get_all_medications()
-        if not medications_data:
+        """Find medication by name (case-insensitive)."""
+        data = self.get_all_medications()
+        if not data:
             return None
         
-        items = medications_data.get("items", [])
-        for med in items:
+        for med in data.get("items", []):
             if med.get("name", "").lower() == medication_name.lower():
-                logger.debug(f"Found medication: {med.get('name')}")
                 return med
-        
-        logger.debug(f"Medication '{medication_name}' not found")
         return None
     
     def get_medication_names(self) -> List[str]:
-        """Get list of all medication names"""
-        medications_data = self.get_all_medications()
-        if not medications_data:
+        """Get list of all medication names."""
+        data = self.get_all_medications()
+        if not data:
             return []
         
-        items = medications_data.get("items", [])
-        names = [med.get("name", "") for med in items if med.get("name")]
-        logger.debug(f"Extracted {len(names)} medication names")
-        return names
+        return [med.get("name", "") for med in data.get("items", []) if med.get("name")]
     
     def save_medication(self, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
-        """Save a new medication or update existing"""
-        logger.info(f"Saving medication: {medication_data.get('name', 'Unnamed')}")
+        """Save new or update existing medication (clears cache)."""
         success, message = api_client.save_user_medication(self.token, medication_data)
         
         if success:
-            # Clear cache since data has changed
-            self._medications_cache = None
-            logger.info("Medication saved, cache cleared")
-        else:
-            logger.error(f"Failed to save medication: {message}")
+            self._medications_cache = None  # Clear cache
         
         return success, message
     
     def get_medication_tracking(self, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:
-        """Get medication tracking data with date filtering"""
-        logger.debug(f"Getting tracking data from {start_date} to {end_date}")
-        
-        tracking_data = api_client.get_medication_tracking(
+        """Get tracking data with optional date filtering."""
+        return api_client.get_medication_tracking(
             self.token, 
             start_date=start_date, 
             end_date=end_date
         )
-        
-        if tracking_data:
-            items = tracking_data.get("items", [])
-            logger.debug(f"Got {len(items)} tracking entries")
-            
-            # Log sample for debugging
-            if items:
-                sample = items[0]
-                logger.debug(f"Sample entry: {sample.get('reminder')} - "
-                            f"Tracked: {'Yes' if sample.get('tracked_at') else 'No'}")
-        
-        return tracking_data
 
     def get_recent_tracking(self, days: int = 7) -> List[Dict[str, Any]]:
-        """Get recent tracking data (last N days)"""
-        logger.debug(f"Getting last {days} days of tracking")
-        
-        from datetime import datetime, timedelta
+        """Get tracking data for last N days."""
         end_date = datetime.now().strftime("%Y-%m-%d")
         start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
         
@@ -104,16 +83,14 @@ class MedicationManager:
         return []
 
     def analyze_tracking_compliance(self, tracking_data: List[Dict] = None) -> Dict[str, Any]:
-        """Analyze tracking data and return compliance statistics"""
-        logger.debug("Analyzing tracking compliance")
-        
+        """Analyze tracking data and return compliance statistics."""
         if tracking_data is None:
             tracking_data = self.get_recent_tracking(days=30)
         
         if not tracking_data:
-            logger.debug("No tracking data to analyze")
             return {"total": 0, "taken": 0, "missed": 0, "compliance_rate": 0}
         
+        # Calculate overall compliance
         total = len(tracking_data)
         taken = sum(1 for item in tracking_data if item.get('tracked_at'))
         missed = total - taken
@@ -130,8 +107,6 @@ class MedicationManager:
             if item.get('tracked_at'):
                 medication_stats[med_name]['taken'] += 1
         
-        logger.debug(f"Compliance analysis: {taken}/{total} taken ({compliance_rate:.1f}%)")
-        
         return {
             'total': total,
             'taken': taken,
@@ -142,17 +117,115 @@ class MedicationManager:
         }
 
     def get_todays_tracking(self) -> List[Dict[str, Any]]:
-        """Get today's medication tracking data"""
-        logger.debug("Fetching today's tracking data")
+        """Get today's tracking data."""
         tracking_data = self.get_medication_tracking()
         if tracking_data:
             return tracking_data.get("items", [])
         return []
-
-    def _get_auth_headers(self) -> Dict[str, str]:
-        """Helper to get authentication headers"""
+    
+    # NEW CONSOLIDATED METHODS
+    def analyze_problematic_medications(self, stats: Dict[str, Any], period: str = "month") -> str:
+        """
+        Analyze which medications need attention based on compliance.
+        Returns a human-readable note about problematic medications.
+        """
+        if not stats.get('medication_stats'):
+            return ""
+        
+        medication_stats = stats['medication_stats']
+        total_meds = len(medication_stats)
+        problematic_meds = []
+        
+        # Identify medications with low compliance (<70%)
+        for med_name, med_stats in medication_stats.items():
+            if med_stats.get('total', 0) > 0:
+                compliance = (med_stats['taken'] / med_stats['total']) * 100
+                if compliance < 70:
+                    problematic_meds.append((med_name, compliance))
+        
+        if not problematic_meds:
+            return ""
+        
+        # Sort by worst compliance first
+        problematic_meds.sort(key=lambda x: x[1])
+        num_problematic = len(problematic_meds)
+        med_names = [m[0] for m in problematic_meds]
+        percent_problematic = (num_problematic / total_meds) * 100
+        
+        # Generate appropriate note based on severity
+        if percent_problematic == 100:
+            return f"It seems you haven't been taking any of your medications on time this {period}. Let's try to improve that!"
+        elif percent_problematic >= 70:
+            return f"Almost all of your medications ({', '.join(med_names)}) need more attention this {period}."
+        elif percent_problematic >= 40:
+            if num_problematic == 1:
+                return f"Try to be more consistent with your {med_names[0]} this {period}."
+            elif num_problematic == 2:
+                return f"Focus on taking {med_names[0]} and {med_names[1]} more regularly this {period}."
+            else:
+                return f"Pay special attention to: {', '.join(med_names[:-1])} and {med_names[-1]} this {period}."
+        else:
+            if num_problematic == 1:
+                return f"You mostly did well this {period}, but keep an eye on your {med_names[0]}."
+            else:
+                return f"You mostly took your medications on time this {period}. A few like {', '.join(med_names[:-1])} and {med_names[-1]} could use more consistency."
+    
+    def format_tracking_entry(self, item: Dict[str, Any]) -> Dict[str, str]:
+        """
+        Format a tracking entry for display.
+        Returns: {'name': medication_name, 'value': formatted_entry}
+        """
+        med_name = item.get('reminder', 'Unknown medication')
+        reminder_at = item.get('reminder_at', '')
+        tracked_at = item.get('tracked_at')
+        
+        # Format reminder time
+        if reminder_at and ' ' in reminder_at:
+            date_part, time_part = reminder_at.split(' ', 1)
+            time_short = time_part[:5] if len(time_part) >= 5 else time_part
+            reminder_str = f"{date_part} {time_short}"
+        else:
+            reminder_str = reminder_at or "Unknown time"
+        
+        # Determine status
+        if tracked_at:
+            if ' ' in tracked_at:
+                _, tracked_time = tracked_at.split(' ', 1)
+                time_short = tracked_time[:5] if len(tracked_time) >= 5 else tracked_time
+                status = f"Taken at {time_short}"
+            else:
+                status = "Taken"
+        else:
+            status = "Medication not taken"
+        
         return {
-            "Authorization": f"Bearer {self.token}",
-            "Content-Type": "application/json",
-            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
+            'name': med_name,
+            'value': f"Reminded at {reminder_str}, {status}"
         }
+    
+    def build_report_data(self, tracking_data: List[Dict], max_entries: int = 10, period: str = "month") -> List[Dict]:
+        """
+        Build formatted report data from tracking entries.
+        
+        Args:
+            tracking_data: List of tracking entries
+            max_entries: Maximum number of entries to include
+            period: Time period for context
+            
+        Returns:
+            List of formatted entries for display
+        """
+        report_data = []
+        recent_entries = tracking_data[:max_entries]
+        
+        for item in recent_entries:
+            report_data.append(self.format_tracking_entry(item))
+        
+        # Add truncation note if needed
+        if len(tracking_data) > max_entries:
+            report_data.append({
+                'name': 'Note',
+                'value': f"... and {len(tracking_data) - max_entries} more entries this {period}"
+            })
+        
+        return report_data

@@ -7,7 +7,7 @@ intents:
   - add_medication
   - list_medications
   - medication_report
-  - medication_report_with_timeframe
+  - get_health_records
   - notify_medication_taken
   - out_of_scope
   - list_of_todays_medication
@@ -27,9 +27,9 @@ actions:
   - action_goodbye
   - action_iamabot
   - action_add_medication
-  - action_list_medication_name
+  - action_list_medications
   - action_medication_report
-  - action_medication_report_with_timeframe
+  - action_get_health_records
   - action_medication_tracker
   - action_custom_fallback
   - action_todays_medication
@@ -94,6 +94,12 @@ slots:
     mappings:
       - type: from_entity
         entity: medication
+
+  health_records_available:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom
 
 session_config:
   session_expiration_time: 60

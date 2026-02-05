@@ -1,5 +1,16 @@
 """
-API Client for Pillaxia with enhanced debugging and error handling
+API CLIENT
+==========
+Central API client for Pillaxia backend services with retry logic and error handling.
+
+Key:
+- Singleton pattern (api_client instance)
+- Retry logic with exponential backoff
+- Authentication via Bearer tokens
+- Comprehensive error handling
+
+Env vars: PILLAXIA_API_URL, API_TIMEOUT, API_RETRY_ATTEMPTS, API_RETRY_DELAY
+Endpoints: /profile, /user-medications/list, /medication-tracker/list, /user-medications/save, /health
 """
 
 import requests
@@ -12,88 +23,59 @@ logger = logging.getLogger(__name__)
 
 
 class PillaxiaAPIClient:
-    """API client for Pillaxia backend services"""
+    """API client for Pillaxia backend services."""
     
     def __init__(self):
+        """Initialize with environment variables or defaults."""
         self.base_url = os.getenv("PILLAXIA_API_URL", "https://api.pillaxia.com/api/v1")
         self.timeout = int(os.getenv("API_TIMEOUT", 30))
         self.retry_attempts = int(os.getenv("API_RETRY_ATTEMPTS", 2))
         self.retry_delay = int(os.getenv("API_RETRY_DELAY", 1))
-        
-        logger.debug(f"API Client initialized with base_url: {self.base_url}")
+        logger.debug(f"API Client base_url: {self.base_url}")
     
     def _make_request(self, method: str, endpoint: str, **kwargs) -> Tuple[Optional[Dict], int, Optional[str]]:
         """
-        Make HTTP request with retry logic and comprehensive debugging
-        
+        Make HTTP request with retry logic.
         Returns: (data, status_code, error_message)
         """
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         request_id = f"req_{int(time.time())}_{hash(url) % 1000:03d}"
         
-        logger.debug(f"[{request_id}] {method} {url}")
-        
         for attempt in range(self.retry_attempts + 1):
             try:
-                start_time = time.time()
-                response = requests.request(
-                    method=method,
-                    url=url,
-                    timeout=self.timeout,
-                    **kwargs
-                )
-                elapsed = time.time() - start_time
-                
-                logger.debug(f"[{request_id}] Attempt {attempt + 1}/{self.retry_attempts + 1}")
-                logger.debug(f"[{request_id}] Status: {response.status_code}, Time: {elapsed:.2f}s")
+                response = requests.request(method=method, url=url, timeout=self.timeout, **kwargs)
                 
                 if response.status_code == 200:
-                    try:
-                        data = response.json()
-                        logger.debug(f"[{request_id}] Success - Response keys: {list(data.keys())}")
-                        return data, response.status_code, None
-                    except ValueError as e:
-                        logger.error(f"[{request_id}] JSON decode error: {e}")
-                        return None, response.status_code, f"Invalid JSON response: {e}"
+                    return response.json(), response.status_code, None
                 else:
-                    logger.warning(f"[{request_id}] HTTP {response.status_code}: {response.text[:200]}")
-                    
-                    # Don't retry on client errors (4xx) except 429 (rate limit)
+                    # Don't retry on client errors (except 429 rate limit)
                     if 400 <= response.status_code < 500 and response.status_code != 429:
                         return None, response.status_code, f"Client error: {response.text[:100]}"
                     
-                    # Retry on server errors (5xx) and rate limits
+                    # Retry on server errors and rate limits
                     if attempt < self.retry_attempts:
-                        delay = self.retry_delay * (2 ** attempt)  # Exponential backoff
-                        logger.debug(f"[{request_id}] Retrying in {delay}s...")
+                        delay = self.retry_delay * (2 ** attempt)
                         time.sleep(delay)
                         continue
                     
                     return None, response.status_code, f"Server error: {response.status_code}"
                     
             except requests.exceptions.Timeout:
-                logger.error(f"[{request_id}] Timeout after {self.timeout}s")
                 if attempt < self.retry_attempts:
-                    logger.debug(f"[{request_id}] Retrying timeout...")
                     continue
-                return None, 408, f"Request timeout after {self.timeout}s"
-                
+                return None, 408, f"Request timeout"
             except requests.exceptions.ConnectionError:
-                logger.error(f"[{request_id}] Connection error")
                 if attempt < self.retry_attempts:
-                    logger.debug(f"[{request_id}] Retrying connection...")
                     time.sleep(self.retry_delay)
                     continue
                 return None, 503, "Connection failed"
-                
             except Exception as e:
-                logger.error(f"[{request_id}] Unexpected error: {str(e)}", exc_info=True)
                 return None, 500, f"Unexpected error: {str(e)}"
         
         return None, 500, "Max retries exceeded"
     
     def _get_auth_headers(self, token: str) -> Dict[str, str]:
-        """Get authentication headers for API requests"""
+        """Get authentication headers for API requests."""
         return {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -101,72 +83,27 @@ class PillaxiaAPIClient:
         }
     
     def get_user_profile(self, token: str) -> Optional[Dict[str, Any]]:
-        """Get user profile with authentication"""
-        logger.info(f"Fetching user profile for token: {token[:20]}...")
-        
-        headers = self._get_auth_headers(token)
-        
+        """Get user profile information."""
         data, status_code, error = self._make_request(
-            "GET",
-            "/profile",
-            headers=headers
+            "GET", "/profile", headers=self._get_auth_headers(token)
         )
         
         if status_code == 200 and data:
-            # Extract from "result" key in API response
-            result = data.get("result")
-            if result:
-                logger.info(f"Profile fetched successfully")
-                logger.debug(f"Profile fields: {list(result.keys())}")
-                
-                # Log specific fields (mask sensitive data)
-                safe_profile = result.copy()
-                for key in ["email", "phone", "password"]:
-                    if key in safe_profile and safe_profile[key]:
-                        safe_profile[key] = f"{safe_profile[key][:3]}...{safe_profile[key][-2:]}"
-                
-                logger.debug(f"Profile data (sanitized): {safe_profile}")
-                return result
-            else:
-                logger.warning("API response missing 'result' key")
-                logger.debug(f"Full response: {data}")
-                return None
-        else:
-            logger.error(f"Failed to fetch profile: {error}")
-            return None
+            return data.get("result")
+        return None
     
     def get_user_medications(self, token: str) -> Optional[Dict[str, Any]]:
-        """Get user's medication list"""
-        logger.info(f"Fetching medications for token: {token[:20]}...")
-
-        headers = self._get_auth_headers(token)
-
+        """Get user's medication list."""
         data, status_code, error = self._make_request(
-            "POST",  
-            "/user-medications/list",  
-            headers=headers
+            "POST", "/user-medications/list", headers=self._get_auth_headers(token)
         )
-
+        
         if status_code == 200 and data:
-            result = data.get("result")
-            if result:
-                logger.info(f"Medications fetched successfully - {result.get('count', 0)} items")
-                logger.debug(f"Medication data structure: {list(result.keys())}")
-                return result
-            else:
-                logger.warning("API response missing 'result' key for medications")
-                return None
-        else:
-            logger.error(f"Failed to fetch medications: {error}")
-            return None
-     
+            return data.get("result")
+        return None
+    
     def get_medication_tracking(self, token: str, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:
-        """Get medication tracking data (when meds were taken/missed)"""
-        logger.info(f"Fetching medication tracking for token: {token[:20]}...")
-        
-        headers = self._get_auth_headers(token)
-        
-        # Build params for date filtering
+        """Get medication tracking data with optional date filtering."""
         params = {}
         if start_date:
             params["start_date"] = start_date
@@ -174,60 +111,68 @@ class PillaxiaAPIClient:
             params["end_date"] = end_date
         
         data, status_code, error = self._make_request(
-            "POST",  # Your API uses POST for this endpoint
-            "/medication-tracker/list",
-            headers=headers,
-            params=params  # Pass dates as query params
+            "POST", "/medication-tracker/list", 
+            headers=self._get_auth_headers(token),
+            params=params
         )
         
         if status_code == 200 and data:
-            result = data.get("result", {})
-            items_count = len(result.get("items", []))
-            logger.info(f"✓ Fetched {items_count} tracking entries")
-            return result
-        else:
-            logger.error(f"✗ Failed to fetch tracking: {error}")
-            return None
+            return data.get("result", {})
+        return None
     
     def save_user_medication(self, token: str, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
-        """Save/update a user medication"""
-        logger.info(f"Saving medication for token: {token[:20]}...")
-        logger.debug(f"Medication data: {medication_data}")
-
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "User-Agent": "Pillaxia-Rasa-Bot/1.0"
-        }
-
+        """Save or update a user medication."""
         data, status_code, error = self._make_request(
-            "POST",
-            "/user-medications/save",  
-            headers=headers,
+            "POST", "/user-medications/save",
+            headers=self._get_auth_headers(token),
             json=medication_data
         )
-
+        
         if status_code == 200:
-            logger.info("Medication saved successfully")
-            if data and "message" in data:
-                return True, data.get("message")
-            return True, "Medication saved successfully"
-        else:
-            logger.error(f"Failed to save medication: {error}")
-            return False, error
+            message = data.get("message") if data else "Medication saved successfully"
+            return True, message
+        return False, error
+    
+    def get_health_records(self, token: str, page: int = 1, page_size: int = 10) -> Optional[Dict[str, Any]]:
+        """
+        Get user's health records from API.
+        
+        Args:
+            token: User authentication token
+            page: Page number (default: 1)
+            page_size: Records per page (default: 10)
+        
+        Returns:
+            Health records data with items list or None on error
+        """
+        # Prepare request body matching API example
+        request_body = {
+            "page": page,
+            "pageSize": page_size,
+            "sorts": [],
+            "searchColumnFilters": []
+        }
+        
+        data, status_code, error = self._make_request(
+            "POST",
+            "/health-records/list",
+            headers=self._get_auth_headers(token),
+            json=request_body
+        )
+        
+        if status_code == 200 and data:
+            return data.get("result")
+        return None
         
     def health_check(self) -> bool:
-        """Check if API is reachable"""
+        """Check if API is reachable (public endpoint)."""
         try:
             url = f"{self.base_url}/health"
-            logger.debug(f"Health check: {url}")
             response = requests.get(url, timeout=5)
-            logger.debug(f"Health check status: {response.status_code}")
             return response.status_code == 200
-        except Exception as e:
-            logger.error(f"Health check failed: {e}")
+        except Exception:
             return False
 
 
-# Singleton instance
+# Singleton instance - import this in other files
 api_client = PillaxiaAPIClient()
