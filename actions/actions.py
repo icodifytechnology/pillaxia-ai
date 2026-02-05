@@ -111,12 +111,32 @@ class ActionSessionStart(BaseAction):
         # Send welcome message
         try:
             builder = ResponseBuilder(tracker.sender_id, tracker)
-            welcome = builder.build_response("greet")
-            dispatcher.utter_message(text=welcome)
-            logger.info(f"Sent welcome message: '{welcome}'")
+            response = builder.build_response("greet")  # Get the response
+            
+            # Check if it's a string (simple response) or dict (structured)
+            if isinstance(response, dict):
+                # It's already structured, send as attachment
+                dispatcher.utter_message(attachment=response)
+                logger.info(f"Sent welcome message as attachment")
+            else:
+                # It's a string, wrap it in the standard format
+                attachment = {
+                    "query_response": response,
+                    "type": "text",
+                    "status": "success"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                logger.info(f"Sent welcome message: '{response}'")
+                
         except Exception as e:
             logger.error(f"Error sending welcome message: {e}", exc_info=True)
-            dispatcher.utter_message(text="Hello! Welcome to Pillaxia.")
+            # Send error in standard format too
+            attachment = {
+                "query_response": "Hello! Welcome to Pillaxia.",
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
         
         return []
     
