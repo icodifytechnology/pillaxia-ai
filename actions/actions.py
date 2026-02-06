@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from typing import Any, Text, Dict, List
+from typing import Any, Text, Dict, List, Optional
 import logging
 from abc import ABC, abstractmethod
 
@@ -12,6 +12,7 @@ from rasa_sdk.events import SlotSet, SessionStarted, FollowupAction, ActionExecu
 from rasa_sdk.executor import CollectingDispatcher
 from rasa.shared.exceptions import RasaException
 from .helpers.medication_manager import MedicationManager
+from .helpers.medication_analyzer import MedicationAnalyzer
 import openai
 from openai import OpenAI
 import os
@@ -414,7 +415,7 @@ class ActionMedicationReport(Action):
             dispatcher.utter_message(text=f"Sorry, I couldn't generate your medication report.")
         
         return []
-
+    
 class ActionGetHealthRecords(Action):
     """Action to fetch and show health records."""
     
@@ -1164,103 +1165,54 @@ class ActionCheckMedication(Action):
         return[]
     
 class ActionMedicationAdherence(Action):
+    """Provide medication adherence insights using analyzer and response builder."""
+    
     def name(self):
         return "action_medication_adherence"
     
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-        try:
-            end_date = start_date = date.today()  
-            period = tracker.get_slot("period")   
-            if period:    
-                if period.lower() == "week":
-                        start_date = start_date - relativedelta(weeks=1)
-                elif period.lower() == "month":
-                        start_date = start_date - relativedelta(months=1)
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-            url = f'https://api.pillaxia.com/api/v1/pxtracker?start_date={start_date}&end_date={end_date}'
-            header = {
-                "Authorization": f"Bearer {tracker.sender_id}"
+        logger.info("Generating medication adherence insights")
+        
+        try:
+            period = tracker.get_slot("period") or "month"
+            logger.debug(f"Adherence period: {period}")
+            
+            # Map period to days
+            days_map = {
+                "today": 1, "day": 1, "week": 7, 
+                "month": 30, "3 months": 90, "year": 365
             }
-            response = requests.get(url, headers=header)
-            response_data = response.json()["result"]["summary"]
-            adherence_percentage = response_data.get("taken_medication_percent")
-            reply = self.get_adherence_response(adherence_percentage)
-            attachment = {
-                "query_response": reply,
-                "data": [],
-                "type": "string",
-                "status": "success"
-            }
+            days = days_map.get(period.lower(), 30)
+            
+            # Initialize managers
+            med_manager = MedicationManager(tracker.sender_id)
+            analyzer = MedicationAnalyzer(med_manager)
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            
+            # Get tracking data
+            tracking_data = med_manager.get_recent_tracking(days=days)
+            
+            if not tracking_data:
+                logger.debug(f"No tracking data for {period}")
+                reply = builder.build_response("no_tracking_data", day=period)
+                dispatcher.utter_message(text=reply["query_response"])
+                return []
+            
+            # Analyze insights
+            insights = analyzer.analyze_adherence_insights(tracking_data, period)
+            
+            # Build response
+            response = builder.build_medication_insight(insights, include_data=False)
+            
+            dispatcher.utter_message(attachment=response)
+            logger.info(f"✓ {period} adherence insights sent")
             
         except Exception as e:
-            reply = "Sorry, we couldn't access your medication adherence. Please try again later !!!"
-            attachment = {
-                "query_response": reply,
-                "data": str(e),
-                "type": "string",
-                "status": "failed"
-            }
-        dispatcher.utter_message(attachment=attachment)
-        return[]
-    
-    def get_adherence_response(self, percentage):
-        ADHERENCE_RESPONSES = {
-            (0, 9): [
-                "Your adherence is {adherence_percentage}% - let's focus on getting you the support you need. I'm here to help you succeed.",
-                "You're {adherence_percentage}% adherent. Taking medications consistently is crucial for your health. Let's work together to improve this.",
-                "Your medication adherence is {adherence_percentage}%. Every small step counts - let's start building better habits today."
-            ],
-            (10, 19): [
-                "Your adherence is {adherence_percentage}% - let's talk about what's making it difficult to take your medications consistently.",
-                "You're {adherence_percentage}% adherent. I'm here to help you succeed with your medications and overcome any barriers.",
-                "Your medication adherence is {adherence_percentage}%. Let's identify what's challenging and create solutions together."
-            ],
-            (20, 29): [
-                "Your adherence is {adherence_percentage}% - let's prioritize getting back on track with your medication routine.",
-                "You're {adherence_percentage}% adherent. Your medications are important for your health - let's work on consistency.",
-                "Your medication adherence is {adherence_percentage}%. Small improvements can make a big difference in your health outcomes."
-            ],
-            (30, 39): [
-                "Your adherence is {adherence_percentage}% - this needs attention. Let's figure out how to support you better.",
-                "You're {adherence_percentage}% adherent. Your health is important - let's develop strategies to improve your routine.",
-                "Your medication adherence is {adherence_percentage}%. Let's focus on small, achievable improvements that stick."
-            ],
-            (40, 49): [
-                "Your adherence is {adherence_percentage}% - let's work together to improve this and get you on the right track.",
-                "You're {adherence_percentage}% adherent. I know you can do better! Let's identify what's getting in the way.",
-                "Your medication adherence is {adherence_percentage}%. Let's turn this around together - you've got this!"
-            ],
-            (50, 59): [
-                "You're {adherence_percentage}% adherent - about halfway there. Let's work on building stronger medication habits.",
-                "Your medication adherence is {adherence_percentage}%. There's definitely room to grow - every improvement matters!",
-                "You're {adherence_percentage}% adherent. Let's focus on improving your routine and making it more consistent."
-            ],
-            (60, 69): [
-                "You're {adherence_percentage}% adherent - not bad, but there's room for improvement. You're making progress!",
-                "Your adherence is {adherence_percentage}% - you're on the right path! Let's see where we can help you improve further.",
-                "You're {adherence_percentage}% adherent. You're getting there! Keep building on this positive momentum."
-            ],
-            (70, 79): [
-                "You're {adherence_percentage}% adherent - that's pretty good! You're on the right track with your medications.",
-                "Nice progress! {adherence_percentage}% adherence shows you're building good habits. Keep it up!",
-                "You're {adherence_percentage}% adherent - solid work! With a little more consistency, you'll be doing even better."
-            ],
-            (80, 89): [
-                "You're {adherence_percentage}% adherent, that's amazing! You're doing really well with your medication routine.",
-                "Great job! {adherence_percentage}% adherence shows you're staying on track beautifully. Keep up the excellent work!",
-                "You're {adherence_percentage}% adherent - that's really impressive! Your consistency is paying off."
-            ],
-            (90, 100): [
-                "You're {adherence_percentage}% adherent - that's exceptional! You're doing an outstanding job with your medications.",
-                "Wow! {adherence_percentage}% adherence is fantastic! You're really committed to your health. Keep it up!",
-                "Amazing work! You're {adherence_percentage}% adherent - that's excellent medication management. You should be proud!"
-            ]
-        }
-                
-        for (min_val, max_val), responses in ADHERENCE_RESPONSES.items():
-            if min_val <= percentage <= max_val:
-                return random.choice(responses).format(adherence_percentage=percentage)
-        return f"Your adherence is {percentage}%. Want to see your visual report?"
+            logger.error(f"✗ Adherence error: {e}", exc_info=True)
+            dispatcher.utter_message(text="Sorry, I couldn't access your medication adherence.")
+        
+        return []
     
         
 class ActionCustomFallback(Action):

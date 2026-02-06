@@ -1,31 +1,13 @@
-"""
-TEMPLATE MANAGER
-================
-Manages response templates with safe placeholder formatting and tone variation.
-
-Key:
-- Loads templates from JSON file
-- Random selection to avoid repetition
-- Safe formatting with defaults
-- Casual/formal tone support
-
-Dependencies: json, random, os, re, logging
-Template file: ../templates/responses.json
-Format: {intent: {tone: [templates]}}
-Placeholders: {name}, {time_of_day}, {medications}, etc.
-"""
-
 import json
-import random
 import os
+import random
 import re
 import logging
 
 logger = logging.getLogger(__name__)
 
-
 class TemplateManager:
-    """Manages response templates with tone variations and safe formatting."""
+    """Manages response templates with safe placeholder formatting and tone variation."""
     
     def __init__(self):
         """Load templates from JSON file on initialization."""
@@ -72,13 +54,25 @@ class TemplateManager:
         # Select random template and format
         template = random.choice(self.templates[intent][tone])
         return self._safe_format(template, **placeholders)
+
     
     def _safe_format(self, template: str, **placeholders) -> str:
         """Format template with defaults for missing placeholders."""
+        # Pre-process placeholders to handle .capitalize() etc.
+        processed_placeholders = {}
+        
+        for key, value in placeholders.items():
+            if isinstance(value, str):
+                processed_placeholders[key] = value
+                # Also add capitalized version
+                processed_placeholders[f"{key}_capitalize"] = value.capitalize()
+            else:
+                processed_placeholders[key] = value
+        
         values = {}
         for placeholder in re.findall(r'\{(\w+)\}', template):
-            if placeholder in placeholders:
-                values[placeholder] = placeholders[placeholder]
+            if placeholder in processed_placeholders:
+                values[placeholder] = processed_placeholders[placeholder]
             else:
                 values[placeholder] = self._get_default_value(placeholder)
         
@@ -91,7 +85,10 @@ class TemplateManager:
             "time_of_day": "day",
             "medications": "your medications",
             "count": "0",
-            "medication": "your medication"
+            "medication": "your medication",
+            "pattern_insight": "your medication pattern varies",
+            "trend_insight": "maintaining consistency",
+            "encouragement": "Keep up the good work!"
         }
         return defaults.get(placeholder_name, "")
     
