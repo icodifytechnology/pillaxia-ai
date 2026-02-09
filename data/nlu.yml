@@ -1248,21 +1248,21 @@ nlu:
     - am I following my prescription schedule?
     - what's my medication performance?
     - have I been taking everything as directed?
-    - how have I been doing with my meds this [month](time_period)?
-    - how am I doing with my medication this [week](time_period)?
-    - what's my medication score this [month](time_period)?
-    - how have I been with meds this [week](time_period)?
-    - show my medication adherence for last [month](time_period)
-    - what's my pill compliance [today](time_period)?
-    - how was my med adherence (time_period)?
-    - am I on track with meds this [month](time_period)?
-    - show adherence for the last [month](time_period)
-    - how consistent have I been this [week](time_period)?
-    - what's my medication score for this [month](time_period)?
-    - have I been good with meds since last [week](time_period)?
-    - how's my medication compliance this [month](time_period)?
-    - what's my adherence rate over the [week](time_period)?
-    - am I taking my pills consistently this [week](time_period)?
+    - how have I been doing with my meds this [month](period)?
+    - how am I doing with my medication this [week](period)?
+    - what's my medication score this [month](period)?
+    - how have I been with meds this [week](period)?
+    - show my medication adherence for last [month](period)
+    - what's my pill compliance [today](period)?
+    - how was my med adherence [this week](period)?
+    - am I on track with meds this [month](period)?
+    - show adherence for the last [month](period)
+    - how consistent have I been this [week](period)?
+    - what's my medication score for this [month](period)?
+    - have I been good with meds since last [week](period)?
+    - how's my medication compliance this [month](period)?
+    - what's my adherence rate over the [week](period)?
+    - am I taking my pills consistently this [week](period)?
     - have i been taking my pills on time?
     - am i keeping up with my medications?
     - how consistent am i with my meds?
@@ -1273,39 +1273,39 @@ nlu:
     - what’s my compliance with prescriptions?
     - have i been regular with my medications?
     - show my pill-taking record
-    - how many doses did i skip this week?
+    - how many doses did i skip this [week](period)?
     - am i on track with my treatment?
     - give me a report of my medication consistency
-    - what's my med adherence for today?
-    - how have i been doing with my pills this week?
-    - show my adherence for the last month
+    - what's my med adherence for [today](period)?
+    - how have i been doing with my pills this [week](period)?
+    - show my adherence for the last [month](period)
     - am i taking all my medications as prescribed?
-    - what does my pill compliance look like this week?
-    - how regular have i been with meds over the last month?
+    - what does my pill compliance look like this [week] (period)?
+    - how regular have i been with meds over the last [month](period)?
     - have i been forgetting any pills lately?
     - show how consistent i’ve been with my meds
-    - what's my adherence percentage for this week?
-    - how many pills have i taken this month?
+    - what's my adherence percentage for this [week](period)?
+    - how many pills have i taken this [month] (period)?
     - have i been following my prescription correctly?
-    - check my medication performance this [week](time_period)
-    - show my med adherence for the past [month](time_period)
-    - am i taking my meds properly this [week](time_period)?
-    - what’s my medication consistency this [month](time_period)?
-    - how well am i keeping up with my pills today?
-    - show how many doses i missed in the last [week](time_period)
-    - what’s my compliance score for the past [month](time_period)?
-    - have i been consistent with my doses this [week](time_period)?
-    - show a summary of my pill adherence today
-    - how am i doing with my medication schedule this [month](time_period)?
-    - did i take all my meds on time this [week](time_period)?
-    - can you check my adherence for the last [month](time_period)?
-    - how many doses did i miss this [week](time_period)?
-    - show my compliance history over the last [month](time_period)
-    - am i staying consistent with my medications this [week](time_period)?
-    - how good have i been at taking my pills this [month](time_period)?
-    - what's my adherence rate for today?
-    - summarize my medication consistency this [week](time_period)
-    - check my pill compliance this [month](time_period)
+    - check my medication performance this [week](period)
+    - show my med adherence for the past [month](period)
+    - am i taking my meds properly this [week](period)?
+    - what’s my medication consistency this [month](period)?
+    - how well am i keeping up with my pills [today](period)?
+    - show how many doses i missed in the last [week](period)
+    - what’s my compliance score for the past [month](period)?
+    - have i been consistent with my doses this [week](period)?
+    - show a summary of my pill adherence for [today](period)
+    - how am i doing with my medication schedule this [month](period)?
+    - did i take all my meds on time this [week](period)?
+    - can you check my adherence for the last [month](period)?
+    - how many doses did i miss this [week](period)?
+    - show my compliance history over the last [month](period)
+    - am i staying consistent with my medications this [week](period)?
+    - how good have i been at taking my pills this [month](period)?
+    - what's my adherence rate for [today] (period)?
+    - summarize my medication consistency this [week](period)
+    - check my pill compliance this [month](period)
 
 - intent: out_of_scope
   examples: |

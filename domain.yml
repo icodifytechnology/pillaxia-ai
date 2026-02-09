@@ -88,6 +88,9 @@ slots:
         values:
           - week
           - month
+          - day
+          - 3 months
+          - year
 
   medication:
     type: text

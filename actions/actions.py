@@ -992,11 +992,11 @@ class ActionRefillInformation(Action):
 #             tracker: Tracker, 
 #             domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
 #         symptom = tracker.get_slot('symptom')
-#         time_period = tracker.get_slot('time_period')
+#         period = tracker.get_slot('period')
 #         today = date.today()
-#         if time_period.lower() == "week":
+#         if period.lower() == "week":
 #                 date = today - timedelta(days = 7)
-#         elif time_period.lower() == "month":
+#         elif period.lower() == "month":
 #                 date = today - timedelta(days = 30)
 
 
@@ -1054,16 +1054,16 @@ class ActionSymptoms(Action):
     def run(self, dispatcher: CollectingDispatcher, 
             tracker: Tracker, 
             domain: Dict[Text, Any])  -> List[Dict[Text, Any]]: 
-        time_period = tracker.get_slot('period')
+        period = tracker.get_slot('period')
 
-        if time_period == None:
-            time_periods = ("week", "month", "week", "month")
-            time_period = random.choice(time_periods)
+        if period == None:
+            periods = ("week", "month", "week", "month")
+            period = random.choice(periods)
         today = date.today()
         Date = today
-        if time_period.lower() == "week":
+        if period.lower() == "week":
                 Date = today - timedelta(days = 7)
-        elif time_period.lower() == "month":
+        elif period.lower() == "month":
                 Date = today - timedelta(days = 30)
                 
         url = f'https://api.pillaxia.com/api/v1/pxdiary?start_date={Date}&end_date={Date}'
@@ -1083,7 +1083,7 @@ class ActionSymptoms(Action):
                     }
                     symptoms.append(symptoms_info)
 
-                reply = f"Here's your list of symptoms you experienced last {time_period}"
+                reply = f"Here's your list of symptoms you experienced last {period}"
                 attachment = {
                     "query_response": reply,
                     "data": symptoms,
@@ -1091,7 +1091,7 @@ class ActionSymptoms(Action):
                     "status": "success"
                 }
             else:
-                reply = f"You have no recorded symptoms for last {time_period}"
+                reply = f"You have no recorded symptoms for last {period}"
                 attachment = {
                     "query_response": reply,
                     "data": [],
@@ -1100,7 +1100,7 @@ class ActionSymptoms(Action):
                 }
 
         except Exception as ex:
-            reply = f"Failed to get your last {time_period} symptoms"
+            reply = f"Failed to get your last {period} symptoms"
             attachment = {
                     "query_response": reply,
                     "data": [],
