@@ -207,7 +207,163 @@
       "Health records database contains {count} entries.",
       "A total of {count} health records are available in your profile."
     ]
-  }
+  },
+
+"medication_report_analysis": {
+  "casual": [
+    "Looking at your medication pattern for the past {period}, I notice you have {medication_count} medications scheduled. You've taken {taken} out of {total} doses, which is about {compliance_rate}% adherence. From what I can see, {pattern_insight}. Let me show you the detailed records:",
+    
+    "I've reviewed your medication history this {period}. With your {medication_count} medications, you managed to take {taken} of {total} scheduled doses ({compliance_rate}%). I'm noticing that {pattern_insight}. Here's a breakdown of your medication intake:",
+    
+    "Let me walk you through your medication adherence for this {period}. You're on {medication_count} medications, and you took {taken} out of {total} doses - that's {compliance_rate}% of them. What's interesting is that {pattern_insight}. Here are the details:",
+    
+    "Based on your medication tracking for the {period}, here's what I found: You have {medication_count} medications, took {taken}/{total} doses ({compliance_rate}%). I see that {pattern_insight}. Take a look at your medication timeline:",
+    
+    "I've been looking at how you're doing with your medications this {period}. With {medication_count} different medications to manage, you took {taken} of the {total} doses scheduled ({compliance_rate}%). It seems {pattern_insight}. Let me show you the specifics:",
+    
+    "Checking in on your medication adherence for the {period}: You're managing {medication_count} medications and took {taken} out of {total} doses ({compliance_rate}%). What I'm observing is that {pattern_insight}. Here's how it breaks down:",
+    
+    "Let's review your medication pattern together this {period}. You have {medication_count} medications, and you took {taken} doses out of {total} scheduled ({compliance_rate}%). I notice that {pattern_insight}. Here are the records:",
+    
+    "I analyzed your medication intake for the past {period}. You're tracking {medication_count} medications and managed {taken}/{total} doses ({compliance_rate}%). Something I'm seeing is that {pattern_insight}. Here's the detailed view:"
+  ],
+  "formal": [
+    "After reviewing your medication adherence for the {period}, I can report that you have {medication_count} scheduled medications. You administered {taken} of {total} doses, representing a {compliance_rate}% adherence rate. The pattern analysis indicates that {pattern_insight}. Please find the detailed medication records below:",
+    
+    "Your medication adherence report for the {period} shows {medication_count} medications in your regimen. You took {taken} doses out of {total} scheduled, achieving {compliance_rate}% adherence. Analysis reveals that {pattern_insight}. Detailed medication administration records follow:",
+    
+    "The medication adherence assessment for the {period} indicates you are prescribed {medication_count} medications. You completed {taken} of {total} doses ({compliance_rate}%). Pattern observation suggests that {pattern_insight}. Below are the detailed administration records:"
+  ]
+},
+
+"pattern_morning": {
+  "casual": [
+    "you tend to be most consistent with morning doses",
+    "morning seems to be your most reliable time for medications",
+    "you're doing well with morning medication routines"
+  ],
+  "formal": [
+    "your morning medication adherence appears to be most consistent",
+    "medication administration is most reliable during morning hours",
+    "morning doses demonstrate higher adherence rates"
+  ]
+},
+"pattern_afternoon": {
+  "casual": [
+    "afternoon doses are when you're most consistent",
+    "you seem to remember your medications best in the afternoon",
+    "your afternoon medication schedule is working well"
+  ],
+  "formal": [
+    "afternoon medication adherence shows greater consistency",
+    "medication compliance appears optimal during afternoon hours",
+    "afternoon administration demonstrates improved adherence"
+  ]
+},
+"pattern_evening": {
+  "casual": [
+    "evening is when you're most consistent with medications",
+    "you tend to remember your doses best in the evening",
+    "your evening medication routine seems to be effective"
+  ],
+  "formal": [
+    "evening medication administration shows highest adherence",
+    "compliance rates are most favorable during evening hours",
+    "evening doses demonstrate consistent administration"
+  ]
+},
+"pattern_night": {
+  "casual": [
+    "you're most consistent with nighttime medications",
+    "your nighttime medication schedule seems to work well",
+    "you remember your medications best at night"
+  ],
+  "formal": [
+    "nighttime medication adherence appears most consistent",
+    "administration is most reliable during nighttime hours",
+    "nighttime doses show improved compliance rates"
+  ]
+},
+"pattern_varied": {
+  "casual": [
+    "your medication times vary throughout the day",
+    "you don't have a consistent pattern for medication times",
+    "your medication schedule varies day to day"
+  ],
+  "formal": [
+    "medication administration times demonstrate variability",
+    "no consistent temporal pattern is evident in medication adherence",
+    "administration times vary across the day"
+  ]
+},
+"pattern_low_adherence": {
+  "casual": [
+    "we should work on finding a more consistent time for your medications",
+    "let's think about when might be the best time for you to take medications consistently",
+    "it might help to establish a more regular medication schedule"
+  ],
+  "formal": [
+    "consider establishing a more consistent medication administration schedule",
+    "identifying optimal administration times may improve adherence",
+    "consistent scheduling could enhance medication compliance"
+  ]
+},
+"medication_adherence_insight": {
+  "casual": [
+    "Looking at your medication adherence for the past {period}, you have {medication_count} medications and took {taken}/{total} doses ({compliance_rate}%). {pattern_insight}, and you're {trend_insight}. {encouragement}",
+    
+    "I've checked your medication adherence this {period}. With {medication_count} medications, you managed {taken} of {total} doses ({compliance_rate}%). {pattern_insight}. You're {trend_insight}.",
+    
+    "Here's your medication adherence update for the {period}: {medication_count} medications, {taken}/{total} doses taken ({compliance_rate}%). {pattern_insight}. You're {trend_insight} with your routine."
+  ],
+  "formal": [
+    "Your medication adherence assessment for {period} shows {medication_count} medications with {taken} of {total} doses administered ({compliance_rate}% adherence). {pattern_insight}. Consistency is {trend_insight}.",
+    
+    "Medication adherence report for {period}: {medication_count} medications, {taken}/{total} doses ({compliance_rate}%). {pattern_insight}. Adherence trend indicates {trend_insight}."
+  ]
+},
+"adherence_encouragement": {
+  "excellent": [
+    "You're doing amazing - keep up this fantastic routine!",
+    "This is exceptional consistency - you should be proud!",
+    "Your dedication to your health is truly inspiring!"
+  ],
+  "very_good": [
+    "Great work maintaining this routine!",
+    "You're doing really well with your medications!",
+    "Keep up this good consistency!"
+  ],
+  "good": [
+    "Good progress - a little more consistency could make it perfect!",
+    "You're on the right track!",
+    "Keep building on this positive momentum!"
+  ],
+  "moderate": [
+    "Let's work on improving this together!",
+    "There's room for improvement here.",
+    "We can get you to better consistency!"
+  ],
+  "fair": [
+    "Let's focus on building better medication habits.",
+    "We should work on this together.",
+    "Your medications are important - let's improve this."
+  ],
+  "needs_improvement": [
+    "Let's identify what's challenging and create solutions.",
+    "Your medications are important - let's improve this together.",
+    "I'm here to help you succeed with your medications."
+  ],
+  "poor": [
+    "Let's talk about what's making it difficult to take your medications consistently.",
+    "I'm here to help you succeed with your medications.",
+    "Taking medications consistently is crucial for your health."
+  ],
+  "very_poor": [
+    "Taking medications consistently is crucial for your health. Let's work together on this.",
+    "Every small step counts - let's start building better habits today.",
+    "I'm here to support you in building better medication routines."
+  ]
+}
 }
 
 

@@ -229,3 +229,116 @@ class MedicationManager:
             })
         
         return report_data
+    
+    def analyze_tracking_trends(self, period: str = "month") -> Dict[str, Any]:
+        """
+        Minimal trend analysis comparing current period to previous period.
+        Focuses on: adherence comparison, medication changes, and on-time tracking.
+        """
+        
+        # Map period to days
+        period_days = {
+            "week": 7,
+            "month": 30,
+            "quarter": 90
+        }
+        
+        days_to_analyze = period_days.get(period.lower(), 30)
+        
+        # Get current period data
+        current_end = datetime.now()
+        current_start = current_end - timedelta(days=days_to_analyze)
+        
+        current_data = self.get_medication_tracking(
+            start_date=current_start.strftime("%Y-%m-%d"),
+            end_date=current_end.strftime("%Y-%m-%d")
+        )
+        current_items = current_data.get("items", []) if current_data else []
+        
+        # Get previous period data
+        prev_start = current_start - timedelta(days=days_to_analyze)
+        prev_end = current_start
+        
+        prev_data = self.get_medication_tracking(
+            start_date=prev_start.strftime("%Y-%m-%d"),
+            end_date=prev_end.strftime("%Y-%m-%d")
+        )
+        prev_items = prev_data.get("items", []) if prev_data else []
+        
+        # Get current and previous medication lists
+        current_meds = self.get_medication_names()
+        
+        # Temporarily cache previous medications
+        self._temp_cache = self._medications_cache
+        self._medications_cache = None  # Force refresh for previous period
+        prev_meds = self.get_medication_names()
+        self._medications_cache = self._temp_cache
+        
+        # Calculate compliance for both periods
+        current_stats = self.analyze_tracking_compliance(current_items)
+        prev_stats = self.analyze_tracking_compliance(prev_items)
+        
+        # Compare adherence
+        current_rate = current_stats.get("compliance_rate", 0)
+        prev_rate = prev_stats.get("compliance_rate", 0)
+        
+        # Determine change
+        if prev_rate > 0:
+            change = current_rate - prev_rate
+            change_percent = (change / prev_rate) * 100
+        else:
+            change = current_rate
+            change_percent = 100 if current_rate > 0 else 0
+        
+        # Find medications added/removed
+        added_meds = [med for med in current_meds if med not in prev_meds]
+        removed_meds = [med for med in prev_meds if med not in current_meds]
+        
+        # Find medications taken on time vs missed (using current stats)
+        on_time_meds = []
+        missed_meds = []
+        
+        med_stats = current_stats.get("medication_stats", {})
+        for med_name, stats in med_stats.items():
+            if stats.get("total", 0) > 0:
+                compliance = (stats.get("taken", 0) / stats.get("total", 0)) * 100
+                if compliance >= 80:
+                    on_time_meds.append(med_name)
+                elif compliance < 50:
+                    missed_meds.append(med_name)
+        
+        # Generate simple insights
+        insights = []
+        
+        if abs(change) >= 5:  # Significant change
+            if change > 0:
+                insights.append(f"Your adherence improved by {abs(change):.1f}% compared to last {period}")
+            else:
+                insights.append(f"Your adherence decreased by {abs(change):.1f}% compared to last {period}")
+        
+        if added_meds:
+            insights.append(f"New medications added: {', '.join(added_meds)}")
+        
+        if removed_meds:
+            insights.append(f"Medications removed: {', '.join(removed_meds)}")
+        
+        if on_time_meds:
+            insights.append(f"You're doing well with: {', '.join(on_time_meds[:3])}")
+        
+        if missed_meds:
+            insights.append(f"Need more consistency with: {', '.join(missed_meds[:3])}")
+        
+        return {
+            "period": period,
+            "current_compliance": round(current_rate, 1),
+            "previous_compliance": round(prev_rate, 1),
+            "change": round(change, 1),
+            "change_percent": round(change_percent, 1),
+            "medications_added": added_meds,
+            "medications_removed": removed_meds,
+            "medications_on_time": on_time_meds,
+            "medications_needing_attention": missed_meds,
+            "insights": insights,
+            "current_medication_count": len(current_meds),
+            "previous_medication_count": len(prev_meds)
+        }
