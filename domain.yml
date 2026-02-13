@@ -3,8 +3,12 @@ version: '3.1'
 intents:
   - greet
   - goodbye
+  - affirm
+  - deny
+  - skip
   - bot_challenge
   - add_medication
+  - cancel_form
   - list_medications
   - medication_report
   - get_health_records
@@ -20,13 +24,17 @@ intents:
   - medication_stock_level
   - check_medication_taken
   - medication_adherence
-
+  - provide_medication_name
+  - provide_medication_type
+  - provide_medication_colour
+  - provide_medication_dose
+  - provide_medication_instructions
+  
 actions:
   - action_session_start
   - action_greet
   - action_goodbye
   - action_iamabot
-  - action_add_medication
   - action_list_medications
   - action_medication_report
   - action_get_health_records
@@ -42,10 +50,30 @@ actions:
   - action_stock_level
   - action_check_medication
   - action_medication_adherence
+  - validate_medication_form
+  - validate_refill_form
+  - validate_reminder_form
+  - action_submit_medication_form
+  - action_submit_refill_form
+  - action_submit_reminder_form
+  - action_handle_refill_decision
+  - action_handle_reminder_decision
+  - action_handle_reminder_confirmation
+  - action_cancel_medication_form
+  - action_ask_medication_name
+  - action_ask_medication_type
+  - action_ask_medication_colour
+  - action_ask_medication_dose
+  - action_ask_medication_instructions
 
 entities:
   - period
   - medication
+  - medication_name
+  - medication_type
+  - medication_colour
+  - medication_dose
+  - medication_instructions
 
 slots:
   preferred_tone:
@@ -103,6 +131,204 @@ slots:
     influence_conversation: true
     mappings:
       - type: custom
+
+  # Medication slots 
+  medication_name:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_name
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_name
+  
+  medication_type:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_type
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_type
+  
+  medication_colour:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_colour
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_colour
+
+  medication_dose:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_dose
+        conditions:
+            - active_loop: medication_form
+              requested_slot: medication_dose
+  
+  medication_instructions:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_instructions
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_instructions
+
+  # Refill slots
+  stock_level:
+    type: float
+    mappings: 
+      - type: from_text
+  
+  refill_in_days:
+    type: float
+    mappings: 
+      - type: from_text
+
+  refill_date:
+    type: text
+    mappings: 
+     - type: custom
+    influence_conversation: false  # Don't affect conversation flow
+  
+  skip_refill:
+    type: bool
+    mappings:
+    - type: from_trigger_intent
+      intent: skip
+      value: true
+  
+  # Reminder slots
+  wants_reminders:
+    type: bool
+    mappings:
+    - type: from_intent
+      intent: affirm
+      value: true
+    - type: from_intent
+      intent: deny
+      value: false
+  
+  frequency_type:
+    type: categorical
+    values: [day, week, month, year]
+    mappings: 
+     - type: from_text
+
+  frequency_period:
+    type: float
+    mappings: 
+     - type: from_text
+
+  time_period:    
+    type: categorical
+    values: [once, twice, thrice]
+    mappings: 
+     - type: from_text
+  
+  quantity:
+    type: float
+    mappings: 
+     - type: from_text   
+  
+  reminder_time:
+    type: list
+    mappings: 
+     - type: from_text
+  
+  alert_type:
+    type: categorical
+    values: [alarm, voice]  
+    mappings: 
+     - type: from_text
+
+  reminder_day:
+    type: list
+    mappings: 
+     - type: from_text
+
+  current_step:
+      type: text
+      influence_conversation: true
+      mappings:
+        - type: custom
+
+  awaiting_reminder_confirmation:
+      type: bool
+      influence_conversation: true
+      mappings:
+        - type: custom
+
+  interrupting_intent:
+    type: text
+    mappings:
+    - type: custom
+    influence_conversation: false
+    
+  interrupting_text:
+    type: text
+    mappings:
+    - type: custom
+    influence_conversation: false
+    
+  interruption_confirmation:
+    type: any  
+    mappings:
+    - type: custom
+forms:
+  medication_form:
+    required_slots:
+      - medication_name
+      - medication_type
+      - medication_colour
+      - medication_dose
+      - medication_instructions
+    
+  refill_form:
+    required_slots:
+      - stock_level
+      - refill_in_days
+  
+  reminder_form:
+    required_slots: []
+
+# responses:
+#   utter_ask_medication_form_medication_name:
+#     - text: "What is the name of the medication you would like to add?"
+
+#   utter_ask_medication_form_medication_type:
+#     - text: "What type of medication is this? (e.g., Antidepressant, Painkiller, Antibiotic, etc.)"
+  
+#   utter_ask_medication_form_medication_colour:
+#     - text: "What color would you like to associate with the medication? (Choose from: red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"
+
+#   utter_ask_medication_form_medication_dose:
+#     - text: "What is the dosage? (e.g., 500mg, 10ml, 1 tablet)"
+  
+#   utter_ask_medication_form_medication_instructions:
+#     - text: "Any special instructions for taking this medication? (e.g., take with food, take before bed, etc.)"    
+
+#   utter_ask_refill_form_stock_level: 
+#     - text: "How many pills/units do you currently have in stock? (Type 'skip' to skip adding refill info)"
+
+#   utter_ask_reminder_form_wants_reminders: 
+#     - text: "Would you like to set up reminders for this medication? (yes/no)" 
+    
+#   utter_ask_reminder_form_frequency_type: 
+#     - text: "How long would you like to save the reminder for? (e.g., day, week, month, year)" 
+    
+#   utter_ask_reminder_form_frequency_period: 
+#     - text: "How many {frequency_type}s would you like to be reminded? (e.g., 1, 2 )"
+  
+#   utter_ask_reminder_form_time_period: 
+#     - text: "How many times per {frequency_type} would you like to be reminded? (e.g., once, twice, thrice)" 
+    
+#   utter_submit: 
+#     - text: "Thanks! I've saved that information for you."
 
 session_config:
   session_expiration_time: 60

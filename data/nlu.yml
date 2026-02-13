@@ -1,6 +1,97 @@
 version: "3.1"
 
 nlu:
+- intent: affirm
+  examples: |
+      - yes
+      - sure
+      - okay
+      - yep
+      - yes please
+      - definitely
+      - absolutely
+
+- intent: deny
+  examples: |
+      - no
+      - nope
+      - not really
+      - no thanks
+      - I don't think so
+      - negative
+
+- intent: cancel_form
+  examples: |
+      - cancel
+      - stop
+      - nevermind
+      - I changed my mind
+      - forget it
+      - abort
+      - actually, cancel that
+      - please cancel
+      - can we stop this?
+      - I don’t want to continue
+      - let’s stop here
+      - exit
+      - quit
+      - scrap that
+      - ignore my last request
+      - don’t go ahead with it
+      - I don’t need this anymore
+      - that’s all, cancel it
+      - stop the process
+      - discontinue
+      - I’d like to cancel this
+      - can you cancel it?
+      - never mind, I’m good
+      - scratch that
+      - please stop this
+      - cancel the request
+      - end this
+      - terminate it
+      - back out
+
+- intent: provide_medication_colour
+  examples: |
+      - [red](medication_colour)
+      - [blue](medication_colour)
+      - [white](medication_colour)
+      - [yellow](medication_colour)
+      - [green](medication_colour)
+      - [orange](medication_colour)
+      - [purple](medication_colour)
+      - [pink](medication_colour)
+      - [black](medication_colour)
+      - [grey](medication_colour)
+      - [brown](medication_colour)
+
+- intent: provide_medication_dose
+  examples: |
+      - the dose is [500]mg(medication_dose)
+      - it's [10]ml(medication_dose)
+      - I take [1] pill(medication_dose)
+      - it's [2] tablets(medication_dose)
+      - the dosage is [5] mg(medication_dose)
+      - I take [3] capsules(medication_dose)
+
+- intent: provide_medication_instructions     
+  examples: |
+      - I take it [with food](medication_instructions)
+      - I take it [before bed](medication_instructions)
+      - I take it [in the morning](medication_instructions)
+      - I take it [at night](medication_instructions)
+      - I take it [after meals](medication_instructions)
+      - I take it [as needed](medication_instructions)
+
+- intent: skip
+  examples: |
+      - skip
+      - pass
+      - not now
+      - later
+      - I'll do it later
+
 - intent: greet
   examples: |
     - hello
@@ -90,7 +181,6 @@ nlu:
     - until next time
     - catch ya later
     - catch you later
-    - later
     - talk later
     - talk soon
     - ttyl
@@ -1254,7 +1344,7 @@ nlu:
     - how have I been with meds this [week](period)?
     - show my medication adherence for last [month](period)
     - what's my pill compliance [today](period)?
-    - how was my med adherence [this week](period)?
+    - how was my med adherence this [week](period)?
     - am I on track with meds this [month](period)?
     - show adherence for the last [month](period)
     - how consistent have I been this [week](period)?

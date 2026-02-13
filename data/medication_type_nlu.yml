@@ -1,0 +1,220 @@
+version: "3.1"
+
+nlu:
+- intent: provide_medication_type
+  examples: |
+    - it is an [inhaler](medication_type)
+    - it is an [anticoagulant](medication_type)
+    - it's in a [painkiller](medication_type) form
+    - it is an [Asthma Medicine](medication_type)
+    - [Inhaler](medication_type)
+    - a [drops](medication_type)
+    - it's in a [steroid](medication_type) form
+    - [antipsychotic](medication_type)
+    - it's in an [Antihistamine](medication_type) form
+    - [pain killer](medication_type)
+    - it's in a [topical ointment](medication_type) form
+    - [Mood Stabilizer](medication_type)
+    - it's in a [Tablet](medication_type) form
+    - it's in an [analgesic](medication_type) form
+    - it's a [Cream](medication_type)
+    - it is an [antibiotic](medication_type)
+    - it's in an [Inflammation Medicine](medication_type) form
+    - a [Cream](medication_type)
+    - it is a [pill](medication_type)
+    - it's an [antidepressant](medication_type)
+    - [anti-inflammatory](medication_type)
+    - it's in an [infection medicine](medication_type) form
+    - it's a [Hormone](medication_type)
+    - an [inflammation medicine](medication_type)
+    - it's in an [anticoagulant](medication_type) form
+    - it is a [Drops](medication_type)
+    - it's in an [antacid](medication_type) form
+    - [injection](medication_type)
+    - a [Gel](medication_type)
+    - it's an [antiviral](medication_type)
+    - it's a [syrup](medication_type)
+    - it is an [antidepressant](medication_type)
+    - [Ear Drops](medication_type)
+    - it's a [corticosteroid](medication_type)
+    - it's a [Topical Ointment](medication_type)
+    - [Antihistamine](medication_type)
+    - it's in a [Pill](medication_type) form
+    - it's an [Antacid](medication_type)
+    - it is an [Eye Drops](medication_type)
+    - an [antipsychotic](medication_type)
+    - it's in an [Injection](medication_type) form
+    - it is a [cream](medication_type)
+    - it is an [Anti-Inflammatory](medication_type)
+    - a [Corticosteroid](medication_type)
+    - it's a [Mood Stabilizer](medication_type)
+    - it's in an [antidepressant](medication_type) form
+    - it is an [ear drops](medication_type)
+    - it's a [Painkiller](medication_type)
+    - [blood thinner](medication_type)
+    - it's an [ointment](medication_type)
+    - [Liquid](medication_type)
+    - it's an [Inflammation Medicine](medication_type)
+    - it is a [Capsule](medication_type)
+    - it's in a [Patch](medication_type) form
+    - it is a [corticosteroid](medication_type)
+    - it's in an [Antipsychotic](medication_type) form
+    - it's a [Tablet](medication_type)
+    - [Antibiotic](medication_type)
+    - it's an [Infection Medicine](medication_type)
+    - an [Injection](medication_type)
+    - a [Tablet](medication_type)
+    - it's an [anti inflammatory](medication_type)
+    - it's in a [Blood Thinner](medication_type) form
+    - it is a [patch](medication_type)
+    - it's in a [Liquid](medication_type) form
+    - it's an [Antifungal](medication_type)
+    - [gel](medication_type)
+    - it is a [spray](medication_type)
+    - an [Eye Drops](medication_type)
+    - an [anti-inflammatory](medication_type)
+    - it is an [Injection](medication_type)
+    - an [infection medicine](medication_type)
+    - [asthma medicine](medication_type)
+    - [painkiller](medication_type)
+    - [Topical Ointment](medication_type)
+    - [anticoagulant](medication_type)
+    - an [allergy medicine](medication_type)
+    - [Inflammation Medicine](medication_type)
+    - a [spray](medication_type)
+    - it's in a [Cream](medication_type) form
+    - [allergy medicine](medication_type)
+    - [infection medicine](medication_type)
+    - it's a [gel](medication_type)
+    - it's in an [ear drops](medication_type) form
+    - [antacid](medication_type)
+    - it's in a [drops](medication_type) form
+    - [Oral Liquid](medication_type)
+    - it's in a [Spray](medication_type) form
+    - it's an [Ear Drops](medication_type)
+    - it's in an [Asthma Medicine](medication_type) form
+    - [Antifungal](medication_type)
+    - it's in a [corticosteroid](medication_type) form
+    - it is a [Tablet](medication_type)
+    - it's an [Allergy Medicine](medication_type)
+    - it is a [steroid](medication_type)
+    - it's a [bronchodilator](medication_type)
+    - it's an [Anticoagulant](medication_type)
+    - an [antiviral](medication_type)
+    - [Syrup](medication_type)
+    - it is a [Gel](medication_type)
+    - it's in an [eye drops](medication_type) form
+    - a [steroid](medication_type)
+    - it's an [injection](medication_type)
+    - it's in a [Mood Stabilizer](medication_type) form
+    - [Hormone](medication_type)
+    - it is a [depression medicine](medication_type)
+    - it's a [patch](medication_type)
+    - it's in an [allergy medicine](medication_type) form
+    - it's in an [anti inflammatory](medication_type) form
+    - it's in an [antiviral](medication_type) form
+    - [Anti Inflammatory](medication_type)
+    - it is a [bronchodilator](medication_type)
+    - a [Depression Medicine](medication_type)
+    - it's in a [Pain Killer](medication_type) form
+    - it's a [Topical Cream](medication_type)
+    - it's in a [Capsule](medication_type) form
+    - it is a [Hormone](medication_type)
+    - a [syrup](medication_type)
+    - it's in an [anti-inflammatory](medication_type) form
+    - it is a [pain killer](medication_type)
+    - [Capsule](medication_type)
+    - [Pill](medication_type)
+    - a [Pill](medication_type)
+    - it is an [Antacid](medication_type)
+    - [Antiviral](medication_type)
+    - an [Oral Liquid](medication_type)
+    - it's in a [bronchodilator](medication_type) form
+    - [Corticosteroid](medication_type)
+    - [Depression Medicine](medication_type)
+    - an [asthma medicine](medication_type)
+    - it's in a [Syrup](medication_type) form
+    - [diuretic](medication_type)
+    - an [Ointment](medication_type)
+    - a [Topical Cream](medication_type)
+    - it is a [Syrup](medication_type)
+    - it's an [inhaler](medication_type)
+    - an [Analgesic](medication_type)
+    - a [topical ointment](medication_type)
+    - a [diuretic](medication_type)
+    - it is a [Liquid](medication_type)
+    - it's in a [hormone](medication_type) form
+    - it's a [liquid](medication_type)
+    - it's in a [Gel](medication_type) form
+    - it's an [antihistamine](medication_type)
+    - it's an [Analgesic](medication_type)
+    - [eye drops](medication_type)
+    - it is a [Painkiller](medication_type)
+    - it's a [pain killer](medication_type)
+    - it's a [steroid](medication_type)
+    - it is an [antihistamine](medication_type)
+    - it's an [asthma medicine](medication_type)
+    - an [anti inflammatory](medication_type)
+    - an [antacid](medication_type)
+    - it's a [capsule](medication_type)
+    - it is a [topical cream](medication_type)
+    - it's a [blood thinner](medication_type)
+    - it is a [Blood Thinner](medication_type)
+    - it is an [Antipsychotic](medication_type)
+    - it's an [Oral Liquid](medication_type)
+    - it's in a [Depression Medicine](medication_type) form
+    - it is an [Oral Liquid](medication_type)
+    - a [Blood Thinner](medication_type)
+    - [tablet](medication_type)
+    - an [Antidepressant](medication_type)
+    - [Ointment](medication_type)
+    - it's a [Spray](medication_type)
+    - it's in a [Diuretic](medication_type) form
+    - it is an [inflammation medicine](medication_type)
+    - [patch](medication_type)
+    - a [bronchodilator](medication_type)
+    - a [Patch](medication_type)
+    - it is an [anti inflammatory](medication_type)
+    - it's an [Anti-Inflammatory](medication_type)
+    - it's an [Antibiotic](medication_type)
+    - a [Liquid](medication_type)
+    - a [Painkiller](medication_type)
+    - it is an [antiviral](medication_type)
+    - [Drops](medication_type)
+    - a [Pain Killer](medication_type)
+    - an [ear drops](medication_type)
+    - it's an [antipsychotic](medication_type)
+    - it is a [Diuretic](medication_type)
+    - it is a [mood stabilizer](medication_type)
+    - it is an [Antifungal](medication_type)
+    - [Steroid](medication_type)
+    - it's an [Eye Drops](medication_type)
+    - it's in an [oral liquid](medication_type) form
+    - it is a [Topical Ointment](medication_type)
+    - [Topical Cream](medication_type)
+    - [cream](medication_type)
+    - an [antibiotic](medication_type)
+    - it's a [diuretic](medication_type)
+    - [spray](medication_type)
+    - [Analgesic](medication_type)
+    - a [Mood Stabilizer](medication_type)
+    - it is an [Infection Medicine](medication_type)
+    - it's a [Depression Medicine](medication_type)
+    - [Bronchodilator](medication_type)
+    - an [Antifungal](medication_type)
+    - it's a [Pill](medication_type)
+    - it's in an [ointment](medication_type) form
+    - it's in an [antifungal](medication_type) form
+    - an [Antihistamine](medication_type)
+    - it is an [Analgesic](medication_type)
+    - it's in a [topical cream](medication_type) form
+    - an [anticoagulant](medication_type)
+    - it's a [drops](medication_type)
+    - it's in an [inhaler](medication_type) form
+    - it is an [Ointment](medication_type)
+    - it is an [Allergy Medicine](medication_type)
+    - a [Capsule](medication_type)
+    - [Antidepressant](medication_type)
+    - an [inhaler](medication_type)
+    - it's in an [antibiotic](medication_type) form
+    - a [hormone](medication_type)

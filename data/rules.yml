@@ -23,17 +23,72 @@ rules:
   - intent: bot_challenge
   - action: action_iamabot
 
-- rule: Adding medication
+- rule: Activate medication form when user wants to add medication
   steps:
   - intent: add_medication
-  - action: action_add_medication
+  - action: medication_form
+  - active_loop: medication_form
+
+- rule: Cancel medication form
+  condition:
+    - active_loop: medication_form
+  steps:
+  - intent: cancel_form
+  - action: action_cancel_medication_form
+
+- rule: After form cancellation, listen for next user input
+  steps:
+  - action: action_cancel_medication_form
+  - action: action_listen
+  
+- rule: Submit medication form
+  condition:
+    - active_loop: medication_form
+  steps:
+  - action: medication_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_submit_medication_form
+
+- rule: Submit refill form
+  condition:
+    - active_loop: refill_form
+  steps:
+    - action: validate_refill_form
+    - active_loop: null
+    - action: action_submit_refill_form
+
+- rule: Submit reminder form
+  condition:
+    - active_loop: reminder_form
+  steps:
+    - action: validate_reminder_form
+    - active_loop: null
+    - action: action_submit_reminder_form
+
+- rule: Handle reminder confirmation - Yes
+  condition:
+    - slot_was_set:
+      - awaiting_reminder_confirmation: true
+  steps:
+  - intent: affirm
+  - action: action_handle_reminder_confirmation
+
+- rule: Handle reminder confirmation - No
+  condition:
+    - slot_was_set:
+      - awaiting_reminder_confirmation: true
+  steps:
+  - intent: deny
+  - action: action_handle_reminder_confirmation
 
 - rule: List Medications
   steps:
   - intent: list_medications
   - action: action_list_medications
 
-- rule: give medication report
+- rule: Give medication report
   steps:
   - intent: medication_report
   - action: action_medication_report
@@ -43,79 +98,71 @@ rules:
   - intent: get_health_records
   - action: action_get_health_records
   
-- rule: medication taken
+- rule: Medication taken
   steps:
   - intent: notify_medication_taken
   - action: action_medication_tracker
 
-- rule: Custom Fallback
+- rule: Custom Fallback when no form is active
+  condition:
+    - active_loop: null  # ← Only trigger when NO form is active
   steps: 
   - intent: out_of_scope
   - action: action_custom_fallback
 
-- rule: todays medication
+- rule: Today's medication
   steps: 
   - intent: list_of_todays_medication
   - action: action_todays_medication
 
-# - rule: Get symptoms
-#   steps:
-#     - intent: number_of_times_symptom_occured
-#     - action: action_symptoms_occured
-
-
-- rule: get refill period
+- rule: Get refill period
   steps:
    - intent: refill_due
    - action: action_refill_information
 
-
-- rule: get next dose
+- rule: Get next dose
   steps:
    - intent: next_dose_date
    - action: action_next_dose
 
-
-- rule: get medication taken time
+- rule: Get medication taken time
   steps:
    - intent: medication_taken_time
    - action: action_medication_taken
 
-
-- rule: get new symptoms
+- rule: Get new symptoms
   steps:
    - intent: get_new_symptoms
    - action: action_new_symptom
 
-
-- rule: get medication_dosage
+- rule: Get medication dosage
   steps:
    - intent: medication_dosage
    - action: action_medication_dosage
 
-
-- rule: medication_left_dose
+- rule: Medication left dose
   steps:
    - intent: medication_stock_level
    - action: action_stock_level
 
-
-- rule: last sympyom logged
+- rule: Last symptom logged
   steps: 
    - intent: get_symptoms
    - action: action_symptoms
-
-- rule: time of medication intake
-  steps:
-  - intent: medication_taken_time
-  - action: action_medication_taken
 
 - rule: Medication Adherence
   steps:
   - intent: medication_adherence
   - action: action_medication_adherence
 
-- rule: check mediation taken time
+- rule: Check medication taken time
   steps:
   - intent: check_medication_taken
   - action: action_check_medication
+
+- rule: Skip refill information
+  condition:
+    - active_loop: refill_form
+  steps:
+    - intent: skip
+    - action: action_submit_refill_form

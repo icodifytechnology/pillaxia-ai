@@ -312,9 +312,9 @@
   "casual": [
     "Looking at your medication adherence for the past {period}, you have {medication_count} medications and took {taken}/{total} doses ({compliance_rate}%). {pattern_insight}, and you're {trend_insight}. {encouragement}",
     
-    "I've checked your medication adherence this {period}. With {medication_count} medications, you managed {taken} of {total} doses ({compliance_rate}%). {pattern_insight}. You're {trend_insight}.",
+    "I've checked your medication adherence in {period}. With {medication_count} medications, you managed {taken} of {total} doses ({compliance_rate}%). {pattern_insight}. You're {trend_insight}.",
     
-    "Here's your medication adherence update for the {period}: {medication_count} medications, {taken}/{total} doses taken ({compliance_rate}%). {pattern_insight}. You're {trend_insight} with your routine."
+    "Here's your medication adherence update for the {period}: {medication_count} medications, {taken}/{total} doses taken ({compliance_rate}%). {pattern_insight}. You're {trend_insight}'s routine."
   ],
   "formal": [
     "Your medication adherence assessment for {period} shows {medication_count} medications with {taken} of {total} doses administered ({compliance_rate}% adherence). {pattern_insight}. Consistency is {trend_insight}.",
@@ -363,7 +363,105 @@
     "Every small step counts - let's start building better habits today.",
     "I'm here to support you in building better medication routines."
   ]
-}
+},
+  "ask_medication_name": {
+    "casual": [
+      "What's the name of the medication you'd like to add?"
+    ],
+    "formal": [
+      "Please provide the name of the medication you would like to add."
+    ]
+  },
+
+  "ask_medication_type": {
+    "casual": [
+      "What type of medication is it? (e.g., antidepressant, painkiller, antibiotic)"
+    ],
+    "formal": [
+      "What type of medication is this? (e.g., Antidepressant, Painkiller, Antibiotic, etc.)"
+    ]
+  },
+
+  "ask_medication_colour": {
+    "casual": [
+      "What color should we associate with it? (red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"
+    ],
+    "formal": [
+      "Which color would you like to associate with this medication? (Choose from: red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"
+    ]
+  },
+
+  "ask_medication_dose": {
+    "casual": [
+      "What's the dosage? (e.g., 500mg, 10ml, 1 tablet)"
+    ],
+    "formal": [
+      "Please specify the dosage. (e.g., 500mg, 10ml, 1 tablet)"
+    ]
+  },
+
+  "ask_medication_instructions": {
+    "casual": [
+      "Any special instructions? (like take with food or before bed)"
+    ],
+    "formal": [
+      "Are there any special instructions for taking this medication? (e.g., take with food, take before bed, etc.)"
+    ]
+  },
+
+  "ask_refill_stock_level": {
+    "casual": [
+      "How many pills or units do you have left? (Type 'skip' if you'd rather not add this now.)"
+    ],
+    "formal": [
+      "How many pills or units do you currently have in stock? (Type 'skip' to skip adding refill information.)"
+    ]
+  },
+
+  "ask_reminder_wants_reminders": {
+    "casual": [
+      "Would you like me to set up reminders for this medication? (yes/no)"
+    ],
+    "formal": [
+      "Would you like to set up reminders for this medication? (yes/no)"
+    ]
+  },
+
+  "ask_reminder_frequency_type": {
+    "casual": [
+      "How long should the reminder run? (day, week, month, year)"
+    ],
+    "formal": [
+      "For what duration would you like to save the reminder? (e.g., day, week, month, year)"
+    ]
+  },
+
+  "ask_reminder_frequency_period": {
+    "casual": [
+      "How many {frequency_type}s should I remind you for? (e.g., 1, 2)"
+    ],
+    "formal": [
+      "How many {frequency_type}s would you like to be reminded? (e.g., 1, 2)"
+    ]
+  },
+
+  "ask_reminder_time_period": {
+    "casual": [
+      "How many times per {frequency_type} should I remind you? (once, twice, thrice)"
+    ],
+    "formal": [
+      "How many times per {frequency_type} would you like to receive reminders? (e.g., once, twice, thrice)"
+    ]
+  },
+
+  "submit_confirmation": {
+    "casual": [
+      "All set! I've saved everything for you."
+    ],
+    "formal": [
+      "Thank you. The information has been successfully saved."
+    ]
+  }
 }
 
 
