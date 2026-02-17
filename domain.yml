@@ -29,6 +29,8 @@ intents:
   - provide_medication_colour
   - provide_medication_dose
   - provide_medication_instructions
+  - provide_stock_level
+  - provide_refill_day
   
 actions:
   - action_session_start
@@ -50,21 +52,23 @@ actions:
   - action_stock_level
   - action_check_medication
   - action_medication_adherence
-  - validate_medication_form
-  - validate_refill_form
-  - validate_reminder_form
-  - action_submit_medication_form
-  - action_submit_refill_form
-  - action_submit_reminder_form
-  - action_handle_refill_decision
-  - action_handle_reminder_decision
-  - action_handle_reminder_confirmation
-  - action_cancel_medication_form
   - action_ask_medication_name
   - action_ask_medication_type
   - action_ask_medication_colour
   - action_ask_medication_dose
   - action_ask_medication_instructions
+  - validate_medication_form
+  - action_submit_medication_form
+  - action_handle_refill_deny
+  - action_handle_reminder_deny
+  - action_ask_stock_level
+  - action_ask_refill_day
+  - validate_refill_form
+  - action_submit_refill_form
+  - validate_reminder_form
+  - action_submit_reminder_form
+  - action_handle_form_interruption
+  - action_cancel_form
 
 entities:
   - period
@@ -74,6 +78,8 @@ entities:
   - medication_colour
   - medication_dose
   - medication_instructions
+  - stock_level
+  - refill_day
 
 slots:
   preferred_tone:
@@ -136,11 +142,15 @@ slots:
   medication_name:
     type: text
     mappings: 
-      - type: from_entity
-        entity: medication_name
+      - type: from_text
+        # entity: medication_name
         conditions:
           - active_loop: medication_form
             requested_slot: medication_name
+        not_intent:
+          - cancel_form
+          - greet
+          - goodbye
   
   medication_type:
     type: text
@@ -179,28 +189,26 @@ slots:
             requested_slot: medication_instructions
 
   # Refill slots
+  user_medication_id:
+    type: text
+    mappings:
+      - type: custom
+
   stock_level:
     type: float
     mappings: 
       - type: from_text
+        conditions:
+          - active_loop: refill_form
+            requested_slot: stock_level
   
-  refill_in_days:
+  refill_day:
     type: float
     mappings: 
       - type: from_text
-
-  refill_date:
-    type: text
-    mappings: 
-     - type: custom
-    influence_conversation: false  # Don't affect conversation flow
-  
-  skip_refill:
-    type: bool
-    mappings:
-    - type: from_trigger_intent
-      intent: skip
-      value: true
+        conditions:
+          - active_loop: refill_form
+            requested_slot: refill_day
   
   # Reminder slots
   wants_reminders:
@@ -279,8 +287,12 @@ slots:
     type: any  
     mappings:
     - type: custom
+
 forms:
   medication_form:
+    ignored_intents:
+      - cancel_form
+      
     required_slots:
       - medication_name
       - medication_type
@@ -289,9 +301,12 @@ forms:
       - medication_instructions
     
   refill_form:
+    ignored_intents:
+      - cancel_form
+      
     required_slots:
       - stock_level
-      - refill_in_days
+      - refill_day
   
   reminder_form:
     required_slots: []

@@ -33,12 +33,26 @@ rules:
   condition:
     - active_loop: medication_form
   steps:
-  - intent: cancel_form
-  - action: action_cancel_medication_form
+    - intent: cancel_form
+    - action: action_cancel_form
+
+- rule: Cancel refill form
+  condition:
+    - active_loop: refill_form
+  steps:
+    - intent: cancel_form
+    - action: action_cancel_form
+
+- rule: Cancel reminder form
+  condition:
+    - active_loop: reminder_form
+  steps:
+    - intent: cancel_form
+    - action: action_cancel_form
 
 - rule: After form cancellation, listen for next user input
   steps:
-  - action: action_cancel_medication_form
+  - action: action_cancel_form
   - action: action_listen
   
 - rule: Submit medication form
@@ -50,38 +64,60 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: action_submit_medication_form
+  - action: action_listen
+
+- rule: Handle affirm after medication submission - start refill form
+  condition:
+    - slot_was_set:
+      - current_step: ask_refill
+  steps:
+    - action: action_submit_medication_form
+    - action: action_listen
+    - intent: affirm
+    - action: refill_form
+    - active_loop: refill_form
+
+- rule: Handle deny after medication submission - finish
+  condition:
+    - slot_was_set:
+      - current_step: ask_refill 
+  steps:
+    - action: action_submit_medication_form
+    - action: action_listen
+    - or:
+      - intent: deny
+      - intent: skip
+    - action: action_handle_refill_deny
 
 - rule: Submit refill form
   condition:
     - active_loop: refill_form
   steps:
-    - action: validate_refill_form
-    - active_loop: null
-    - action: action_submit_refill_form
+  - action: refill_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_submit_refill_form
+  - action: action_listen
 
-- rule: Submit reminder form
-  condition:
-    - active_loop: reminder_form
-  steps:
-    - action: validate_reminder_form
-    - active_loop: null
-    - action: action_submit_reminder_form
-
-- rule: Handle reminder confirmation - Yes
-  condition:
-    - slot_was_set:
-      - awaiting_reminder_confirmation: true
-  steps:
-  - intent: affirm
-  - action: action_handle_reminder_confirmation
-
-- rule: Handle reminder confirmation - No
-  condition:
-    - slot_was_set:
-      - awaiting_reminder_confirmation: true
-  steps:
-  - intent: deny
-  - action: action_handle_reminder_confirmation
+# - rule: Handle affirm after refill deny - start reminder form
+#   condition:
+#     - slot_was_set:
+#       - current_step: ask_reminder
+#   steps:
+#     - intent: affirm
+#     - action: reminder_form
+#     - active_loop: reminder_form
+  
+# - rule: Handle deny after refill deny - finish
+#   condition:
+#     - slot_was_set:
+#       - current_step: ask_reminder
+#   steps:
+#     - or: 
+#       - intent: deny
+#       - intent: skip
+#     - action: action_handle_reminder_deny
 
 - rule: List Medications
   steps:
@@ -166,3 +202,145 @@ rules:
   steps:
     - intent: skip
     - action: action_submit_refill_form
+
+## FORM INTERRUPTION RULE:
+
+- rule: Interrupting form with greet intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: greet
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with goodbye intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: goodbye
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with bot_challenge intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: bot_challenge
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with list_medications intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: list_medications
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with medication_report intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: medication_report
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with get_health_records intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: get_health_records
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with notify_medication_taken intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: notify_medication_taken
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with out_of_scope intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: out_of_scope
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with list_of_todays_medication intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: list_of_todays_medication
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with refill_due intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: refill_due
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with next_dose_date intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: next_dose_date
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with medication_taken_time intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: medication_taken_time
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with get_symptoms intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: get_symptoms
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with get_new_symptoms intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: get_new_symptoms
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with medication_dosage intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: medication_dosage
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with medication_stock_level intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: medication_stock_level
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with check_medication_taken intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: check_medication_taken
+    - action: action_handle_form_interruption
+
+- rule: Interrupting form with medication_adherence intent
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: medication_adherence
+    - action: action_handle_form_interruption
+
+- rule: Affirming medication addition cancellation
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: affirm
+    - action: action_cancel_form
+
+- rule: Denying medication addition cancellation
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: deny
+    - action: action_handle_form_interruption

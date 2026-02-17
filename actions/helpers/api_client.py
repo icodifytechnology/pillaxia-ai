@@ -129,17 +129,21 @@ class PillaxiaAPIClient:
             json=medication_data
         )
         
-        if status_code == 200:
-            message = data.get("message") if data else "Medication saved successfully"
-            return True, message
-        return False, error
+        if status_code == 200 and data:
+            result = data.get("result", {})
+            medication_id = result.get("id")
+            message = data.get("message", "Medication saved successfully")
+            return True, message, medication_id
+        
+        return False, error, None
     
-    def save_medication_refill(self, token: str, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+    def save_medication_refill(self, token: str, refill_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
         """Save or update a medication refill."""
+        logger.debug(f"Saving refill data: {refill_data}")
         data, status_code, error = self._make_request(
             "POST", "/medication-refill-periods/save",
             headers=self._get_auth_headers(token),
-            json=medication_data
+            json=refill_data
         )
         if status_code == 200:
             message = data.get("message") if data else "Medication refillsaved successfully"

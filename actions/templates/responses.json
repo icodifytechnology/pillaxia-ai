@@ -409,15 +409,21 @@
     ]
   },
 
-  "ask_refill_stock_level": {
+  "ask_stock_level": {
     "casual": [
-      "How many pills or units do you have left? (Type 'skip' if you'd rather not add this now.)"
-    ],
+      "How many pills or units do you have left?"],
     "formal": [
-      "How many pills or units do you currently have in stock? (Type 'skip' to skip adding refill information.)"
+      "How many pills or units do you currently have in stock?"
     ]
   },
 
+  "ask_refill_day": {
+    "casual": [
+      "In how many days would you need to refill the medication?"],
+    "formal": [
+      "In how many days would you need to refill the medication?"
+    ]
+  },
   "ask_reminder_wants_reminders": {
     "casual": [
       "Would you like me to set up reminders for this medication? (yes/no)"
@@ -454,12 +460,48 @@
     ]
   },
 
-  "submit_confirmation": {
+  "submit_medication": {
     "casual": [
-      "All set! I've saved everything for you."
+      "I have added the medication for you. Would you like to setup refill information for it? "
     ],
     "formal": [
-      "Thank you. The information has been successfully saved."
+      "The medication information has been successfully set. Would you like to add refill information for it?"
+    ]
+  },
+
+    "submit_refill": {
+    "casual": [
+      "I have added the refill information for you. Would you like to setup reminder information for it? "
+    ],
+    "formal": [
+      "The refill information has been successfully set. Would you like to add reminder information for it?"
+    ]
+  },
+
+  "greet-form": {
+    "casual": [
+      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+    ],
+    "formal": [
+      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+    ]
+  },
+  
+  "form-interrupt": {
+    "casual": [
+      "We are in the process of adding a medication. Would you like to cancel it?"
+    ],
+    "formal": [
+      "We are in the process of adding a medication. Would you like to cancel it?"
+    ]
+  },
+
+    "refill-deny": {
+    "casual": [
+      "Okay. Would you like to setup reminder for the medication?"
+    ],
+    "formal": [
+      "Okay. Would you like to setup reminder for the medication?"
     ]
   }
 }

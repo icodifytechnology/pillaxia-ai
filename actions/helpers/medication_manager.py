@@ -57,13 +57,13 @@ class MedicationManager:
     
     def save_medication(self, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
         """Save new or update existing medication (clears cache)."""
-        success, message = api_client.save_user_medication(self.token, medication_data)
+        success, message, medication_id = api_client.save_user_medication(self.token, medication_data)
         
         if success:
             self._medications_cache = None  # Clear cache
         
         logger.debug(f"save_medication result: success={success}, message={message}")
-        return success, message
+        return success, message, medication_id
     
     def save_refill(self, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
         """Save new or update existing refill (clears cache)."""
@@ -72,6 +72,7 @@ class MedicationManager:
         if success:
             self._medications_cache = None  # Clear cache
         
+        logger.debug(f'save_refill result: success = {success}, message={message}')
         return success, message
     
     def save_reminder(self, reminder_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:

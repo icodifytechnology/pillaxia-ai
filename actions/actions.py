@@ -184,7 +184,6 @@ class ActionGreet(BaseAction):
         
         return []
 
-
 class ActionGoodbye(BaseAction):
     """Personalized goodbye action"""
     
@@ -520,11 +519,9 @@ class ValidateMedicationForm(FormValidationAction):
         logger.debug('######### Validating medication name #########')
         
         if not slot_value:
-            dispatcher.utter_message("Please provide the medication name.")
             return {"medication_name": None}
         
         if len(slot_value.strip()) < 2:
-            dispatcher.utter_message("Please provide a valid medication name (at least 2 characters).")
             return {"medication_name": None}
         
         # Check if it's a common type/colour that shouldn't be a name
@@ -645,47 +642,218 @@ class ValidateMedicationForm(FormValidationAction):
         result = {"medication_instructions": None}
         logger.debug(f"Returning (empty case): {result}")
         return result
-        
-    async def validate_interruption_confirmation(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate interruption confirmation response."""
-        
-        # This slot is handled by the interruption actions, not the form
-        # Just return empty to avoid validation errors
-        return {}
 
-class CancelMedicationForm(BaseAction):
-    """Cancells the active medication form."""
+class ActionCancelForm(BaseAction):
+    """Cancells the active form."""
 
     def name(self) -> Text:
-        return "cancel_medication_form"
+        return "action_cancel_form"
     
     def run_with_slots(self, dispatcher, tracker, domain):
 
-        response = "Okay. I have cancelled the medication adding process. What would you like to do next?"
-        attachment = {
+        if ActiveLoop == "medication_form":
+            response = "Okay. I have cancelled the medication adding process. What would you like to do next?"
+            attachment = {
+                "query_response": response,
+                "data": [],
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+        
+            # THIS is where deactivation happens
+            return [
+                ActiveLoop(None),  # Deactivate the form
+                SlotSet("requested_slot", None),  # Clear requested slot
+                SlotSet("medication_name", None),  # Clear form data
+                SlotSet("medication_type", None),
+                SlotSet("medication_colour", None),
+                SlotSet("medication_dose", None),
+                SlotSet("medication_instructions", None)
+            ]
+        elif ActiveLoop == "refill_form":
+            response = "Okay. I have cancelled the refill information adding process. What would you like to do next?"
+            attachment = {
+                "query_response": response,
+                "data": [],
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+        
+            # THIS is where deactivation happens
+            return [
+                ActiveLoop(None),  # Deactivate the form
+                SlotSet("requested_slot", None),  # Clear requested slot
+                SlotSet("stock_level", None),  # Clear form data
+                SlotSet("refill_day", None)
+            ]
+        elif ActiveLoop == "reminder_form":
+            response = "Okay. I have cancelled the reminder adding process. What would you like to do next?"
+            attachment = {
+                "query_response": response,
+                "data": [],
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+        
+            # THIS is where deactivation happens
+            return [
+                ActiveLoop(None),  # Deactivate the form
+                SlotSet("requested_slot", None),  # Clear requested slot
+                SlotSet("frequency_type", None),  # Clear form data
+                SlotSet("frequency_period", None),
+                SlotSet('time_period', None),
+                SlotSet("quantity", None),
+                SlotSet('reminder_time', None),
+                SlotSet("alert_type", None),
+                SlotSet('reminder_day', None),
+            ]
+
+class ActionSubmitMedicationForm(BaseAction):
+    """Submits medication form and moves to refill."""
+
+    def name(self) -> Text:
+        return "action_submit_medication_form"
+
+    def run_with_slots(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]
+    ) -> List[SlotSet]:
+
+        logger.debug("="*80)
+        logger.debug("ACTION_SUBMIT_MEDICATION_FORM IS RUNNING!")
+        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
+        logger.debug("="*80)
+
+        # Collect medication data
+        medmanager = MedicationManager(token=tracker.sender_id)
+        colour = medmanager.color_to_hex(tracker.get_slot("medication_colour"))
+        logger.debug(f"Converted colour '{tracker.get_slot('medication_colour')}' to hex: {colour}")
+
+        medication_data = {
+            "name": tracker.get_slot("medication_name"),
+            "medication_type": tracker.get_slot("medication_type"),
+            "colour": colour,
+            "dose": tracker.get_slot("medication_dose"),
+            "instructions": tracker.get_slot("medication_instructions") or "",
+            "stock_level": 0,
+            "order": 0,
+            "status": 1
+        }
+
+        logger.info(f"Medication data ready: {medication_data}")
+
+        # Save medication
+        medmanager = MedicationManager(token=tracker.sender_id)
+        success, message, medication_id = medmanager.save_medication(medication_data)
+
+        # Initialize ResponseBuilder with sender token
+        builder = ResponseBuilder(token=tracker.sender_id)
+
+        if not success: 
+            response = "Sorry, I couldn't save your medication. Would you like to try again?"
+            attachment = {
             "query_response": response,
-            "data": [],
             "type": "text",
             "status": "success"
-        }
-        dispatcher.utter_message(attachment=attachment)
+            }
+            return [
+                ActiveLoop(None),
+                SlotSet("current_step", None)
+            ]
         
-        # THIS is where deactivation happens
+        # Use ResponseBuilder for success + refill prompt
+        response = builder.build_response(intent='submit_medication')
+        dispatcher.utter_message(attachment=response)
+
         return [
-            ActiveLoop(None),  # Deactivate the form
-            SlotSet("requested_slot", None),  # Clear requested slot
-            SlotSet("medication_name", None),  # Clear form data
-            SlotSet("medication_type", None),
-            SlotSet("medication_colour", None),
-            SlotSet("medication_dose", None),
-            SlotSet("medication_instructions", None)
+            ActiveLoop(None),  # Deactivate medication form
+            SlotSet("current_step", "ask_refill"),
+            SlotSet("user_medication_id", medication_id)
         ]
+    
+class ActionHandleFormInterruption(BaseAction):
+    def name(self) -> Text:
+        return "action_handle_form_interruption"
+
+    def run_with_slots(self, dispatcher, tracker, domain):
+
+        intent = tracker.latest_message.get("intent", {}).get("name")
+
+        if intent == "deny":
+            logger.debug("✅ User denied cancellation - returning to form")
+
+            # Get the current requested slot
+            requested_slot = tracker.get_slot("requested_slot")
+
+            # Re-activate the form explicitly
+            return [
+                ActiveLoop("medication_form"),  # Reactivate the form
+                FollowupAction("validate_medication_form")  # Run validation
+            ]
+        
+        # Otherwise treat as interruption
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+
+        if intent == "greet":
+            intent = "greet-form"
+            response = builder.build_response(intent)
+        else:
+            intent = "form-interrupt"
+            response = builder.build_response(intent)
+
+        logger.debug(f'Response: {response}')
+        dispatcher.utter_message(attachment=response)
+
+        return []
+
+class ActionHandleRefillDeny(BaseAction):
+    def name(self) -> Text:
+        return "action_handle_refill_deny"
+
+    def run_with_slots(self, dispatcher, tracker, domain):
+
+        intent = tracker.latest_message.get("intent", {}).get("name")
+        logger.debug(f"ActionHandleRefillDeny called with intent: {intent}")
+
+        if intent == "deny" or intent == "skip":
+            logger.debug("User denied refill - asking about reminder")
+        
+            # Otherwise treat as interruption
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            response = builder.build_response('refill-deny')
+            
+            dispatcher.utter_message(attachment=response)
+
+            # Set a slot to track that we're now in reminder-asking phase
+            return [SlotSet("current_step", "ask_reminder")]
+
+        return []
+
+class ActionAskStockLevel(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_stock_level"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        "Asks refill stock level to the user"
+
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_stock_level")
+        dispatcher.utter_message(attachment=response)
+        return []
+
+class ActionAskRefillInDays(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_refill_day"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        "Asks refill days to the user"
+
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_refill_day")
+        dispatcher.utter_message(attachment=response)
+        return []
     
 class ValidateRefillForm(FormValidationAction):
     """Validates slots for refill form."""
@@ -693,6 +861,37 @@ class ValidateRefillForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_refill_form"
 
+    async def _ask_for_next_slot(
+        self,
+        slot_to_fill: Text,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]
+    ) -> List[Dict]:
+        """Override the default slot asking behavior to use custom attachment format."""
+        
+        # Define your slot questions
+        slot_questions = {
+            "stock_level": "How many pills/units do you currently have in stock?",
+            "refill_day": "In how many days would you need to refill the medication?"
+        }
+        
+        # Get the question text
+        question = slot_questions.get(
+            slot_to_fill, 
+            f"Please provide {slot_to_fill.replace('_', ' ')}"
+        )
+        
+        # Send in the custom attachment format
+        dispatcher.utter_message(
+            attachment={
+                "query_response": question,
+                "type": "text",
+                "status": "success"
+            }
+        )
+        return []
+    
     async def required_slots(
         self,
         domain_slots: List[Text],
@@ -700,37 +899,67 @@ class ValidateRefillForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Text]:
-        """Conditionally require slots based on user's choice."""
-        logger.debug(f"Refill form required slots check. Intent: {tracker.get_intent_of_latest_message()}")
+        """Determine which slots are still required."""
+        # DEBUG: Log current state
+        logger.debug("="*80)
+        logger.debug("REQUIRED_SLOTS DEBUG:")
+        logger.debug(f"Active loop: {tracker.active_loop}")
+        logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
+        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
+        logger.debug(f"Latest text: '{tracker.latest_message.get('text')}'")
+        logger.debug("="*80)
         
-        if tracker.get_intent_of_latest_message() == "skip" or tracker.get_slot("skip_refill"):
-            return ["skip_refill"]
+        # List of all slots in order
+        all_slots = [
+            "stock_level",
+            "refill_day"
+        ]
         
-        slots_to_ask = []
+        # Check which slots are still empty
+        required = []
+        for slot in all_slots:
+            slot_value = tracker.get_slot(slot)
+            if slot_value is None or slot_value == "":
+                required.append(slot)
+            else:
+                logger.debug(f"Slot '{slot}' is already filled: {slot_value}")
         
-        if tracker.get_slot("stock_level") is None:
-            slots_to_ask.append("stock_level")
-        
-        if tracker.get_slot("stock_level") is not None and tracker.get_slot("refill_in_days") is None:
-            slots_to_ask.append("refill_in_days")
-        
-        return slots_to_ask
+        logger.debug(f"Required slots: {required}")
+        return required
 
     async def validate_stock_level(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate stock level."""
-        logger.debug(f"Validating stock level: {slot_value}")
+    self,
+    slot_value: Any,
+    dispatcher: CollectingDispatcher,
+    tracker: Tracker,
+    domain: Dict[Text, Any],
+) -> Dict[Text, Any]:
+        """Validate stock level, handling wrong intent predictions."""
         
-        if slot_value is None:
+        intent = tracker.latest_message.get("intent", {}).get("name")
+        text = tracker.latest_message.get("text", "")
+        
+        logger.debug(f"Validating stock level with intent: {intent}, value: {slot_value}")
+        
+        # If intent is wrong but value is numeric, try to extract anyway
+        if intent != "provide_stock_level" and intent != "provide_medication_dose":
             return {"stock_level": None}
         
+        # Try to extract number from text
         try:
-            stock = int(slot_value)
+            # If slot_value is already a number
+            if slot_value is not None:
+                stock = int(slot_value)
+            else:
+                # Try to extract number from text
+                import re
+                numbers = re.findall(r'\d+', text)
+                if numbers:
+                    stock = int(numbers[0])
+                else:
+                    dispatcher.utter_message("Please enter a valid number for stock level.")
+                    return {"stock_level": None}
+            
             if stock < 0:
                 dispatcher.utter_message("Please enter a positive number for stock level.")
                 return {"stock_level": None}
@@ -743,7 +972,7 @@ class ValidateRefillForm(FormValidationAction):
             dispatcher.utter_message("Please enter a valid number for stock level.")
             return {"stock_level": None}
 
-    async def validate_refill_in_days(
+    async def validate_refill_day(
         self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
@@ -751,44 +980,93 @@ class ValidateRefillForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate refill period in days and calculate actual date."""
-        logger.debug(f"Validating refill days: {slot_value}")
+        
+        logger.debug("="*80)
+        logger.debug(f"VALIDATE_refill_day called with: '{slot_value}'")
+        logger.debug("="*80)
         
         if slot_value is None:
-            return {"refill_in_days": None}
+            return {"refill_day": None}
         
         try:
             days = int(slot_value)
             
             if days <= 0:
-                dispatcher.utter_message("Please enter a positive number of days (e.g., 30 for one month).")
-                return {"refill_in_days": None}
+                response = {
+                     "query_response": "Please enter a positive number of days (e.g., 30 for one month).",
+                     "type": "text",
+                     "status": "success"
+                    }
+                dispatcher.utter_message(attachment=response)
+                return {"refill_day": None}
             
             if days > 365:
                 dispatcher.utter_message("That's more than a year! Please enter a number of days (1-365).")
-                return {"refill_in_days": None}
-            
-            refill_date = (datetime.now() + timedelta(days=days)).strftime('%Y-%m-%d')
-            dispatcher.utter_message(f"Got it! I'll remind you to refill in {days} days ({refill_date}).")
+                return {"refill_day": None}
             
             return {
-                "refill_in_days": days,
-                "refill_date": refill_date
+                "refill_day": days,
             }
             
         except (ValueError, TypeError):
             dispatcher.utter_message("Please enter a valid number of days (e.g., 7, 30, 90).")
-            return {"refill_in_days": None}
-
-    async def validate_skip_refill(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Handle skip refill."""
-        return {"skip_refill": True}
+            return {"refill_day": None}
+      
+class ActionSubmitRefillForm(BaseAction):
+    """Submits refill form and moves to reminders."""
+    
+    def name(self) -> Text:
+        return "action_submit_refill_form"
+    
+    def run_with_slots(self, dispatcher: CollectingDispatcher,
+                       tracker: Tracker,
+                       domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+
+        logger.debug("="*80)
+        logger.debug("ACTION_SUBMIT_REFILL_FORM IS RUNNING!")
+        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
+        logger.debug("="*80)
+
+        # Collect refill data
+        refill_data = {
+            "user_medication_id": tracker.get_slot("user_medication_id"),
+            "stock_level": int(tracker.get_slot("stock_level")),
+            "refill_day": int(tracker.get_slot("refill_day"))}
+
+        if refill_data:
+            logger.debug(f"refill_data:{refill_data}")
+
+            # Save refill data
+            medmanager = MedicationManager(token=tracker.sender_id)
+            success, message = medmanager.save_refill(refill_data)
+
+            if not success: 
+                response = "Sorry, I couldn't save your refill information. Would you like to try again?"
+                attachment = {
+                "query_response": response,
+                "type": "text",
+                "status": "success"
+                }
+                return [
+                    ActiveLoop(None),
+                    SlotSet("current_step", None)
+                ]
+            
+            # Initialize ResponseBuilder with sender token
+            builder = ResponseBuilder(token=tracker.sender_id)
+            
+            response = builder.build_response(intent='submit_refill')
+            dispatcher.utter_message(attachment=response)
+            return [
+                ActiveLoop(None),  # Deactivate refill form
+                SlotSet("current_step", "ask_reminder")
+            ]
+        
+        else:
+            logger.debug(f"No refill data")
+            return []
+
 class ValidateReminderForm(FormValidationAction):
     """Validates slots for reminder form with smart dependency handling."""
     
@@ -1349,104 +1627,7 @@ class ValidateReminderForm(FormValidationAction):
         
         return canonical_days
 
-class ActionSubmitMedicationForm(BaseAction):
-    """Submits medication form and moves to refill."""
-    
-    def name(self) -> Text:
-        return "action_submit_medication_form"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                       tracker: Tracker,
-                       domain: Dict[Text, Any]) -> List[SlotSet]:
-        
-        logger.debug("="*80)
-        logger.debug("ACTION_SUBMIT_MEDICATION_FORM IS RUNNING!")
-        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
-        logger.debug("="*80)
-        
-        # Collect medication data
-        medmanager = MedicationManager(token=tracker.sender_id)
-        logger.debug(tracker.get_slot("medication_colour"))
-        colour = medmanager.color_to_hex(tracker.get_slot("medication_colour"))
-        logger.debug(f"Converted colour '{tracker.get_slot('medication_colour')}' to hex: {colour}")
 
-        medication_data = {
-            "name": tracker.get_slot("medication_name"),
-            "medication_type": tracker.get_slot("medication_type"),
-            "colour": colour,
-            "dose": tracker.get_slot("medication_dose"),
-            "instructions": tracker.get_slot("medication_instructions") or "",
-            "stock_level": 0,  # Default
-            "order": 0,        # Default
-            "status": 1
-        }
-        
-        logger.info(f"Medication data ready: {medication_data}")
-        
-        # Save medication
-        medmanager = MedicationManager(token=tracker.sender_id)
-        success, message = medmanager.save_medication(medication_data)
-
-        if not success:
-            dispatcher.utter_message(f"Error saving medication: {message}")
-            return [
-                ActiveLoop(None),
-                SlotSet("current_step", None)
-            ]
-        
-        # Extract medication ID from response
-        medication_id = None
-        if isinstance(message, dict):
-            medication_id = message.get("result", {}).get("id") or message.get("id")
-        else:
-            logger.warning(f"API returned string instead of dict: {message}")
-        
-        # Single combined message - success + refill question
-        dispatcher.utter_message(
-            "Medication information saved successfully! "
-            "Would you like to set up refill information for this medication? (yes/no)"
-        )
-        
-        return [
-            ActiveLoop(None),  # Deactivate medication form
-            SlotSet("current_step", "ask_refill"),  # Track where we are
-            SlotSet("user_medication_id", medication_id)
-        ]
-    
-class ActionSubmitRefillForm(BaseAction):
-    """Submits refill form and moves to reminders."""
-    
-    def name(self) -> Text:
-        return "action_submit_refill_form"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                       tracker: Tracker,
-                       domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        # Check if user skipped refill
-        if tracker.get_slot("skip_refill"):
-            dispatcher.utter_message("Skipped refill information.")
-        else:
-            # Get refill data
-            refill_data = {
-                "user_medication_id": tracker.get_slot("user_medication_id"),
-                "stock_level": tracker.get_slot("stock_level"),
-                "refill_date": tracker.get_slot("refill_date")}
-            
-            if refill_data:
-                # TODO: Call API to save refill
-                medmanager = MedicationManager(token=tracker.sender_id)
-                success, message = medmanager.save_refill(refill_data )   
-            else:
-                dispatcher.utter_message("Note: Refill information incomplete.")
-        
-        # Ask about reminders
-        dispatcher.utter_message("Would you like to set up reminders for this medication? (yes/no)")
-        
-        return [
-            ActiveLoop(None),  # Deactivate refill form
-            SlotSet("current_step", "ask_reminders")
-        ]
     
 class ActionSubmitReminderForm(BaseAction):
     """Submits reminder form and saves to API."""
@@ -1548,33 +1729,30 @@ class ActionSubmitReminderForm(BaseAction):
             {"text": "All done! Your medication has been successfully added with reminders."}
         ]
     
-class ActionHandleRefillDecision(BaseAction):
-    """Handles yes/no decision about refill."""
-    
-    def name(self) -> Text:
+from rasa_sdk import Tracker, Action
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet, ActiveLoop
+
+class ActionHandleRefillDecision(Action):
+    def name(self):
         return "action_handle_refill_decision"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                       tracker: Tracker,
-                       domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        intent = tracker.get_intent_of_latest_message()
-        
-        if intent == "affirm":
-            dispatcher.utter_message("Great! Let's set up refill information.")
-            return [ActiveLoop("refill_form")]
-        elif intent == "deny":
-            dispatcher.utter_message("No problem! Skipping refill information.")
-            # Skip to reminders
-            dispatcher.utter_message("Would you like to set up reminders for this medication? (yes/no)")
-            return [
-                ActiveLoop(None),
-                SlotSet("current_step", "ask_reminders")
-            ]
-        else:
-            # Ask again if unclear
-            dispatcher.utter_message("Please answer with 'yes' or 'no'. Would you like to set up refill information?")
-            return []
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: dict):
+        latest_intent = tracker.latest_message.get("intent", {}).get("name")
+        builder = ResponseBuilder(token=tracker.sender_id)
+
+        if tracker.get_slot("current_step") == "ask_refill":
+            if latest_intent == "affirm":
+                # Open refill form
+                dispatcher.utter_message(text="Great! Let's set up refill info.")
+                return [SlotSet("current_step", None), ActiveLoop("refill_form")]
+            elif latest_intent == "deny":
+                # Ask about reminder
+                dispatcher.utter_message(text="No problem! Would you like to add reminder information?")
+                return [SlotSet("current_step", "ask_reminder")]
+            else:
+                dispatcher.utter_message(text="Please answer yes or no.")
+                return []
 
 class ActionHandleReminderDecision(BaseAction):
     """Handles yes/no decision about reminders."""
@@ -1586,17 +1764,20 @@ class ActionHandleReminderDecision(BaseAction):
                        tracker: Tracker,
                        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        intent = tracker.get_intent_of_latest_message()
+        latest_intent = tracker.latest_message.get("intent", {}).get("name")
+        builder = ResponseBuilder(token=tracker.sender_id)
         
-        if intent == "affirm":
-            dispatcher.utter_message("Great! Let's set up reminders.")
-            return [ActiveLoop("reminder_form")]
-        elif intent == "deny":
-            dispatcher.utter_message("No reminders set up. Your medication has been added successfully!")
-            return [
-                ActiveLoop(None),
-                {"text": "All done! Medication addition complete."}
-            ]
+        if tracker.get_slot("current_step") == "ask_reminder":
+            if latest_intent == "affirm":
+                # Open reminder form
+                dispatcher.utter_message(text="Perfect! Let's set up your reminders.")
+                return [SlotSet("current_step", None), ActiveLoop("reminder_form")]
+            elif latest_intent == "deny":
+                dispatcher.utter_message(text="That's fine. What else can I help you with?")
+                return [SlotSet("current_step", None)]
+            else:
+                dispatcher.utter_message(text="Please answer yes or no.")
+                return []
 
 class ActionHandleReminderConfirmation(BaseAction):
     """Handles confirmation for reminder setup."""
@@ -1641,233 +1822,6 @@ class ActionHandleReminderConfirmation(BaseAction):
                 ActiveLoop("reminder_form"),
                 SlotSet("awaiting_reminder_confirmation", None)
             ]
-        
-class ActionCancelMedicationForm(Action):
-    """Cancels the medication form and clears related slots."""
-    
-    def name(self) -> Text:
-        return "action_cancel_medication_form"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        logger.debug("Cancelling medication form and clearing slots")
-        
-        # Clear all medication-related slots
-        slots_to_clear = [
-            "medication_name",
-            "medication_type", 
-            "medication_colour",
-            "medication_dose",
-            "medication_instructions",
-            "requested_slot"
-        ]
-        
-        events = []
-        for slot in slots_to_clear:
-            events.append(SlotSet(slot, None))
-        
-        # Deactivate the form
-        events.append(ActiveLoop(None))
-        
-        dispatcher.utter_message("Okay, I've cancelled adding the medication. What would you like to do next?")
-        logger.debug(f"Events after cancellation: {events}")
-        return events
-
-
-# class ActionHandleFormInterruption(Action):
-#     """Handle form interruption with Rasa's built-in mechanism."""
-    
-#     def name(self) -> Text:
-#         return "action_handle_form_interruption"
-    
-#     def run(
-#         self,
-#         dispatcher: CollectingDispatcher,
-#         tracker: Tracker,
-#         domain: Dict[Text, Any]
-#     ) -> List[Dict[Text, Any]]:
-        
-#         current_intent = tracker.latest_message.get("intent", {}).get("name")
-#         current_text = tracker.latest_message.get("text", "")
-        
-#         # Store what the user wanted to do
-#         events = [
-#             SlotSet("interrupting_intent", current_intent),
-#             SlotSet("interrupting_text", current_text),
-#             SlotSet("requested_slot", "interruption_confirmation")
-#         ]
-        
-#         # Ask for confirmation
-#         intent_readable = current_intent.replace('_', ' ').title()
-#         dispatcher.utter_message(
-#             response="utter_interruption_confirmation",
-#             intent=intent_readable
-#         )
-        
-#         return events
-    
-class ActionHandleFormInterruption(Action):
-    """Handle interruption of medication form with confirmation."""
-    
-    def name(self) -> Text:
-        return "action_handle_form_interruption"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        # List of intents that should trigger interruption
-        interruption_intents = [
-            "greet",
-            "goodbye",
-            "list_medications",
-            "bot_challenge",
-            "medication_report",
-            "get_health_records", 
-            "check_medication",
-            "list_of_todays_medication",
-            "refill_due",
-            "next_dose_date",
-            "medication_taken_time",
-            "get_symptoms",
-            "get_new_symptoms",
-            "medication_dosage",
-            "medication_stock_level",
-            "check_medication_taken",
-            "medication_adherence",
-            "out_of_scope"
-        ]
-        
-        current_intent = tracker.latest_message.get("intent", {}).get("name")
-        current_text = tracker.latest_message.get("text", "")
-        
-        logger.debug(f"Checking interruption for intent: {current_intent}")
-        logger.debug(f"Active form: {tracker.active_loop}")
-        
-        # Check if we're in a form and user triggered an interruption intent
-        if (tracker.active_loop and 
-            tracker.active_loop.get("name") == "medication_form" and
-            current_intent in interruption_intents):
-            
-            # Store the interrupting intent for later use
-            interrupting_intent = current_intent
-            interrupting_text = current_text
-            
-            # Ask for confirmation
-            dispatcher.utter_message(
-                f"I'm currently helping you add a medication. "
-                f"Would you like to cancel this and {interrupting_intent.replace('_', ' ')} instead?"
-            )
-            
-            # Store the interrupting intent in a slot
-            return [
-                SlotSet("interrupting_intent", interrupting_intent),
-                SlotSet("interrupting_text", interrupting_text),
-                SlotSet("requested_slot", "interruption_confirmation")
-            ]
-        
-        return []
-
-class ActionConfirmInterruption(Action):
-    """User confirms they want to interrupt the form."""
-    
-    def name(self) -> Text:
-        return "action_confirm_interruption"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        interrupting_intent = tracker.get_slot("interrupting_intent")
-        
-        # Clear form slots
-        form_slots = [
-            "medication_name",
-            "medication_type", 
-            "medication_colour",
-            "medication_dose",
-            "medication_instructions",
-            "requested_slot",
-            "interrupting_intent",
-            "interrupting_text"
-        ]
-        
-        events = [SlotSet(slot, None) for slot in form_slots]
-        events.append(ActiveLoop(None))  # Deactivate form
-        
-        dispatcher.utter_message("Okay, I've cancelled adding the medication.")
-        
-        # Now execute the original intent
-        if interrupting_intent == "goodbye":
-            dispatcher.utter_message("Goodbye! Take care.")
-        elif interrupting_intent == "list_medications":
-            # This will trigger the list_medications action
-            return events + [FollowupAction("action_list_medications")]
-        elif interrupting_intent == "get_health_records":
-            return events + [FollowupAction("action_get_health_records")]
-        elif interrupting_intent == "check_medication":
-            return events + [FollowupAction("action_check_medication")]
-        elif interrupting_intent == "list_of_todays_medication":
-            return events + [FollowupAction("action_todays_medication")]
-        elif interrupting_intent == "refill_due":
-            return events + [FollowupAction("action_refill_information")]
-        elif interrupting_intent == "next_dose_date":   
-            return events + [FollowupAction("action_next_dose")]
-        elif interrupting_intent == "medication_taken_time":
-            return events + [FollowupAction("action_medication_taken")]
-        elif interrupting_intent == "get_symptoms":
-            return events + [FollowupAction("action_symptoms")]
-        elif interrupting_intent == "get_new_symptoms":
-            return events + [FollowupAction("action_new_symptom")]
-        elif interrupting_intent == "medication_dosage":
-            return events + [FollowupAction("action_medication_dosage")]
-        elif interrupting_intent == "medication_stock_level":   
-            return events + [FollowupAction("action_stock_level")]
-        elif interrupting_intent == "check_medication_taken":
-            return events + [FollowupAction("action_check_medication")]
-        elif interrupting_intent == "medication_adherence":
-            return events + [FollowupAction("action_medication_adherence")]
-        elif interrupting_intent == "out_of_scope":
-            dispatcher.utter_message("Sure, let's talk about something else. What would you like to do?")
-        else:
-            dispatcher.utter_message("Okay, let's do that instead.")
-        
-        return events
-
-class ActionRejectInterruption(Action):
-    """User rejected interruption - just clear slots and let form continue."""
-    
-    def name(self) -> Text:
-        return "action_reject_interruption"
-    
-    def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict[Text, Any]]:
-        
-        logger.info("User wants to continue with form - clearing interruption slots")
-        dispatcher.utter_message("Okay, let's continue with adding your medication.")
-        
-        # Just clear interruption slots - nothing else needed
-        # The form's validate_medication_form will automatically run next
-        # and ask for the next required slot
-        return [
-            SlotSet("interrupting_intent", None),
-            SlotSet("interrupting_text", None),
-        ]
     
 class ActionListMedications(Action):
     """List all medication names for the user."""
