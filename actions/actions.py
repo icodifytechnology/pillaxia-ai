@@ -899,7 +899,7 @@ class ValidateRefillForm(FormValidationAction):
         logger.debug(f"Validating refill_day with text: '{text}'")
         logger.debug(f"Entities found: {entities}")
         
-        # 🔥 FIX: Check if there's a frequency entity that should map to refill_day
+        # FIX: Check if there's a frequency entity that should map to refill_day
         for entity in entities:
             if entity.get("entity") == "frequency":
                 frequency_value = entity.get("value")
@@ -950,13 +950,17 @@ class ActionSubmitRefillForm(BaseAction):
         def extract_refill_days(value):
             """
             Extract numeric value and convert to days if needed.
-            Supports days, weeks, months.
+            Supports:
+            - Numeric: 7, 14
+            - Text: "7 days", "2 weeks", "1.5 months"
+            - Words: "one week", "two months"
+            - Short forms: "weekly", "monthly"
             """
 
             if value is None:
                 return None
 
-            # If already numeric → assume it's days
+            # If already numeric → assume days
             if isinstance(value, (int, float)):
                 return int(value)
 
@@ -965,13 +969,42 @@ class ActionSubmitRefillForm(BaseAction):
 
                 value = value.lower().strip()
 
-                # Extract number (supports decimals)
-                match = re.search(r'(\d+(?:\.\d+)?)', value)
-                if not match:
-                    logger.warning(f"No number found in refill_day: {value}")
-                    return None
+                # Word-to-number mapping
+                word_to_number = {
+                    "one": 1,
+                    "two": 2,
+                    "three": 3,
+                    "four": 4,
+                    "five": 5,
+                    "six": 6,
+                    "seven": 7,
+                    "eight": 8,
+                    "nine": 9,
+                    "ten": 10,
+                    "a": 1,
+                    "an": 1
+                }
 
-                number = float(match.group(1))
+                # Handle "weekly" / "monthly"
+                if "weekly" in value:
+                    return 7
+                if "monthly" in value:
+                    return 30
+
+                # Extract numeric digits (supports decimals)
+                match = re.search(r'(\d+(?:\.\d+)?)', value)
+
+                if match:
+                    number = float(match.group(1))
+                else:
+                    # Try extracting number words
+                    for word, num in word_to_number.items():
+                        if word in value:
+                            number = num
+                            break
+                    else:
+                        logger.warning(f"No number found in refill_day: {value}")
+                        return None
 
                 # Determine unit
                 if "week" in value:
