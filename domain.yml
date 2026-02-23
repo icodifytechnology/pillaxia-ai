@@ -3,8 +3,13 @@ version: '3.1'
 intents:
   - greet
   - goodbye
+  - affirm
+  - confused
+  - deny
+  - skip
   - bot_challenge
   - add_medication
+  - cancel_form
   - list_medications
   - medication_report
   - get_health_records
@@ -20,13 +25,25 @@ intents:
   - medication_stock_level
   - check_medication_taken
   - medication_adherence
-
+  - provide_medication_name
+  - provide_medication_type
+  - provide_medication_colour
+  - provide_medication_dose
+  - provide_medication_instructions
+  - provide_stock_level
+  - provide_refill_day
+  - provide_frequency
+  - provide_per_day_frequency
+  - provide_quantity  # can we use provide_medication_dose to fill it up?
+  - provide_reminder_time
+  - provide_alert_type
+  - provide_reminder_day
+  
 actions:
   - action_session_start
   - action_greet
   - action_goodbye
   - action_iamabot
-  - action_add_medication
   - action_list_medications
   - action_medication_report
   - action_get_health_records
@@ -42,10 +59,46 @@ actions:
   - action_stock_level
   - action_check_medication
   - action_medication_adherence
+  - action_ask_medication_name
+  - action_ask_medication_type
+  - action_ask_medication_colour
+  - action_ask_medication_dose
+  - action_ask_medication_instructions
+  - validate_medication_form
+  - action_submit_medication_form
+  - action_handle_refill_deny
+  - action_handle_reminder_deny
+  - action_ask_stock_level
+  - action_ask_refill_day
+  - validate_refill_form
+  - action_submit_refill_form
+  - validate_reminder_form
+  - action_submit_reminder_form
+  - action_handle_form_interruption
+  - action_cancel_form
+  - action_ask_frequency
+  - action_ask_per_day_frequency
+  - action_ask_quantity
+  - action_ask_reminder_time
+  - action_ask_reminder_day
+  - action_ask_alert_type
 
 entities:
   - period
   - medication
+  - medication_name
+  - medication_type
+  - medication_colour
+  - medication_dose
+  - medication_instructions
+  - stock_level
+  - refill_day
+  - frequency
+  - per_day_frequency
+  - quantity
+  - reminder_time
+  - alert_type
+  - reminder_day
 
 slots:
   preferred_tone:
@@ -103,6 +156,189 @@ slots:
     influence_conversation: true
     mappings:
       - type: custom
+
+  # Medication slots 
+  medication_name:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_name
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_name
+        not_intent:
+          - cancel_form
+          - greet
+          - goodbye
+  
+  medication_type:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_type
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_type
+  
+  medication_colour:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_colour
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_colour
+
+  medication_dose:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_dose
+        conditions:
+            - active_loop: medication_form
+              requested_slot: medication_dose
+  
+  medication_instructions:
+    type: text
+    mappings: 
+      - type: from_entity
+        entity: medication_instructions
+        conditions:
+          - active_loop: medication_form
+            requested_slot: medication_instructions
+
+  # Refill slots
+  user_medication_id:
+    type: text
+    mappings:
+      - type: custom
+
+  stock_level:
+    type: float
+    mappings: 
+      - type: from_entity
+        entity: stock_level
+        conditions:
+          - active_loop: refill_form
+            requested_slot: stock_level
+  
+  refill_day:
+    type: float
+    mappings: 
+      - type: from_entity
+        entity: refill_day
+        conditions:
+          - active_loop: refill_form
+            requested_slot: refill_day
+  
+  frequency:
+    type: text
+    mappings: 
+     - type: from_entity
+       entity: frequency
+       intent: provide_frequency
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: frequency
+
+  per_day_frequency:    
+    type: text
+    mappings: 
+     - type: from_entity
+       entity: per_day_frequency
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: per_day_frequency
+  
+  quantity:
+    type: float
+    mappings: 
+     - type: from_entity
+       entity: quantity
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: quantity 
+
+     - type: from_entity
+       entity: stock_level
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: quantity
+  
+  reminder_time:
+    type: list
+    influence_conversation: false
+    mappings: 
+     - type: from_entity
+       entity: reminder_time
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: reminder_time
+  
+  alert_type:
+    type: text
+    mappings: 
+     - type: from_entity
+       entity: alert_type
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: alert_type
+
+  reminder_day:
+    type: list
+    influence_conversation: false
+    mappings: 
+     - type: from_entity
+       entity: reminder_day
+     - type: from_text
+       conditions:
+          - active_loop: reminder_form
+            requested_slot: reminder_day
+
+  current_step:
+      type: text
+      influence_conversation: true
+      mappings:
+        - type: custom
+
+  form_prompt:
+      type: text
+      influence_conversation: false
+      mappings:
+        - type: custom
+
+forms:
+  medication_form:
+    ignored_intents:
+      - cancel_form
+      
+    required_slots:
+      - medication_name
+      - medication_type
+      - medication_colour
+      - medication_dose
+      - medication_instructions
+    
+  refill_form:
+    ignored_intents:
+      - cancel_form
+      - provide_frequency
+      
+    required_slots:
+      - stock_level
+      - refill_day
+  
+  reminder_form:
+    ignored_intents:
+      - cancel_form
+
+    required_slots: 
+      - frequency
+      - per_day_frequency
+      - quantity
+      - reminder_time
+      - alert_type
+      - reminder_day
 
 session_config:
   session_expiration_time: 60

@@ -1,0 +1,26 @@
+version: "3.1"
+
+nlu:
+- intent: provide_per_day_frequency
+  examples: |
+    - Please remind me [thrice](per_day_frequency) per day
+    - I would like to be reminded [thrice](per_day_frequency) daily
+    - Set a reminder [once](per_day_frequency) each day
+    - I want to be reminded [twice](per_day_frequency) per day
+    - Remind me [twice](per_day_frequency) daily
+    - I would like to be reminded [once](per_day_frequency) daily
+    - Make it [thrice](per_day_frequency) every day
+    - Make it [once](per_day_frequency) every day
+    - I want to be reminded [thrice](per_day_frequency) per day
+    - Set a reminder [thrice](per_day_frequency) each day
+    - [thrice](per_day_frequency)
+    - Make it [twice](per_day_frequency) every day
+    - Please remind me [once](per_day_frequency) per day
+    - [twice](per_day_frequency)
+    - Remind me [once](per_day_frequency) daily
+    - Remind me [thrice](per_day_frequency) daily
+    - I would like to be reminded [twice](per_day_frequency) daily
+    - [once](per_day_frequency)
+    - Please remind me [twice](per_day_frequency) per day
+    - I want to be reminded [once](per_day_frequency) per day
+    - Set a reminder [twice](per_day_frequency) each day

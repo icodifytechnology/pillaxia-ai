@@ -1,0 +1,33 @@
+version: "3.1"
+
+nlu:
+- intent: provide_frequency
+  examples: |
+    - Make it [10 months](frequency)
+    - Set a reminder for [30 years](frequency)
+    - Remind me for [1 week](frequency)
+    - I would like to be reminded for [5 years](frequency)
+    - [1 month](frequency)
+    - Remind me for [1 day](frequency)
+    - Make it [10 days](frequency)
+    - Set a reminder for [30 weeks](frequency)
+    - [2 days](frequency)
+    - I want to be reminded for [3 years](frequency)
+    - I would like to be reminded for [5 weeks](frequency)
+    - Remind me for [1 month](frequency)
+    - I want to be reminded for [30 days](frequency)
+    - [3 years](frequency)
+    - Remind me for [1 year](frequency)
+    - I would like to be reminded for [3 days](frequency)
+    - Please keep it for [2 days](frequency)
+    - Set a reminder for [5 days](frequency)
+    - Set a reminder for [10 months](frequency)
+    - Please keep it for [3 weeks](frequency)
+    - Make it [10 weeks](frequency)
+    - Make it [10 years](frequency)
+    - I want to be reminded for [10 months](frequency)
+    - Please keep it for [3 months](frequency)
+    - I would like to be reminded for [2 months](frequency)
+    - I want to be reminded for [30 weeks](frequency)
+    - [30 weeks](frequency)
+    - Please keep it for [3 years](frequency)

@@ -1,6 +1,191 @@
 version: "3.1"
 
 nlu:
+- intent: affirm
+  examples: |
+    - yes
+    - yep
+    - yup
+    - yeah
+    - sure
+    - okay
+    - ok
+    - yes please
+    - definitely
+    - absolutely
+    - of course
+    - sure thing
+    - alright
+    - sounds good
+    - certainly
+    - indeed
+    - I agree
+    - fine
+    - that's fine
+    - why not
+    - for sure
+    - you got it
+    - all good
+    - agreed
+    - correct
+    - right
+    - affirmative
+    - okie
+    - okie dokie
+    - sure, go ahead
+    - works for me
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - nah
+    - not really
+    - no thanks
+    - I don't think so
+    - negative
+    - never
+    - not at all
+    - absolutely not
+    - by no means
+    - definitely not
+    - nah, I'm good
+    - not now
+    - no way
+    - I’d rather not
+    - I don’t want to
+    - not interested
+    - I’ll pass
+    - maybe later, not now
+    - don’t
+    - nevermind
+    - nope, thanks
+    - no, thank you
+    - not for me
+    - I’m okay, no
+    - that’s a no
+    - skip
+    - leave it
+    - I’ll skip that
+    - not this time
+    - not today
+
+- intent: cancel_form
+  examples: |
+    - cancel
+    - stop
+    - nevermind
+    - never mind
+    - forget it
+    - I changed my mind
+    - abort
+    - actually, cancel that
+    - please cancel
+    - can we stop this?
+    - I don’t want to continue
+    - let’s stop here
+    - exit
+    - quit
+    - scrap that
+    - ignore my last request
+    - don’t go ahead with it
+    - I don’t need this anymore
+    - that’s all, cancel it
+    - stop the process
+    - discontinue
+    - I’d like to cancel this
+    - can you cancel it?
+    - never mind, I’m good
+    - scratch that
+    - please stop this
+    - cancel the request
+    - end this
+    - terminate it
+    - back out
+    - nope, cancel
+    - not anymore
+    - forget what I just said
+    - never mind about that
+    - let’s forget it
+    - we can skip that
+    - I changed my decision
+    - put that on hold
+    - don’t continue with that
+    - stop everything
+    - halt
+    - call it off
+    - pull the plug
+    - nix that
+    - remove that
+    - cancel everything
+    - forget the last step
+    - retract that
+    - stop now
+    - pls cancel
+    - umm, cancel that
+    - ok, stop now
+    - abort mission
+
+- intent: provide_medication_colour
+  examples: |
+      - [red](medication_colour)
+      - [blue](medication_colour)
+      - [white](medication_colour)
+      - [yellow](medication_colour)
+      - [green](medication_colour)
+      - [orange](medication_colour)
+      - [purple](medication_colour)
+      - [pink](medication_colour)
+      - [black](medication_colour)
+      - [grey](medication_colour)
+      - [brown](medication_colour)
+
+- intent: provide_medication_dose
+  examples: |
+      - the dose is [500]mg(medication_dose)
+      - it's [10]ml(medication_dose)
+      - I take [1] pill(medication_dose)
+      - it's [2] tablets(medication_dose)
+      - the dosage is [5] mg(medication_dose)
+      - I take [3] capsules(medication_dose)
+
+- intent: provide_medication_instructions     
+  examples: |
+      - I take it [with food](medication_instructions)
+      - I take it [before bed](medication_instructions)
+      - I take it [in the morning](medication_instructions)
+      - I take it [at night](medication_instructions)
+      - I take it [after meals](medication_instructions)
+      - I take it [as needed](medication_instructions)
+
+- intent: skip
+  examples: |
+    - skip
+    - pass
+    - not now
+    - later
+    - I'll do it later
+    - maybe later
+    - can we skip this?
+    - let's skip
+    - skip that
+    - not this time
+    - leave it
+    - I’ll skip that
+    - skip for now
+    - we can skip it
+    - hold off
+    - put it off
+    - do it later
+    - postpone
+    - not interested right now
+    - skip it for now
+    - let’s do it another time
+    - delay it
+    - I’ll get to it later
+    - can wait
+    - pause for now
+
 - intent: greet
   examples: |
     - hello
@@ -90,7 +275,6 @@ nlu:
     - until next time
     - catch ya later
     - catch you later
-    - later
     - talk later
     - talk soon
     - ttyl
@@ -137,7 +321,6 @@ nlu:
     - all good, bye
     - all done here
     - all done here, take care
-    - done for now
     - finished for today, thanks
     - wrapping up, have a good one
     - signing off
@@ -153,7 +336,6 @@ nlu:
     - that's all the questions I had, bye
     - I'm done, thanks for your assistance
     - gotta go, thanks for your help
-    - I'm done for now
     - thanks, I'm done for now
     - ok that's all
     
@@ -1254,7 +1436,7 @@ nlu:
     - how have I been with meds this [week](period)?
     - show my medication adherence for last [month](period)
     - what's my pill compliance [today](period)?
-    - how was my med adherence [this week](period)?
+    - how was my med adherence this [week](period)?
     - am I on track with meds this [month](period)?
     - show adherence for the last [month](period)
     - how consistent have I been this [week](period)?

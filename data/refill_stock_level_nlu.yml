@@ -1,0 +1,4109 @@
+version: "3.1"
+
+nlu:
+- intent: provide_stock_level
+  examples: |
+    - I’m down to [2](stock_level) pill
+    - About [120](stock_level) pills left
+    - I have [24](stock_level) bottle left
+    - I’ve got [12](stock_level) dose left
+    - [100](stock_level)
+    - Only [3](stock_level) remaining
+    - I have [45](stock_level) strips left
+    - Roughly [2](stock_level) tablet remaining
+    - There’s [2](stock_level) left
+    - Stock is [3](stock_level) pill
+    - [100](stock_level) dose left
+    - I’m down to [7](stock_level) tablets
+    - [30](stock_level)
+    - Only [15](stock_level) remaining
+    - Stock is [5](stock_level) tablets
+    - Stock is [20](stock_level) doses
+    - Still have [120](stock_level) pills
+    - [12](stock_level)
+    - Just [120](stock_level) pill
+    - Only [20](stock_level) remaining
+    - Only [3](stock_level) capsule left
+    - [24](stock_level)
+    - Currently have [90](stock_level) pill
+    - Still have [2](stock_level) dose
+    - Roughly [5](stock_level) dose remaining
+    - I have [200](stock_level) tablet left
+    - There’s [30](stock_level) left
+    - About [15](stock_level) pills left
+    - Stock is [90](stock_level) pills
+    - Only [60](stock_level) bottle left
+    - I have [10](stock_level) doses remaining
+    - Just [0](stock_level) capsules
+    - Only [7](stock_level) capsule left
+    - I have [120](stock_level) doses remaining
+    - [100](stock_level) pill left
+    - Only [7](stock_level) remaining
+    - Still have [3](stock_level) capsules
+    - Still have [1](stock_level) pills
+    - Roughly [7](stock_level) pills remaining
+    - Just [24](stock_level) pill
+    - I have [90](stock_level) pills left
+    - I’m down to [30](stock_level) bottles
+    - I have [45](stock_level) pills left
+    - [1](stock_level) pills remaining
+    - I’ve got [24](stock_level) capsule left
+    - I have [200](stock_level) bottle remaining
+    - I have [45](stock_level) dose left
+    - I’ve got [30](stock_level) dose left
+    - There’s [30](stock_level) left
+    - About [24](stock_level) tablets left
+    - [30](stock_level)
+    - I have [20](stock_level) capsule left
+    - There are [100](stock_level) tablets left
+    - [200](stock_level) left
+    - [60](stock_level)
+    - There’s [60](stock_level) left
+    - I’ve got [120](stock_level) tablet left
+    - About [20](stock_level) capsules left
+    - [12](stock_level) dose remaining
+    - About [45](stock_level) pills left
+    - I have [12](stock_level) tablet remaining
+    - Roughly [2](stock_level) capsules remaining
+    - Currently have [90](stock_level) capsule
+    - Roughly [24](stock_level) doses remaining
+    - Just [20](stock_level) pills
+    - There are [60](stock_level) bottles left
+    - I’m down to [2](stock_level) pills
+    - [7](stock_level)
+    - Roughly [0](stock_level) strips remaining
+    - About [1](stock_level) bottles left
+    - [60](stock_level)
+    - About [120](stock_level) tablet left
+    - Only [2](stock_level) dose left
+    - Only [45](stock_level) tablets left
+    - [200](stock_level) capsule left
+    - Stock is [2](stock_level) pill
+    - Around [45](stock_level) pill
+    - Only [20](stock_level) remaining
+    - Just [30](stock_level) capsule
+    - Currently have [120](stock_level) strip
+    - [45](stock_level)
+    - There are [24](stock_level) capsule left
+    - I have [5](stock_level) tablets remaining
+    - I’ve got [100](stock_level) bottles left
+    - There are [5](stock_level) strips left
+    - There’s [3](stock_level) left
+    - Only [10](stock_level) remaining
+    - I have [30](stock_level) pill left
+    - I’ve got [20](stock_level) bottle left
+    - [10](stock_level) doses left
+    - Just [200](stock_level) tablet
+    - About [1](stock_level) capsules left
+    - I have [20](stock_level) dose remaining
+    - [100](stock_level) pills left
+    - About [60](stock_level) strip left
+    - Just [24](stock_level) doses
+    - Only [90](stock_level) tablet left
+    - Just [90](stock_level) tablets
+    - I have [5](stock_level) tablets left
+    - Around [1](stock_level) tablet
+    - About [60](stock_level) tablets left
+    - I’ve got [45](stock_level) strip left
+    - I have [10](stock_level) tablets remaining
+    - Just [20](stock_level) bottles
+    - Only [7](stock_level) remaining
+    - [3](stock_level) capsule left
+    - I’ve got [5](stock_level) bottle left
+    - I’ve got [0](stock_level) strip left
+    - Only [120](stock_level) remaining
+    - Stock is [30](stock_level) capsule
+    - I’ve got [1](stock_level) strips left
+    - I’ve got [0](stock_level) pills left
+    - Currently have [24](stock_level) pill
+    - I have [12](stock_level) doses left
+    - There are [10](stock_level) doses left
+    - Still have [90](stock_level) bottle
+    - [24](stock_level) bottle remaining
+    - [3](stock_level) strips remaining
+    - Only [2](stock_level) strips left
+    - [200](stock_level) left
+    - [1](stock_level)
+    - Stock is [120](stock_level) bottles
+    - [45](stock_level) capsules remaining
+    - I’ve got [45](stock_level) dose left
+    - I’ve got [120](stock_level) pills left
+    - Currently have [0](stock_level) pill
+    - Roughly [30](stock_level) bottle remaining
+    - There’s [90](stock_level) left
+    - Just [120](stock_level) bottles
+    - About [120](stock_level) tablets left
+    - [20](stock_level) left
+    - I’ve got [2](stock_level) tablet left
+    - Stock is [200](stock_level) dose
+    - Currently have [45](stock_level) capsule
+    - About [1](stock_level) strips left
+    - Still have [5](stock_level) tablet
+    - Only [24](stock_level) remaining
+    - [0](stock_level)
+    - There’s [12](stock_level) left
+    - There are [0](stock_level) bottle left
+    - I’ve got [24](stock_level) pill left
+    - Currently have [3](stock_level) doses
+    - There are [60](stock_level) bottle left
+    - Only [60](stock_level) remaining
+    - There’s [100](stock_level) left
+    - Just [15](stock_level) capsule
+    - Just [10](stock_level) bottles
+    - Only [12](stock_level) remaining
+    - [60](stock_level)
+    - Only [0](stock_level) remaining
+    - About [20](stock_level) strip left
+    - I have [120](stock_level) pill remaining
+    - [45](stock_level)
+    - [24](stock_level) pill left
+    - Stock is [200](stock_level) capsules
+    - I have [10](stock_level) doses left
+    - [15](stock_level) capsule remaining
+    - I have [15](stock_level) bottle left
+    - Currently have [20](stock_level) bottle
+    - There’s [10](stock_level) left
+    - I’ve got [10](stock_level) strip left
+    - I have [2](stock_level) pills remaining
+    - Around [45](stock_level) strip
+    - Roughly [120](stock_level) strip remaining
+    - Roughly [1](stock_level) tablets remaining
+    - Only [30](stock_level) remaining
+    - Still have [90](stock_level) capsules
+    - Roughly [24](stock_level) tablets remaining
+    - Roughly [20](stock_level) strip remaining
+    - There are [0](stock_level) strip left
+    - I have [60](stock_level) pills left
+    - [120](stock_level) capsules left
+    - There are [20](stock_level) bottle left
+    - There are [200](stock_level) dose left
+    - I’ve got [3](stock_level) bottles left
+    - I have [100](stock_level) tablet remaining
+    - [2](stock_level)
+    - Still have [45](stock_level) tablet
+    - There’s [1](stock_level) left
+    - Stock is [60](stock_level) dose
+    - Stock is [1](stock_level) capsules
+    - [100](stock_level) capsules left
+    - Stock is [60](stock_level) tablet
+    - [10](stock_level)
+    - I have [7](stock_level) dose left
+    - Around [7](stock_level) bottle
+    - There’s [120](stock_level) left
+    - [7](stock_level)
+    - Roughly [3](stock_level) capsules remaining
+    - Around [90](stock_level) dose
+    - Only [15](stock_level) remaining
+    - Currently have [0](stock_level) capsule
+    - I have [30](stock_level) strips left
+    - Only [100](stock_level) remaining
+    - Still have [7](stock_level) bottles
+    - I’ve got [15](stock_level) capsules left
+    - Currently have [24](stock_level) doses
+    - About [5](stock_level) strip left
+    - Currently have [60](stock_level) strip
+    - About [200](stock_level) bottles left
+    - [100](stock_level) strip remaining
+    - There are [30](stock_level) pills left
+    - [60](stock_level) doses remaining
+    - [100](stock_level) tablets remaining
+    - [2](stock_level) tablet left
+    - Still have [45](stock_level) pill
+    - [20](stock_level) left
+    - There’s [24](stock_level) left
+    - Roughly [30](stock_level) tablets remaining
+    - Roughly [200](stock_level) capsule remaining
+    - Roughly [2](stock_level) pills remaining
+    - Roughly [24](stock_level) strip remaining
+    - [100](stock_level) strips left
+    - I have [15](stock_level) capsule left
+    - There are [90](stock_level) tablets left
+    - Currently have [12](stock_level) bottle
+    - Roughly [0](stock_level) bottle remaining
+    - Still have [120](stock_level) doses
+    - [1](stock_level)
+    - I have [12](stock_level) bottle left
+    - Only [0](stock_level) remaining
+    - Just [30](stock_level) tablets
+    - I have [200](stock_level) capsule left
+    - [10](stock_level) strips remaining
+    - Around [15](stock_level) pill
+    - [20](stock_level)
+    - [1](stock_level) left
+    - [24](stock_level) strips left
+    - Around [1](stock_level) pills
+    - There’s [2](stock_level) left
+    - I have [24](stock_level) bottles left
+    - Roughly [120](stock_level) strips remaining
+    - Roughly [100](stock_level) strips remaining
+    - [3](stock_level) tablets left
+    - Stock is [10](stock_level) tablet
+    - [90](stock_level) bottles left
+    - I’m down to [24](stock_level) pill
+    - I’ve got [120](stock_level) dose left
+    - I have [2](stock_level) pills left
+    - Currently have [15](stock_level) pill
+    - I have [200](stock_level) tablets left
+    - Currently have [60](stock_level) pills
+    - Still have [10](stock_level) strips
+    - [7](stock_level)
+    - Still have [60](stock_level) strip
+    - [45](stock_level)
+    - Just [3](stock_level) strip
+    - [10](stock_level) capsules left
+    - Still have [45](stock_level) tablets
+    - Currently have [1](stock_level) doses
+    - There’s [5](stock_level) left
+    - I’m down to [100](stock_level) pill
+    - About [10](stock_level) pills left
+    - I’m down to [60](stock_level) capsule
+    - Only [200](stock_level) strips left
+    - About [30](stock_level) capsules left
+    - Stock is [90](stock_level) doses
+    - Stock is [120](stock_level) dose
+    - [20](stock_level) strip left
+    - I have [100](stock_level) bottle left
+    - Just [90](stock_level) tablet
+    - Just [90](stock_level) strips
+    - There are [3](stock_level) capsule left
+    - [100](stock_level) tablet remaining
+    - [100](stock_level) left
+    - Roughly [12](stock_level) strip remaining
+    - I’ve got [3](stock_level) tablet left
+    - I’ve got [24](stock_level) bottles left
+    - [1](stock_level) left
+    - Around [90](stock_level) doses
+    - Stock is [100](stock_level) tablet
+    - I have [24](stock_level) dose remaining
+    - [90](stock_level) left
+    - About [20](stock_level) pills left
+    - I have [7](stock_level) tablet left
+    - Just [5](stock_level) pill
+    - I’m down to [15](stock_level) capsule
+    - Currently have [200](stock_level) capsule
+    - Stock is [2](stock_level) doses
+    - There’s [12](stock_level) left
+    - There’s [12](stock_level) left
+    - Just [200](stock_level) strip
+    - There are [24](stock_level) bottle left
+    - Just [0](stock_level) strips
+    - I have [60](stock_level) dose left
+    - I’m down to [10](stock_level) tablets
+    - There’s [12](stock_level) left
+    - [15](stock_level) pills left
+    - Only [20](stock_level) remaining
+    - About [45](stock_level) strip left
+    - I’m down to [20](stock_level) strips
+    - I have [7](stock_level) capsule left
+    - Currently have [30](stock_level) pill
+    - Roughly [2](stock_level) strip remaining
+    - [200](stock_level) pills left
+    - I have [60](stock_level) capsules left
+    - [15](stock_level) left
+    - I’m down to [120](stock_level) bottles
+    - [30](stock_level)
+    - I’m down to [1](stock_level) capsule
+    - I’ve got [24](stock_level) pills left
+    - [24](stock_level) left
+    - I’ve got [45](stock_level) capsules left
+    - I’m down to [24](stock_level) strips
+    - I have [100](stock_level) tablets remaining
+    - There’s [24](stock_level) left
+    - About [2](stock_level) strips left
+    - [60](stock_level) left
+    - I have [3](stock_level) strip left
+    - About [10](stock_level) pill left
+    - I have [10](stock_level) capsule remaining
+    - Roughly [100](stock_level) capsule remaining
+    - [120](stock_level) left
+    - I’ve got [1](stock_level) strip left
+    - I have [5](stock_level) bottles left
+    - [2](stock_level) capsule remaining
+    - Stock is [3](stock_level) pills
+    - About [12](stock_level) dose left
+    - [200](stock_level)
+    - Stock is [5](stock_level) capsule
+    - About [12](stock_level) pill left
+    - I have [90](stock_level) doses remaining
+    - Just [60](stock_level) tablets
+    - Around [200](stock_level) pills
+    - Stock is [12](stock_level) pill
+    - [24](stock_level) tablet left
+    - There are [60](stock_level) pills left
+    - [12](stock_level) left
+    - [30](stock_level) capsule remaining
+    - Currently have [2](stock_level) capsules
+    - Around [3](stock_level) tablet
+    - [200](stock_level) doses left
+    - Only [15](stock_level) remaining
+    - Stock is [12](stock_level) capsule
+    - Only [2](stock_level) doses left
+    - [60](stock_level)
+    - Only [45](stock_level) pill left
+    - Around [15](stock_level) pills
+    - Around [5](stock_level) doses
+    - [15](stock_level) left
+    - [120](stock_level) left
+    - [100](stock_level) pills remaining
+    - Roughly [90](stock_level) tablets remaining
+    - I’m down to [12](stock_level) pill
+    - Currently have [3](stock_level) bottles
+    - Roughly [45](stock_level) tablet remaining
+    - Only [5](stock_level) strip left
+    - About [60](stock_level) tablet left
+    - About [12](stock_level) tablets left
+    - Just [15](stock_level) tablets
+    - I have [3](stock_level) pills remaining
+    - I’ve got [5](stock_level) bottles left
+    - Only [1](stock_level) remaining
+    - [12](stock_level) left
+    - I have [12](stock_level) capsule left
+    - About [0](stock_level) tablets left
+    - Only [45](stock_level) remaining
+    - There are [20](stock_level) capsule left
+    - Only [120](stock_level) remaining
+    - Still have [200](stock_level) tablets
+    - Around [12](stock_level) tablets
+    - I’m down to [20](stock_level) tablets
+    - [90](stock_level)
+    - [3](stock_level) dose remaining
+    - [20](stock_level) pills remaining
+    - Just [20](stock_level) pill
+    - Only [30](stock_level) capsule left
+    - There are [3](stock_level) pill left
+    - I’m down to [0](stock_level) pill
+    - There’s [200](stock_level) left
+    - Currently have [12](stock_level) capsules
+    - Just [200](stock_level) capsule
+    - There are [3](stock_level) tablet left
+    - Stock is [24](stock_level) dose
+    - Stock is [5](stock_level) strips
+    - There’s [10](stock_level) left
+    - About [30](stock_level) strip left
+    - Only [30](stock_level) bottles left
+    - Around [30](stock_level) capsule
+    - Only [5](stock_level) tablets left
+    - Currently have [20](stock_level) doses
+    - [20](stock_level) left
+    - Only [5](stock_level) strips left
+    - Stock is [5](stock_level) capsules
+    - I’m down to [24](stock_level) doses
+    - Only [45](stock_level) remaining
+    - [5](stock_level)
+    - [10](stock_level) tablets remaining
+    - [15](stock_level) left
+    - I have [90](stock_level) capsule left
+    - Only [1](stock_level) bottles left
+    - I’m down to [7](stock_level) strip
+    - [30](stock_level) strip remaining
+    - Only [45](stock_level) remaining
+    - Currently have [200](stock_level) pills
+    - Still have [30](stock_level) pills
+    - I have [5](stock_level) capsule left
+    - I’ve got [30](stock_level) capsule left
+    - I’m down to [100](stock_level) doses
+    - There are [20](stock_level) strips left
+    - I have [100](stock_level) strip remaining
+    - I have [10](stock_level) bottles remaining
+    - About [100](stock_level) bottles left
+    - [0](stock_level)
+    - There are [5](stock_level) doses left
+    - There’s [120](stock_level) left
+    - [12](stock_level) pill left
+    - Still have [120](stock_level) capsule
+    - I’m down to [0](stock_level) dose
+    - Just [2](stock_level) tablets
+    - [60](stock_level) capsules left
+    - There are [20](stock_level) capsules left
+    - About [5](stock_level) tablets left
+    - I’m down to [12](stock_level) tablet
+    - [15](stock_level)
+    - Roughly [2](stock_level) doses remaining
+    - Roughly [12](stock_level) strips remaining
+    - I have [3](stock_level) tablets left
+    - Stock is [20](stock_level) bottles
+    - I have [20](stock_level) tablet remaining
+    - There’s [7](stock_level) left
+    - I have [24](stock_level) pills left
+    - Still have [2](stock_level) pills
+    - I’m down to [5](stock_level) bottles
+    - I have [120](stock_level) tablets remaining
+    - Roughly [12](stock_level) tablet remaining
+    - I’ve got [10](stock_level) pills left
+    - About [15](stock_level) pill left
+    - I’ve got [100](stock_level) doses left
+    - There’s [0](stock_level) left
+    - Roughly [0](stock_level) pills remaining
+    - Around [100](stock_level) dose
+    - Just [5](stock_level) capsule
+    - Just [2](stock_level) tablet
+    - Around [7](stock_level) capsules
+    - Only [45](stock_level) remaining
+    - Currently have [24](stock_level) tablets
+    - Just [2](stock_level) strips
+    - Stock is [3](stock_level) bottles
+    - I’m down to [100](stock_level) capsules
+    - [5](stock_level) left
+    - Currently have [200](stock_level) bottles
+    - Roughly [45](stock_level) tablets remaining
+    - Just [200](stock_level) capsules
+    - There are [24](stock_level) pills left
+    - Roughly [15](stock_level) doses remaining
+    - Stock is [20](stock_level) strips
+    - Just [1](stock_level) tablets
+    - I’ve got [30](stock_level) bottles left
+    - Just [5](stock_level) dose
+    - I’m down to [10](stock_level) pill
+    - Roughly [12](stock_level) bottles remaining
+    - [5](stock_level) pills left
+    - There’s [7](stock_level) left
+    - I have [60](stock_level) bottle left
+    - Roughly [2](stock_level) dose remaining
+    - Currently have [2](stock_level) strip
+    - [20](stock_level) left
+    - There’s [120](stock_level) left
+    - Still have [7](stock_level) tablets
+    - I have [3](stock_level) pill left
+    - [200](stock_level) capsules left
+    - [30](stock_level)
+    - Only [0](stock_level) pills left
+    - Still have [100](stock_level) capsules
+    - Stock is [24](stock_level) tablet
+    - I have [15](stock_level) dose remaining
+    - About [12](stock_level) strip left
+    - Only [3](stock_level) remaining
+    - Still have [30](stock_level) strips
+    - Only [12](stock_level) remaining
+    - About [120](stock_level) pill left
+    - I’m down to [45](stock_level) bottles
+    - [90](stock_level) bottle remaining
+    - Still have [10](stock_level) pills
+    - I have [0](stock_level) strip left
+    - Only [5](stock_level) remaining
+    - There’s [200](stock_level) left
+    - Currently have [45](stock_level) tablet
+    - [5](stock_level) capsule remaining
+    - [2](stock_level) pills remaining
+    - [200](stock_level) tablet left
+    - I have [200](stock_level) bottles left
+    - I’ve got [200](stock_level) strips left
+    - Currently have [0](stock_level) bottle
+    - There’s [15](stock_level) left
+    - I’m down to [200](stock_level) strips
+    - Only [24](stock_level) strip left
+    - [20](stock_level) doses left
+    - There are [60](stock_level) doses left
+    - Currently have [2](stock_level) capsule
+    - [5](stock_level)
+    - I’m down to [7](stock_level) doses
+    - Currently have [24](stock_level) strips
+    - Just [100](stock_level) pill
+    - [7](stock_level) pills left
+    - Still have [15](stock_level) capsule
+    - Only [60](stock_level) remaining
+    - I have [0](stock_level) bottles left
+    - Only [12](stock_level) remaining
+    - Around [3](stock_level) dose
+    - [90](stock_level) left
+    - There’s [100](stock_level) left
+    - [10](stock_level) pill left
+    - [5](stock_level) tablets left
+    - Stock is [24](stock_level) strips
+    - Around [20](stock_level) capsule
+    - I have [30](stock_level) dose left
+    - Roughly [0](stock_level) bottles remaining
+    - [3](stock_level)
+    - Still have [24](stock_level) dose
+    - Just [120](stock_level) pills
+    - [45](stock_level) left
+    - Currently have [90](stock_level) doses
+    - [0](stock_level) left
+    - About [120](stock_level) strips left
+    - Still have [20](stock_level) bottles
+    - About [0](stock_level) pills left
+    - Only [90](stock_level) remaining
+    - Just [60](stock_level) capsule
+    - [0](stock_level) doses remaining
+    - I’ve got [0](stock_level) bottle left
+    - Only [120](stock_level) capsules left
+    - Currently have [1](stock_level) strip
+    - There’s [15](stock_level) left
+    - Only [12](stock_level) remaining
+    - There’s [30](stock_level) left
+    - Around [100](stock_level) doses
+    - Only [2](stock_level) capsule left
+    - Currently have [7](stock_level) strips
+    - I’ve got [200](stock_level) capsule left
+    - [100](stock_level) capsule remaining
+    - There’s [60](stock_level) left
+    - [1](stock_level) left
+    - Currently have [60](stock_level) tablets
+    - [3](stock_level) left
+    - [15](stock_level) capsule left
+    - Just [120](stock_level) doses
+    - [1](stock_level)
+    - There are [5](stock_level) bottle left
+    - I’m down to [100](stock_level) strips
+    - [45](stock_level)
+    - [12](stock_level)
+    - Around [100](stock_level) pill
+    - I’ve got [60](stock_level) strip left
+    - Only [10](stock_level) remaining
+    - [0](stock_level) bottle left
+    - Only [100](stock_level) pill left
+    - Stock is [10](stock_level) capsule
+    - Just [0](stock_level) bottles
+    - Only [15](stock_level) remaining
+    - There’s [200](stock_level) left
+    - Just [3](stock_level) strips
+    - About [0](stock_level) doses left
+    - [7](stock_level) bottles left
+    - Just [45](stock_level) bottles
+    - I have [60](stock_level) capsule remaining
+    - Only [200](stock_level) dose left
+    - [100](stock_level)
+    - There are [2](stock_level) pills left
+    - [90](stock_level) dose remaining
+    - [12](stock_level) left
+    - I’ve got [10](stock_level) strips left
+    - [5](stock_level) left
+    - There’s [20](stock_level) left
+    - [200](stock_level) bottles remaining
+    - [0](stock_level) left
+    - [200](stock_level) left
+    - [20](stock_level) strips left
+    - Stock is [12](stock_level) doses
+    - Stock is [7](stock_level) strip
+    - Roughly [10](stock_level) capsule remaining
+    - Just [15](stock_level) dose
+    - I’m down to [20](stock_level) capsules
+    - I’m down to [15](stock_level) capsules
+    - There are [60](stock_level) dose left
+    - Roughly [45](stock_level) strip remaining
+    - Currently have [15](stock_level) bottles
+    - Roughly [12](stock_level) doses remaining
+    - [15](stock_level) bottles remaining
+    - Currently have [10](stock_level) doses
+    - Only [12](stock_level) remaining
+    - Roughly [10](stock_level) capsules remaining
+    - There’s [7](stock_level) left
+    - Still have [7](stock_level) strip
+    - Just [20](stock_level) bottle
+    - [30](stock_level) left
+    - Only [7](stock_level) remaining
+    - I’ve got [15](stock_level) strips left
+    - I have [3](stock_level) tablet remaining
+    - I’m down to [100](stock_level) tablets
+    - I have [20](stock_level) pills remaining
+    - Currently have [45](stock_level) bottles
+    - Still have [1](stock_level) capsules
+    - Still have [60](stock_level) tablets
+    - Stock is [45](stock_level) pill
+    - Currently have [0](stock_level) bottles
+    - Only [20](stock_level) remaining
+    - Stock is [12](stock_level) dose
+    - [30](stock_level) bottle left
+    - About [3](stock_level) strip left
+    - I’m down to [1](stock_level) strip
+    - [24](stock_level) pill remaining
+    - I have [1](stock_level) tablets left
+    - [5](stock_level) tablet left
+    - I have [1](stock_level) pills remaining
+    - Roughly [20](stock_level) bottles remaining
+    - I have [1](stock_level) capsule remaining
+    - I’m down to [45](stock_level) tablets
+    - Just [7](stock_level) pills
+    - Only [10](stock_level) capsule left
+    - Stock is [200](stock_level) capsule
+    - Only [200](stock_level) strip left
+    - [20](stock_level) left
+    - I have [3](stock_level) tablet left
+    - I’ve got [10](stock_level) tablets left
+    - [0](stock_level) dose remaining
+    - Stock is [7](stock_level) dose
+    - Stock is [0](stock_level) dose
+    - Roughly [90](stock_level) dose remaining
+    - Roughly [90](stock_level) strips remaining
+    - There are [45](stock_level) dose left
+    - Still have [90](stock_level) pill
+    - There’s [200](stock_level) left
+    - Just [24](stock_level) pills
+    - Just [12](stock_level) bottle
+    - Roughly [1](stock_level) dose remaining
+    - Only [200](stock_level) remaining
+    - Around [100](stock_level) bottle
+    - [2](stock_level) strips remaining
+    - Just [90](stock_level) pills
+    - Around [20](stock_level) bottle
+    - [24](stock_level) dose remaining
+    - I’ve got [15](stock_level) pill left
+    - Just [100](stock_level) tablet
+    - [5](stock_level) left
+    - [120](stock_level) left
+    - [2](stock_level) bottle left
+    - Around [0](stock_level) dose
+    - Only [1](stock_level) remaining
+    - [2](stock_level) pill remaining
+    - [7](stock_level) left
+    - [5](stock_level) pills remaining
+    - About [45](stock_level) bottles left
+    - Around [3](stock_level) strips
+    - Around [200](stock_level) tablet
+    - Around [90](stock_level) strip
+    - Around [1](stock_level) capsule
+    - [200](stock_level) dose left
+    - Only [12](stock_level) strip left
+    - There are [200](stock_level) capsules left
+    - [45](stock_level) strip left
+    - [45](stock_level) pill left
+    - Currently have [100](stock_level) dose
+    - I have [24](stock_level) capsules remaining
+    - About [24](stock_level) pill left
+    - Just [7](stock_level) tablet
+    - Just [24](stock_level) strip
+    - Stock is [12](stock_level) strips
+    - Stock is [1](stock_level) strips
+    - Around [100](stock_level) capsules
+    - I have [24](stock_level) capsules left
+    - Around [30](stock_level) capsules
+    - Roughly [120](stock_level) tablet remaining
+    - Only [15](stock_level) remaining
+    - Still have [3](stock_level) bottles
+    - Currently have [1](stock_level) bottle
+    - I have [5](stock_level) strips remaining
+    - I’ve got [15](stock_level) dose left
+    - Only [12](stock_level) pill left
+    - Stock is [120](stock_level) capsule
+    - Still have [1](stock_level) dose
+    - [60](stock_level)
+    - Just [100](stock_level) capsule
+    - Currently have [45](stock_level) strip
+    - Only [200](stock_level) remaining
+    - [24](stock_level)
+    - I’ve got [60](stock_level) doses left
+    - Still have [120](stock_level) strip
+    - Currently have [100](stock_level) pills
+    - [7](stock_level) left
+    - Roughly [200](stock_level) tablet remaining
+    - Still have [5](stock_level) tablets
+    - Around [60](stock_level) strip
+    - [10](stock_level) left
+    - Just [15](stock_level) capsules
+    - I’m down to [90](stock_level) pills
+    - Currently have [30](stock_level) dose
+    - There are [5](stock_level) tablets left
+    - Still have [100](stock_level) tablet
+    - [100](stock_level) strip left
+    - There’s [7](stock_level) left
+    - I have [15](stock_level) doses left
+    - About [3](stock_level) pill left
+    - Around [30](stock_level) strip
+    - Stock is [12](stock_level) pills
+    - I have [60](stock_level) capsule left
+    - I have [20](stock_level) dose left
+    - There’s [120](stock_level) left
+    - I’ve got [20](stock_level) capsules left
+    - [15](stock_level) left
+    - Roughly [20](stock_level) bottle remaining
+    - [60](stock_level) strip remaining
+    - About [10](stock_level) capsules left
+    - [120](stock_level) left
+    - I have [60](stock_level) dose remaining
+    - Stock is [30](stock_level) pills
+    - [7](stock_level)
+    - Still have [120](stock_level) tablet
+    - [20](stock_level) capsules left
+    - I’ve got [5](stock_level) pills left
+    - Just [12](stock_level) tablet
+    - There are [3](stock_level) pills left
+    - I’ve got [20](stock_level) pill left
+    - Still have [2](stock_level) bottle
+    - Only [90](stock_level) pill left
+    - [7](stock_level) capsule left
+    - Only [200](stock_level) remaining
+    - Still have [3](stock_level) doses
+    - Currently have [10](stock_level) pill
+    - I’ve got [12](stock_level) capsule left
+    - [5](stock_level) left
+    - Only [200](stock_level) remaining
+    - Stock is [15](stock_level) strip
+    - There are [30](stock_level) capsules left
+    - Just [3](stock_level) capsules
+    - There’s [15](stock_level) left
+    - Around [45](stock_level) strips
+    - I have [10](stock_level) tablet left
+    - Only [1](stock_level) tablets left
+    - [7](stock_level) left
+    - [30](stock_level) left
+    - I have [20](stock_level) strips remaining
+    - There are [20](stock_level) strip left
+    - Just [45](stock_level) dose
+    - There’s [5](stock_level) left
+    - Around [200](stock_level) dose
+    - Around [90](stock_level) capsule
+    - Only [90](stock_level) remaining
+    - Just [15](stock_level) pills
+    - [90](stock_level) tablets left
+    - Around [45](stock_level) bottles
+    - Currently have [100](stock_level) capsules
+    - Just [90](stock_level) pill
+    - I have [100](stock_level) dose left
+    - I have [20](stock_level) capsule remaining
+    - Roughly [60](stock_level) tablet remaining
+    - Still have [20](stock_level) doses
+    - [15](stock_level) left
+    - Just [2](stock_level) dose
+    - Roughly [30](stock_level) pills remaining
+    - [3](stock_level)
+    - [10](stock_level) left
+    - I’m down to [45](stock_level) strip
+    - About [30](stock_level) tablets left
+    - I have [120](stock_level) dose remaining
+    - There’s [20](stock_level) left
+    - I have [10](stock_level) bottles left
+    - [2](stock_level)
+    - About [90](stock_level) doses left
+    - Still have [2](stock_level) tablet
+    - I have [12](stock_level) dose remaining
+    - There’s [90](stock_level) left
+    - There’s [3](stock_level) left
+    - [100](stock_level)
+    - I’ve got [12](stock_level) pill left
+    - There are [200](stock_level) bottles left
+    - About [120](stock_level) bottles left
+    - There’s [7](stock_level) left
+    - [60](stock_level) capsules remaining
+    - [0](stock_level) left
+    - [45](stock_level) pill remaining
+    - I have [15](stock_level) strips remaining
+    - I’ve got [2](stock_level) strip left
+    - I have [12](stock_level) tablets remaining
+    - [5](stock_level) left
+    - I’ve got [2](stock_level) tablets left
+    - Only [200](stock_level) remaining
+    - Stock is [60](stock_level) strips
+    - I have [100](stock_level) tablets left
+    - Only [200](stock_level) capsule left
+    - I have [60](stock_level) tablet remaining
+    - About [1](stock_level) doses left
+    - Currently have [45](stock_level) capsules
+    - Only [200](stock_level) capsules left
+    - Roughly [90](stock_level) strip remaining
+    - Only [90](stock_level) remaining
+    - There’s [0](stock_level) left
+    - [10](stock_level)
+    - I’ve got [2](stock_level) bottle left
+    - I’m down to [60](stock_level) strip
+    - There’s [5](stock_level) left
+    - Stock is [7](stock_level) capsule
+    - I have [0](stock_level) tablets left
+    - About [24](stock_level) tablet left
+    - Roughly [120](stock_level) doses remaining
+    - [90](stock_level) left
+    - I’m down to [30](stock_level) dose
+    - I’m down to [3](stock_level) dose
+    - There’s [7](stock_level) left
+    - Around [60](stock_level) bottle
+    - [2](stock_level) dose left
+    - Just [1](stock_level) pill
+    - I have [15](stock_level) tablet left
+    - Only [2](stock_level) remaining
+    - I have [7](stock_level) doses left
+    - I have [3](stock_level) tablets remaining
+    - Around [7](stock_level) tablets
+    - Stock is [45](stock_level) capsules
+    - There are [90](stock_level) pill left
+    - [120](stock_level) strips left
+    - Stock is [12](stock_level) strip
+    - Only [24](stock_level) remaining
+    - Currently have [1](stock_level) pills
+    - Around [90](stock_level) bottles
+    - Just [120](stock_level) capsule
+    - Only [30](stock_level) remaining
+    - Only [200](stock_level) remaining
+    - About [24](stock_level) dose left
+    - Stock is [100](stock_level) pill
+    - Stock is [5](stock_level) strip
+    - I have [200](stock_level) strips left
+    - I’m down to [60](stock_level) dose
+    - About [20](stock_level) tablet left
+    - Only [60](stock_level) remaining
+    - Currently have [60](stock_level) doses
+    - Only [120](stock_level) strips left
+    - I’ve got [30](stock_level) tablet left
+    - [10](stock_level)
+    - [7](stock_level) pills remaining
+    - [20](stock_level) tablet remaining
+    - Currently have [15](stock_level) capsule
+    - I have [5](stock_level) strips left
+    - Still have [3](stock_level) strips
+    - [5](stock_level)
+    - [200](stock_level) tablet remaining
+    - I have [45](stock_level) bottles left
+    - Only [12](stock_level) remaining
+    - I have [2](stock_level) strip remaining
+    - I’m down to [7](stock_level) pills
+    - Currently have [20](stock_level) strips
+    - Around [12](stock_level) pill
+    - Around [30](stock_level) dose
+    - There are [2](stock_level) strips left
+    - There are [1](stock_level) capsules left
+    - [90](stock_level) left
+    - There are [7](stock_level) doses left
+    - Only [0](stock_level) bottles left
+    - There are [30](stock_level) strips left
+    - Currently have [100](stock_level) capsule
+    - I have [5](stock_level) pills left
+    - Still have [15](stock_level) bottles
+    - [60](stock_level) dose left
+    - I have [12](stock_level) strip remaining
+    - Currently have [2](stock_level) tablet
+    - Roughly [15](stock_level) bottles remaining
+    - Stock is [30](stock_level) bottles
+    - Just [30](stock_level) tablet
+    - Around [1](stock_level) tablets
+    - I’ve got [24](stock_level) doses left
+    - [90](stock_level)
+    - Stock is [200](stock_level) strip
+    - I’ve got [1](stock_level) bottle left
+    - Only [3](stock_level) pill left
+    - Currently have [3](stock_level) tablet
+    - There are [200](stock_level) pills left
+    - [3](stock_level) pills left
+    - Only [120](stock_level) remaining
+    - There are [30](stock_level) strip left
+    - I have [90](stock_level) tablet remaining
+    - I’m down to [10](stock_level) doses
+    - Roughly [60](stock_level) dose remaining
+    - [2](stock_level)
+    - I have [7](stock_level) tablet remaining
+    - I have [0](stock_level) capsules left
+    - Only [3](stock_level) remaining
+    - Still have [20](stock_level) capsules
+    - I have [200](stock_level) tablet remaining
+    - Around [60](stock_level) dose
+    - There’s [60](stock_level) left
+    - [200](stock_level) bottle left
+    - Stock is [2](stock_level) tablets
+    - Just [2](stock_level) capsule
+    - [30](stock_level) strips remaining
+    - Only [3](stock_level) strip left
+    - I have [15](stock_level) capsules left
+    - [1](stock_level) strip left
+    - [200](stock_level) bottles left
+    - [12](stock_level) bottles remaining
+    - Only [10](stock_level) capsules left
+    - [15](stock_level) strip left
+    - Currently have [12](stock_level) capsule
+    - Only [20](stock_level) bottles left
+    - Only [15](stock_level) remaining
+    - There are [60](stock_level) strip left
+    - [30](stock_level) bottle remaining
+    - Still have [100](stock_level) strips
+    - Currently have [200](stock_level) strips
+    - Currently have [200](stock_level) tablets
+    - [2](stock_level)
+    - There are [12](stock_level) tablet left
+    - [120](stock_level) tablets remaining
+    - About [1](stock_level) bottle left
+    - Stock is [7](stock_level) capsules
+    - There’s [90](stock_level) left
+    - Roughly [5](stock_level) strips remaining
+    - Currently have [120](stock_level) pill
+    - Roughly [20](stock_level) dose remaining
+    - Around [100](stock_level) tablets
+    - I’ve got [24](stock_level) strips left
+    - Currently have [24](stock_level) tablet
+    - Only [100](stock_level) remaining
+    - Around [45](stock_level) capsule
+    - About [120](stock_level) doses left
+    - Currently have [1](stock_level) strips
+    - Currently have [60](stock_level) pill
+    - There’s [200](stock_level) left
+    - Currently have [2](stock_level) bottles
+    - Still have [30](stock_level) capsules
+    - I have [120](stock_level) tablets left
+    - [20](stock_level)
+    - Around [3](stock_level) strip
+    - [15](stock_level) capsules remaining
+    - Only [20](stock_level) tablet left
+    - Only [60](stock_level) remaining
+    - There’s [100](stock_level) left
+    - [90](stock_level) bottle left
+    - [2](stock_level) left
+    - I have [1](stock_level) dose left
+    - There’s [24](stock_level) left
+    - Roughly [200](stock_level) strip remaining
+    - Around [45](stock_level) dose
+    - I have [20](stock_level) tablets remaining
+    - Stock is [90](stock_level) bottles
+    - I have [24](stock_level) strip left
+    - Roughly [2](stock_level) pill remaining
+    - Around [5](stock_level) strips
+    - [12](stock_level) pills remaining
+    - There’s [200](stock_level) left
+    - Just [120](stock_level) tablet
+    - Currently have [30](stock_level) capsules
+    - Roughly [100](stock_level) bottle remaining
+    - I have [45](stock_level) strips remaining
+    - Still have [200](stock_level) dose
+    - About [2](stock_level) strip left
+    - I’ve got [15](stock_level) pills left
+    - There’s [2](stock_level) left
+    - [90](stock_level) capsule remaining
+    - Roughly [200](stock_level) capsules remaining
+    - Roughly [90](stock_level) pills remaining
+    - Just [60](stock_level) strip
+    - Just [10](stock_level) dose
+    - Only [24](stock_level) remaining
+    - [120](stock_level) bottles remaining
+    - [0](stock_level)
+    - I’ve got [12](stock_level) bottles left
+    - [15](stock_level) capsules left
+    - Still have [15](stock_level) doses
+    - Only [10](stock_level) remaining
+    - I have [2](stock_level) pill remaining
+    - [5](stock_level) strips remaining
+    - [120](stock_level)
+    - Still have [24](stock_level) capsule
+    - I’m down to [10](stock_level) capsule
+    - I’ve got [10](stock_level) bottles left
+    - Just [1](stock_level) tablet
+    - Roughly [1](stock_level) bottles remaining
+    - Currently have [7](stock_level) strip
+    - Just [3](stock_level) dose
+    - Roughly [100](stock_level) pills remaining
+    - I have [120](stock_level) strip left
+    - [120](stock_level) capsule left
+    - Roughly [60](stock_level) doses remaining
+    - I’m down to [15](stock_level) pill
+    - Still have [2](stock_level) strip
+    - I have [3](stock_level) capsules left
+    - Still have [1](stock_level) doses
+    - [0](stock_level) bottles left
+    - [2](stock_level) capsules left
+    - There are [30](stock_level) doses left
+    - I’ve got [30](stock_level) bottle left
+    - Only [100](stock_level) remaining
+    - I have [90](stock_level) capsules left
+    - There’s [7](stock_level) left
+    - There’s [3](stock_level) left
+    - I’ve got [100](stock_level) bottle left
+    - Just [1](stock_level) dose
+    - Around [2](stock_level) tablets
+    - [3](stock_level) left
+    - Roughly [12](stock_level) capsules remaining
+    - There are [2](stock_level) dose left
+    - Around [45](stock_level) bottle
+    - There’s [1](stock_level) left
+    - I’ve got [3](stock_level) capsules left
+    - There are [2](stock_level) tablets left
+    - Around [12](stock_level) pills
+    - [45](stock_level) left
+    - Roughly [7](stock_level) pill remaining
+    - I have [100](stock_level) capsules left
+    - I’ve got [1](stock_level) tablets left
+    - [60](stock_level) left
+    - Still have [24](stock_level) capsules
+    - There are [120](stock_level) strips left
+    - [10](stock_level) dose remaining
+    - I have [1](stock_level) tablets remaining
+    - [3](stock_level) tablets remaining
+    - I’ve got [7](stock_level) pill left
+    - Only [1](stock_level) strips left
+    - Just [5](stock_level) strip
+    - Roughly [120](stock_level) pill remaining
+    - I’ve got [2](stock_level) pill left
+    - Around [90](stock_level) tablet
+    - [3](stock_level) left
+    - Only [60](stock_level) remaining
+    - Around [45](stock_level) capsules
+    - [24](stock_level) tablet remaining
+    - [100](stock_level) bottles remaining
+    - Stock is [200](stock_level) bottles
+    - Stock is [200](stock_level) tablet
+    - Around [2](stock_level) capsules
+    - I’m down to [1](stock_level) tablet
+    - I have [60](stock_level) doses remaining
+    - [90](stock_level) pills remaining
+    - Currently have [15](stock_level) bottle
+    - Only [3](stock_level) capsules left
+    - I’ve got [45](stock_level) bottles left
+    - Around [120](stock_level) capsules
+    - Still have [5](stock_level) bottles
+    - Around [12](stock_level) capsules
+    - Still have [60](stock_level) bottles
+    - Just [24](stock_level) tablet
+    - Still have [24](stock_level) tablets
+    - I’ve got [2](stock_level) pills left
+    - [1](stock_level)
+    - I have [1](stock_level) tablet left
+    - Only [3](stock_level) remaining
+    - Currently have [1](stock_level) capsules
+    - I’ve got [10](stock_level) pill left
+    - Only [15](stock_level) remaining
+    - Only [3](stock_level) remaining
+    - Just [5](stock_level) pills
+    - I have [90](stock_level) strips left
+    - [3](stock_level) capsules remaining
+    - Stock is [15](stock_level) capsules
+    - There are [90](stock_level) tablet left
+    - Only [200](stock_level) tablets left
+    - Only [120](stock_level) remaining
+    - Roughly [60](stock_level) bottles remaining
+    - There are [120](stock_level) dose left
+    - [5](stock_level) left
+    - Roughly [0](stock_level) tablet remaining
+    - Around [10](stock_level) tablet
+    - There are [15](stock_level) strips left
+    - Just [1](stock_level) pills
+    - [100](stock_level) strips remaining
+    - Roughly [20](stock_level) strips remaining
+    - Still have [10](stock_level) bottles
+    - I’ve got [1](stock_level) pill left
+    - Currently have [45](stock_level) strips
+    - [120](stock_level)
+    - Only [0](stock_level) capsule left
+    - Still have [60](stock_level) bottle
+    - Just [200](stock_level) pill
+    - I have [7](stock_level) pill left
+    - I’ve got [3](stock_level) dose left
+    - There’s [1](stock_level) left
+    - I have [200](stock_level) doses left
+    - Just [10](stock_level) strips
+    - [15](stock_level)
+    - Still have [5](stock_level) pills
+    - Only [120](stock_level) pills left
+    - Stock is [3](stock_level) tablets
+    - There’s [45](stock_level) left
+    - Currently have [120](stock_level) dose
+    - Only [0](stock_level) remaining
+    - [0](stock_level) strip left
+    - [90](stock_level)
+    - About [30](stock_level) dose left
+    - [10](stock_level)
+    - About [45](stock_level) capsules left
+    - [30](stock_level) left
+    - I have [100](stock_level) strips left
+    - There are [15](stock_level) tablets left
+    - About [100](stock_level) tablets left
+    - Roughly [90](stock_level) capsules remaining
+    - Still have [1](stock_level) capsule
+    - [90](stock_level)
+    - About [2](stock_level) bottles left
+    - Roughly [20](stock_level) pill remaining
+    - I’m down to [7](stock_level) bottles
+    - Only [120](stock_level) bottle left
+    - [120](stock_level) doses remaining
+    - I have [3](stock_level) strip remaining
+    - I’m down to [3](stock_level) doses
+    - [7](stock_level) left
+    - About [60](stock_level) dose left
+    - I’m down to [20](stock_level) pills
+    - I’ve got [5](stock_level) strip left
+    - Still have [7](stock_level) pill
+    - Around [20](stock_level) strips
+    - Only [120](stock_level) remaining
+    - Around [120](stock_level) strip
+    - There’s [1](stock_level) left
+    - I’m down to [7](stock_level) capsules
+    - I have [45](stock_level) capsules remaining
+    - Stock is [30](stock_level) bottle
+    - Only [90](stock_level) bottles left
+    - Only [1](stock_level) tablet left
+    - About [60](stock_level) bottles left
+    - Still have [12](stock_level) pills
+    - Stock is [24](stock_level) bottles
+    - [60](stock_level) left
+    - Only [5](stock_level) remaining
+    - About [100](stock_level) strips left
+    - Only [24](stock_level) strips left
+    - Stock is [45](stock_level) tablets
+    - [0](stock_level) left
+    - [7](stock_level) strip left
+    - I have [24](stock_level) tablets remaining
+    - Currently have [15](stock_level) capsules
+    - Just [7](stock_level) dose
+    - Stock is [1](stock_level) strip
+    - Roughly [15](stock_level) tablet remaining
+    - I’ve got [30](stock_level) strips left
+    - There are [1](stock_level) strip left
+    - Just [200](stock_level) tablets
+    - Around [15](stock_level) capsules
+    - I have [120](stock_level) capsule left
+    - About [1](stock_level) tablets left
+    - I’ve got [90](stock_level) bottles left
+    - There’s [7](stock_level) left
+    - [1](stock_level) pill remaining
+    - I’m down to [7](stock_level) tablet
+    - There’s [10](stock_level) left
+    - Still have [0](stock_level) tablet
+    - Only [0](stock_level) remaining
+    - Stock is [45](stock_level) bottles
+    - Currently have [100](stock_level) pill
+    - Only [200](stock_level) remaining
+    - I have [15](stock_level) strip left
+    - I’m down to [10](stock_level) capsules
+    - Currently have [12](stock_level) pills
+    - [2](stock_level) doses left
+    - I have [7](stock_level) tablets remaining
+    - I have [10](stock_level) dose remaining
+    - Around [90](stock_level) pill
+    - Just [45](stock_level) doses
+    - Currently have [200](stock_level) capsules
+    - Currently have [200](stock_level) dose
+    - There are [5](stock_level) capsules left
+    - About [10](stock_level) doses left
+    - [24](stock_level)
+    - [1](stock_level) tablets remaining
+    - I have [45](stock_level) doses remaining
+    - Currently have [12](stock_level) dose
+    - Roughly [24](stock_level) strips remaining
+    - Just [60](stock_level) pills
+    - [60](stock_level) left
+    - [45](stock_level) capsule remaining
+    - There are [2](stock_level) tablet left
+    - I have [3](stock_level) bottle remaining
+    - Still have [24](stock_level) doses
+    - I have [45](stock_level) tablet remaining
+    - Just [0](stock_level) bottle
+    - Roughly [20](stock_level) tablet remaining
+    - Only [1](stock_level) bottle left
+    - Stock is [20](stock_level) capsules
+    - There are [100](stock_level) pills left
+    - There are [45](stock_level) pills left
+    - Around [15](stock_level) strip
+    - Still have [10](stock_level) capsules
+    - I have [45](stock_level) dose remaining
+    - Roughly [100](stock_level) tablets remaining
+    - About [30](stock_level) bottle left
+    - Only [90](stock_level) remaining
+    - I’m down to [10](stock_level) dose
+    - Just [10](stock_level) capsules
+    - Just [3](stock_level) bottle
+    - Around [0](stock_level) capsules
+    - I’ve got [120](stock_level) capsule left
+    - [90](stock_level)
+    - Only [60](stock_level) capsule left
+    - I’ve got [100](stock_level) dose left
+    - Roughly [60](stock_level) capsule remaining
+    - I have [120](stock_level) strips remaining
+    - There are [7](stock_level) strips left
+    - Just [90](stock_level) bottles
+    - Only [1](stock_level) capsule left
+    - [12](stock_level) strips left
+    - Only [2](stock_level) remaining
+    - About [45](stock_level) bottle left
+    - Only [1](stock_level) remaining
+    - There are [2](stock_level) bottles left
+    - Still have [15](stock_level) pills
+    - [24](stock_level) left
+    - [100](stock_level) doses left
+    - Only [5](stock_level) pills left
+    - There are [5](stock_level) capsule left
+    - [120](stock_level) doses left
+    - [200](stock_level)
+    - [5](stock_level) doses remaining
+    - Around [7](stock_level) doses
+    - Just [1](stock_level) capsule
+    - I have [10](stock_level) dose left
+    - I’ve got [12](stock_level) bottle left
+    - About [100](stock_level) strip left
+    - [5](stock_level) left
+    - I’m down to [1](stock_level) tablets
+    - [2](stock_level) left
+    - Stock is [0](stock_level) capsules
+    - Currently have [60](stock_level) capsule
+    - Stock is [5](stock_level) pill
+    - Only [120](stock_level) remaining
+    - Around [3](stock_level) doses
+    - I’m down to [2](stock_level) tablets
+    - Just [2](stock_level) bottle
+    - [1](stock_level) left
+    - Currently have [1](stock_level) pill
+    - I’ve got [45](stock_level) capsule left
+    - [3](stock_level)
+    - There’s [7](stock_level) left
+    - [100](stock_level) left
+    - I have [120](stock_level) dose left
+    - I have [12](stock_level) strips remaining
+    - Just [60](stock_level) tablet
+    - I have [30](stock_level) capsule remaining
+    - Roughly [1](stock_level) strips remaining
+    - [2](stock_level) left
+    - There are [0](stock_level) strips left
+    - Only [2](stock_level) remaining
+    - Only [30](stock_level) strip left
+    - Only [0](stock_level) tablets left
+    - I’m down to [3](stock_level) pill
+    - Just [3](stock_level) capsule
+    - [10](stock_level)
+    - I have [100](stock_level) strips remaining
+    - Only [100](stock_level) remaining
+    - I’m down to [10](stock_level) strip
+    - There are [12](stock_level) strip left
+    - There’s [60](stock_level) left
+    - Only [5](stock_level) remaining
+    - Roughly [60](stock_level) strip remaining
+    - Only [24](stock_level) pills left
+    - Only [45](stock_level) strip left
+    - Stock is [10](stock_level) strip
+    - I’m down to [90](stock_level) bottles
+    - There’s [20](stock_level) left
+    - There’s [60](stock_level) left
+    - I’m down to [24](stock_level) tablets
+    - Stock is [24](stock_level) tablets
+    - Only [12](stock_level) remaining
+    - I’m down to [30](stock_level) doses
+    - There are [100](stock_level) dose left
+    - Stock is [3](stock_level) dose
+    - [100](stock_level) left
+    - I’m down to [200](stock_level) bottle
+    - Around [10](stock_level) pills
+    - Still have [90](stock_level) capsule
+    - Only [30](stock_level) remaining
+    - Just [7](stock_level) capsules
+    - Roughly [0](stock_level) capsules remaining
+    - Still have [24](stock_level) tablet
+    - [2](stock_level) left
+    - There are [0](stock_level) pill left
+    - Only [1](stock_level) remaining
+    - Only [1](stock_level) dose left
+    - I’ve got [3](stock_level) tablets left
+    - [60](stock_level) bottle remaining
+    - Roughly [7](stock_level) bottles remaining
+    - Roughly [30](stock_level) capsules remaining
+    - Around [2](stock_level) pill
+    - Only [10](stock_level) remaining
+    - [7](stock_level) dose remaining
+    - Stock is [100](stock_level) bottle
+    - [12](stock_level)
+    - I’m down to [100](stock_level) dose
+    - Roughly [5](stock_level) doses remaining
+    - About [200](stock_level) doses left
+    - Roughly [10](stock_level) pills remaining
+    - I have [24](stock_level) tablet left
+    - I have [100](stock_level) dose remaining
+    - Stock is [0](stock_level) doses
+    - I have [20](stock_level) bottles remaining
+    - [24](stock_level)
+    - [90](stock_level) strip remaining
+    - [30](stock_level) capsules remaining
+    - [5](stock_level)
+    - [10](stock_level) strip left
+    - I have [20](stock_level) capsules left
+    - [45](stock_level) bottle left
+    - [2](stock_level)
+    - Around [12](stock_level) strip
+    - I have [5](stock_level) capsules remaining
+    - There’s [2](stock_level) left
+    - Still have [60](stock_level) capsule
+    - There’s [120](stock_level) left
+    - Roughly [3](stock_level) pill remaining
+    - About [100](stock_level) capsules left
+    - [45](stock_level) left
+    - [2](stock_level) left
+    - Only [45](stock_level) remaining
+    - [90](stock_level) strip left
+    - About [3](stock_level) capsule left
+    - There are [20](stock_level) pill left
+    - [45](stock_level) bottles remaining
+    - I’ve got [5](stock_level) strips left
+    - Stock is [2](stock_level) capsule
+    - I’m down to [60](stock_level) pills
+    - [3](stock_level)
+    - I’m down to [3](stock_level) strips
+    - About [24](stock_level) strip left
+    - I’ve got [120](stock_level) capsules left
+    - There are [24](stock_level) bottles left
+    - I’ve got [3](stock_level) capsule left
+    - I have [15](stock_level) pills remaining
+    - Only [10](stock_level) strip left
+    - Stock is [100](stock_level) pills
+    - About [1](stock_level) pills left
+    - Around [5](stock_level) capsules
+    - There’s [3](stock_level) left
+    - [200](stock_level) pills remaining
+    - Only [120](stock_level) remaining
+    - Roughly [0](stock_level) tablets remaining
+    - I’m down to [0](stock_level) doses
+    - There are [5](stock_level) tablet left
+    - Only [0](stock_level) remaining
+    - Only [1](stock_level) remaining
+    - [0](stock_level)
+    - Roughly [200](stock_level) bottle remaining
+    - Just [12](stock_level) capsule
+    - Around [0](stock_level) bottle
+    - [7](stock_level)
+    - I have [5](stock_level) tablet left
+    - I’ve got [3](stock_level) pill left
+    - Just [10](stock_level) capsule
+    - Still have [15](stock_level) tablet
+    - About [12](stock_level) capsule left
+    - Still have [5](stock_level) dose
+    - [60](stock_level)
+    - [7](stock_level) tablet remaining
+    - Currently have [90](stock_level) capsules
+    - Still have [90](stock_level) strip
+    - About [100](stock_level) pills left
+    - I’ve got [30](stock_level) tablets left
+    - [0](stock_level) left
+    - There’s [100](stock_level) left
+    - I have [20](stock_level) tablets left
+    - I have [60](stock_level) tablet left
+    - [7](stock_level) tablet left
+    - About [5](stock_level) capsules left
+    - There’s [12](stock_level) left
+    - I have [90](stock_level) capsule remaining
+    - Around [60](stock_level) bottles
+    - [15](stock_level)
+    - There’s [200](stock_level) left
+    - [3](stock_level) doses left
+    - I have [60](stock_level) tablets remaining
+    - There are [30](stock_level) tablets left
+    - Around [60](stock_level) tablet
+    - I have [3](stock_level) bottles left
+    - Roughly [30](stock_level) dose remaining
+    - Only [5](stock_level) remaining
+    - There are [60](stock_level) tablet left
+    - [10](stock_level)
+    - Stock is [7](stock_level) bottles
+    - I’m down to [1](stock_level) dose
+    - [60](stock_level) tablet remaining
+    - There’s [30](stock_level) left
+    - [12](stock_level) left
+    - Currently have [100](stock_level) strip
+    - I have [90](stock_level) tablets left
+    - There’s [90](stock_level) left
+    - Just [45](stock_level) tablet
+    - About [7](stock_level) dose left
+    - Still have [5](stock_level) capsules
+    - Only [45](stock_level) remaining
+    - I’m down to [15](stock_level) tablets
+    - Currently have [5](stock_level) strip
+    - [1](stock_level) left
+    - About [10](stock_level) capsule left
+    - I’m down to [10](stock_level) bottle
+    - Currently have [45](stock_level) doses
+    - Around [3](stock_level) capsules
+    - [90](stock_level)
+    - [1](stock_level) capsules remaining
+    - About [60](stock_level) bottle left
+    - Still have [15](stock_level) tablets
+    - I have [15](stock_level) doses remaining
+    - Only [5](stock_level) bottle left
+    - I’m down to [3](stock_level) tablet
+    - [100](stock_level)
+    - I have [60](stock_level) pill remaining
+    - I’m down to [15](stock_level) doses
+    - Currently have [100](stock_level) tablets
+    - Around [2](stock_level) pills
+    - Only [1](stock_level) remaining
+    - Still have [5](stock_level) strip
+    - Currently have [120](stock_level) doses
+    - [2](stock_level) bottle remaining
+    - Roughly [200](stock_level) pills remaining
+    - Still have [10](stock_level) pill
+    - About [0](stock_level) tablet left
+    - Only [24](stock_level) tablet left
+    - Just [60](stock_level) pill
+    - Only [30](stock_level) remaining
+    - Just [100](stock_level) bottles
+    - I’ve got [10](stock_level) bottle left
+    - Roughly [5](stock_level) bottle remaining
+    - [5](stock_level) left
+    - I have [90](stock_level) pill left
+    - There’s [100](stock_level) left
+    - I have [30](stock_level) doses left
+    - There are [45](stock_level) strips left
+    - There are [3](stock_level) strip left
+    - Stock is [15](stock_level) tablets
+    - [12](stock_level) tablet left
+    - Roughly [1](stock_level) bottle remaining
+    - Only [5](stock_level) tablet left
+    - [1](stock_level) dose remaining
+    - [200](stock_level)
+    - Stock is [200](stock_level) strips
+    - Stock is [200](stock_level) pill
+    - I’m down to [100](stock_level) bottles
+    - Around [60](stock_level) doses
+    - Stock is [20](stock_level) pills
+    - Only [30](stock_level) remaining
+    - Still have [15](stock_level) bottle
+    - About [5](stock_level) dose left
+    - [0](stock_level) strips remaining
+    - [12](stock_level) left
+    - There are [45](stock_level) bottle left
+    - Just [200](stock_level) bottles
+    - [120](stock_level) left
+    - [200](stock_level) pill remaining
+    - Around [24](stock_level) bottles
+    - Just [2](stock_level) capsules
+    - About [15](stock_level) strips left
+    - Currently have [2](stock_level) pill
+    - There are [3](stock_level) capsules left
+    - Still have [30](stock_level) bottles
+    - I’ve got [5](stock_level) tablets left
+    - [1](stock_level) strips remaining
+    - [120](stock_level) capsules remaining
+    - About [3](stock_level) capsules left
+    - I’m down to [2](stock_level) tablet
+    - [60](stock_level) left
+    - I have [12](stock_level) tablet left
+    - There’s [24](stock_level) left
+    - [10](stock_level) left
+    - Stock is [3](stock_level) capsule
+    - Currently have [120](stock_level) tablet
+    - I’ve got [60](stock_level) strips left
+    - There are [90](stock_level) bottle left
+    - [0](stock_level) tablet left
+    - Roughly [12](stock_level) pill remaining
+    - Currently have [20](stock_level) tablets
+    - Just [100](stock_level) strips
+    - I’ve got [0](stock_level) tablets left
+    - Stock is [2](stock_level) bottles
+    - Currently have [200](stock_level) bottle
+    - Currently have [15](stock_level) tablet
+    - About [2](stock_level) tablets left
+    - I have [5](stock_level) bottle remaining
+    - Stock is [7](stock_level) pills
+    - Stock is [20](stock_level) bottle
+    - I have [15](stock_level) strip remaining
+    - [100](stock_level) left
+    - Still have [2](stock_level) strips
+    - I have [3](stock_level) dose left
+    - I’ve got [100](stock_level) capsule left
+    - Stock is [90](stock_level) pill
+    - [30](stock_level) strips left
+    - [200](stock_level) doses remaining
+    - I’ve got [1](stock_level) bottles left
+    - [30](stock_level) dose left
+    - Around [24](stock_level) pills
+    - [3](stock_level) pill left
+    - I’ve got [60](stock_level) bottles left
+    - There are [15](stock_level) bottles left
+    - [7](stock_level)
+    - Currently have [12](stock_level) bottles
+    - I’m down to [200](stock_level) dose
+    - I’ve got [100](stock_level) capsules left
+    - Roughly [1](stock_level) doses remaining
+    - I have [15](stock_level) bottles left
+    - [7](stock_level)
+    - There are [200](stock_level) strip left
+    - [30](stock_level) strip left
+    - Stock is [15](stock_level) dose
+    - There’s [20](stock_level) left
+    - [12](stock_level) doses left
+    - [30](stock_level) left
+    - Stock is [24](stock_level) pill
+    - Roughly [100](stock_level) tablet remaining
+    - About [30](stock_level) capsule left
+    - I’m down to [12](stock_level) tablets
+    - Stock is [15](stock_level) bottle
+    - There’s [2](stock_level) left
+    - Roughly [10](stock_level) bottle remaining
+    - There are [45](stock_level) bottles left
+    - There’s [30](stock_level) left
+    - [20](stock_level) tablets remaining
+    - I have [0](stock_level) strip remaining
+    - Still have [5](stock_level) strips
+    - Around [12](stock_level) tablet
+    - Only [100](stock_level) strips left
+    - Roughly [2](stock_level) capsule remaining
+    - [3](stock_level) bottle left
+    - Currently have [3](stock_level) capsule
+    - Currently have [5](stock_level) pill
+    - Still have [20](stock_level) tablets
+    - Only [15](stock_level) bottle left
+    - I’m down to [15](stock_level) strips
+    - Only [0](stock_level) remaining
+    - There’s [60](stock_level) left
+    - [30](stock_level)
+    - [200](stock_level) left
+    - Around [90](stock_level) strips
+    - Around [10](stock_level) strips
+    - I’ve got [7](stock_level) bottle left
+    - [7](stock_level) capsules remaining
+    - I’m down to [0](stock_level) tablets
+    - Only [2](stock_level) remaining
+    - [1](stock_level) strips left
+    - [3](stock_level) left
+    - About [2](stock_level) tablet left
+    - Only [20](stock_level) pill left
+    - There are [20](stock_level) tablet left
+    - I have [15](stock_level) tablets left
+    - I’m down to [90](stock_level) doses
+    - Just [120](stock_level) capsules
+    - Stock is [60](stock_level) capsules
+    - Still have [90](stock_level) tablet
+    - Just [90](stock_level) capsules
+    - I’m down to [30](stock_level) strip
+    - Stock is [100](stock_level) capsules
+    - Only [10](stock_level) remaining
+    - Around [20](stock_level) doses
+    - Only [200](stock_level) remaining
+    - Stock is [1](stock_level) bottle
+    - [7](stock_level)
+    - [90](stock_level)
+    - [60](stock_level) tablets left
+    - There’s [60](stock_level) left
+    - There’s [20](stock_level) left
+    - Stock is [5](stock_level) pills
+    - There are [20](stock_level) dose left
+    - Only [10](stock_level) remaining
+    - [20](stock_level) dose remaining
+    - I’ve got [7](stock_level) capsule left
+    - There are [15](stock_level) pills left
+    - [7](stock_level) left
+    - I have [5](stock_level) pills remaining
+    - I have [10](stock_level) pills remaining
+    - [20](stock_level) tablet left
+    - I have [2](stock_level) tablets remaining
+    - Roughly [45](stock_level) pill remaining
+    - I’ve got [120](stock_level) strip left
+    - There are [90](stock_level) strip left
+    - Around [100](stock_level) strip
+    - Only [120](stock_level) tablet left
+    - I’ve got [20](stock_level) pills left
+    - Only [20](stock_level) dose left
+    - I’m down to [12](stock_level) doses
+    - Currently have [45](stock_level) pills
+    - I have [24](stock_level) pill left
+    - [100](stock_level)
+    - [1](stock_level) capsule remaining
+    - [0](stock_level)
+    - I’m down to [100](stock_level) bottle
+    - I’ve got [12](stock_level) strips left
+    - Stock is [15](stock_level) bottles
+    - [2](stock_level) pills left
+    - There are [120](stock_level) capsule left
+    - Currently have [120](stock_level) bottles
+    - I’m down to [90](stock_level) strips
+    - Only [1](stock_level) capsules left
+    - Just [30](stock_level) pill
+    - I’ve got [120](stock_level) strips left
+    - [200](stock_level) left
+    - About [3](stock_level) tablets left
+    - [200](stock_level) capsule remaining
+    - [24](stock_level) pills remaining
+    - Around [7](stock_level) pills
+    - I have [2](stock_level) bottle left
+    - I’ve got [200](stock_level) tablet left
+    - Stock is [60](stock_level) tablets
+    - Only [90](stock_level) capsules left
+    - There’s [20](stock_level) left
+    - Currently have [0](stock_level) tablet
+    - [90](stock_level) tablets remaining
+    - [20](stock_level) bottles remaining
+    - Only [1](stock_level) remaining
+    - Just [45](stock_level) tablets
+    - Only [5](stock_level) capsule left
+    - Only [2](stock_level) pills left
+    - There’s [12](stock_level) left
+    - Just [90](stock_level) bottle
+    - [120](stock_level) strips remaining
+    - [3](stock_level) left
+    - Still have [30](stock_level) doses
+    - [5](stock_level) left
+    - Just [10](stock_level) tablet
+    - There’s [90](stock_level) left
+    - About [90](stock_level) strip left
+    - About [0](stock_level) strips left
+    - Around [24](stock_level) tablets
+    - I have [2](stock_level) tablet remaining
+    - Stock is [120](stock_level) pills
+    - I’m down to [2](stock_level) bottle
+    - Stock is [60](stock_level) bottles
+    - Still have [120](stock_level) pill
+    - Around [5](stock_level) tablets
+    - There’s [100](stock_level) left
+    - [0](stock_level) left
+    - [10](stock_level)
+    - About [7](stock_level) doses left
+    - I’ve got [0](stock_level) capsules left
+    - About [100](stock_level) bottle left
+    - Currently have [5](stock_level) bottle
+    - [10](stock_level)
+    - I’m down to [15](stock_level) bottle
+    - Only [5](stock_level) remaining
+    - There’s [2](stock_level) left
+    - Still have [120](stock_level) bottles
+    - I’ve got [30](stock_level) doses left
+    - Only [3](stock_level) remaining
+    - Only [0](stock_level) remaining
+    - [7](stock_level) bottle left
+    - I have [5](stock_level) capsule remaining
+    - I’m down to [45](stock_level) pill
+    - [20](stock_level)
+    - [45](stock_level) dose left
+    - Still have [7](stock_level) strips
+    - [2](stock_level)
+    - I have [20](stock_level) pill left
+    - About [0](stock_level) capsules left
+    - I’ve got [7](stock_level) strips left
+    - About [100](stock_level) capsule left
+    - Stock is [5](stock_level) bottle
+    - I have [20](stock_level) tablet left
+    - There’s [100](stock_level) left
+    - There’s [200](stock_level) left
+    - Still have [60](stock_level) pill
+    - Roughly [120](stock_level) bottles remaining
+    - Only [3](stock_level) tablets left
+    - I’m down to [3](stock_level) tablets
+    - Currently have [10](stock_level) tablets
+    - I have [3](stock_level) strips remaining
+    - There are [100](stock_level) capsules left
+    - Just [100](stock_level) pills
+    - I’m down to [10](stock_level) bottles
+    - There are [120](stock_level) bottle left
+    - Only [2](stock_level) tablet left
+    - [30](stock_level) left
+    - [7](stock_level) tablets remaining
+    - [120](stock_level) left
+    - I’ve got [1](stock_level) capsules left
+    - I have [100](stock_level) tablet left
+    - [0](stock_level) capsules remaining
+    - I’m down to [60](stock_level) tablets
+    - About [12](stock_level) bottles left
+    - Only [100](stock_level) remaining
+    - I’m down to [120](stock_level) strip
+    - Still have [90](stock_level) pills
+    - [15](stock_level) left
+    - Around [7](stock_level) pill
+    - [90](stock_level) dose left
+    - Roughly [12](stock_level) capsule remaining
+    - Still have [0](stock_level) strips
+    - I’m down to [20](stock_level) doses
+    - Around [1](stock_level) strip
+    - Currently have [12](stock_level) pill
+    - Only [20](stock_level) capsules left
+    - There are [90](stock_level) capsule left
+    - I’m down to [45](stock_level) strips
+    - Only [15](stock_level) pill left
+    - [200](stock_level)
+    - Only [24](stock_level) pill left
+    - There are [7](stock_level) strip left
+    - [200](stock_level) left
+    - Only [60](stock_level) tablets left
+    - I’m down to [5](stock_level) bottle
+    - Only [7](stock_level) remaining
+    - I’m down to [24](stock_level) bottles
+    - Still have [12](stock_level) doses
+    - I’m down to [200](stock_level) pill
+    - Stock is [2](stock_level) capsules
+    - [15](stock_level) tablet remaining
+    - Stock is [2](stock_level) strips
+    - Only [2](stock_level) remaining
+    - [1](stock_level)
+    - There are [7](stock_level) tablets left
+    - About [24](stock_level) capsule left
+    - Still have [3](stock_level) bottle
+    - Roughly [90](stock_level) pill remaining
+    - Roughly [30](stock_level) bottles remaining
+    - [0](stock_level) pills remaining
+    - Only [120](stock_level) remaining
+    - I have [5](stock_level) doses left
+    - I’ve got [20](stock_level) bottles left
+    - There are [1](stock_level) bottles left
+    - [20](stock_level) capsule left
+    - Just [7](stock_level) bottle
+    - Currently have [7](stock_level) bottle
+    - I have [7](stock_level) pills left
+    - Only [7](stock_level) tablets left
+    - [3](stock_level)
+    - [2](stock_level)
+    - [120](stock_level)
+    - [1](stock_level) left
+    - About [200](stock_level) pills left
+    - Roughly [120](stock_level) bottle remaining
+    - There’s [90](stock_level) left
+    - Only [45](stock_level) doses left
+    - Around [200](stock_level) capsules
+    - Stock is [20](stock_level) dose
+    - [45](stock_level) pills remaining
+    - Currently have [90](stock_level) strip
+    - [15](stock_level) tablets left
+    - [12](stock_level) pills left
+    - I have [12](stock_level) pills left
+    - Just [20](stock_level) strip
+    - [120](stock_level)
+    - Currently have [100](stock_level) bottle
+    - Still have [1](stock_level) strip
+    - I have [0](stock_level) doses remaining
+    - [7](stock_level) bottle remaining
+    - There are [0](stock_level) tablet left
+    - Roughly [20](stock_level) capsule remaining
+    - There are [100](stock_level) tablet left
+    - [2](stock_level) tablet remaining
+    - About [90](stock_level) bottles left
+    - [5](stock_level) dose left
+    - [20](stock_level) dose left
+    - [30](stock_level) capsules left
+    - Just [5](stock_level) bottle
+    - There’s [120](stock_level) left
+    - I’m down to [200](stock_level) capsules
+    - [1](stock_level) tablet left
+    - Only [20](stock_level) strip left
+    - About [45](stock_level) strips left
+    - About [0](stock_level) strip left
+    - There are [10](stock_level) bottles left
+    - I have [24](stock_level) bottles remaining
+    - Roughly [1](stock_level) strip remaining
+    - There’s [24](stock_level) left
+    - I’ve got [7](stock_level) doses left
+    - Only [3](stock_level) doses left
+    - Only [0](stock_level) remaining
+    - Still have [200](stock_level) capsules
+    - There’s [24](stock_level) left
+    - [7](stock_level) left
+    - I have [200](stock_level) dose left
+    - [45](stock_level) bottles left
+    - [20](stock_level) doses remaining
+    - Only [90](stock_level) doses left
+    - Still have [3](stock_level) tablets
+    - There’s [10](stock_level) left
+    - About [30](stock_level) pills left
+    - I’m down to [60](stock_level) bottle
+    - Stock is [0](stock_level) pills
+    - Still have [0](stock_level) capsule
+    - I’m down to [20](stock_level) tablet
+    - I’m down to [100](stock_level) pills
+    - [12](stock_level) left
+    - I have [2](stock_level) bottles left
+    - There are [10](stock_level) capsule left
+    - Currently have [0](stock_level) capsules
+    - I have [0](stock_level) pill left
+    - Only [2](stock_level) remaining
+    - [30](stock_level) left
+    - Still have [200](stock_level) capsule
+    - Still have [20](stock_level) pill
+    - I’ve got [60](stock_level) tablet left
+    - I’m down to [100](stock_level) capsule
+    - I have [3](stock_level) capsule remaining
+    - [45](stock_level) doses left
+    - I’m down to [3](stock_level) bottle
+    - Still have [10](stock_level) doses
+    - Currently have [10](stock_level) capsules
+    - [20](stock_level) capsules remaining
+    - I’ve got [10](stock_level) tablet left
+    - Stock is [100](stock_level) doses
+    - [24](stock_level) tablets remaining
+    - I’m down to [2](stock_level) capsules
+    - Just [15](stock_level) bottle
+    - I have [15](stock_level) tablets remaining
+    - Only [20](stock_level) remaining
+    - About [24](stock_level) doses left
+    - Only [200](stock_level) tablet left
+    - I’ve got [2](stock_level) bottles left
+    - I’ve got [12](stock_level) doses left
+    - Stock is [60](stock_level) pill
+    - I’m down to [3](stock_level) pills
+    - [0](stock_level) left
+    - Around [0](stock_level) bottles
+    - About [200](stock_level) pill left
+    - I’m down to [45](stock_level) bottle
+    - Stock is [45](stock_level) bottle
+    - Currently have [10](stock_level) strips
+    - [12](stock_level)
+    - Still have [12](stock_level) strips
+    - About [7](stock_level) pills left
+    - I’m down to [90](stock_level) strip
+    - There’s [7](stock_level) left
+    - I have [30](stock_level) pills remaining
+    - Just [15](stock_level) doses
+    - I have [3](stock_level) doses remaining
+    - I’m down to [200](stock_level) tablet
+    - Just [15](stock_level) pill
+    - There’s [2](stock_level) left
+    - There are [200](stock_level) strips left
+    - I have [12](stock_level) doses remaining
+    - Only [90](stock_level) remaining
+    - There are [120](stock_level) doses left
+    - Only [12](stock_level) remaining
+    - Only [12](stock_level) doses left
+    - There are [60](stock_level) capsules left
+    - I have [3](stock_level) capsule left
+    - Only [15](stock_level) capsules left
+    - [12](stock_level)
+    - Stock is [30](stock_level) strip
+    - Around [100](stock_level) strips
+    - [100](stock_level)
+    - I have [45](stock_level) capsule remaining
+    - About [24](stock_level) bottles left
+    - Still have [15](stock_level) pill
+    - [5](stock_level) pill remaining
+    - There are [12](stock_level) bottle left
+    - Roughly [2](stock_level) strips remaining
+    - I have [12](stock_level) bottles left
+    - About [12](stock_level) pills left
+    - [2](stock_level) strips left
+    - Stock is [10](stock_level) strips
+    - Only [12](stock_level) tablet left
+    - There are [2](stock_level) doses left
+    - About [200](stock_level) tablets left
+    - Around [10](stock_level) pill
+    - There are [10](stock_level) dose left
+    - Roughly [5](stock_level) tablets remaining
+    - I have [0](stock_level) pill remaining
+    - Only [5](stock_level) bottles left
+    - Around [15](stock_level) capsule
+    - I have [24](stock_level) strip remaining
+    - There’s [45](stock_level) left
+    - [200](stock_level) left
+    - Roughly [0](stock_level) dose remaining
+    - [45](stock_level) left
+    - About [2](stock_level) pills left
+    - Around [20](stock_level) bottles
+    - [1](stock_level) strip remaining
+    - Only [30](stock_level) strips left
+    - Around [15](stock_level) tablet
+    - There’s [100](stock_level) left
+    - I have [30](stock_level) doses remaining
+    - I’m down to [120](stock_level) capsules
+    - There are [30](stock_level) tablet left
+    - There’s [15](stock_level) left
+    - [10](stock_level) doses remaining
+    - [100](stock_level) doses remaining
+    - I have [120](stock_level) pill left
+    - There are [120](stock_level) capsules left
+    - I’m down to [30](stock_level) capsules
+    - There are [24](stock_level) tablet left
+    - About [15](stock_level) dose left
+    - I have [12](stock_level) bottle remaining
+    - Only [60](stock_level) remaining
+    - Still have [100](stock_level) doses
+    - There’s [20](stock_level) left
+    - Only [10](stock_level) tablets left
+    - I’m down to [90](stock_level) tablet
+    - About [60](stock_level) doses left
+    - About [20](stock_level) tablets left
+    - [45](stock_level) left
+    - Just [10](stock_level) doses
+    - I have [100](stock_level) bottles remaining
+    - [90](stock_level) strips remaining
+    - Still have [12](stock_level) bottle
+    - I’ve got [20](stock_level) dose left
+    - Only [5](stock_level) pill left
+    - [1](stock_level) doses remaining
+    - I’ve got [24](stock_level) tablet left
+    - About [1](stock_level) pill left
+    - Currently have [2](stock_level) pills
+    - I’m down to [30](stock_level) capsule
+    - There’s [7](stock_level) left
+    - Just [60](stock_level) dose
+    - Around [60](stock_level) pills
+    - I have [90](stock_level) pills remaining
+    - [1](stock_level) pills left
+    - About [20](stock_level) dose left
+    - Roughly [15](stock_level) strips remaining
+    - [5](stock_level)
+    - [7](stock_level) tablets left
+    - Roughly [10](stock_level) pill remaining
+    - [30](stock_level) left
+    - [120](stock_level) tablet left
+    - [1](stock_level) left
+    - I have [45](stock_level) capsules left
+    - [2](stock_level)
+    - I’m down to [1](stock_level) strips
+    - There are [20](stock_level) bottles left
+    - [7](stock_level) left
+    - I’m down to [30](stock_level) tablets
+    - There’s [10](stock_level) left
+    - There’s [10](stock_level) left
+    - [20](stock_level) capsule remaining
+    - There’s [120](stock_level) left
+    - Just [200](stock_level) dose
+    - Only [7](stock_level) doses left
+    - There are [60](stock_level) strips left
+    - There’s [5](stock_level) left
+    - There are [15](stock_level) bottle left
+    - I have [90](stock_level) strips remaining
+    - [12](stock_level) left
+    - Currently have [2](stock_level) tablets
+    - Currently have [5](stock_level) capsules
+    - About [7](stock_level) bottles left
+    - Around [200](stock_level) pill
+    - Currently have [7](stock_level) capsules
+    - Roughly [30](stock_level) pill remaining
+    - Still have [30](stock_level) bottle
+    - I’ve got [20](stock_level) doses left
+    - Still have [7](stock_level) tablet
+    - Only [120](stock_level) remaining
+    - Just [0](stock_level) tablet
+    - I have [2](stock_level) bottles remaining
+    - [24](stock_level)
+    - I’m down to [60](stock_level) doses
+    - I have [0](stock_level) doses left
+    - Roughly [90](stock_level) doses remaining
+    - About [5](stock_level) bottles left
+    - [90](stock_level) tablet left
+    - Still have [120](stock_level) strips
+    - There’s [45](stock_level) left
+    - Only [90](stock_level) strip left
+    - Stock is [45](stock_level) doses
+    - Around [15](stock_level) bottles
+    - I have [2](stock_level) strips remaining
+    - Just [12](stock_level) dose
+    - [5](stock_level)
+    - Only [90](stock_level) tablets left
+    - There are [24](stock_level) dose left
+    - Still have [30](stock_level) pill
+    - Only [60](stock_level) pill left
+    - I’ve got [3](stock_level) strip left
+    - [0](stock_level)
+    - Stock is [60](stock_level) strip
+    - I have [5](stock_level) pill remaining
+    - Around [3](stock_level) pill
+    - [100](stock_level)
+    - I’ve got [20](stock_level) tablet left
+    - Stock is [30](stock_level) tablet
+    - Only [2](stock_level) bottle left
+    - [10](stock_level) bottle remaining
+    - Roughly [15](stock_level) capsules remaining
+    - Currently have [100](stock_level) strips
+    - [0](stock_level)
+    - [2](stock_level) left
+    - About [7](stock_level) capsules left
+    - Just [5](stock_level) capsules
+    - Stock is [100](stock_level) bottles
+    - There’s [24](stock_level) left
+    - [120](stock_level) dose remaining
+    - There’s [90](stock_level) left
+    - Still have [100](stock_level) strip
+    - Just [7](stock_level) pill
+    - Around [60](stock_level) capsules
+    - Just [30](stock_level) capsules
+    - Around [2](stock_level) strips
+    - [90](stock_level) capsules remaining
+    - Stock is [3](stock_level) capsules
+    - Roughly [24](stock_level) capsule remaining
+    - There’s [20](stock_level) left
+    - Still have [2](stock_level) pill
+    - [15](stock_level) pill left
+    - Just [10](stock_level) pills
+    - I’ve got [90](stock_level) capsule left
+    - Just [12](stock_level) strip
+    - Currently have [20](stock_level) capsules
+    - There are [7](stock_level) dose left
+    - There’s [24](stock_level) left
+    - Stock is [2](stock_level) bottle
+    - Only [60](stock_level) remaining
+    - I’m down to [7](stock_level) pill
+    - Roughly [45](stock_level) bottles remaining
+    - [45](stock_level) left
+    - [20](stock_level) strip remaining
+    - Currently have [3](stock_level) pills
+    - I have [120](stock_level) bottle remaining
+    - I’ve got [7](stock_level) capsules left
+    - There are [60](stock_level) tablets left
+    - Only [5](stock_level) remaining
+    - Stock is [3](stock_level) strip
+    - Around [7](stock_level) strip
+    - About [20](stock_level) capsule left
+    - Only [100](stock_level) remaining
+    - [60](stock_level) left
+    - Around [100](stock_level) bottles
+    - I have [45](stock_level) tablets left
+    - There’s [45](stock_level) left
+    - [24](stock_level) bottles remaining
+    - Only [20](stock_level) strips left
+    - I’m down to [90](stock_level) dose
+    - Only [2](stock_level) strip left
+    - Only [7](stock_level) pills left
+    - About [3](stock_level) bottles left
+    - [100](stock_level) pill remaining
+    - There are [120](stock_level) tablet left
+    - Only [90](stock_level) strips left
+    - [3](stock_level)
+    - Around [7](stock_level) dose
+    - There are [45](stock_level) capsule left
+    - I have [45](stock_level) capsule left
+    - Stock is [15](stock_level) tablet
+    - About [90](stock_level) tablets left
+    - There are [20](stock_level) pills left
+    - [3](stock_level) left
+    - Currently have [5](stock_level) dose
+    - Only [100](stock_level) doses left
+    - About [120](stock_level) bottle left
+    - [24](stock_level)
+    - I have [60](stock_level) strips remaining
+    - [15](stock_level) left
+    - [7](stock_level) doses left
+    - Around [24](stock_level) doses
+    - Around [20](stock_level) tablet
+    - [60](stock_level) strips remaining
+    - [30](stock_level)
+    - Around [2](stock_level) dose
+    - Just [30](stock_level) bottle
+    - [45](stock_level) left
+    - Currently have [30](stock_level) bottles
+    - There are [200](stock_level) doses left
+    - [30](stock_level) tablet remaining
+    - Still have [30](stock_level) tablets
+    - [45](stock_level) left
+    - I’ve got [45](stock_level) tablets left
+    - There are [30](stock_level) bottles left
+    - Roughly [60](stock_level) pills remaining
+    - There are [5](stock_level) strip left
+    - There’s [45](stock_level) left
+    - I’m down to [0](stock_level) capsules
+    - I’m down to [5](stock_level) strips
+    - I’ve got [15](stock_level) bottle left
+    - I’ve got [200](stock_level) bottles left
+    - Only [7](stock_level) remaining
+    - About [200](stock_level) bottle left
+    - [12](stock_level) tablet remaining
+    - Around [7](stock_level) tablet
+    - Just [1](stock_level) bottle
+    - I have [0](stock_level) strips remaining
+    - About [10](stock_level) bottles left
+    - I have [10](stock_level) capsules left
+    - Around [12](stock_level) dose
+    - I have [30](stock_level) capsules left
+    - Still have [200](stock_level) doses
+    - Around [15](stock_level) dose
+    - Currently have [30](stock_level) doses
+    - Still have [30](stock_level) strip
+    - Roughly [7](stock_level) tablets remaining
+    - I’ve got [0](stock_level) bottles left
+    - [0](stock_level) left
+    - [2](stock_level) strip remaining
+    - There’s [1](stock_level) left
+    - [0](stock_level)
+    - [90](stock_level) capsules left
+    - I’ve got [60](stock_level) pills left
+    - I have [0](stock_level) strips left
+    - I have [20](stock_level) doses remaining
+    - Only [0](stock_level) strips left
+    - Roughly [7](stock_level) strip remaining
+    - I have [7](stock_level) bottle left
+    - [60](stock_level) bottles left
+    - Still have [45](stock_level) bottle
+    - Stock is [200](stock_level) pills
+    - I’m down to [2](stock_level) bottles
+    - Currently have [1](stock_level) bottles
+    - There’s [24](stock_level) left
+    - I’m down to [20](stock_level) pill
+    - I’ve got [100](stock_level) pills left
+    - Only [15](stock_level) tablet left
+    - [30](stock_level) pills remaining
+    - Stock is [60](stock_level) bottle
+    - About [200](stock_level) strip left
+    - Still have [2](stock_level) doses
+    - Currently have [10](stock_level) bottles
+    - There are [45](stock_level) strip left
+    - [12](stock_level) left
+    - [3](stock_level) left
+    - Roughly [45](stock_level) capsule remaining
+    - Still have [0](stock_level) bottle
+    - There are [60](stock_level) capsule left
+    - [20](stock_level)
+    - Only [60](stock_level) remaining
+    - Just [60](stock_level) strips
+    - Only [15](stock_level) dose left
+    - Stock is [1](stock_level) capsule
+    - Stock is [1](stock_level) bottles
+    - Only [24](stock_level) remaining
+    - Around [10](stock_level) capsule
+    - Around [45](stock_level) tablet
+    - There are [12](stock_level) bottles left
+    - I have [30](stock_level) bottle remaining
+    - Just [24](stock_level) capsules
+    - Just [2](stock_level) strip
+    - Stock is [5](stock_level) bottles
+    - [3](stock_level) strip remaining
+    - Stock is [90](stock_level) bottle
+    - Currently have [45](stock_level) dose
+    - I’m down to [45](stock_level) capsules
+    - [24](stock_level) left
+    - Currently have [12](stock_level) strips
+    - Around [60](stock_level) pill
+    - I’ve got [120](stock_level) pill left
+    - About [5](stock_level) pill left
+    - [90](stock_level) pill left
+    - Around [3](stock_level) capsule
+    - Still have [1](stock_level) tablet
+    - About [15](stock_level) bottles left
+    - Only [24](stock_level) remaining
+    - Only [0](stock_level) pill left
+    - [120](stock_level) left
+    - I’ve got [0](stock_level) dose left
+    - There’s [60](stock_level) left
+    - [45](stock_level) left
+    - I have [20](stock_level) capsules remaining
+    - There are [45](stock_level) capsules left
+    - I’ve got [2](stock_level) capsules left
+    - [45](stock_level) left
+    - I have [1](stock_level) tablet remaining
+    - Roughly [200](stock_level) doses remaining
+    - There are [100](stock_level) strip left
+    - Around [200](stock_level) doses
+    - Only [200](stock_level) doses left
+    - [24](stock_level)
+    - Just [100](stock_level) tablets
+    - Around [2](stock_level) capsule
+    - I have [45](stock_level) strip remaining
+    - Only [5](stock_level) remaining
+    - Just [200](stock_level) doses
+    - Around [45](stock_level) tablets
+    - Around [1](stock_level) pill
+    - There’s [3](stock_level) left
+    - Currently have [3](stock_level) dose
+    - About [5](stock_level) doses left
+    - There’s [30](stock_level) left
+    - Still have [90](stock_level) tablets
+    - Only [60](stock_level) pills left
+    - [12](stock_level) left
+    - Only [20](stock_level) remaining
+    - I’m down to [0](stock_level) strips
+    - Roughly [45](stock_level) bottle remaining
+    - I’ve got [15](stock_level) strip left
+    - I have [24](stock_level) strips remaining
+    - [90](stock_level) tablet remaining
+    - About [1](stock_level) dose left
+    - Still have [2](stock_level) bottles
+    - [24](stock_level) strip remaining
+    - [2](stock_level) bottles remaining
+    - [10](stock_level)
+    - Just [5](stock_level) tablet
+    - [5](stock_level) bottle left
+    - About [200](stock_level) capsules left
+    - [120](stock_level) dose left
+    - I have [24](stock_level) dose left
+    - Only [90](stock_level) remaining
+    - Roughly [15](stock_level) pills remaining
+    - I have [10](stock_level) capsules remaining
+    - [60](stock_level) left
+    - I have [2](stock_level) doses remaining
+    - Currently have [2](stock_level) bottle
+    - Roughly [1](stock_level) pill remaining
+    - Currently have [90](stock_level) strips
+    - [120](stock_level)
+    - Still have [20](stock_level) pills
+    - Around [1](stock_level) capsules
+    - Still have [10](stock_level) capsule
+    - I have [12](stock_level) bottles remaining
+    - There are [10](stock_level) capsules left
+    - [1](stock_level) tablet remaining
+    - [90](stock_level) left
+    - [7](stock_level) pill remaining
+    - Just [24](stock_level) bottles
+    - [20](stock_level)
+    - Currently have [120](stock_level) capsule
+    - There’s [0](stock_level) left
+    - [30](stock_level)
+    - Just [10](stock_level) bottle
+    - Roughly [100](stock_level) pill remaining
+    - Still have [60](stock_level) capsules
+    - There’s [15](stock_level) left
+    - [1](stock_level) capsule left
+    - There’s [12](stock_level) left
+    - Only [20](stock_level) remaining
+    - Only [12](stock_level) bottle left
+    - Currently have [15](stock_level) strips
+    - [100](stock_level) left
+    - I’ve got [5](stock_level) capsule left
+    - I’m down to [24](stock_level) tablet
+    - I have [90](stock_level) strip remaining
+    - About [200](stock_level) capsule left
+    - [90](stock_level) left
+    - Around [200](stock_level) strip
+    - Only [100](stock_level) remaining
+    - There’s [120](stock_level) left
+    - [1](stock_level)
+    - Currently have [120](stock_level) strips
+    - [90](stock_level)
+    - [3](stock_level) pill remaining
+    - [30](stock_level) doses left
+    - [200](stock_level)
+    - I have [120](stock_level) capsule remaining
+    - [30](stock_level) pill left
+    - Still have [7](stock_level) dose
+    - About [45](stock_level) capsule left
+    - I have [20](stock_level) bottles left
+    - [120](stock_level)
+    - I’ve got [45](stock_level) strips left
+    - Just [30](stock_level) strip
+    - Stock is [0](stock_level) capsule
+    - Around [30](stock_level) pill
+    - I’m down to [5](stock_level) doses
+    - Only [1](stock_level) pills left
+    - Roughly [5](stock_level) pill remaining
+    - [1](stock_level) left
+    - Still have [120](stock_level) bottle
+    - [120](stock_level) bottle left
+    - About [7](stock_level) pill left
+    - Stock is [30](stock_level) doses
+    - [45](stock_level) strips left
+    - Just [0](stock_level) capsule
+    - There are [12](stock_level) doses left
+    - About [0](stock_level) bottle left
+    - There are [120](stock_level) pill left
+    - I’ve got [45](stock_level) tablet left
+    - I have [0](stock_level) pills remaining
+    - Around [0](stock_level) strips
+    - [120](stock_level) strip left
+    - About [100](stock_level) dose left
+    - I have [12](stock_level) capsules remaining
+    - Only [24](stock_level) remaining
+    - I have [0](stock_level) capsules remaining
+    - Stock is [200](stock_level) doses
+    - Roughly [3](stock_level) strips remaining
+    - Only [12](stock_level) capsules left
+    - Roughly [10](stock_level) bottles remaining
+    - [24](stock_level) left
+    - Roughly [0](stock_level) pill remaining
+    - I’ve got [15](stock_level) bottles left
+    - [0](stock_level) pill remaining
+    - Still have [12](stock_level) dose
+    - Only [10](stock_level) remaining
+    - There are [100](stock_level) bottles left
+    - Roughly [3](stock_level) dose remaining
+    - I’ve got [24](stock_level) capsules left
+    - Only [12](stock_level) remaining
+    - About [24](stock_level) capsules left
+    - [90](stock_level)
+    - Only [90](stock_level) remaining
+    - Only [24](stock_level) remaining
+    - Only [15](stock_level) doses left
+    - Only [30](stock_level) remaining
+    - [45](stock_level)
+    - Stock is [90](stock_level) strip
+    - [12](stock_level)
+    - About [2](stock_level) capsules left
+    - I’ve got [45](stock_level) bottle left
+    - I’ve got [90](stock_level) pill left
+    - Just [30](stock_level) strips
+    - Only [5](stock_level) doses left
+    - [15](stock_level)
+    - About [5](stock_level) pills left
+    - Roughly [15](stock_level) pill remaining
+    - Only [0](stock_level) capsules left
+    - Only [2](stock_level) remaining
+    - Stock is [120](stock_level) tablet
+    - Only [5](stock_level) remaining
+    - I have [60](stock_level) capsules remaining
+    - Currently have [20](stock_level) strip
+    - [90](stock_level) left
+    - There are [2](stock_level) pill left
+    - Roughly [60](stock_level) pill remaining
+    - Currently have [15](stock_level) tablets
+    - [10](stock_level) pills left
+    - Around [200](stock_level) tablets
+    - There are [20](stock_level) tablets left
+    - [100](stock_level) capsule left
+    - Still have [10](stock_level) dose
+    - Only [2](stock_level) capsules left
+    - About [3](stock_level) doses left
+    - There’s [3](stock_level) left
+    - Stock is [1](stock_level) pills
+    - About [90](stock_level) bottle left
+    - Only [12](stock_level) tablets left
+    - I’m down to [60](stock_level) strips
+    - I have [120](stock_level) pills remaining
+    - Only [45](stock_level) dose left
+    - I’m down to [20](stock_level) capsule
+    - [10](stock_level) pill remaining
+    - Around [200](stock_level) bottle
+    - There’s [15](stock_level) left
+    - I’m down to [100](stock_level) strip
+    - Currently have [60](stock_level) strips
+    - Just [100](stock_level) doses
+    - [45](stock_level) capsule left
+    - Only [45](stock_level) bottles left
+    - Still have [60](stock_level) tablet
+    - Currently have [90](stock_level) bottles
+    - Around [90](stock_level) capsules
+    - [5](stock_level) left
+    - Only [7](stock_level) bottle left
+    - Stock is [3](stock_level) doses
+    - Just [100](stock_level) capsules
+    - Still have [7](stock_level) doses
+    - There’s [12](stock_level) left
+    - I have [24](stock_level) strips left
+    - I have [100](stock_level) capsule remaining
+    - Roughly [45](stock_level) doses remaining
+    - [90](stock_level) left
+    - Only [24](stock_level) remaining
+    - Only [15](stock_level) remaining
+    - About [5](stock_level) bottle left
+    - I have [200](stock_level) pill left
+    - Still have [200](stock_level) bottles
+    - Just [1](stock_level) doses
+    - Around [120](stock_level) tablets
+    - Roughly [5](stock_level) capsules remaining
+    - Currently have [5](stock_level) tablets
+    - Still have [20](stock_level) capsule
+    - Around [12](stock_level) capsule
+    - Stock is [60](stock_level) pills
+    - Roughly [5](stock_level) tablet remaining
+    - [20](stock_level) left
+    - About [2](stock_level) capsule left
+    - [0](stock_level) pill left
+    - I’m down to [90](stock_level) capsule
+    - I have [90](stock_level) pill remaining
+    - Currently have [90](stock_level) tablets
+    - Stock is [200](stock_level) tablets
+    - I’m down to [5](stock_level) strip
+    - [45](stock_level) doses remaining
+    - [1](stock_level) bottles left
+    - Just [60](stock_level) bottles
+    - About [90](stock_level) pill left
+    - [60](stock_level) strips left
+    - I have [15](stock_level) capsule remaining
+    - Stock is [2](stock_level) tablet
+    - I’m down to [15](stock_level) pills
+    - About [60](stock_level) strips left
+    - [15](stock_level) dose remaining
+    - I’m down to [7](stock_level) strips
+    - About [20](stock_level) pill left
+    - I’ve got [60](stock_level) bottle left
+    - There are [5](stock_level) pills left
+    - There are [12](stock_level) pill left
+    - I have [60](stock_level) pills remaining
+    - Just [10](stock_level) strip
+    - I have [1](stock_level) pill remaining
+    - There’s [1](stock_level) left
+    - [30](stock_level) left
+    - I have [200](stock_level) strip remaining
+    - Around [5](stock_level) tablet
+    - Only [24](stock_level) bottles left
+    - About [10](stock_level) bottle left
+    - Only [30](stock_level) remaining
+    - I have [1](stock_level) strip remaining
+    - Only [200](stock_level) remaining
+    - Only [7](stock_level) remaining
+    - There are [0](stock_level) doses left
+    - [60](stock_level) pill remaining
+    - I’m down to [20](stock_level) bottles
+    - There are [7](stock_level) pill left
+    - Stock is [15](stock_level) doses
+    - Stock is [120](stock_level) tablets
+    - There’s [90](stock_level) left
+    - [100](stock_level) left
+    - I have [45](stock_level) tablet left
+    - [5](stock_level) capsules remaining
+    - I have [7](stock_level) strips left
+    - [3](stock_level)
+    - I have [2](stock_level) capsules remaining
+    - [20](stock_level) left
+    - Only [2](stock_level) bottles left
+    - I’m down to [12](stock_level) dose
+    - Roughly [45](stock_level) pills remaining
+    - [15](stock_level) left
+    - I have [90](stock_level) bottles left
+    - Around [2](stock_level) tablet
+    - Just [24](stock_level) strips
+    - About [30](stock_level) bottles left
+    - Only [15](stock_level) strip left
+    - I’ve got [10](stock_level) dose left
+    - There’s [45](stock_level) left
+    - Still have [30](stock_level) capsule
+    - There are [45](stock_level) tablet left
+    - [1](stock_level)
+    - Only [20](stock_level) pills left
+    - Only [24](stock_level) remaining
+    - I’m down to [30](stock_level) tablet
+    - Currently have [120](stock_level) capsules
+    - Roughly [5](stock_level) capsule remaining
+    - [7](stock_level)
+    - There’s [45](stock_level) left
+    - Just [2](stock_level) doses
+    - Around [10](stock_level) doses
+    - I have [90](stock_level) dose left
+    - Around [90](stock_level) tablets
+    - There’s [200](stock_level) left
+    - Roughly [3](stock_level) strip remaining
+    - I have [12](stock_level) capsules left
+    - [1](stock_level)
+    - Around [5](stock_level) pills
+    - Just [15](stock_level) bottles
+    - I’m down to [120](stock_level) tablets
+    - Around [24](stock_level) capsule
+    - About [30](stock_level) strips left
+    - Only [7](stock_level) strip left
+    - [100](stock_level)
+    - There are [5](stock_level) dose left
+    - I have [15](stock_level) bottle remaining
+    - Around [30](stock_level) bottles
+    - Currently have [10](stock_level) tablet
+    - Stock is [20](stock_level) capsule
+    - [0](stock_level)
+    - Roughly [30](stock_level) strips remaining
+    - Just [24](stock_level) tablets
+    - [24](stock_level)
+    - [0](stock_level)
+    - Only [12](stock_level) remaining
+    - [100](stock_level)
+    - I’m down to [200](stock_level) capsule
+    - [12](stock_level) bottles left
+    - Only [2](stock_level) remaining
+    - About [5](stock_level) strips left
+    - Still have [3](stock_level) strip
+    - [30](stock_level) tablets left
+    - [1](stock_level) doses left
+    - Still have [45](stock_level) capsules
+    - Only [15](stock_level) remaining
+    - Still have [12](stock_level) strip
+    - There are [3](stock_level) doses left
+    - I have [200](stock_level) pills left
+    - I’ve got [5](stock_level) tablet left
+    - [7](stock_level)
+    - Stock is [30](stock_level) pill
+    - There’s [100](stock_level) left
+    - Just [3](stock_level) pill
+    - [30](stock_level) capsule left
+    - I have [45](stock_level) doses left
+    - I’m down to [12](stock_level) strip
+    - I’m down to [24](stock_level) dose
+    - I have [10](stock_level) pill remaining
+    - [100](stock_level)
+    - About [120](stock_level) capsule left
+    - [30](stock_level) tablet left
+    - Roughly [100](stock_level) dose remaining
+    - I have [100](stock_level) capsule left
+    - I’m down to [30](stock_level) pills
+    - Around [12](stock_level) doses
+    - I have [10](stock_level) strips left
+    - I’ve got [60](stock_level) capsule left
+    - [200](stock_level) tablets remaining
+    - I have [1](stock_level) capsule left
+    - Around [120](stock_level) bottle
+    - [120](stock_level)
+    - [24](stock_level) bottle left
+    - I’m down to [0](stock_level) tablet
+    - There’s [24](stock_level) left
+    - About [24](stock_level) pills left
+    - Roughly [3](stock_level) bottle remaining
+    - I’m down to [90](stock_level) pill
+    - [100](stock_level) left
+    - Currently have [0](stock_level) tablets
+    - Only [30](stock_level) bottle left
+    - Roughly [12](stock_level) pills remaining
+    - Only [12](stock_level) remaining
+    - Just [20](stock_level) capsule
+    - I have [3](stock_level) pills left
+    - I have [0](stock_level) tablets remaining
+    - Stock is [7](stock_level) bottle
+    - I have [15](stock_level) bottles remaining
+    - About [15](stock_level) capsule left
+    - Currently have [60](stock_level) tablet
+    - Roughly [2](stock_level) tablets remaining
+    - Only [12](stock_level) strips left
+    - About [24](stock_level) strips left
+    - I have [24](stock_level) capsule remaining
+    - [30](stock_level)
+    - I have [0](stock_level) pills left
+    - Still have [100](stock_level) tablets
+    - Just [30](stock_level) bottles
+    - I’m down to [200](stock_level) strip
+    - I’ve got [90](stock_level) capsules left
+    - I have [120](stock_level) bottles left
+    - Still have [2](stock_level) capsule
+    - Only [60](stock_level) remaining
+    - Stock is [12](stock_level) bottles
+    - [2](stock_level) tablets left
+    - Around [30](stock_level) tablets
+    - [15](stock_level) left
+    - [100](stock_level)
+    - [60](stock_level) doses left
+    - [10](stock_level) pills remaining
+    - [90](stock_level) left
+    - Only [0](stock_level) remaining
+    - There are [120](stock_level) bottles left
+    - I’ve got [90](stock_level) strip left
+    - There’s [12](stock_level) left
+    - I’ve got [7](stock_level) tablets left
+    - Currently have [20](stock_level) pills
+    - [60](stock_level) tablet left
+    - Roughly [0](stock_level) capsule remaining
+    - I’ve got [200](stock_level) dose left
+    - Stock is [120](stock_level) strips
+    - Only [120](stock_level) doses left
+    - Only [90](stock_level) bottle left
+    - Just [5](stock_level) bottles
+    - [15](stock_level) strip remaining
+    - I’ve got [10](stock_level) capsule left
+    - [2](stock_level)
+    - There’s [3](stock_level) left
+    - Currently have [1](stock_level) tablet
+    - There are [24](stock_level) capsules left
+    - Around [2](stock_level) doses
+    - Only [7](stock_level) strips left
+    - Currently have [15](stock_level) dose
+    - There are [24](stock_level) strips left
+    - I’ve got [24](stock_level) strip left
+    - There’s [3](stock_level) left
+    - I have [7](stock_level) strip remaining
+    - I’ve got [90](stock_level) strips left
+    - Only [10](stock_level) doses left
+    - About [20](stock_level) doses left
+    - I have [3](stock_level) capsules remaining
+    - Just [12](stock_level) capsules
+    - There’s [120](stock_level) left
+    - There’s [0](stock_level) left
+    - I have [200](stock_level) capsules left
+    - [0](stock_level) left
+    - Still have [45](stock_level) pills
+    - I’m down to [45](stock_level) pills
+    - I have [120](stock_level) bottle left
+    - About [10](stock_level) dose left
+    - Only [3](stock_level) remaining
+    - I have [10](stock_level) pill left
+    - I’ve got [3](stock_level) doses left
+    - There are [200](stock_level) tablets left
+    - There’s [12](stock_level) left
+    - [200](stock_level)
+    - I’ve got [10](stock_level) doses left
+    - I’ve got [200](stock_level) tablets left
+    - I have [24](stock_level) pills remaining
+    - Only [0](stock_level) remaining
+    - [45](stock_level) tablets remaining
+    - I have [15](stock_level) tablet remaining
+    - Only [60](stock_level) remaining
+    - There are [200](stock_level) pill left
+    - Stock is [24](stock_level) doses
+    - Roughly [120](stock_level) dose remaining
+    - I have [1](stock_level) dose remaining
+    - There’s [5](stock_level) left
+    - I have [10](stock_level) pills left
+    - I’ve got [90](stock_level) tablet left
+    - I’ve got [90](stock_level) doses left
+    - [7](stock_level) strip remaining
+    - About [5](stock_level) tablet left
+    - There are [0](stock_level) capsules left
+    - There are [3](stock_level) strips left
+    - Only [30](stock_level) capsules left
+    - I have [20](stock_level) pills left
+    - I have [45](stock_level) bottle left
+    - [45](stock_level) strip remaining
+    - I’ve got [100](stock_level) strip left
+    - I’m down to [45](stock_level) tablet
+    - Only [20](stock_level) doses left
+    - Only [0](stock_level) bottle left
+    - [0](stock_level) capsules left
+    - Still have [2](stock_level) tablets
+    - About [90](stock_level) capsules left
+    - Just [3](stock_level) tablets
+    - [0](stock_level) strips left
+    - About [3](stock_level) pills left
+    - Around [24](stock_level) pill
+    - Only [3](stock_level) strips left
+    - [12](stock_level)
+    - Still have [30](stock_level) tablet
+    - [120](stock_level) left
+    - Currently have [1](stock_level) capsule
+    - Stock is [24](stock_level) bottle
+    - Stock is [120](stock_level) strip
+    - [12](stock_level) strips remaining
+    - Around [3](stock_level) bottle
+    - I have [1](stock_level) strips left
+    - Around [5](stock_level) strip
+    - I’m down to [120](stock_level) capsule
+    - I’ve got [100](stock_level) tablets left
+    - Currently have [30](stock_level) capsule
+    - I have [45](stock_level) bottle remaining
+    - [90](stock_level)
+    - Still have [3](stock_level) capsule
+    - There are [200](stock_level) tablet left
+    - Stock is [1](stock_level) tablet
+    - There’s [2](stock_level) left
+    - Roughly [45](stock_level) capsules remaining
+    - [60](stock_level) capsule left
+    - Only [120](stock_level) remaining
+    - [10](stock_level) left
+    - About [7](stock_level) capsule left
+    - Just [120](stock_level) strip
+    - [15](stock_level) bottles left
+    - I have [100](stock_level) pill left
+    - Currently have [30](stock_level) strip
+    - [10](stock_level) tablet remaining
+    - Just [12](stock_level) pills
+    - I’m down to [120](stock_level) pill
+    - Still have [45](stock_level) strip
+    - Stock is [1](stock_level) doses
+    - I have [60](stock_level) tablets left
+    - I’m down to [1](stock_level) pills
+    - [15](stock_level) left
+    - Roughly [7](stock_level) capsules remaining
+    - Stock is [60](stock_level) doses
+    - I have [5](stock_level) bottles remaining
+    - I’ve got [200](stock_level) pills left
+    - [10](stock_level) left
+    - Currently have [10](stock_level) strip
+    - [2](stock_level) bottles left
+    - There’s [60](stock_level) left
+    - Still have [100](stock_level) bottle
+    - [60](stock_level) left
+    - Stock is [24](stock_level) capsule
+    - I have [100](stock_level) bottle remaining
+    - Only [15](stock_level) strips left
+    - I have [7](stock_level) tablets left
+    - Around [20](stock_level) strip
+    - About [15](stock_level) tablets left
+    - Still have [15](stock_level) capsules
+    - I’m down to [100](stock_level) tablet
+    - Stock is [100](stock_level) strip
+    - Currently have [3](stock_level) capsules
+    - [60](stock_level) pill left
+    - [60](stock_level)
+    - I’m down to [24](stock_level) capsules
+    - Still have [100](stock_level) bottles
+    - Only [30](stock_level) pills left
+    - About [12](stock_level) bottle left
+    - I’ve got [90](stock_level) dose left
+    - Currently have [20](stock_level) dose
+    - I’ve got [3](stock_level) strips left
+    - There’s [0](stock_level) left
+    - I have [120](stock_level) doses left
+    - [45](stock_level)
+    - [20](stock_level) pill left
+    - I have [0](stock_level) capsule left
+    - Around [1](stock_level) bottles
+    - [30](stock_level) left
+    - I’m down to [200](stock_level) bottles
+    - Only [3](stock_level) remaining
+    - Stock is [45](stock_level) tablet
+    - [10](stock_level) capsule remaining
+    - Still have [24](stock_level) bottle
+    - Still have [3](stock_level) tablet
+    - Around [200](stock_level) strips
+    - Currently have [24](stock_level) dose
+    - I’m down to [10](stock_level) strips
+    - I’ve got [200](stock_level) capsules left
+    - Just [7](stock_level) capsule
+    - Still have [1](stock_level) bottle
+    - I have [30](stock_level) capsules remaining
+    - Just [120](stock_level) tablets
+    - Currently have [45](stock_level) pill
+    - I have [12](stock_level) strip left
+    - Only [10](stock_level) bottle left
+    - About [3](stock_level) bottle left
+    - [24](stock_level)
+    - About [60](stock_level) pills left
+    - [120](stock_level) capsule remaining
+    - Only [15](stock_level) remaining
+    - I’ve got [24](stock_level) bottle left
+    - Still have [45](stock_level) bottles
+    - I’ve got [7](stock_level) dose left
+    - Roughly [20](stock_level) capsules remaining
+    - Currently have [45](stock_level) tablets
+    - There are [15](stock_level) doses left
+    - About [60](stock_level) capsules left
+    - Only [24](stock_level) dose left
+    - I’m down to [20](stock_level) dose
+    - Just [120](stock_level) dose
+    - About [7](stock_level) bottle left
+    - [90](stock_level)
+    - There’s [0](stock_level) left
+    - Currently have [0](stock_level) doses
+    - [100](stock_level) bottles left
+    - Roughly [200](stock_level) tablets remaining
+    - [100](stock_level) left
+    - I’m down to [12](stock_level) bottle
+    - Just [7](stock_level) bottles
+    - I’ve got [30](stock_level) pills left
+    - [2](stock_level) left
+    - There’s [0](stock_level) left
+    - Around [10](stock_level) dose
+    - I have [10](stock_level) strip remaining
+    - Around [7](stock_level) capsule
+    - I have [2](stock_level) dose remaining
+    - [30](stock_level)
+    - Currently have [5](stock_level) pills
+    - [3](stock_level) strip left
+    - Stock is [7](stock_level) pill
+    - Roughly [60](stock_level) tablets remaining
+    - There’s [60](stock_level) left
+    - I have [100](stock_level) doses remaining
+    - I’ve got [200](stock_level) strip left
+    - Just [60](stock_level) doses
+    - [12](stock_level) left
+    - I’m down to [7](stock_level) bottle
+    - [45](stock_level) capsules left
+    - There’s [15](stock_level) left
+    - Currently have [20](stock_level) bottles
+    - Around [60](stock_level) strips
+    - Only [90](stock_level) remaining
+    - Still have [20](stock_level) strips
+    - [1](stock_level) bottles remaining
+    - There’s [15](stock_level) left
+    - Stock is [45](stock_level) pills
+    - Only [20](stock_level) remaining
+    - Around [120](stock_level) tablet
+    - Stock is [5](stock_level) dose
+    - Stock is [12](stock_level) capsules
+    - I have [30](stock_level) tablets left
+    - There’s [30](stock_level) left
+    - I’ve got [12](stock_level) tablet left
+    - [3](stock_level) capsule remaining
+    - [5](stock_level) bottle remaining
+    - Roughly [200](stock_level) bottles remaining
+    - There are [0](stock_level) tablets left
+    - I’ve got [5](stock_level) capsules left
+    - Still have [24](stock_level) strip
+    - [30](stock_level) bottles left
+    - There are [120](stock_level) tablets left
+    - Only [3](stock_level) bottles left
+    - Still have [60](stock_level) pills
+    - Stock is [120](stock_level) capsules
+    - I have [24](stock_level) doses left
+    - Currently have [30](stock_level) bottle
+    - I’m down to [12](stock_level) capsules
+    - [200](stock_level) capsules remaining
+    - Around [24](stock_level) strips
+    - Just [120](stock_level) bottle
+    - Only [100](stock_level) strip left
+    - Still have [200](stock_level) pills
+    - Currently have [0](stock_level) strip
+    - I have [100](stock_level) pills left
+    - Stock is [45](stock_level) strip
+    - [30](stock_level) left
+    - I have [200](stock_level) strip left
+    - Stock is [90](stock_level) tablets
+    - Stock is [12](stock_level) bottle
+    - I’m down to [30](stock_level) bottle
+    - Only [5](stock_level) capsules left
+    - Only [90](stock_level) capsule left
+    - About [10](stock_level) strips left
+    - I’m down to [0](stock_level) bottles
+    - Roughly [7](stock_level) tablet remaining
+    - Around [120](stock_level) strips
+    - There’s [0](stock_level) left
+    - [15](stock_level) tablets remaining
+    - Around [12](stock_level) bottle
+    - Only [20](stock_level) bottle left
+    - Roughly [0](stock_level) strip remaining
+    - [3](stock_level)
+    - [45](stock_level) dose remaining
+    - Stock is [100](stock_level) dose
+    - [45](stock_level) left
+    - Around [24](stock_level) strip
+    - I have [0](stock_level) bottles remaining
+    - [1](stock_level) dose left
+    - Around [0](stock_level) pill
+    - I’m down to [5](stock_level) pill
+    - I have [2](stock_level) capsules left
+    - I’m down to [30](stock_level) pill
+    - I have [1](stock_level) bottle left
+    - [5](stock_level) strip remaining
+    - Roughly [20](stock_level) tablets remaining
+    - Just [7](stock_level) strips
+    - [5](stock_level) pill left
+    - Just [100](stock_level) strip
+    - About [12](stock_level) strips left
+    - I’m down to [90](stock_level) bottle
+    - Just [120](stock_level) strips
+    - About [12](stock_level) capsules left
+    - Only [7](stock_level) remaining
+    - Just [30](stock_level) doses
+    - Still have [10](stock_level) tablet
+    - I have [5](stock_level) strip left
+    - [45](stock_level)
+    - I have [0](stock_level) capsule remaining
+    - There are [1](stock_level) bottle left
+    - [120](stock_level) left
+    - There’s [90](stock_level) left
+    - Stock is [15](stock_level) pill
+    - Currently have [100](stock_level) bottles
+    - Around [1](stock_level) strips
+    - Stock is [30](stock_level) strips
+    - Around [15](stock_level) strips
+    - Around [24](stock_level) capsules
+    - [0](stock_level) doses left
+    - [20](stock_level)
+    - Only [100](stock_level) bottles left
+    - Only [60](stock_level) tablet left
+    - Still have [20](stock_level) dose
+    - Around [90](stock_level) pills
+    - [60](stock_level) left
+    - Around [200](stock_level) bottles
+    - Still have [45](stock_level) strips
+    - I have [30](stock_level) tablets remaining
+    - Only [200](stock_level) bottle left
+    - Still have [1](stock_level) bottles
+    - Still have [12](stock_level) tablets
+    - Still have [45](stock_level) capsule
+    - There are [90](stock_level) bottles left
+    - I’m down to [0](stock_level) bottle
+    - About [100](stock_level) doses left
+    - Currently have [2](stock_level) dose
+    - Stock is [5](stock_level) tablet
+    - I have [7](stock_level) dose remaining
+    - Only [24](stock_level) bottle left
+    - I have [200](stock_level) pills remaining
+    - There are [1](stock_level) doses left
+    - Roughly [1](stock_level) tablet remaining
+    - Still have [200](stock_level) strip
+    - Still have [20](stock_level) tablet
+    - There are [3](stock_level) bottle left
+    - About [120](stock_level) dose left
+    - Just [20](stock_level) tablet
+    - Still have [15](stock_level) dose
+    - [3](stock_level)
+    - I have [5](stock_level) strip remaining
+    - [24](stock_level) doses left
+    - I’ve got [7](stock_level) bottles left
+    - Stock is [90](stock_level) dose
+    - Roughly [200](stock_level) strips remaining
+    - I’ve got [15](stock_level) tablets left
+    - [2](stock_level)
+    - I have [2](stock_level) tablets left
+    - Around [2](stock_level) strip
+    - I’m down to [2](stock_level) doses
+    - Only [60](stock_level) doses left
+    - [60](stock_level)
+    - [12](stock_level)
+    - I’ve got [12](stock_level) capsules left
+    - I’m down to [5](stock_level) capsules
+    - [100](stock_level) left
+    - There’s [12](stock_level) left
+    - I’m down to [1](stock_level) doses
+    - I have [7](stock_level) bottle remaining
+    - Only [100](stock_level) dose left
+    - There are [0](stock_level) dose left
+    - About [30](stock_level) pill left
+    - I’ve got [2](stock_level) capsule left
+    - Only [5](stock_level) remaining
+    - [7](stock_level) capsule remaining
+    - Still have [100](stock_level) pill
+    - [200](stock_level)
+    - Only [7](stock_level) remaining
+    - I have [60](stock_level) bottle remaining
+    - I have [1](stock_level) bottles left
+    - I’m down to [12](stock_level) bottles
+    - I have [0](stock_level) tablet left
+    - Stock is [0](stock_level) tablet
+    - I have [45](stock_level) tablets remaining
+    - I’m down to [1](stock_level) bottles
+    - There are [30](stock_level) capsule left
+    - About [90](stock_level) tablet left
+    - Currently have [100](stock_level) tablet
+    - There are [12](stock_level) capsules left
+    - I have [3](stock_level) bottle left
+    - There are [100](stock_level) bottle left
+    - Just [20](stock_level) capsules
+    - [90](stock_level) capsule left
+    - [200](stock_level)
+    - There are [10](stock_level) strip left
+    - I’m down to [5](stock_level) capsule
+    - [15](stock_level)
+    - There’s [200](stock_level) left
+    - [3](stock_level) left
+    - Currently have [7](stock_level) tablet
+    - [20](stock_level)
+    - Only [120](stock_level) capsule left
+    - Just [7](stock_level) strip
+    - [24](stock_level) dose left
+    - [20](stock_level) bottle remaining
+    - About [60](stock_level) capsule left
+    - [12](stock_level)
+    - Roughly [120](stock_level) capsules remaining
+    - I’ve got [200](stock_level) bottle left
+    - I’ve got [1](stock_level) capsule left
+    - Stock is [45](stock_level) capsule
+    - I’ve got [200](stock_level) doses left
+    - Only [7](stock_level) capsules left
+    - Only [10](stock_level) strips left
+    - Stock is [10](stock_level) bottle
+    - Only [3](stock_level) tablet left
+    - I have [24](stock_level) pill remaining
+    - Around [60](stock_level) tablets
+    - [15](stock_level) pills remaining
+    - [1](stock_level) left
+    - Currently have [12](stock_level) strip
+    - Just [30](stock_level) dose
+    - Only [100](stock_level) remaining
+    - Only [1](stock_level) doses left
+    - I’m down to [3](stock_level) strip
+    - About [0](stock_level) capsule left
+    - Around [30](stock_level) bottle
+    - There are [10](stock_level) tablets left
+    - There’s [45](stock_level) left
+    - Roughly [15](stock_level) dose remaining
+    - There’s [90](stock_level) left
+    - Currently have [10](stock_level) pills
+    - I’ve got [60](stock_level) pill left
+    - I have [2](stock_level) tablet left
+    - Currently have [45](stock_level) bottle
+    - Currently have [100](stock_level) doses
+    - I have [30](stock_level) tablet left
+    - Roughly [10](stock_level) doses remaining
+    - About [15](stock_level) tablet left
+    - [12](stock_level) left
+    - I have [20](stock_level) strip remaining
+    - I have [0](stock_level) dose remaining
+    - There’s [5](stock_level) left
+    - About [20](stock_level) strips left
+    - I’ve got [100](stock_level) pill left
+    - [5](stock_level) dose remaining
+    - There are [90](stock_level) strips left
+    - I have [20](stock_level) doses left
+    - I’m down to [5](stock_level) tablets
+    - [3](stock_level) doses remaining
+    - [30](stock_level) pill remaining
+    - I’m down to [2](stock_level) strip
+    - Just [0](stock_level) strip
+    - I’m down to [0](stock_level) pills
+    - There are [1](stock_level) pills left
+    - I’ve got [12](stock_level) strip left
+    - I have [10](stock_level) bottle remaining
+    - [45](stock_level)
+    - Only [7](stock_level) remaining
+    - There’s [10](stock_level) left
+    - Around [15](stock_level) bottle
+    - Roughly [60](stock_level) capsules remaining
+    - I’m down to [24](stock_level) pills
+    - Stock is [20](stock_level) pill
+    - Roughly [3](stock_level) bottles remaining
+    - I’m down to [60](stock_level) tablet
+    - About [3](stock_level) strips left
+    - I’m down to [60](stock_level) capsules
+    - About [7](stock_level) strip left
+    - About [120](stock_level) strip left
+    - Currently have [7](stock_level) bottles
+    - I’m down to [24](stock_level) capsule
+    - Around [5](stock_level) bottles
+    - [0](stock_level) left
+    - [10](stock_level)
+    - I have [90](stock_level) doses left
+    - Only [120](stock_level) pill left
+    - There’s [60](stock_level) left
+    - Still have [30](stock_level) dose
+    - There are [1](stock_level) tablet left
+    - Still have [200](stock_level) tablet
+    - I have [12](stock_level) pill left
+    - [2](stock_level) left
+    - I have [200](stock_level) doses remaining
+    - There’s [1](stock_level) left
+    - Only [10](stock_level) remaining
+    - [24](stock_level) left
+    - [3](stock_level)
+    - I’ve got [24](stock_level) tablets left
+    - Roughly [3](stock_level) tablet remaining
+    - [24](stock_level) left
+    - I have [5](stock_level) dose remaining
+    - Only [90](stock_level) remaining
+    - I have [24](stock_level) tablets left
+    - I have [10](stock_level) tablet remaining
+    - I have [1](stock_level) pills left
+    - I’m down to [30](stock_level) strips
+    - There’s [30](stock_level) left
+    - [100](stock_level) tablet left
+    - [120](stock_level) left
+    - Just [3](stock_level) doses
+    - Only [3](stock_level) pills left
+    - There’s [5](stock_level) left
+    - [120](stock_level) bottles left
+    - [5](stock_level) bottles remaining
+    - I have [3](stock_level) dose remaining
+    - [2](stock_level) strip left
+    - I have [200](stock_level) capsule remaining
+    - Still have [60](stock_level) strips
+    - Just [30](stock_level) pills
+    - Still have [12](stock_level) capsule
+    - Around [12](stock_level) strips
+    - Stock is [45](stock_level) strips
+    - Only [90](stock_level) remaining
+    - There are [45](stock_level) tablets left
+    - About [200](stock_level) strips left
+    - There’s [10](stock_level) left
+    - [7](stock_level) left
+    - I’ve got [30](stock_level) strip left
+    - Only [45](stock_level) capsules left
+    - About [2](stock_level) doses left
+    - There are [2](stock_level) capsule left
+    - Only [3](stock_level) bottle left
+    - Only [30](stock_level) remaining
+    - Only [30](stock_level) pill left
+    - I have [1](stock_level) capsules remaining
+    - I have [0](stock_level) dose left
+    - I have [12](stock_level) pills remaining
+    - Stock is [90](stock_level) strips
+    - [5](stock_level) strips left
+    - [120](stock_level)
+    - I’ve got [15](stock_level) doses left
+    - Just [0](stock_level) tablets
+    - Currently have [90](stock_level) tablet
+    - I’m down to [20](stock_level) bottle
+    - Only [20](stock_level) tablets left
+    - I’ve got [100](stock_level) strips left
+    - [120](stock_level) pills left
+    - Only [24](stock_level) remaining
+    - There’s [30](stock_level) left
+    - [2](stock_level) left
+    - I’m down to [2](stock_level) dose
+    - [120](stock_level)
+    - I have [7](stock_level) capsules remaining
+    - Roughly [90](stock_level) bottle remaining
+    - Currently have [7](stock_level) tablets
+    - There are [12](stock_level) tablets left
+    - [15](stock_level) strips remaining
+    - [24](stock_level)
+    - About [2](stock_level) bottle left
+    - Around [90](stock_level) bottle
+    - Just [15](stock_level) strip
+    - I’ve got [100](stock_level) tablet left
+    - There are [30](stock_level) pill left
+    - Roughly [100](stock_level) strip remaining
+    - [24](stock_level) capsules remaining
+    - I’ve got [30](stock_level) pill left
+    - [0](stock_level) bottle remaining
+    - I have [120](stock_level) capsules left
+    - [45](stock_level) left
+    - [1](stock_level)
+    - I’m down to [12](stock_level) capsule
+    - Currently have [120](stock_level) pills
+    - [120](stock_level) tablet remaining
+    - Only [5](stock_level) remaining
+    - Still have [2](stock_level) capsules
+    - [20](stock_level) left
+    - About [90](stock_level) pills left
+    - Around [7](stock_level) strips
+    - Roughly [120](stock_level) pills remaining
+    - About [7](stock_level) tablet left
+    - [3](stock_level) bottle remaining
+    - [1](stock_level) capsules left
+    - About [15](stock_level) capsules left
+    - Roughly [15](stock_level) tablets remaining
+    - [2](stock_level) doses remaining
+    - Just [60](stock_level) bottle
+    - Still have [0](stock_level) pills
+    - I’m down to [15](stock_level) dose
+    - Only [60](stock_level) capsules left
+    - [60](stock_level) left
+    - There are [5](stock_level) bottles left
+    - I have [120](stock_level) pills left
+    - There are [90](stock_level) capsules left
+    - Stock is [10](stock_level) dose
+    - Currently have [24](stock_level) bottles
+    - There’s [3](stock_level) left
+    - There’s [7](stock_level) left
+    - I have [15](stock_level) capsules remaining
+    - I have [90](stock_level) strip left
+    - There are [7](stock_level) capsules left
+    - Around [20](stock_level) pills
+    - Just [45](stock_level) pills
+    - I have [100](stock_level) strip left
+    - Just [20](stock_level) strips
+    - Roughly [7](stock_level) dose remaining
+    - Only [100](stock_level) remaining
+    - [2](stock_level) dose remaining
+    - There’s [24](stock_level) left
+    - I’ve got [200](stock_level) pill left
+    - Around [45](stock_level) pills
+    - Currently have [1](stock_level) dose
+    - I’m down to [7](stock_level) capsule
+    - Just [20](stock_level) dose
+    - Only [100](stock_level) capsules left
+    - [24](stock_level) left
+    - Stock is [12](stock_level) tablets
+    - There are [1](stock_level) tablets left
+    - Roughly [2](stock_level) bottle remaining
+    - Still have [0](stock_level) pill
+    - [30](stock_level) dose remaining
+    - I’ve got [45](stock_level) pill left
+    - Around [10](stock_level) strip
+    - Still have [200](stock_level) pill
+    - Just [2](stock_level) bottles
+    - Just [90](stock_level) strip
+    - [3](stock_level) capsules left
+    - Just [24](stock_level) capsule
+    - Only [24](stock_level) remaining
+    - Only [2](stock_level) remaining
+    - Around [15](stock_level) doses
+    - Still have [120](stock_level) capsules
+    - Just [45](stock_level) capsule
+    - I’ve got [0](stock_level) strips left
+    - Still have [10](stock_level) strip
+    - [10](stock_level)
+    - Currently have [60](stock_level) bottle
+    - I have [15](stock_level) pill remaining
+    - [200](stock_level)
+    - About [30](stock_level) doses left
+    - Still have [90](stock_level) bottles
+    - Roughly [90](stock_level) tablet remaining
+    - Just [12](stock_level) pill
+    - I have [15](stock_level) dose left
+    - [10](stock_level) capsule left
+    - [15](stock_level) left
+    - I’ve got [45](stock_level) doses left
+    - Around [1](stock_level) dose
+    - [15](stock_level) pill remaining
+    - There’s [15](stock_level) left
+    - About [45](stock_level) tablets left
+    - Still have [100](stock_level) capsule
+    - Currently have [24](stock_level) capsules
+    - [45](stock_level) tablets left
+    - Only [24](stock_level) capsules left
+    - Only [10](stock_level) pill left
+    - I have [60](stock_level) bottles remaining
+    - Around [20](stock_level) capsules
+    - [1](stock_level) left
+    - Currently have [90](stock_level) dose
+    - [20](stock_level) tablets left
+    - [0](stock_level) left
+    - [30](stock_level)
+    - There are [24](stock_level) pill left
+    - Only [200](stock_level) remaining
+    - There’s [5](stock_level) left
+    - Only [10](stock_level) bottles left
+    - [7](stock_level)
+    - About [200](stock_level) tablet left
+    - Only [15](stock_level) bottles left
+    - [12](stock_level) doses remaining
+    - There’s [1](stock_level) left
+    - Just [45](stock_level) capsules
+    - Only [20](stock_level) remaining
+    - Around [10](stock_level) tablets
+    - [20](stock_level) pill remaining
+    - I have [45](stock_level) pill remaining
+    - I’ve got [2](stock_level) doses left
+    - [5](stock_level)
+    - [24](stock_level) tablets left
+    - Still have [0](stock_level) dose
+    - Stock is [3](stock_level) strips
+    - I’m down to [120](stock_level) strips
+    - There’s [3](stock_level) left
+    - Stock is [0](stock_level) strip
+    - I have [5](stock_level) capsules left
+    - [120](stock_level) bottle remaining
+    - There’s [120](stock_level) left
+    - [30](stock_level) bottles remaining
+    - Around [3](stock_level) tablets
+    - Roughly [10](stock_level) tablets remaining
+    - [2](stock_level)
+    - There are [15](stock_level) dose left
+    - [12](stock_level) strip remaining
+    - There’s [12](stock_level) left
+    - I’ve got [120](stock_level) bottles left
+    - Roughly [20](stock_level) pills remaining
+    - Still have [90](stock_level) strips
+    - Only [12](stock_level) bottles left
+    - I’ve got [1](stock_level) dose left
+    - There’s [0](stock_level) left
+    - Only [20](stock_level) remaining
+    - About [0](stock_level) pill left
+    - I have [10](stock_level) strips remaining
+    - Stock is [2](stock_level) dose
+    - I’m down to [2](stock_level) capsule
+    - I have [3](stock_level) bottles remaining
+    - [100](stock_level) bottle remaining
+    - Stock is [2](stock_level) strip
+    - I have [20](stock_level) strip left
+    - There are [20](stock_level) doses left
+    - Currently have [5](stock_level) strips
+    - I have [10](stock_level) capsule left
+    - [12](stock_level) strip left
+    - There are [30](stock_level) bottle left
+    - I’ve got [0](stock_level) capsule left
+    - [45](stock_level) strips remaining
+    - I have [90](stock_level) dose remaining
+    - Stock is [15](stock_level) pills
+    - I have [12](stock_level) dose left
+    - Still have [10](stock_level) bottle
+    - Still have [0](stock_level) doses
+    - Stock is [90](stock_level) capsules
+    - About [100](stock_level) tablet left
+    - About [1](stock_level) tablet left
+    - [100](stock_level) bottle left
+    - Still have [120](stock_level) dose
+    - Stock is [100](stock_level) tablets
+    - Stock is [3](stock_level) bottle
+    - There are [12](stock_level) strips left
+    - Around [120](stock_level) bottles
+    - [15](stock_level) strips left
+    - Only [100](stock_level) tablets left
+    - There’s [2](stock_level) left
+    - [1](stock_level) bottle remaining
+    - [7](stock_level) left
+    - [5](stock_level) strip left
+    - I’m down to [90](stock_level) tablets
+    - [10](stock_level) bottle left
+    - I have [24](stock_level) bottle remaining
+    - [20](stock_level)
+    - Only [0](stock_level) strip left
+    - There are [45](stock_level) doses left
+    - There are [2](stock_level) strip left
+    - [5](stock_level)
+    - [20](stock_level) left
+    - I have [30](stock_level) strip remaining
+    - Just [0](stock_level) doses
+    - [0](stock_level) strip remaining
+    - Stock is [20](stock_level) tablet
+    - Currently have [5](stock_level) bottles
+    - [7](stock_level) strips remaining
+    - I have [2](stock_level) capsule left
+    - Currently have [7](stock_level) dose
+    - [60](stock_level) pills remaining
+    - Just [45](stock_level) bottle
+    - I’m down to [0](stock_level) capsule
+    - [120](stock_level) pill remaining
+    - I have [24](stock_level) tablet remaining
+    - Still have [1](stock_level) strips
+    - I’ve got [60](stock_level) capsules left
+    - [3](stock_level) tablet left
+    - Only [0](stock_level) remaining
+    - Just [7](stock_level) doses
+    - Currently have [7](stock_level) pills
+    - I’m down to [24](stock_level) strip
+    - I have [12](stock_level) capsule remaining
+    - [120](stock_level) strip remaining
+    - [10](stock_level) tablets left
+    - Roughly [1](stock_level) pills remaining
+    - Only [3](stock_level) dose left
+    - Just [90](stock_level) capsule
+    - Currently have [0](stock_level) strips
+    - [20](stock_level)
+    - [5](stock_level) tablet remaining
+    - [120](stock_level) pills remaining
+    - Only [1](stock_level) remaining
+    - Around [5](stock_level) bottle
+    - There’s [1](stock_level) left
+    - I have [120](stock_level) strips left
+    - Currently have [2](stock_level) strips
+    - Roughly [10](stock_level) tablet remaining
+    - I have [5](stock_level) tablet remaining
+    - Only [90](stock_level) remaining
+    - Only [24](stock_level) remaining
+    - Just [12](stock_level) doses
+    - [2](stock_level) capsules remaining
+    - There’s [1](stock_level) left
+    - I have [2](stock_level) doses left
+    - Roughly [3](stock_level) capsule remaining
+    - [200](stock_level) left
+    - Still have [12](stock_level) pill
+    - Only [7](stock_level) remaining
+    - I’m down to [2](stock_level) strips
+    - There’s [10](stock_level) left
+    - Stock is [10](stock_level) bottles
+    - Stock is [100](stock_level) capsule
+    - Stock is [3](stock_level) tablet
+    - [7](stock_level) bottles remaining
+    - [7](stock_level) dose left
+    - About [100](stock_level) pill left
+    - Stock is [10](stock_level) tablets
+    - [7](stock_level) left
+    - [15](stock_level)
+    - Only [45](stock_level) remaining
+    - There are [1](stock_level) capsule left
+    - [1](stock_level) pill left
+    - I have [120](stock_level) tablet left
+    - [60](stock_level)
+    - I’ve got [0](stock_level) tablet left
+    - Stock is [10](stock_level) pill
+    - Only [45](stock_level) tablet left
+    - [60](stock_level)
+    - Around [0](stock_level) capsule
+    - Only [3](stock_level) remaining
+    - Stock is [1](stock_level) dose
+    - Roughly [100](stock_level) doses remaining
+    - There are [12](stock_level) capsule left
+    - I have [0](stock_level) tablet remaining
+    - Around [200](stock_level) capsule
+    - There’s [1](stock_level) left
+    - [5](stock_level) tablets remaining
+    - Stock is [1](stock_level) pill
+    - There are [1](stock_level) pill left
+    - Only [2](stock_level) tablets left
+    - Only [15](stock_level) capsule left
+    - Just [15](stock_level) strips
+    - [120](stock_level) pill left
+    - [200](stock_level) left
+    - There’s [2](stock_level) left
+    - [3](stock_level) dose left
+    - Currently have [30](stock_level) tablet
+    - Only [45](stock_level) capsule left
+    - Stock is [10](stock_level) capsules
+    - [20](stock_level) left
+    - I have [1](stock_level) strips remaining
+    - [3](stock_level) bottles left
+    - I have [3](stock_level) pill remaining
+    - [10](stock_level) strip remaining
+    - [30](stock_level) left
+    - There’s [10](stock_level) left
+    - About [10](stock_level) tablets left
+    - Only [3](stock_level) remaining
+    - Only [1](stock_level) remaining
+    - Only [2](stock_level) remaining
+    - [24](stock_level) strips remaining
+    - I’m down to [120](stock_level) doses
+    - Still have [100](stock_level) pills
+    - Only [45](stock_level) strips left
+    - I’ve got [12](stock_level) tablets left
+    - Currently have [3](stock_level) strip
+    - Currently have [200](stock_level) strip
+    - There are [15](stock_level) strip left
+    - There’s [30](stock_level) left
+    - Only [45](stock_level) bottle left
+    - I have [1](stock_level) capsules left
+    - Stock is [0](stock_level) pill
+    - There’s [0](stock_level) left
+    - Around [5](stock_level) pill
+    - Still have [0](stock_level) capsules
+    - Only [120](stock_level) tablets left
+    - Roughly [3](stock_level) tablets remaining
+    - [30](stock_level)
+    - [3](stock_level) tablet remaining
+    - I’ve got [3](stock_level) pills left
+    - [0](stock_level) capsule remaining
+    - I’ve got [120](stock_level) bottle left
+    - [20](stock_level)
+    - There are [1](stock_level) strips left
+    - Only [10](stock_level) remaining
+    - I have [15](stock_level) strips left
+    - Only [7](stock_level) tablet left
+    - I have [100](stock_level) pills remaining
+    - There are [10](stock_level) pill left
+    - [24](stock_level) left
+    - Currently have [20](stock_level) tablet
+    - I’ve got [30](stock_level) capsules left
+    - Around [0](stock_level) doses
+    - There are [200](stock_level) bottle left
+    - [60](stock_level) strip left
+    - Only [45](stock_level) remaining
+    - Roughly [3](stock_level) pills remaining
+    - I have [90](stock_level) bottles remaining
+    - [200](stock_level) left
+    - There’s [0](stock_level) left
+    - I’m down to [200](stock_level) pills
+    - [15](stock_level) bottle remaining
+    - [120](stock_level)
+    - There’s [5](stock_level) left
+    - Around [24](stock_level) bottle
+    - I have [7](stock_level) capsule remaining
+    - Only [2](stock_level) pill left
+    - Currently have [3](stock_level) bottle
+    - [5](stock_level)
+    - Roughly [12](stock_level) dose remaining
+    - Roughly [90](stock_level) capsule remaining
+    - I have [7](stock_level) pills remaining
+    - I have [200](stock_level) strips remaining
+    - I’m down to [15](stock_level) bottles
+    - Only [7](stock_level) remaining
+    - There’s [100](stock_level) left
+    - [20](stock_level) left
+    - Around [120](stock_level) pills
+    - [100](stock_level) tablets left
+    - Just [100](stock_level) dose
+    - I’m down to [120](stock_level) pills
+    - I have [5](stock_level) doses remaining
+    - Only [200](stock_level) pills left
+    - There’s [30](stock_level) left
+    - Stock is [100](stock_level) strips
+    - I have [120](stock_level) tablet remaining
+    - There’s [120](stock_level) left
+    - Just [5](stock_level) tablets
+    - I have [2](stock_level) strips left
+    - [15](stock_level) doses remaining
+    - Currently have [1](stock_level) tablets
+    - Around [1](stock_level) bottle
+    - Still have [0](stock_level) bottles
+    - [20](stock_level) bottles left
+    - There’s [24](stock_level) left
+    - [2](stock_level) left
+    - Around [3](stock_level) bottles
+    - [0](stock_level) tablets remaining
+    - I’m down to [45](stock_level) doses
+    - There are [2](stock_level) capsules left
+    - There are [100](stock_level) strips left
+    - Currently have [24](stock_level) bottle
+    - [10](stock_level)
+    - I have [12](stock_level) strips left
+    - I have [20](stock_level) bottle left
+    - Still have [60](stock_level) dose
+    - Currently have [7](stock_level) capsule
+    - I’m down to [5](stock_level) dose
+    - [12](stock_level)
+    - I have [1](stock_level) pill left
+    - Only [15](stock_level) tablets left
+    - [200](stock_level)
+    - [120](stock_level) left
+    - About [0](stock_level) dose left
+    - [10](stock_level) left
+    - Only [20](stock_level) remaining
+    - Just [12](stock_level) strips
+    - I have [90](stock_level) bottle remaining
+    - [0](stock_level) tablets left
+    - About [20](stock_level) bottle left
+    - Roughly [24](stock_level) capsules remaining
+    - I’ve got [1](stock_level) doses left
+    - [200](stock_level) strip remaining
+    - Stock is [7](stock_level) tablet
+    - Stock is [30](stock_level) dose
+    - Roughly [0](stock_level) doses remaining
+    - [30](stock_level)
+    - [100](stock_level) left
+    - Only [60](stock_level) dose left
+    - Stock is [30](stock_level) tablets
+    - I’ve got [0](stock_level) pill left
+    - I’ve got [5](stock_level) pill left
+    - I have [90](stock_level) tablets remaining
+    - There are [3](stock_level) bottles left
+    - I’m down to [200](stock_level) tablets
+    - There’s [20](stock_level) left
+    - [1](stock_level) left
+    - There’s [0](stock_level) left
+    - [30](stock_level) pills left
+    - [100](stock_level) dose remaining
+    - Only [60](stock_level) strip left
+    - Only [2](stock_level) remaining
+    - [20](stock_level) strips remaining
+    - [120](stock_level)
+    - [10](stock_level) capsules remaining
+    - There’s [3](stock_level) left
+    - Currently have [0](stock_level) dose
+    - I have [200](stock_level) bottles remaining
+    - I have [5](stock_level) bottle left
+    - [90](stock_level) pills left
+    - Only [100](stock_level) remaining
+    - Only [12](stock_level) pills left
+    - There’s [90](stock_level) left
+    - Still have [15](stock_level) strips
+    - [45](stock_level) tablet remaining
+    - About [120](stock_level) capsules left
+    - I have [15](stock_level) pill left
+    - Just [3](stock_level) pills
+    - There are [7](stock_level) bottle left
+    - About [1](stock_level) strip left
+    - Only [12](stock_level) capsule left
+    - I’ve got [90](stock_level) pills left
+    - Roughly [1](stock_level) capsule remaining
+    - I have [30](stock_level) tablet remaining
+    - Only [15](stock_level) remaining
+    - [200](stock_level)
+    - I’m down to [20](stock_level) strip
+    - Roughly [24](stock_level) pills remaining
+    - Just [2](stock_level) pill
+    - I have [30](stock_level) bottle left
+    - I have [60](stock_level) bottles left
+    - There are [0](stock_level) bottles left
+    - There are [15](stock_level) pill left
+    - Still have [12](stock_level) capsules
+    - I have [200](stock_level) bottle left
+    - [0](stock_level) capsule left
+    - Still have [3](stock_level) dose
+    - There are [100](stock_level) doses left
+    - About [30](stock_level) tablet left
+    - Only [10](stock_level) pills left
+    - I’ve got [3](stock_level) bottle left
+    - There’s [10](stock_level) left
+    - [60](stock_level) bottle left
+    - [0](stock_level)
+    - I have [12](stock_level) pill remaining
+    - About [7](stock_level) strips left
+    - I’m down to [12](stock_level) strips
+    - Only [90](stock_level) pills left
+    - Around [120](stock_level) dose
+    - Only [90](stock_level) dose left
+    - Only [10](stock_level) remaining
+    - There’s [20](stock_level) left
+    - [30](stock_level) tablets remaining
+    - [100](stock_level) left
+    - Only [200](stock_level) remaining
+    - There are [15](stock_level) tablet left
+    - Roughly [120](stock_level) capsule remaining
+    - [20](stock_level) pills left
+    - I have [100](stock_level) bottles left
+    - I have [2](stock_level) capsule remaining
+    - [3](stock_level) left
+    - Still have [60](stock_level) doses
+    - Just [0](stock_level) dose
+    - I’m down to [10](stock_level) tablet
+    - Only [20](stock_level) remaining
+    - There’s [20](stock_level) left
+    - I have [120](stock_level) bottles remaining
+    - I’m down to [10](stock_level) pills
+    - I’ve got [2](stock_level) strips left
+    - I have [5](stock_level) dose left
+    - [1](stock_level)
+    - [60](stock_level)
+    - Currently have [60](stock_level) capsules
+    - [90](stock_level) bottles remaining
+    - About [3](stock_level) dose left
+    - [24](stock_level) left
+    - Currently have [24](stock_level) capsule
+    - [15](stock_level) dose left
+    - There’s [90](stock_level) left
+    - Stock is [7](stock_level) strips
+    - Stock is [12](stock_level) tablet
+    - [0](stock_level)
+    - Around [30](stock_level) doses
+    - I have [0](stock_level) bottle left
+    - I have [7](stock_level) capsules left
+    - Only [7](stock_level) bottles left
+    - Just [1](stock_level) bottles
+    - [10](stock_level) bottles left
+    - There’s [200](stock_level) left
+    - Roughly [24](stock_level) dose remaining
+    - Around [1](stock_level) doses
+    - I’ve got [15](stock_level) capsule left
+    - Only [100](stock_level) remaining
+    - Only [24](stock_level) capsule left
+    - Roughly [10](stock_level) strips remaining
+    - About [5](stock_level) capsule left
+    - [2](stock_level) left
+    - I’m down to [12](stock_level) pills
+    - Only [60](stock_level) bottles left
+    - I have [30](stock_level) dose remaining
+    - There are [90](stock_level) dose left
+    - Still have [100](stock_level) dose
+    - I’ve got [15](stock_level) tablet left
+    - Stock is [10](stock_level) pills
+    - Roughly [15](stock_level) strip remaining
+    - Still have [45](stock_level) doses
+    - Around [2](stock_level) bottle
+    - Stock is [20](stock_level) strip
+    - There’s [5](stock_level) left
+    - Around [2](stock_level) bottles
+    - Roughly [7](stock_level) doses remaining
+    - I have [30](stock_level) pill remaining
+    - Still have [7](stock_level) pills
+    - About [10](stock_level) tablet left
+    - Only [0](stock_level) dose left
+    - Only [30](stock_level) remaining
+    - Just [3](stock_level) bottles
+    - Currently have [3](stock_level) pill
+    - I’m down to [1](stock_level) capsules
+    - Still have [15](stock_level) strip
+    - [100](stock_level) left
+    - Currently have [12](stock_level) doses
+    - Still have [90](stock_level) dose
+    - [24](stock_level) capsule left
+    - I have [45](stock_level) pills remaining
+    - There’s [100](stock_level) left
+    - There are [10](stock_level) tablet left
+    - I’ve got [90](stock_level) tablets left
+    - Around [100](stock_level) pills
+    - I have [7](stock_level) pill remaining
+    - Around [0](stock_level) tablet
+    - There are [30](stock_level) dose left
+    - There’s [10](stock_level) left
+    - Still have [200](stock_level) bottle
+    - Only [100](stock_level) pills left
+    - Still have [12](stock_level) tablet
+    - There are [7](stock_level) pills left
+    - Just [200](stock_level) bottle
+    - [45](stock_level)
+    - Only [10](stock_level) remaining
+    - Still have [5](stock_level) capsule
+    - Stock is [7](stock_level) tablets
+    - [100](stock_level) capsules remaining
+    - Stock is [15](stock_level) strips
+    - Roughly [10](stock_level) strip remaining
+    - [60](stock_level) pills left
+    - Roughly [100](stock_level) bottles remaining
+    - Stock is [30](stock_level) capsules
+    - Around [24](stock_level) dose
+    - [10](stock_level) left
+    - I have [120](stock_level) strip remaining
+    - Around [0](stock_level) tablets
+    - There’s [120](stock_level) left
+    - Currently have [90](stock_level) pills
+    - I have [1](stock_level) bottle remaining
+    - About [2](stock_level) pill left
+    - Just [1](stock_level) strip
+    - Only [7](stock_level) remaining
+    - I’m down to [15](stock_level) tablet
+    - Roughly [7](stock_level) bottle remaining
+    - [7](stock_level) capsules left
+    - Around [10](stock_level) capsules
+    - About [7](stock_level) tablets left
+    - About [10](stock_level) strip left
+    - I’m down to [60](stock_level) bottles
+    - [20](stock_level)
+    - [90](stock_level) left
+    - I have [3](stock_level) strips left
+    - I have [7](stock_level) bottles remaining
+    - [120](stock_level) tablets left
+    - I’ve got [20](stock_level) strip left
+    - I have [60](stock_level) doses left
+    - Only [60](stock_level) remaining
+    - Still have [3](stock_level) pills
+    - I’ve got [1](stock_level) tablet left
+    - Still have [12](stock_level) bottles
+    - Stock is [0](stock_level) strips
+    - Just [90](stock_level) doses
+    - I’ve got [20](stock_level) capsule left
+    - Currently have [24](stock_level) strip
+    - I have [10](stock_level) tablets left
+    - Stock is [120](stock_level) doses
+    - I’m down to [120](stock_level) dose
+    - About [90](stock_level) dose left
+    - There’s [15](stock_level) left
+    - I’ve got [45](stock_level) pills left
+    - [200](stock_level) strips left
+    - Roughly [3](stock_level) doses remaining
+    - Stock is [0](stock_level) bottle
+    - I have [60](stock_level) strips left
+    - Only [30](stock_level) tablets left
+    - I have [3](stock_level) doses left
+    - Stock is [45](stock_level) dose
+    - Stock is [5](stock_level) doses
+    - There’s [60](stock_level) left
+    - Still have [20](stock_level) bottle
+    - [0](stock_level) pills left
+    - Only [200](stock_level) remaining
+    - [7](stock_level) left
+    - Still have [90](stock_level) doses
+    - [2](stock_level) pill left
+    - [1](stock_level) tablets left
+    - [1](stock_level)
+    - I have [200](stock_level) dose remaining
+    - Only [1](stock_level) remaining
+    - I have [100](stock_level) capsules remaining
+    - [12](stock_level) bottle left
+    - I’m down to [5](stock_level) tablet
+    - Only [30](stock_level) doses left
+    - [15](stock_level)
+    - [60](stock_level) tablets remaining
+    - I’m down to [200](stock_level) doses
+    - There are [200](stock_level) capsule left
+    - [20](stock_level) bottle left
+    - Only [1](stock_level) remaining
+    - There are [3](stock_level) dose left
+    - Still have [5](stock_level) bottle
+    - Still have [200](stock_level) strips
+    - Roughly [7](stock_level) capsule remaining
+    - Just [5](stock_level) doses
+    - Still have [24](stock_level) pill
+    - [60](stock_level) left
+    - Around [24](stock_level) tablet
+    - [10](stock_level) bottles remaining
+    - I have [45](stock_level) bottles remaining
+    - [200](stock_level) tablets left
+    - [5](stock_level) left
+    - Only [45](stock_level) remaining
+    - [5](stock_level) capsules left
+    - There’s [2](stock_level) left
+    - [200](stock_level) strips remaining
+    - [12](stock_level) pill remaining
+    - About [15](stock_level) bottle left
+    - I have [20](stock_level) strips left
+    - There’s [100](stock_level) left
+    - [200](stock_level) left
+    - Currently have [30](stock_level) strips
+    - Still have [20](stock_level) strip
+    - Just [1](stock_level) strips
+    - I have [30](stock_level) bottles left
+    - [24](stock_level)
+    - There are [0](stock_level) capsule left
+    - Still have [120](stock_level) tablets
+    - Roughly [5](stock_level) bottles remaining
+    - Still have [7](stock_level) capsule
+    - Roughly [7](stock_level) strips remaining
+    - Still have [24](stock_level) bottles
+    - I’ve got [0](stock_level) doses left
+    - Still have [3](stock_level) pill
+    - I’ve got [7](stock_level) strip left
+    - Still have [1](stock_level) pill
+    - Roughly [24](stock_level) bottle remaining
+    - There’s [1](stock_level) left
+    - [12](stock_level) capsule remaining
+    - Around [20](stock_level) tablets
+    - Roughly [60](stock_level) strips remaining
+    - Around [30](stock_level) tablet
+    - There are [24](stock_level) strip left
+    - Currently have [10](stock_level) bottle
+    - Only [30](stock_level) remaining
+    - About [2](stock_level) dose left
+    - Still have [0](stock_level) tablets
+    - I’m down to [3](stock_level) capsules
+    - Around [3](stock_level) pills
+    - About [45](stock_level) pill left
+    - Roughly [200](stock_level) dose remaining
+    - I’m down to [0](stock_level) strip
+    - I’m down to [60](stock_level) pill
+    - Only [1](stock_level) remaining
+    - There are [100](stock_level) capsule left
+    - [60](stock_level)
+    - I’m down to [1](stock_level) pill
+    - I have [30](stock_level) pills left
+    - Currently have [10](stock_level) capsule
+    - [45](stock_level) pills left
+    - Currently have [20](stock_level) capsule
+    - Around [10](stock_level) bottle
+    - Only [100](stock_level) tablet left
+    - Only [1](stock_level) strip left
+    - Still have [7](stock_level) bottle
+    - I’m down to [15](stock_level) strip
+    - There are [10](stock_level) strips left
+    - Only [60](stock_level) remaining
+    - [200](stock_level) left
+    - I have [1](stock_level) doses remaining
+    - Currently have [3](stock_level) strips
+    - [45](stock_level)
+    - Just [100](stock_level) bottle
+    - Only [45](stock_level) remaining
+    - Currently have [2](stock_level) doses
+    - Stock is [90](stock_level) tablet
+    - There are [60](stock_level) pill left
+    - [2](stock_level) tablets remaining
+    - Only [1](stock_level) pill left
+    - I have [60](stock_level) pill left
+    - [1](stock_level)
+    - Roughly [24](stock_level) tablet remaining
+    - Only [200](stock_level) pill left
+    - Roughly [12](stock_level) tablets remaining
+    - Currently have [24](stock_level) pills
+    - [90](stock_level) left
+    - Currently have [5](stock_level) doses
+    - I’m down to [120](stock_level) bottle
+    - Only [45](stock_level) pills left
+    - Roughly [45](stock_level) dose remaining
+    - There’s [5](stock_level) left
+    - Roughly [24](stock_level) pill remaining
+    - [2](stock_level)
+    - Only [2](stock_level) remaining
+    - I’ve got [1](stock_level) pills left
+    - Only [0](stock_level) doses left
+    - [24](stock_level) bottles left
+    - Just [60](stock_level) capsules
+    - [7](stock_level) left
+    - Stock is [10](stock_level) doses
+    - [60](stock_level) left
+    - [12](stock_level) capsules left
+    - There are [2](stock_level) bottle left
+    - [10](stock_level) strips left
+    - About [15](stock_level) strip left
+    - [5](stock_level)
+    - About [45](stock_level) doses left
+    - [30](stock_level) doses remaining
+    - There are [10](stock_level) bottle left
+    - [24](stock_level) strip left
+    - [90](stock_level) strips left
+    - Stock is [24](stock_level) pills
+    - Only [7](stock_level) pill left
+    - [15](stock_level)
+    - Currently have [20](stock_level) pill
+    - I have [90](stock_level) bottle left
+    - Just [24](stock_level) bottle
+    - [45](stock_level) bottle remaining
+    - Roughly [1](stock_level) capsules remaining
+    - Only [5](stock_level) dose left
+    - There’s [45](stock_level) left
+    - [3](stock_level) pills remaining
+    - About [12](stock_level) tablet left
+    - There are [15](stock_level) capsule left
+    - [7](stock_level)
+    - Just [24](stock_level) dose
+    - [15](stock_level) doses left
+    - There are [7](stock_level) tablet left
+    - There’s [200](stock_level) left
+    - About [45](stock_level) dose left
+    - Only [15](stock_level) pills left
+    - [10](stock_level) dose left
+    - [3](stock_level) left
+    - I have [1](stock_level) bottles remaining
+    - There are [120](stock_level) pills left
+    - Around [10](stock_level) bottles
+    - There are [5](stock_level) pill left
+    - [15](stock_level) tablet left
+    - Roughly [30](stock_level) tablet remaining
+    - [0](stock_level) left
+    - [1](stock_level) left
+    - I have [2](stock_level) dose left
+    - I have [200](stock_level) tablets remaining
+    - Stock is [24](stock_level) capsules
+    - Around [20](stock_level) pill
+    - Roughly [30](stock_level) capsule remaining
+    - There’s [45](stock_level) left
+    - I have [20](stock_level) bottle remaining
+    - [0](stock_level) tablet remaining
+    - I’ve got [20](stock_level) tablets left
+    - [12](stock_level) capsules remaining
+    - There’s [30](stock_level) left
+    - About [200](stock_level) dose left
+    - Currently have [60](stock_level) bottles
+    - [60](stock_level) dose remaining
+    - I have [1](stock_level) doses left
+    - [12](stock_level) left
+    - I have [2](stock_level) pill left
+    - I’ve got [5](stock_level) doses left
+    - Still have [1](stock_level) tablets
+    - [120](stock_level)
+    - There are [12](stock_level) pills left
+    - Currently have [10](stock_level) dose
+    - [24](stock_level) doses remaining
+    - I’m down to [90](stock_level) capsules
+    - Only [12](stock_level) remaining
+    - Only [90](stock_level) remaining
+    - Roughly [90](stock_level) bottles remaining
+    - There are [12](stock_level) dose left
+    - Roughly [5](stock_level) strip remaining
+    - About [0](stock_level) bottles left
+    - Just [12](stock_level) bottles
+    - [45](stock_level)
+    - [200](stock_level) dose remaining
+    - Just [10](stock_level) pill
+    - Only [120](stock_level) strip left
+    - Only [120](stock_level) remaining
+    - Roughly [10](stock_level) dose remaining
+    - Just [15](stock_level) tablet
+    - Only [120](stock_level) remaining
+    - Still have [24](stock_level) pills
+    - Only [45](stock_level) remaining
+    - I’m down to [3](stock_level) capsule
+    - Just [90](stock_level) dose
+    - Stock is [2](stock_level) pills
+    - Currently have [12](stock_level) tablet
+    - Around [20](stock_level) dose
+    - [7](stock_level) doses remaining
+    - There are [1](stock_level) dose left
+    - Only [24](stock_level) doses left
+    - Around [120](stock_level) pill
+    - [15](stock_level)
+    - Roughly [45](stock_level) strips remaining
+    - [3](stock_level) strips left
+    - I have [100](stock_level) pill remaining
+    - There’s [15](stock_level) left
+    - About [12](stock_level) doses left
+    - [5](stock_level) bottles left
+    - Currently have [90](stock_level) bottle
+    - Only [12](stock_level) dose left
+    - [5](stock_level)
+    - Stock is [60](stock_level) capsule
+    - Only [5](stock_level) remaining
+    - [20](stock_level)
+    - I’ve got [7](stock_level) tablet left
+    - Only [120](stock_level) dose left
+    - Roughly [60](stock_level) bottle remaining
+    - Only [45](stock_level) remaining
+    - [12](stock_level)
+    - There are [100](stock_level) pill left
+    - Only [20](stock_level) capsule left
+    - [24](stock_level) left
+    - [45](stock_level)
+    - [7](stock_level) pill left
+    - [24](stock_level) pills left
+    - There are [45](stock_level) pill left
+    - [120](stock_level) left
+    - [3](stock_level) left
+    - About [15](stock_level) doses left
+    - I have [24](stock_level) capsule left
+    - I’ve got [60](stock_level) dose left
+    - I’m down to [24](stock_level) bottle
+    - Stock is [0](stock_level) bottles
+    - [3](stock_level)
+    - Stock is [7](stock_level) doses
+    - Only [0](stock_level) remaining
+    - Just [20](stock_level) doses
+    - Currently have [120](stock_level) bottle
+    - Currently have [7](stock_level) pill
+    - There are [3](stock_level) tablets left
+    - [10](stock_level) left
+    - [3](stock_level) left
+    - Only [0](stock_level) tablet left
+    - [200](stock_level)
+    - [5](stock_level)
+    - Only [30](stock_level) remaining
+    - Only [30](stock_level) dose left
+    - Only [7](stock_level) dose left
+    - Still have [7](stock_level) capsules
+    - [30](stock_level) left
+    - Just [20](stock_level) tablets
+    - [0](stock_level) dose left
+    - Around [100](stock_level) tablet
+    - Around [120](stock_level) capsule
+    - I’m down to [45](stock_level) dose
+    - Stock is [0](stock_level) tablets
+    - There are [120](stock_level) strip left
+    - Just [200](stock_level) strips
+    - Roughly [12](stock_level) bottle remaining
+    - Roughly [200](stock_level) pill remaining
+    - I have [2](stock_level) bottle remaining
+    - Only [3](stock_level) remaining
+    - Stock is [200](stock_level) bottle
+    - Currently have [15](stock_level) pills
+    - Only [10](stock_level) dose left
+    - Just [7](stock_level) tablets
+    - Roughly [30](stock_level) doses remaining
+    - Currently have [60](stock_level) dose
+    - There are [7](stock_level) bottles left
+    - I have [120](stock_level) capsules remaining
+    - I have [0](stock_level) bottle remaining
+    - [90](stock_level)
+    - I’ve got [24](stock_level) dose left
+    - I have [7](stock_level) strip left
+    - I have [200](stock_level) pill remaining
+    - There are [90](stock_level) doses left
+    - About [24](stock_level) bottle left
+    - About [45](stock_level) tablet left
+    - [15](stock_level) bottle left
+    - Around [120](stock_level) doses
+    - [5](stock_level) capsule left
+    - Still have [5](stock_level) doses
+    - Still have [10](stock_level) tablets
+    - Only [15](stock_level) remaining
+    - [12](stock_level) dose left
+    - I have [30](stock_level) strips remaining
+    - [12](stock_level) capsule left
+    - Just [2](stock_level) pills
+    - [0](stock_level) bottles remaining
+    - [10](stock_level) tablet left
+    - I have [12](stock_level) tablets left
+    - There are [0](stock_level) pills left
+    - I’m down to [5](stock_level) pills
+    - Still have [45](stock_level) dose
+    - Just [0](stock_level) pill
+    - Just [45](stock_level) pill
+    - Currently have [30](stock_level) tablets
+    - Stock is [120](stock_level) pill
+    - About [1](stock_level) capsule left
+    - [200](stock_level) pill left
+    - I’ve got [90](stock_level) bottle left
+    - I’m down to [1](stock_level) bottle
+    - [90](stock_level) doses left
+    - Currently have [200](stock_level) pill
+    - Stock is [1](stock_level) tablets
+    - Currently have [7](stock_level) doses
+    - [200](stock_level) bottle remaining
+    - [12](stock_level) tablets left
+    - [10](stock_level) left
+    - Only [120](stock_level) bottles left
+    - [24](stock_level) left
+    - Currently have [12](stock_level) tablets
+    - Just [0](stock_level) pills
+    - I have [7](stock_level) bottles left
+    - Stock is [120](stock_level) bottle
+    - [24](stock_level) capsules left
+    - I’ve got [60](stock_level) tablets left
+    - Roughly [15](stock_level) bottle remaining
+    - I’ve got [20](stock_level) strips left
+    - Just [45](stock_level) strip
+    - About [20](stock_level) bottles left
+    - [10](stock_level) left
+    - Around [30](stock_level) pills
+    - Around [5](stock_level) capsule
+    - Only [10](stock_level) tablet left
+    - I have [30](stock_level) capsule left
+    - [20](stock_level) left
+    - I’ve got [2](stock_level) dose left
+    - [15](stock_level)
+    - [15](stock_level) left
+    - [7](stock_level) strips left
+    - Only [30](stock_level) tablet left
+    - Roughly [120](stock_level) tablets remaining
+    - Roughly [100](stock_level) capsules remaining
+    - Currently have [3](stock_level) tablets
+    - Just [5](stock_level) strips
+    - [2](stock_level) capsule left
+    - Around [0](stock_level) pills
+    - Just [3](stock_level) tablet
+    - About [90](stock_level) capsule left
+    - I have [5](stock_level) pill left
+    - Only [200](stock_level) bottles left
+    - [24](stock_level) left
+    - Only [30](stock_level) remaining
+    - Currently have [5](stock_level) capsule
+    - I’ve got [120](stock_level) doses left
+    - Around [5](stock_level) dose
+    - Just [12](stock_level) tablets
+    - I’ve got [12](stock_level) pills left
+    - Currently have [200](stock_level) tablet
+    - I have [1](stock_level) strip left
+    - Around [45](stock_level) doses
+    - I have [2](stock_level) strip left
+    - [3](stock_level) bottles remaining
+    - Still have [0](stock_level) strip
+    - I have [20](stock_level) pill remaining
+    - There are [15](stock_level) capsules left
+    - Roughly [20](stock_level) doses remaining
+    - [5](stock_level) doses left
+    - I’ve got [10](stock_level) capsules left
+    - I have [30](stock_level) strip left
+    - [12](stock_level) bottle remaining
+    - About [60](stock_level) pill left
+    - I have [90](stock_level) capsules remaining
+    - There’s [45](stock_level) left
+    - Stock is [90](stock_level) capsule
+    - Only [10](stock_level) remaining
+    - Roughly [15](stock_level) capsule remaining
+    - [12](stock_level)
+    - [90](stock_level) pill remaining
+    - I have [15](stock_level) pills left
+    - Only [5](stock_level) remaining
+    - [60](stock_level) bottles remaining
+    - Currently have [120](stock_level) tablets
+    - Stock is [24](stock_level) strip
+    - Currently have [15](stock_level) strip
+    - There’s [3](stock_level) left
+    - I have [30](stock_level) bottles remaining
+    - [2](stock_level) left
+    - [15](stock_level)
+    - Around [30](stock_level) strips
+    - Currently have [0](stock_level) pills
+    - [10](stock_level) left
+    - [24](stock_level) capsule remaining
+    - Roughly [24](stock_level) bottles remaining
+    - Around [0](stock_level) strip
+    - I have [7](stock_level) strips remaining
+    - Around [12](stock_level) bottles
+    - I have [200](stock_level) capsules remaining
+    - Still have [24](stock_level) strips
+    - [90](stock_level) doses remaining
+    - I have [7](stock_level) doses remaining
+    - I have [60](stock_level) strip left
+    - [15](stock_level)
+    - I’ve got [120](stock_level) tablets left
+    - Just [45](stock_level) strips
+    - Around [60](stock_level) capsule
+    - I’m down to [7](stock_level) dose
+    - There are [10](stock_level) pills left
+    - There’s [45](stock_level) left
+    - Still have [5](stock_level) pill
+    - I have [10](stock_level) strip left
+    - Only [100](stock_level) bottle left
+    - I have [24](stock_level) doses remaining
+    - Just [1](stock_level) capsules
+    - About [3](stock_level) tablet left
+    - I have [60](stock_level) strip remaining
+    - There’s [20](stock_level) left
+    - [10](stock_level) left
+    - Currently have [5](stock_level) tablet
+    - Currently have [200](stock_level) doses
+    - Only [60](stock_level) strips left
+    - I’m down to [45](stock_level) capsule
+    - Roughly [5](stock_level) pills remaining
+    - I have [10](stock_level) bottle left
+    - There’s [2](stock_level) left
+    - [3](stock_level)
+    - I’ve got [7](stock_level) pills left
+    - There are [24](stock_level) doses left
+    - Roughly [2](stock_level) bottles remaining
+    - I have [90](stock_level) tablet left
+    - [24](stock_level)
+    - [100](stock_level)
+    - There are [90](stock_level) pills left
+    - [12](stock_level) tablets remaining
+    - Currently have [30](stock_level) pills
+    - [45](stock_level) tablet left
+    - Just [10](stock_level) tablets
+    - Roughly [30](stock_level) strip remaining
+    - Just [200](stock_level) pills
+    - There are [7](stock_level) capsule left
+    - Around [100](stock_level) capsule
+    - I’ve got [5](stock_level) dose left
+    - [90](stock_level) left
+    - [60](stock_level) capsule remaining
+    - Currently have [15](stock_level) doses
+    - Only [100](stock_level) remaining
+    - There’s [15](stock_level) left
+    - Only [3](stock_level) remaining
+    - Stock is [20](stock_level) tablets
+    - Around [15](stock_level) tablets
+    - There’s [5](stock_level) left
+    - [200](stock_level) strip left
+    - [1](stock_level) bottle left
+    - I’m down to [120](stock_level) tablet
+    - Only [24](stock_level) tablets left
+    - I have [45](stock_level) pill left
+    - I have [45](stock_level) strip left
+    - About [90](stock_level) strips left
+    - [5](stock_level) left
+    - Stock is [15](stock_level) capsule
+    - Only [100](stock_level) capsule left
+    - Around [7](stock_level) bottles
+    - There are [24](stock_level) tablets left
+    - I have [100](stock_level) doses left
+    - I’m down to [3](stock_level) bottles

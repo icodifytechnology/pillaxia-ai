@@ -312,9 +312,9 @@
   "casual": [
     "Looking at your medication adherence for the past {period}, you have {medication_count} medications and took {taken}/{total} doses ({compliance_rate}%). {pattern_insight}, and you're {trend_insight}. {encouragement}",
     
-    "I've checked your medication adherence this {period}. With {medication_count} medications, you managed {taken} of {total} doses ({compliance_rate}%). {pattern_insight}. You're {trend_insight}.",
+    "I've checked your medication adherence in {period}. With {medication_count} medications, you managed {taken} of {total} doses ({compliance_rate}%). {pattern_insight}. You're {trend_insight}.",
     
-    "Here's your medication adherence update for the {period}: {medication_count} medications, {taken}/{total} doses taken ({compliance_rate}%). {pattern_insight}. You're {trend_insight} with your routine."
+    "Here's your medication adherence update for the {period}: {medication_count} medications, {taken}/{total} doses taken ({compliance_rate}%). {pattern_insight}. You're {trend_insight}'s routine."
   ],
   "formal": [
     "Your medication adherence assessment for {period} shows {medication_count} medications with {taken} of {total} doses administered ({compliance_rate}% adherence). {pattern_insight}. Consistency is {trend_insight}.",
@@ -363,7 +363,174 @@
     "Every small step counts - let's start building better habits today.",
     "I'm here to support you in building better medication routines."
   ]
-}
+},
+  "ask_medication_name": {
+    "casual": [
+      "What's the name of the medication you'd like to add?"
+    ],
+    "formal": [
+      "Please provide the name of the medication you would like to add."
+    ]
+  },
+
+  "ask_medication_type": {
+    "casual": [
+      "What type of medication is it? (e.g., antidepressant, painkiller, antibiotic)"
+    ],
+    "formal": [
+      "What type of medication is this? (e.g., Antidepressant, Painkiller, Antibiotic, etc.)"
+    ]
+  },
+
+  "ask_medication_colour": {
+    "casual": [
+      "What color should we associate with it? (red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"
+    ],
+    "formal": [
+      "Which color would you like to associate with this medication? (Choose from: red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"
+    ]
+  },
+
+  "ask_medication_dose": {
+    "casual": [
+      "What's the dosage? (e.g., 500mg, 10ml, 1 tablet)"
+    ],
+    "formal": [
+      "Please specify the dosage. (e.g., 500mg, 10ml, 1 tablet)"
+    ]
+  },
+
+  "ask_medication_instructions": {
+    "casual": [
+      "Any special instructions? (like take with food or before bed)"
+    ],
+    "formal": [
+      "Are there any special instructions for taking this medication? (e.g., take with food, take before bed, etc.)"
+    ]
+  },
+
+  "ask_stock_level": {
+    "casual": [
+      "How many pills or units do you have left?"],
+    "formal": [
+      "How many pills or units do you currently have in stock?"
+    ]
+  },
+
+  "ask_refill_day": {
+    "casual": [
+      "In how many days would you need to refill the medication?"],
+    "formal": [
+      "In how many days would you need to refill the medication?"
+    ]
+  },
+
+  "ask_frequency": {
+    "casual": [
+      "For how long would you like to setup the reminder for? (e.g, 1 day, 1 week, 2 months)"
+    ],
+    "formal": [
+      "For what duration would you like to save the reminder? (e.g., day, week, month, year)"
+    ]
+  },
+
+  "ask_per_day_frequency": {
+    "casual": [
+      "How many times a day should I remind you? (once, twice, thrice)"
+    ],
+    "formal": [
+      "How many times a day would you like to receive reminders? (e.g., once, twice, thrice)"
+    ]
+  },
+
+"ask_quantity": {
+  "casual": [
+    "How much medicine should I remind you to take? (e.g., 1 mg, 1 tablet, 5 ml)"
+  ],
+  "formal": [
+    "Please specify the dosage amount for the reminder (e.g., 1 mg, 1 tablet, 5 ml)."
+  ]
+},
+
+"ask_reminder_time": {
+  "casual": [
+    "What time should I remind you? (e.g., 8 AM, 14:30)"
+  ],
+  "formal": [
+    "At what time would you like to receive the reminder? (e.g., 8:00 AM or 14:30)"
+  ]
+},
+
+"ask_alert_type": {
+  "casual": [
+    "How would you like to be notified — voice or alarm?"
+  ],
+  "formal": [
+    "Please select the type of alert you prefer: voice notification or alarm."
+  ]
+},
+
+"ask_reminder_day": {
+  "casual": [
+    "What days should I set the reminder for? You can say something like Monday and Friday, weekdays, or every day."
+  ],
+  "formal": [
+    "Please specify the days on which the reminder should be scheduled (e.g., Monday and Friday, weekdays, or every day)."
+  ]
+},
+
+  "submit_medication": {
+    "casual": [
+      "I have added the medication for you. Would you like to setup refill information for it? "
+    ],
+    "formal": [
+      "The medication information has been successfully set. Would you like to add refill information for it?"
+    ]
+  },
+
+    "submit_refill": {
+    "casual": [
+      "I have added the refill information for you. Would you like to setup reminder information for it? "
+    ],
+    "formal": [
+      "The refill information has been successfully set. Would you like to add reminder information for it?"
+    ]
+  },
+
+  "greet-form": {
+    "casual": [
+      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+    ],
+    "formal": [
+      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+    ]
+  },
+  
+  "form-interrupt": {
+    "casual": [
+      "We are in the process of adding a medication. Would you like to cancel it?"
+    ],
+    "formal": [
+      "We are in the process of adding a medication. Would you like to cancel it?"
+    ]
+  },
+
+    "refill-deny": {
+    "casual": [
+      "Okay. Would you like to setup reminder for the medication?"
+    ],
+    "formal": [
+      "Okay. Would you like to setup reminder for the medication?"
+    ]
+  },
+      "reminder-deny": {
+    "casual": [
+      "Okay. You can setup the reminder for it later. What else can i do for you now?"
+    ],
+    "formal": [
+      "Okay. What can I assit you with today?"
+    ]
+  }
 }
 
 

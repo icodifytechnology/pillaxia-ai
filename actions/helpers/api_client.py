@@ -122,14 +122,43 @@ class PillaxiaAPIClient:
     
     def save_user_medication(self, token: str, medication_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
         """Save or update a user medication."""
+        logger.debug(f"Saving medication data: {medication_data}")
         data, status_code, error = self._make_request(
             "POST", "/user-medications/save",
             headers=self._get_auth_headers(token),
             json=medication_data
         )
         
+        if status_code == 200 and data:
+            result = data.get("result", {})
+            medication_id = result.get("id")
+            message = data.get("message", "Medication saved successfully")
+            return True, message, medication_id
+        
+        return False, error, None
+    
+    def save_medication_refill(self, token: str, refill_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+        """Save or update a medication refill."""
+        logger.debug(f"Saving refill data: {refill_data}")
+        data, status_code, error = self._make_request(
+            "POST", "/medication-refill-periods/save",
+            headers=self._get_auth_headers(token),
+            json=refill_data
+        )
         if status_code == 200:
-            message = data.get("message") if data else "Medication saved successfully"
+            message = data.get("message") if data else "Medication refillsaved successfully"
+            return True, message
+        return False, error
+    
+    def save_medication_reminder(self, token: str, reminder_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+        """Save or update a medication reminder."""
+        data, status_code, error = self._make_request(
+            "POST", "/medication-reminders/save",
+            headers=self._get_auth_headers(token),
+            json=reminder_data
+        )
+        if status_code == 200:
+            message = data.get("message") if data else "Medication reminder saved successfully"
             return True, message
         return False, error
     
