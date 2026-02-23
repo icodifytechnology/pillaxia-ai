@@ -125,6 +125,7 @@ nlu:
     - I'm supposed to take it [After Meals](medication_instructions)
     - [Every 8 Hours](medication_instructions)
     - It's taken [as needed](medication_instructions)
+    - [with water](medication_instructions)
     - Doctor said [when required](medication_instructions)
     - I take it [With Food](medication_instructions)
     - It should be taken [with food](medication_instructions)

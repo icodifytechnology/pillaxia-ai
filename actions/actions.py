@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 from typing import Any, Text, Dict, List, Optional, Tuple
 import logging
 from abc import ABC, abstractmethod
-
+from pathlib import Path
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
+from .uncertainty_classifier import get_classifier
 
 import requests
 from rasa_sdk import Action, Tracker, FormValidationAction
@@ -20,6 +21,9 @@ import os
 import random
 
 load_dotenv()
+
+# Initialize classifier
+uncertainty_classifier = get_classifier()
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -36,6 +40,16 @@ def debug_separator(title: str = "DEBUG") -> str:
     """Create formatted debug separator"""
     return f"\n{'='*60}\n=== {title} ===\n{'='*60}"
 
+def send_response(response: str):
+    '''Send the text response in attachment format'''
+
+    attachment={
+                "query_response": response,
+                "type": "text",
+                "status": "success"
+            }
+    
+    return attachment
 
 class BaseAction(Action, ABC):
     """Abstract base class for all actions that need user preferences"""
@@ -272,11 +286,24 @@ class ActionAskMedicationName(BaseAction):
     
     def run_with_slots(self, dispatcher, tracker, domain):
         "Asks medication name to the user"
+        
+        prompt = tracker.get_slot("form_prompt")
 
-        builder = ResponseBuilder(tracker.sender_id, tracker)
-        response = builder.build_response(intent="ask_medication_name")
-        dispatcher.utter_message(attachment=response)
-        return []
+        if prompt == "multiple_meds":
+            response_text = "Please provide only one medication at a time. Which one would you like to add?"
+            dispatcher.utter_message(attachment={
+                "query_response": response_text,
+                "type": "text",
+                "status": "success"
+            })
+        else:
+            # Normal ask via your ResponseBuilder
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            response = builder.build_response(intent="ask_medication_name")
+            dispatcher.utter_message(attachment=response)
+
+        # Clear the prompt slot so it doesn’t repeat
+        return [SlotSet("form_prompt", None)]
 
 class ActionAskMedicationType(BaseAction):
     def name(self) -> Text:
@@ -329,218 +356,65 @@ class ActionAskMedicationInstructions(BaseAction):
 class ValidateMedicationForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_medication_form"
-
-    async def _ask_for_next_slot(
+        
+    async def validate_medication_name(
         self,
-        slot_to_fill: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict]:
-        """Override the default slot asking behavior to use custom attachment format."""
-        
-        # Define your slot questions
-        slot_questions = {
-            "medication_name": "What is the name of the medication you would like to add?",
-            "medication_type": "What type of medication is this? (e.g., Antidepressant, Painkiller, Antibiotic, etc.)",
-            "medication_colour": "What color would you like to associate with the medication? (Choose from: red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)",
-            "medication_dose": "What is the dosage? (e.g., 500mg, 10ml, 1 tablet)",
-            "medication_instructions": "Any special instructions for taking this medication? (e.g., take with food, take before bed, etc.)"
-        }
-        
-        # Get the question text
-        question = slot_questions.get(
-            slot_to_fill, 
-            f"Please provide {slot_to_fill.replace('_', ' ')}"
-        )
-        
-        # Send in the custom attachment format
-        dispatcher.utter_message(
-            attachment={
-                "query_response": question,
-                "type": "text",
-                "status": "success"
-            }
-        )
-        return []
-    
-    async def required_slots(
-        self,
-        domain_slots: List[Text],
+        slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any],
-    ) -> List[Text]:
-        """Determine which slots are still required."""
-        
-        # DEBUG: Log current state
-        logger.debug("="*80)
-        logger.debug("REQUIRED_SLOTS DEBUG:")
-        logger.debug(f"Active loop: {tracker.active_loop}")
-        logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
-        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
-        logger.debug(f"Latest text: '{tracker.latest_message.get('text')}'")
-        logger.debug("="*80)
-        
-        # List of all slots in order
-        all_slots = [
-            "medication_name", 
-            "medication_type", 
-            "medication_colour",
-            "medication_dose", 
-            "medication_instructions"
-        ]
-    
-        # Check which slots are still empty
-        required = []
-        for slot in all_slots:
-            slot_value = tracker.get_slot(slot)
-            if slot_value is None or slot_value == "":
-                required.append(slot)
-            else:
-                logger.debug(f"Slot '{slot}' is already filled: {slot_value}")
-        
-        logger.debug(f"Required slots: {required}")
-        return required
-    
-    # async def extract_medication_name(
-    #     self,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Extract medication name - only when form is asking for it."""
-        
-    #     requested_slot = tracker.get_slot("requested_slot")
-    #     text = tracker.latest_message.get("text", "").strip()
-    #     intent = tracker.latest_message.get("intent", {}).get("name", "")
-        
-    #     logger.debug(f"Extracting medication name. Requested slot: {requested_slot}, Intent: {intent}, Text: '{text}'")
-        
-    #     # # Only proceed if we're asking for medication_name AND user said something
-    #     # if requested_slot != "medication_name" or not text:
-    #     #     return {}
-
-    #     # # ============ INTENT VALIDATION ============
-    #     # # If the intent is wrong, reject without message - form will re-ask
-    #     # if intent != "provide_medication_name" and intent != "add_medication":
-    #     #     logger.debug(f"Rejecting - intent '{intent}' is not 'provide_medication_name'")
-    #     #     dispatcher.utter_message("Please provide the name of the medication.")
-    #     #     return {}  # Just return empty - form's utter_ask will handle the re-prompt
-    #     # # ===========================================
-        
-    #     # if intent == "cancel_medication_form":
-    #     #     dispatcher.utter_message(response="utter_ask_continue", medication_name=text)
-
-    #     # if intent == "add_medication":
-    #     #     dispatcher.utter_message("Great! Let's add a new medication. What is the name of the medication?")
-    #     # logger.debug(f"✓ Accepting '{text}' as medication_name")
-        
-    #     # Validate and return
-    #     validation_result = await self.validate_medication_name(text, dispatcher, tracker, domain)
-    #     return validation_result
-    
-    # async def extract_medication_type(
-    #     self,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Extract medication type."""
-        
-    #     requested_slot = tracker.get_slot("requested_slot")
-    #     text = tracker.latest_message.get("text", "").strip()
-        
-    #     if requested_slot == "medication_type" and text:
-    #         logger.debug(f"✓ Accepting '{text}' as medication_type")
-    #         return {"medication_type": text}
-        
-    #     return {}
-    
-    # async def extract_medication_colour(
-    #     self,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Extract medication colour."""
-        
-    #     requested_slot = tracker.get_slot("requested_slot")
-    #     text = tracker.latest_message.get("text", "").strip()
-        
-    #     if requested_slot == "medication_colour" and text:
-    #         logger.debug(f"✓ Accepting '{text}' as medication_colour")
-    #         return {"medication_colour": text}
-        
-    #     return {}
-    
-    # async def extract_medication_dose(
-    #     self,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Extract medication dose."""
-        
-    #     requested_slot = tracker.get_slot("requested_slot")
-    #     text = tracker.latest_message.get("text", "").strip()
-        
-    #     if requested_slot == "medication_dose" and text:
-    #         logger.debug(f"✓ Accepting '{text}' as medication_dose")
-    #         return {"medication_dose": text}
-        
-    #     return {}
-    
-    # async def extract_medication_instructions(
-    #     self,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Extract medication instructions."""
-        
-    #     requested_slot = tracker.get_slot("requested_slot")
-    #     text = tracker.latest_message.get("text", "").strip()
-        
-    #     if requested_slot == "medication_instructions" and text:
-    #         logger.debug(f"✓ Accepting '{text}' as medication_instructions")
-    #         return {"medication_instructions": text}
-        
-    #     return {}
-        
-    async def validate_medication_name(
-    self,
-    slot_value: Any,
-    dispatcher: CollectingDispatcher,
-    tracker: Tracker,
-    domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate medication name."""
-        logger.debug('######### Validating medication name #########')
-        
-        if not slot_value:
-            return {"medication_name": None}
-        
-        if len(slot_value.strip()) < 2:
-            return {"medication_name": None}
-        
-        # Check if it's a common type/colour that shouldn't be a name
-        common_types = ["pill", "tablet", "capsule", "liquid", "injection", "cream", "ointment"]
-        if slot_value.lower() in common_types:
-            dispatcher.utter_message(f"'{slot_value}' sounds like a medication type. Please provide the specific medication name.")
-            return {"medication_name": None}
-        
-        common_colours = ["red", "blue", "white", "yellow", "green", "orange", "purple", "pink", "black", "grey", "brown"]
-        if slot_value.lower() in common_colours:
-            dispatcher.utter_message(f"'{slot_value}' is a colour. I need the medication name first.")
-            return {"medication_name": None}
-        
-        logger.debug(f"Valid medication name: {slot_value.strip()}")
-        
-        return {
-            "medication_name": slot_value.strip()
-        }
+        """Validate medication name and ensure only one medication is provided."""
+        logger.debug('######### VALIDATING MEDICATION NAME #########')
 
+        entities = tracker.latest_message.get('entities', [])
+        medication_entities = [
+            e.get('value') for e in entities if e.get('entity') == 'medication_name'
+        ]
+
+        text = tracker.latest_message.get('text', '') or ""
+
+        # --------------------------------------------------
+        # 1. Detect multiple medication entities
+        # --------------------------------------------------
+        if len(medication_entities) > 1:
+            logger.debug(f"Multiple medication entities detected: {medication_entities}")
+            prompt = tracker.get_slot("form_prompt")
+            return {"medication_name": None, "form_prompt": "multiple_meds"}
+
+        # --------------------------------------------------
+        # 2. Extract single medication
+        # --------------------------------------------------
+        medication_name_value = None
+
+        if medication_entities:
+            medication_name_value = medication_entities[0]
+            logger.debug(f"Found medication_name entity: {medication_name_value}")
+
+        elif slot_value and isinstance(slot_value, str):
+            cleaned = slot_value.strip()
+            medication_name_value = cleaned
+
+        if not medication_name_value:
+            logger.debug("No medication name value found")
+            return {"medication_name": None}
+
+        if len(medication_name_value.strip()) < 2:
+            logger.debug(f"Medication name too short: {medication_name_value}")
+            return {"medication_name": None}
+
+        # --------------------------------------------------
+        # 4. Clean + Format
+        # --------------------------------------------------
+        cleaned_name = medication_name_value.strip()
+        capitalized_name = cleaned_name.title()
+
+        logger.debug(f"Valid medication name (capitalized): {capitalized_name}")
+
+        return {
+            "medication_name": capitalized_name
+        }
+    
     async def validate_medication_type(
         self,
         slot_value: Any,
@@ -548,7 +422,9 @@ class ValidateMedicationForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        logger.debug('Validating medication type')
+        
+        logger.debug('######### VALIDATING MEDICATION TYPE #########')
+
         if not slot_value or len(slot_value.strip()) < 2:
             dispatcher.utter_message("Please specify the medication type.")
             return {"medication_type": None}
@@ -566,6 +442,9 @@ class ValidateMedicationForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate medication colour from categorical values."""
+        
+        logger.debug('######### VALIDATING MEDICATION COLOUR #########')
+
         if not slot_value:
             return {"medication_colour": None}
         
@@ -594,28 +473,25 @@ class ValidateMedicationForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        if not slot_value:
-            dispatcher.utter_message("Please provide the dosage.")
-            return {"medication_dose": None}
         
-        if not re.search(r'\d+', slot_value):
-            dispatcher.utter_message("Please include the dosage amount (e.g., 500 mg).")
-            return {"medication_dose": None}
+        logger.debug('######### VALIDATING MEDICATION DOSE #########')
+        if tracker.latest_message.get("entities"):
+            for ent in tracker.latest_message["entities"]:
+                if ent["entity"] == "quantity":
+                    return {"medication_dose": ent["value"]}
+        return {}
         
-        return {"medication_dose": slot_value.strip()}
 
     async def validate_medication_instructions(
-    self,
-    slot_value: Any,
-    dispatcher: CollectingDispatcher,
-    tracker: Tracker,
-    domain: Dict[Text, Any],
-) -> Dict[Text, Any]:
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
         """Handle medication instructions."""
         
-        logger.debug("="*80)
-        logger.debug(f"VALIDATE_MEDICATION_INSTRUCTIONS called with: '{slot_value}'")
-        logger.debug("="*80)
+        logger.debug('######### VALIDATING MEDICATION INSTRUCTIONS #########')
         
         # If user explicitly says "none"
         if slot_value and slot_value.lower().strip() == "none":
@@ -644,35 +520,41 @@ class ValidateMedicationForm(FormValidationAction):
         return result
 
 class ActionCancelForm(BaseAction):
-    """Cancells the active form."""
+    """Cancels the active form."""
 
     def name(self) -> Text:
         return "action_cancel_form"
     
     def run_with_slots(self, dispatcher, tracker, domain):
 
-        if ActiveLoop == "medication_form":
-            response = "Okay. I have cancelled the medication adding process. What would you like to do next?"
+        logger.debug('CANCEL FORM CALLED')
+
+        active_loop = tracker.active_loop.get('name') if tracker.active_loop else None
+        logger.debug(f'Active loop: "{active_loop}"')
+        
+        if active_loop == "medication_form":
+            logger.debug('Cancelling medication form')
+            response = "Okay. I've stopped adding the medication. What would you like to do next?"
             attachment = {
                 "query_response": response,
-                "data": [],
                 "type": "text",
                 "status": "success"
             }
             dispatcher.utter_message(attachment=attachment)
-        
-            # THIS is where deactivation happens
+            
             return [
-                ActiveLoop(None),  # Deactivate the form
-                SlotSet("requested_slot", None),  # Clear requested slot
-                SlotSet("medication_name", None),  # Clear form data
+                ActiveLoop(None),
+                SlotSet("requested_slot", None),
+                SlotSet("medication_name", None),
                 SlotSet("medication_type", None),
                 SlotSet("medication_colour", None),
                 SlotSet("medication_dose", None),
                 SlotSet("medication_instructions", None)
             ]
-        elif ActiveLoop == "refill_form":
-            response = "Okay. I have cancelled the refill information adding process. What would you like to do next?"
+            
+        elif active_loop == "refill_form":
+            logger.debug('Cancelling refill form')
+            response = "Okay. I've stopped adding the refill information. What would you like to do next?"
             attachment = {
                 "query_response": response,
                 "data": [],
@@ -680,16 +562,17 @@ class ActionCancelForm(BaseAction):
                 "status": "success"
             }
             dispatcher.utter_message(attachment=attachment)
-        
-            # THIS is where deactivation happens
+            
             return [
-                ActiveLoop(None),  # Deactivate the form
-                SlotSet("requested_slot", None),  # Clear requested slot
-                SlotSet("stock_level", None),  # Clear form data
+                ActiveLoop(None),
+                SlotSet("requested_slot", None),
+                SlotSet("stock_level", None),
                 SlotSet("refill_day", None)
             ]
-        elif ActiveLoop == "reminder_form":
-            response = "Okay. I have cancelled the reminder adding process. What would you like to do next?"
+            
+        elif active_loop == "reminder_form":
+            logger.debug('Cancelling reminder form')
+            response = "Okay. I have I've stopped adding the reminder. What would you like to do next?"
             attachment = {
                 "query_response": response,
                 "data": [],
@@ -697,18 +580,33 @@ class ActionCancelForm(BaseAction):
                 "status": "success"
             }
             dispatcher.utter_message(attachment=attachment)
-        
-            # THIS is where deactivation happens
+            
             return [
-                ActiveLoop(None),  # Deactivate the form
-                SlotSet("requested_slot", None),  # Clear requested slot
-                SlotSet("frequency_type", None),  # Clear form data
-                SlotSet("frequency_period", None),
-                SlotSet('time_period', None),
+                ActiveLoop(None),
+                SlotSet("requested_slot", None),
+                SlotSet("frequency", None),
+                SlotSet("frequency", None),
+                SlotSet("per_day_frequency", None),
                 SlotSet("quantity", None),
-                SlotSet('reminder_time', None),
+                SlotSet("reminder_time", None),
                 SlotSet("alert_type", None),
-                SlotSet('reminder_day', None),
+                SlotSet("reminder_day", None)
+            ]
+            
+        else:
+            logger.debug(f'No matching form for active_loop: "{active_loop}"')
+            response = "Okay. Cancelled."
+            attachment = {
+                "query_response": response,
+                "data": [],
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+            
+            return [
+                ActiveLoop(None),
+                SlotSet("requested_slot", None)
             ]
 
 class ActionSubmitMedicationForm(BaseAction):
@@ -726,17 +624,42 @@ class ActionSubmitMedicationForm(BaseAction):
         logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
         logger.debug("="*80)
 
-        # Collect medication data
+        # Get raw slot values
+        raw_name = tracker.get_slot("medication_name") or ""
+        raw_type = tracker.get_slot("medication_type") or ""
+        raw_colour = tracker.get_slot("medication_colour")
+        raw_dose = tracker.get_slot("medication_dose") or ""
+        raw_instructions = tracker.get_slot("medication_instructions") or ""
+
+        # Capitalize medication name (title case for multi-word names)
+        capitalized_name = raw_name.title()
+        logger.debug(f"Capitalized medication name: '{raw_name}' -> '{capitalized_name}'")
+        
+        # Capitalize medication type (just first letter since it's usually a single word)
+        if raw_type:
+            capitalized_type = raw_type[0].upper() + raw_type[1:].lower()
+        else:
+            capitalized_type = ""
+        logger.debug(f"Capitalized medication type: '{raw_type}' -> '{capitalized_type}'")
+        
+        # Capitalize instructions (first letter of each sentence)
+        if raw_instructions and raw_instructions.lower() != "none":
+            # Simple capitalization - first letter of the string
+            capitalized_instructions = raw_instructions[0].upper() + raw_instructions[1:].lower()
+        else:
+            capitalized_instructions = raw_instructions
+
+        # Collect medication data with capitalized values
         medmanager = MedicationManager(token=tracker.sender_id)
-        colour = medmanager.color_to_hex(tracker.get_slot("medication_colour"))
-        logger.debug(f"Converted colour '{tracker.get_slot('medication_colour')}' to hex: {colour}")
+        colour = medmanager.color_to_hex(raw_colour)
+        logger.debug(f"Converted colour '{raw_colour}' to hex: {colour}")
 
         medication_data = {
-            "name": tracker.get_slot("medication_name"),
-            "medication_type": tracker.get_slot("medication_type"),
+            "name": capitalized_name,  # Use capitalized name
+            "medication_type": capitalized_type,  # Use capitalized type
             "colour": colour,
-            "dose": tracker.get_slot("medication_dose"),
-            "instructions": tracker.get_slot("medication_instructions") or "",
+            "dose": raw_dose,  # Keep dose as-is (might have numbers and units)
+            "instructions": capitalized_instructions or "",
             "stock_level": 0,
             "order": 0,
             "status": 1
@@ -770,7 +693,13 @@ class ActionSubmitMedicationForm(BaseAction):
         return [
             ActiveLoop(None),  # Deactivate medication form
             SlotSet("current_step", "ask_refill"),
-            SlotSet("user_medication_id", medication_id)
+            SlotSet("user_medication_id", medication_id),
+            # Clear all medication slots for next time
+            SlotSet("medication_name", None),
+            SlotSet("medication_type", None),
+            SlotSet("medication_colour", None),
+            SlotSet("medication_dose", None),
+            SlotSet("medication_instructions", None)
         ]
     
 class ActionHandleFormInterruption(BaseAction):
@@ -860,37 +789,6 @@ class ValidateRefillForm(FormValidationAction):
     
     def name(self) -> Text:
         return "validate_refill_form"
-
-    async def _ask_for_next_slot(
-        self,
-        slot_to_fill: Text,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]
-    ) -> List[Dict]:
-        """Override the default slot asking behavior to use custom attachment format."""
-        
-        # Define your slot questions
-        slot_questions = {
-            "stock_level": "How many pills/units do you currently have in stock?",
-            "refill_day": "In how many days would you need to refill the medication?"
-        }
-        
-        # Get the question text
-        question = slot_questions.get(
-            slot_to_fill, 
-            f"Please provide {slot_to_fill.replace('_', ' ')}"
-        )
-        
-        # Send in the custom attachment format
-        dispatcher.utter_message(
-            attachment={
-                "query_response": question,
-                "type": "text",
-                "status": "success"
-            }
-        )
-        return []
     
     async def required_slots(
         self,
@@ -928,12 +826,12 @@ class ValidateRefillForm(FormValidationAction):
         return required
 
     async def validate_stock_level(
-    self,
-    slot_value: Any,
-    dispatcher: CollectingDispatcher,
-    tracker: Tracker,
-    domain: Dict[Text, Any],
-) -> Dict[Text, Any]:
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
         """Validate stock level, handling wrong intent predictions."""
         
         intent = tracker.latest_message.get("intent", {}).get("name")
@@ -941,35 +839,54 @@ class ValidateRefillForm(FormValidationAction):
         
         logger.debug(f"Validating stock level with intent: {intent}, value: {slot_value}")
         
-        # If intent is wrong but value is numeric, try to extract anyway
-        if intent != "provide_stock_level" and intent != "provide_medication_dose":
+        # Try to extract number from text
+        import re
+        numbers = re.findall(r'\d+', text)
+        
+        # MINIMAL UPDATE: If no numbers found, reject and ask again
+        if not numbers:
+            dispatcher.utter_message(
+                attachment={
+                    "query_response": "Please enter a valid number for stock level (e.g., 15, 30, 60).",
+                    "type": "text",
+                    "status": "success"
+                }
+            )
             return {"stock_level": None}
         
-        # Try to extract number from text
+        # If we have numbers, use the first one
         try:
-            # If slot_value is already a number
-            if slot_value is not None:
-                stock = int(slot_value)
-            else:
-                # Try to extract number from text
-                import re
-                numbers = re.findall(r'\d+', text)
-                if numbers:
-                    stock = int(numbers[0])
-                else:
-                    dispatcher.utter_message("Please enter a valid number for stock level.")
-                    return {"stock_level": None}
+            stock = int(numbers[0])
             
             if stock < 0:
-                dispatcher.utter_message("Please enter a positive number for stock level.")
+                dispatcher.utter_message(
+                    attachment={
+                        "query_response": "Please enter a positive number for stock level.",
+                        "type": "text",
+                        "status": "success"
+                    }
+                )
                 return {"stock_level": None}
             
             if stock < 7:
-                dispatcher.utter_message(f"Only {stock} left? You might need a refill soon!")
+                dispatcher.utter_message(
+                    attachment={
+                        "query_response": f"Only {stock} left? You might need a refill soon!",
+                        "type": "text",
+                        "status": "success"
+                    }
+                )
             
             return {"stock_level": stock}
+            
         except (ValueError, TypeError):
-            dispatcher.utter_message("Please enter a valid number for stock level.")
+            dispatcher.utter_message(
+                attachment={
+                    "query_response": "Please enter a valid number for stock level.",
+                    "type": "text",
+                    "status": "success"
+                }
+            )
             return {"stock_level": None}
 
     async def validate_refill_day(
@@ -979,38 +896,44 @@ class ValidateRefillForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate refill period in days and calculate actual date."""
         
-        logger.debug("="*80)
-        logger.debug(f"VALIDATE_refill_day called with: '{slot_value}'")
-        logger.debug("="*80)
+        text = tracker.latest_message.get("text", "")
+        entities = tracker.latest_message.get("entities", [])
         
-        if slot_value is None:
-            return {"refill_day": None}
+        logger.debug(f"Validating refill_day with text: '{text}'")
+        logger.debug(f"Entities found: {entities}")
         
-        try:
-            days = int(slot_value)
-            
-            if days <= 0:
-                response = {
-                     "query_response": "Please enter a positive number of days (e.g., 30 for one month).",
-                     "type": "text",
-                     "status": "success"
-                    }
-                dispatcher.utter_message(attachment=response)
-                return {"refill_day": None}
-            
-            if days > 365:
-                dispatcher.utter_message("That's more than a year! Please enter a number of days (1-365).")
-                return {"refill_day": None}
-            
-            return {
-                "refill_day": days,
+        # 🔥 FIX: Check if there's a frequency entity that should map to refill_day
+        for entity in entities:
+            if entity.get("entity") == "frequency":
+                frequency_value = entity.get("value")
+                logger.debug(f"Found frequency entity: '{frequency_value}' - mapping to refill_day")
+                
+                # Extract number from the frequency
+                import re
+                numbers = re.findall(r'\d+', frequency_value)
+                if numbers:
+                    days = int(numbers[0])
+                    if days > 0 and days <= 365:
+                        return {"refill_day": days}
+        
+        # Also check the raw text for numbers
+        import re
+        numbers = re.findall(r'\d+', text)
+        if numbers:
+            days = int(numbers[0])
+            if days > 0 and days <= 365:
+                return {"refill_day": days}
+        
+        # If no valid number found
+        dispatcher.utter_message(
+            attachment={
+                "query_response": "Please enter a valid number of days (e.g., 7, 30, 90).",
+                "type": "text",
+                "status": "success"
             }
-            
-        except (ValueError, TypeError):
-            dispatcher.utter_message("Please enter a valid number of days (e.g., 7, 30, 90).")
-            return {"refill_day": None}
+        )
+        return {"refill_day": None}
       
 class ActionSubmitRefillForm(BaseAction):
     """Submits refill form and moves to reminders."""
@@ -1022,319 +945,381 @@ class ActionSubmitRefillForm(BaseAction):
                        tracker: Tracker,
                        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-
         logger.debug("="*80)
         logger.debug("ACTION_SUBMIT_REFILL_FORM IS RUNNING!")
         logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
         logger.debug("="*80)
 
-        # Collect refill data
-        refill_data = {
-            "user_medication_id": tracker.get_slot("user_medication_id"),
-            "stock_level": int(tracker.get_slot("stock_level")),
-            "refill_day": int(tracker.get_slot("refill_day"))}
+        # Helper function to extract refill days 
+        def extract_refill_days(value):
+            """
+            Extract numeric value and convert to days if needed.
+            Supports days, weeks, months.
+            """
 
-        if refill_data:
-            logger.debug(f"refill_data:{refill_data}")
+            if value is None:
+                return None
 
-            # Save refill data
-            medmanager = MedicationManager(token=tracker.sender_id)
-            success, message = medmanager.save_refill(refill_data)
+            # If already numeric → assume it's days
+            if isinstance(value, (int, float)):
+                return int(value)
 
-            if not success: 
-                response = "Sorry, I couldn't save your refill information. Would you like to try again?"
-                attachment = {
-                "query_response": response,
-                "type": "text",
-                "status": "success"
+            if isinstance(value, str):
+                import re
+
+                value = value.lower().strip()
+
+                # Extract number (supports decimals)
+                match = re.search(r'(\d+(?:\.\d+)?)', value)
+                if not match:
+                    logger.warning(f"No number found in refill_day: {value}")
+                    return None
+
+                number = float(match.group(1))
+
+                # Determine unit
+                if "week" in value:
+                    return int(number * 7)
+
+                elif "month" in value:
+                    return int(number * 30)
+
+                elif "day" in value:
+                    return int(number)
+
+                else:
+                    # If no unit provided → assume days
+                    return int(number)
+
+            logger.warning(f"Unsupported refill_day type: {type(value)}")
+            return None
+
+        # Get raw slot values
+        raw_stock_level = tracker.get_slot("stock_level")
+        raw_refill_day = tracker.get_slot("refill_day")
+        user_medication_id = tracker.get_slot("user_medication_id")
+        
+        logger.debug(f"Raw stock_level: '{raw_stock_level}' (type: {type(raw_stock_level)})")
+        logger.debug(f"Raw refill_day: '{raw_refill_day}' (type: {type(raw_refill_day)})")
+        
+        # Extract numbers
+        stock_level = extract_refill_days(raw_stock_level)
+        refill_day = extract_refill_days(raw_refill_day)
+        
+        logger.debug(f"Extracted stock_level: {stock_level}")
+        logger.debug(f"Extracted refill_day: {refill_day}")
+
+        # Validate we have valid numbers
+        if stock_level is None:
+            dispatcher.utter_message(
+                attachment={
+                    "query_response": "I couldn't understand your stock level. Please try again.",
+                    "type": "text",
+                    "status": "error"
                 }
-                return [
-                    ActiveLoop(None),
-                    SlotSet("current_step", None)
-                ]
-            
-            # Initialize ResponseBuilder with sender token
-            builder = ResponseBuilder(token=tracker.sender_id)
-            
-            response = builder.build_response(intent='submit_refill')
-            dispatcher.utter_message(attachment=response)
+            )
             return [
-                ActiveLoop(None),  # Deactivate refill form
-                SlotSet("current_step", "ask_reminder")
+                ActiveLoop(None),
+                SlotSet("current_step", None)
             ]
         
-        else:
-            logger.debug(f"No refill data")
-            return []
+        logger.debug(f'ActiveLoop: {ActiveLoop}')
+        if refill_day is None:
+            dispatcher.utter_message(
+                attachment={
+                    "query_response": "I couldn't understand when you need a refill. Please try again.",
+                    "type": "text",
+                    "status": "error"
+                }
+            )
+            return [
+                ActiveLoop(None),
+                SlotSet("current_step", None)
+            ]
 
+        # Collect cleaned refill data
+        refill_data = {
+            "user_medication_id": user_medication_id,
+            "stock_level": stock_level,
+            "refill_day": refill_day
+        }
+
+        logger.debug(f"Cleaned refill_data: {refill_data}")
+
+        # Save refill data
+        medmanager = MedicationManager(token=tracker.sender_id)
+        success, message = medmanager.save_refill(refill_data)
+
+        if not success: 
+            response = "Sorry, I couldn't save your refill information. Would you like to try again?"
+            attachment = {
+                "query_response": response,
+                "type": "text",
+                "status": "error"
+            }
+            dispatcher.utter_message(attachment=attachment)
+            return [
+                ActiveLoop(None),
+                SlotSet("current_step", None)
+            ]
+        
+        # Success - move to reminders
+        builder = ResponseBuilder(token=tracker.sender_id)
+        response = builder.build_response(intent='submit_refill')
+        dispatcher.utter_message(attachment=response)
+        
+        return [
+            ActiveLoop(None),  # Deactivate refill form
+            SlotSet("current_step", "ask_reminder"),
+            SlotSet('stock_level', None),
+            SlotSet('refill_day', None)
+        ]
+
+class ActionHandleReminderDeny(BaseAction):
+    def name(self) -> Text:
+        return "action_handle_reminder_deny"
+
+    def run_with_slots(self, dispatcher, tracker, domain):
+
+        intent = tracker.latest_message.get("intent", {}).get("name")
+        logger.debug(f"ActionHandleReminderDeny called with intent: {intent}")
+
+        if intent == "deny" or intent == "skip":
+            logger.debug("User denied reminder -- Asking what else can I do")
+        
+            # Otherwise treat as interruption
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            response = builder.build_response('reminder-deny')
+            
+            dispatcher.utter_message(attachment=response)
+
+            # Set a slot to track that we're now in reminder-asking phase
+            return [SlotSet("current_step", None)]
+
+        return []
+    
+class ActionAskFrequency(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_frequency"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks frequency from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_frequency")
+        dispatcher.utter_message(attachment=response)
+        return []
+
+class ActionAskPerDayFrequency(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_per_day_frequency"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks Per day frequency from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_per_day_frequency")
+        dispatcher.utter_message(attachment=response)
+        return []
+    
+class ActionAskQuantity(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_quantity"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks Quantity from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_quantity")
+        dispatcher.utter_message(attachment=response)
+        return []
+    
+class ActionAskReminderTime(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_reminder_time"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks Reminder time from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_reminder_time")
+        dispatcher.utter_message(attachment=response)
+        return []
+
+class ActionAskAlertType(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_alert_type"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks Reminder time from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_alert_type")
+        dispatcher.utter_message(attachment=response)
+        return []
+    
+class ActionAskReminderDay(BaseAction):
+    def name(self) -> Text:
+        return "action_ask_reminder_day"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        """Asks Reminder time from the user"""
+        
+        builder = ResponseBuilder(tracker.sender_id, tracker)
+        response = builder.build_response(intent="ask_reminder_day")
+        dispatcher.utter_message(attachment=response)
+        return []
+    
 class ValidateReminderForm(FormValidationAction):
     """Validates slots for reminder form with smart dependency handling."""
     
     def name(self) -> Text:
         return "validate_reminder_form"
+
+    # async def required_slots(
+    #     self,
+    #     domain_slots: List[Text],
+    #     dispatcher: CollectingDispatcher,
+    #     tracker: Tracker,
+    #     domain: Dict[Text, Any],
+    # ) -> List[Text]:
+    #     """Dynamically determine required slots based on user choices."""
+    #     # DEBUG: Log current state
+    #     logger.debug("="*80)
+    #     logger.debug("REQUIRED_SLOTS DEBUG:")
+    #     logger.debug(f"Active loop: {tracker.active_loop}")
+    #     logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
+    #     logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
+    #     logger.debug(f"Latest text: '{tracker.latest_message.get('text')}'")
+    #     logger.debug("="*80)
+
+    #     all_slots = [
+    #         "frequency",
+    #         "per_day_frequency",
+    #         "quantity",
+    #         "reminder_time",
+    #         "alert_type",
+    #         "reminder_day"
+    #     ]
+
+    #     required = []
+    #     for slot in all_slots:
+    #         slot_value = tracker.get_slot(slot)
+
+    #         # Custom fallback trigger for invalid user input for 'frequency'
+    #         if slot == "frequency" and slot_value is None:
+    #             user_input = tracker.latest_message.get("text", "")
+    #             if not self.is_valid_frequency(user_input):
+    #                 dispatcher.utter_message(text="Hmm, I didn't quite get that. Can you specify the frequency clearly?")
+    #                 # Trigger fallback action
+    #                 return [FollowupAction("action_custom_fallback")]
+
+    #         if slot_value is None or slot_value == "":
+    #             required.append(slot)
+    #         else:
+    #             logger.debug(f"Slot '{slot}' is already filled: {slot_value}")
+
+    #     logger.debug(f"Required slots: {required}")
+    #     return required
+
+    # def is_valid_frequency(self, text: str) -> bool:
+    #     """Simple check to see if user input can be interpreted as a frequency."""
+    #     text = text.lower()
+    #     valid_keywords = ["day", "week", "month"]
+    #     return any(word in text for word in valid_keywords)
     
-    async def required_slots(
-        self,
-        domain_slots: List[Text],
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Text]:
-        """Dynamically determine required slots based on user choices."""
-        required_slots = []
-        
-        # If wants_reminders is not set, ask it first
-        if tracker.get_slot("wants_reminders") is None:
-            return ["wants_reminders"]
-        
-        # If user doesn't want reminders, we're done
-        if tracker.get_slot("wants_reminders") is False:
-            return []
-        
-        # User wants reminders, check what's already filled
-        slots_needed = []
-        
-        # Check frequency slots
-        if tracker.get_slot("frequency_type") is None:
-            slots_needed.append("frequency_type")
-        elif tracker.get_slot("frequency_period") is None:
-            slots_needed.append("frequency_period")
-        
-        # Check time period
-        elif tracker.get_slot("time_period") is None:
-            slots_needed.append("time_period")
-        
-        # Check quantity
-        elif tracker.get_slot("quantity") is None:
-            slots_needed.append("quantity")
-        
-        # Check reminder times
-        elif tracker.get_slot("reminder_time") is None:
-            slots_needed.append("reminder_time")
-        
-        # Check days if weekly
-        elif (tracker.get_slot("frequency_type") == "week" and 
-            tracker.get_slot("reminder_day") is None):
-            slots_needed.append("reminder_day")
-        
-        # Check alert type
-        elif tracker.get_slot("alert_type") is None:
-            slots_needed.append("alert_type")
-        
-        return slots_needed
-    
-    async def validate_wants_reminders(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate if user wants reminders."""
-        return {"wants_reminders": slot_value}
-    
-    async def validate_frequency_type(
+    async def validate_frequency(
         self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate frequency type (day/week/month/year)."""
+        """Validate combined frequency slot like '5 years', '3 days', etc."""
+
+        logger.debug("VALIDATING COMBINED FREQUENCY")
+
         if not slot_value:
-            return {"frequency_type": None}
-        
-        valid_types = ["day", "week", "month", "year"]
-        slot_value_lower = str(slot_value).lower().strip()
-        
-        # Map common variations
-        type_mapping = {
+            return {"frequency": None}
+
+        slot_value = str(slot_value).lower().strip()
+
+        # Regex to extract number + unit
+        match = re.match(r"(\d+)\s*(day|days|week|weeks|month|months|year|years)", slot_value)
+
+        if not match:
+            response = "Please enter a valid duration like '5 days', '2 weeks', or '1 month'."
+            attachment = send_response(response)
+            dispatcher.utter_message(attachment=attachment)
+            return {"frequency": None}
+
+        count = int(match.group(1))
+        unit = match.group(2)
+
+        # Normalize unit to singular
+        unit_mapping = {
             "days": "day",
-            "daily": "day",
-            "everyday": "day",
             "weeks": "week",
-            "weekly": "week",
             "months": "month",
-            "monthly": "month",
-            "years": "year",
-            "yearly": "year",
-            "annually": "year"
+            "years": "year"
         }
-        
-        # Check mapped values
-        if slot_value_lower in type_mapping:
-            slot_value_lower = type_mapping[slot_value_lower]
-        
-        # Validate
-        if slot_value_lower in valid_types:
-            # Provide context for next question
-            context_messages = {
-                "day": "Great! Now, for how many days would you like to be reminded?",
-                "week": "Got it! For how many weeks would you like reminders?",
-                "month": "Perfect! How many months of reminders do you need?",
-                "year": "Alright! For how many years should I remind you?"
-            }
-            
-            dispatcher.utter_message(context_messages[slot_value_lower])
-            return {"frequency_type": slot_value_lower}
-        else:
-            dispatcher.utter_message(
-                "Please specify: day, week, month, or year. "
-                "For example: 'weekly reminders' or 'for a month'."
-            )
-            return {"frequency_type": None}
+
+        unit = unit_mapping.get(unit, unit)
+
+        if count <= 0:
+            return {"frequency": None}
+
+        # Optional: store normalized format
+        normalized_value = f"{count} {unit}"
+
+        return {"frequency": normalized_value}
     
-    async def validate_frequency_period(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate frequency period number with context from frequency_type."""
-        if slot_value is None:
-            return {"frequency_period": None}
+    # async def validate_time_period(
+    #     self,
+    #     slot_value: Any,
+    #     dispatcher: CollectingDispatcher,
+    #     tracker: Tracker,
+    #     domain: Dict[Text, Any],
+    # ) -> Dict[Text, Any]:
+    #     """Validate times per period (once/twice/thrice)."""
+    #     if not slot_value:
+    #         return {"time_period": None}
         
-        try:
-            # Extract number from text if needed
-            import re
-            if isinstance(slot_value, str):
-                match = re.search(r'(\d+)', slot_value)
-                if match:
-                    number = int(match.group(1))
-                else:
-                    # Try word to number conversion
-                    word_to_number = {
-                        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
-                        "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-                        "once": 1, "twice": 2
-                    }
-                    number = word_to_number.get(slot_value.lower(), None)
-                    if number is None:
-                        raise ValueError
-            else:
-                number = int(slot_value)
-            
-            # Get frequency type for context
-            freq_type = tracker.get_slot("frequency_type")
-            
-            # Validate based on frequency type
-            max_limits = {
-                "day": 365,    # Max 1 year in days
-                "week": 52,    # Max 1 year in weeks
-                "month": 12,   # Max 1 year in months
-                "year": 5      # Max 5 years
-            }
-            
-            if freq_type and freq_type in max_limits:
-                if number <= 0:
-                    dispatcher.utter_message(f"Please enter a positive number of {freq_type}s.")
-                    return {"frequency_period": None}
-                
-                if number > max_limits[freq_type]:
-                    suggestion = max_limits[freq_type]
-                    dispatcher.utter_message(
-                        f"That's quite a long time! For {freq_type}s, "
-                        f"I'd suggest up to {suggestion}. How many {freq_type}s would you like?"
-                    )
-                    return {"frequency_period": None}
-            
-            # Provide confirmation with context
-            freq_type = tracker.get_slot("frequency_type") or "period"
-            time_phrases = {
-                1: "one",
-                2: "two",
-                3: "three",
-                4: "four",
-                5: "five",
-                6: "six",
-                7: "seven",
-                30: "thirty"
-            }
-            
-            number_word = time_phrases.get(number, str(number))
-            dispatcher.utter_message(f"Alright, reminders for {number_word} {freq_type}(s)!")
-            
-            # Calculate end date for user info
-            if freq_type in ["day", "week", "month", "year"]:
-                from datetime import datetime, timedelta
-                from dateutil.relativedelta import relativedelta
-                
-                today = datetime.now()
-                if freq_type == "day":
-                    end_date = today + timedelta(days=number)
-                elif freq_type == "week":
-                    end_date = today + timedelta(weeks=number)
-                elif freq_type == "month":
-                    end_date = today + relativedelta(months=+number)
-                elif freq_type == "year":
-                    end_date = today + relativedelta(years=+number)
-                
-                date_str = end_date.strftime("%B %d, %Y")
-                dispatcher.utter_message(f"That means reminders until approximately {date_str}.")
-            
-            return {"frequency_period": number}
-            
-        except (ValueError, TypeError):
-            dispatcher.utter_message(f"Please enter a valid number. How many {tracker.get_slot('frequency_type') or 'periods'}?")
-            return {"frequency_period": None}
-    
-    async def validate_time_period(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate times per period (once/twice/thrice)."""
-        if not slot_value:
-            return {"time_period": None}
+    #     valid_periods = ["once", "twice", "thrice"]
+    #     slot_value_lower = str(slot_value).lower().strip()
         
-        valid_periods = ["once", "twice", "thrice"]
-        slot_value_lower = str(slot_value).lower().strip()
+    #     # Map variations
+    #     period_mapping = {
+    #         "1": "once",
+    #         "one": "once",
+    #         "1x": "once",
+    #         "one time": "once",
+    #         "single": "once",
+    #         "2": "twice",
+    #         "two": "twice",
+    #         "2x": "twice",
+    #         "two times": "twice",
+    #         "double": "twice",
+    #         "3": "thrice",
+    #         "three": "thrice",
+    #         "3x": "thrice",
+    #         "three times": "thrice",
+    #         "triple": "thrice"
+    #     }
         
-        # Map variations
-        period_mapping = {
-            "1": "once",
-            "one": "once",
-            "1x": "once",
-            "one time": "once",
-            "single": "once",
-            "2": "twice",
-            "two": "twice",
-            "2x": "twice",
-            "two times": "twice",
-            "double": "twice",
-            "3": "thrice",
-            "three": "thrice",
-            "3x": "thrice",
-            "three times": "thrice",
-            "triple": "thrice"
-        }
+    #     # Check mapped values
+    #     if slot_value_lower in period_mapping:
+    #         slot_value_lower = period_mapping[slot_value_lower]
         
-        # Check mapped values
-        if slot_value_lower in period_mapping:
-            slot_value_lower = period_mapping[slot_value_lower]
-        
-        # Validate
-        if slot_value_lower in valid_periods:
-            # Get frequency context
-            freq_type = tracker.get_slot("frequency_type")
-            freq_period = tracker.get_slot("frequency_period")
+    #     # Validate
+    #     if slot_value_lower in valid_periods:
+    #         # Get frequency context
+    #         freq_type = tracker.get_slot("frequency_type")
+    #         freq_period = tracker.get_slot("frequency_period")
             
-            if freq_type:
-                message = f"Got it! {slot_value_lower.title()} per {freq_type}."
-                if freq_period:
-                    message += f" That's {slot_value_lower} for {freq_period} {freq_type}(s)."
-                dispatcher.utter_message(message)
-            
-            return {"time_period": slot_value_lower}
-        else:
-            dispatcher.utter_message(
-                "Please specify: once, twice, or thrice. "
-                "For example: 'twice daily' or 'once a week'."
-            )
-            return {"time_period": None}
+    #         return {"time_period": slot_value_lower}
+    #     else:
+    #         return {"time_period": None}
     
     async def validate_quantity(
         self,
@@ -1378,10 +1363,10 @@ class ValidateReminderForm(FormValidationAction):
             
             # Get medication dose for context
             medication_dose = tracker.get_slot("medication_dose")
-            if medication_dose:
-                dispatcher.utter_message(f"Perfect! {quantity} pill(s) of {medication_dose} each time.")
-            else:
-                dispatcher.utter_message(f"Got it! {quantity} pill(s) each time.")
+            # if medication_dose:
+            #     dispatcher.utter_message(f"Perfect! {quantity} pill(s) of {medication_dose} each time.")
+            # else:
+            #     dispatcher.utter_message(f"Got it! {quantity} pill(s) each time.")
             
             return {"quantity": quantity}
             
@@ -1441,20 +1426,20 @@ class ValidateReminderForm(FormValidationAction):
                 # Sort times chronologically
                 current_times.sort()
                 time_list_str = ", ".join(current_times)
-                dispatcher.utter_message(f"Perfect! Reminders set for: {time_list_str}")
+                # dispatcher.utter_message(f"Perfect! Reminders set for: {time_list_str}")
                 return {"reminder_time": current_times}
             else:
                 remaining = times_needed - len(current_times)
-                if remaining == 1:
-                    dispatcher.utter_message(f"Great! Need 1 more time. What time?")
-                else:
-                    dispatcher.utter_message(f"Got it! Need {remaining} more times. What's the next time?")
+                # if remaining == 1:
+                #     dispatcher.utter_message(f"Great! Need 1 more time. What time?")
+                # else:
+                #     dispatcher.utter_message(f"Got it! Need {remaining} more times. What's the next time?")
                 return {"reminder_time": current_times}
         else:
-            dispatcher.utter_message(
-                "Please enter a valid time in 12-hour or 24-hour format. "
-                "Examples: '8:00 AM', '14:30', '9 PM'."
-            )
+            # dispatcher.utter_message(
+            #     "Please enter a valid time in 12-hour or 24-hour format. "
+            #     "Examples: '8:00 AM', '14:30', '9 PM'."
+            # )
             return {"reminder_time": current_times}
     
     async def validate_reminder_day(
@@ -1465,12 +1450,9 @@ class ValidateReminderForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate reminder days (only for weekly frequency)."""
-        freq_type = tracker.get_slot("frequency_type")
         
-        # Only validate if frequency_type is "week"
-        if freq_type != "week":
-            return {"reminder_day": None}
-        
+        import re
+
         if not slot_value:
             return {"reminder_day": None}
         
@@ -1480,7 +1462,7 @@ class ValidateReminderForm(FormValidationAction):
             valid_days = self._validate_day_list(slot_value)
             if valid_days:
                 days_str = ", ".join(valid_days)
-                dispatcher.utter_message(f"Perfect! Weekly reminders on: {days_str}")
+                # dispatcher.utter_message(f"Perfect! Weekly reminders on: {days_str}")
                 return {"reminder_day": valid_days}
         
         # Parse day input
@@ -1489,13 +1471,13 @@ class ValidateReminderForm(FormValidationAction):
         
         if parsed_days:
             days_str = ", ".join(parsed_days)
-            dispatcher.utter_message(f"Great! Reminders on: {days_str}")
+            # dispatcher.utter_message(f"Great! Reminders on: {days_str}")
             return {"reminder_day": parsed_days}
         else:
-            dispatcher.utter_message(
-                "Please specify days of the week. "
-                "Examples: 'Monday, Wednesday, Friday' or 'everyday' or 'weekdays'."
-            )
+            # dispatcher.utter_message(
+            #     "Please specify days of the week. "
+            #     "Examples: 'Monday, Wednesday, Friday' or 'everyday' or 'weekdays'."
+            # )
             return {"reminder_day": None}
     
     async def validate_alert_type(
@@ -1528,13 +1510,13 @@ class ValidateReminderForm(FormValidationAction):
             slot_value_lower = type_mapping[slot_value_lower]
         
         if slot_value_lower in valid_types:
-            message = f"Perfect! I'll use {slot_value_lower} alerts for your reminders."
-            dispatcher.utter_message(message)
+            # message = f"Perfect! I'll use {slot_value_lower} alerts for your reminders."
+            # dispatcher.utter_message(message)
             return {"alert_type": slot_value_lower}
         else:
-            dispatcher.utter_message(
-                "Please choose: alarm (sound notification) or voice (spoken reminder)."
-            )
+            # dispatcher.utter_message(
+            #     "Please choose: alarm (sound notification) or voice (spoken reminder)."
+            # )
             return {"alert_type": None}
     
     # Helper methods
@@ -1573,7 +1555,7 @@ class ValidateReminderForm(FormValidationAction):
     
     def _parse_days_input(self, days_input: str) -> List[str]:
         """Parse days input into list of day names."""
-        import re
+        
         
         days_input = days_input.lower()
         day_mapping = {
@@ -1626,9 +1608,10 @@ class ValidateReminderForm(FormValidationAction):
                     canonical_days.append(canonical)
         
         return canonical_days
-
-
     
+import re
+from datetime import datetime
+
 class ActionSubmitReminderForm(BaseAction):
     """Submits reminder form and saves to API."""
     
@@ -1638,45 +1621,298 @@ class ActionSubmitReminderForm(BaseAction):
     def run_with_slots(self, dispatcher: CollectingDispatcher,
                        tracker: Tracker,
                        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        import re
+
+        logger.debug("RUNNING ACTION SUBMIT REMINDER FORM")
+        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
+        logger.debug("="*80)
         
-        # Check if user wants reminders
-        wants_reminders = tracker.get_slot("wants_reminders")
-        
-        if not wants_reminders:
-            dispatcher.utter_message("No reminders set up. Your medication has been added successfully!")
-            return self._complete_flow()
-        
-        # Collect reminder data
-        reminder_data = {
-            "user_medication_id": tracker.get_slot("user_medication_id"),
-            "frequency_type": tracker.get_slot("frequency_type"),
-            "frequency_period": tracker.get_slot("frequency_period"),
-            "reminder_day": tracker.get_slot("reminder_day"),
-            "time_period": tracker.get_slot("time_period"),
-            "quantity": tracker.get_slot("quantity"),
-            "snooze": 15,  # Default
-            "alert_type": tracker.get_slot("alert_type"),
-            "reminder_time": tracker.get_slot("reminder_time")
+        user_medication_id = tracker.get_slot("user_medication_id")
+        frequency = tracker.get_slot("frequency")
+        per_day_frequency = tracker.get_slot("per_day_frequency")
+        quantity = tracker.get_slot("quantity")
+        reminder_time = tracker.get_slot("reminder_time")
+        alert_type = tracker.get_slot("alert_type")
+        reminder_day = tracker.get_slot("reminder_day")
+
+        # -----------------------------
+        # Extract frequency_period/type
+        # -----------------------------
+        frequency_period = None
+        frequency_type = None
+
+        if frequency:
+            frequency = str(frequency).lower().strip()
+            match = re.match(r"(\d+)\s*(day|days|week|weeks|month|months|year|years)", frequency)
+            if match:
+                frequency_period = int(match.group(1))
+                frequency_type = match.group(2)
+                unit_mapping = {
+                    "days": "day",
+                    "weeks": "week",
+                    "months": "month",
+                    "years": "year"
+                }
+                frequency_type = unit_mapping.get(frequency_type, frequency_type)
+
+        # -----------------------------
+        # Clean reminder_time
+        # -----------------------------
+        from datetime import datetime
+
+        cleaned_times = []
+        if reminder_time:
+            if not isinstance(reminder_time, list):
+                reminder_time = [reminder_time]
+
+            for t in reminder_time:
+                t = t.strip().lower()
+                logger.debug(f"Cleaning time: '{t}'")
+                
+                # 🔥 NEW: Handle natural language time expressions
+                original_t = t
+                
+                # Map common time expressions to hours
+                time_expressions = {
+                    r'\bmorning\b': 9,
+                    r'\bafternoon\b': 14,
+                    r'\bevening\b': 18,
+                    r'\bnight\b': 21,
+                    r'\bmidnight\b': 0,
+                    r'\bnoon\b': 12,
+                    r'\bmidday\b': 12,
+                    r'\bdawn\b': 5,
+                    r'\bdusk\b': 19,
+                    r'\bsunrise\b': 6,
+                    r'\bsunset\b': 18,
+                    r'\bbefore noon\b': 11,
+                    r'\bafter noon\b': 13,
+                    r'\bearly morning\b': 6,
+                    r'\blate morning\b': 10,
+                    r'\bearly afternoon\b': 13,
+                    r'\blate afternoon\b': 16,
+                    r'\bearly evening\b': 17,
+                    r'\blate evening\b': 20,
+                    r'\blate night\b': 23,
+                }
+                
+                # Handle "X in the morning/afternoon/evening" pattern
+                in_the_pattern = r'(\d{1,2})\s*(?::\s*(\d{1,2}))?\s*in\s+the\s+(morning|afternoon|evening|night)'
+                match = re.search(in_the_pattern, t)
+                if match:
+                    hour = int(match.group(1))
+                    minute = int(match.group(2)) if match.group(2) else 0
+                    period = match.group(3)
+                    
+                    # Adjust hour based on period
+                    if period == 'morning':
+                        if hour < 12:  # Keep as is for AM
+                            pass
+                    elif period == 'afternoon':
+                        if hour < 12:
+                            hour += 12  # Convert to PM
+                    elif period == 'evening' or period == 'night':
+                        if hour < 12:
+                            hour += 12  # Convert to PM
+                        if hour < 18:  # Ensure it's evening
+                            hour = 18 if hour < 18 else hour
+                    
+                    try:
+                        dt = datetime.strptime(f"{hour:02d}:{minute:02d}", "%H:%M")
+                        cleaned_times.append(dt.strftime("%H:%M:%S"))
+                        logger.debug(f"Parsed '{original_t}' as {hour:02d}:{minute:02d}")
+                        continue
+                    except:
+                        pass
+                
+                # Handle "X am/pm" with natural language
+                am_pm_pattern = r'(\d{1,2})\s*(?::\s*(\d{1,2}))?\s*(am|pm|a\.m\.|p\.m\.)?'
+                match = re.search(am_pm_pattern, t)
+                if match:
+                    hour = int(match.group(1))
+                    minute = int(match.group(2)) if match.group(2) else 0
+                    ampm = match.group(3)
+                    
+                    if ampm:
+                        # Convert to 24-hour format
+                        if ampm.startswith('p') and hour < 12:
+                            hour += 12
+                        elif ampm.startswith('a') and hour == 12:
+                            hour = 0
+                    else:
+                        # No AM/PM specified - try to infer from context
+                        if 'morning' in t or 'dawn' in t or 'sunrise' in t:
+                            if hour == 12:
+                                hour = 0
+                        elif 'afternoon' in t or 'noon' in t:
+                            if hour < 12:
+                                hour += 12
+                        elif 'evening' in t or 'night' in t or 'dusk' in t or 'sunset' in t:
+                            if hour < 12:
+                                hour += 12
+                            if hour < 18:
+                                hour = 18  # Default to 6 PM for evening
+                        elif 'midnight' in t:
+                            hour = 0
+                        elif 'noon' in t:
+                            hour = 12
+                    
+                    try:
+                        dt = datetime.strptime(f"{hour:02d}:{minute:02d}", "%H:%M")
+                        cleaned_times.append(dt.strftime("%H:%M:%S"))
+                        logger.debug(f"Parsed '{original_t}' as {hour:02d}:{minute:02d}")
+                        continue
+                    except:
+                        pass
+                
+                # Handle standalone time expressions (like "morning")
+                for pattern, hour in time_expressions.items():
+                    if re.search(pattern, t):
+                        # Check if there's also a number
+                        number_match = re.search(r'(\d{1,2})', t)
+                        if number_match:
+                            hour = int(number_match.group(1))
+                            if pattern in [r'\bevening\b', r'\bnight\b'] and hour < 12:
+                                hour += 12
+                        
+                        try:
+                            dt = datetime.strptime(f"{hour:02d}:00", "%H:%M")
+                            cleaned_times.append(dt.strftime("%H:%M:%S"))
+                            logger.debug(f"Parsed expression '{original_t}' as {hour:02d}:00")
+                            continue
+                        except:
+                            pass
+                
+                # Try parsing common formats
+                try:
+                    # Try "8 am" format
+                    dt = datetime.strptime(t, "%I %p")
+                    cleaned_times.append(dt.strftime("%H:%M:%S"))
+                    continue
+                except ValueError:
+                    pass
+                    
+                try:
+                    # Try "8:30 pm" format
+                    dt = datetime.strptime(t, "%I:%M %p")
+                    cleaned_times.append(dt.strftime("%H:%M:%S"))
+                    continue
+                except ValueError:
+                    pass
+                    
+                try:
+                    # Try "20:30" format
+                    dt = datetime.strptime(t, "%H:%M")
+                    cleaned_times.append(dt.strftime("%H:%M:%S"))
+                    continue
+                except ValueError:
+                    pass
+                
+                # If we got here, couldn't parse
+                logger.warning(f"Could not parse time: '{original_t}'")
+
+        # Remove duplicates while preserving order
+        seen = set()
+        cleaned_times = [x for x in cleaned_times if not (x in seen or seen.add(x))]
+
+        logger.debug(f"Cleaned times: {cleaned_times}")
+
+        logger.debug(f"Cleaned reminder_time: {cleaned_times}")
+
+        # -----------------------------
+        # Validate and normalize reminder_day
+        # -----------------------------
+        valid_days = {
+            "mon": "monday",
+            "monday": "monday",
+            "tue": "tuesday",
+            "tues": "tuesday",
+            "tuesday": "tuesday",
+            "wed": "wednesday",
+            "wednesday": "wednesday",
+            "thu": "thursday",
+            "thurs": "thursday",
+            "thursday": "thursday",
+            "fri": "friday",
+            "friday": "friday",
+            "sat": "saturday",
+            "saturday": "saturday",
+            "sun": "sunday",
+            "sunday": "sunday"
         }
-        
-        # Validate required fields
-        required_fields = ["frequency_type", "frequency_period", "time_period", "reminder_time"]
-        missing_fields = [field for field in required_fields if not reminder_data[field]]
-        
-        if missing_fields:
-            dispatcher.utter_message(f"Missing information: {', '.join(missing_fields)}. Let's complete that.")
-            # Reactivate form for missing info
+
+        normalized_days = []
+        if reminder_day:
+            for day in reminder_day:
+                day_lower = day.lower().strip()
+                if day_lower in valid_days:
+                    normalized_days.append(valid_days[day_lower])
+                else:
+                    logger.warning(f"Ignoring invalid reminder_day value: '{day}'")
+
+        # Remove duplicates while preserving order
+        seen = set()
+        normalized_days = [x for x in normalized_days if not (x in seen or seen.add(x))]
+
+        reminder_day = normalized_days
+        logger.debug(f"Normalized reminder_day: {reminder_day}")
+
+        # -----------------------------
+        # Build final reminder data
+        # -----------------------------
+        reminder_data = {
+            "user_medication_id": user_medication_id,
+            "frequency_type": frequency_type,
+            "frequency_period": frequency_period,
+            "reminder_day": reminder_day,
+            "time_period": per_day_frequency,
+            "quantity": quantity,
+            "snooze": 15,
+            "alert_type": alert_type,
+            "reminder_time": cleaned_times
+        }
+
+        logger.debug(f'Reminder data: {reminder_data}')
+
+        # Save reminder data
+        medmanager = MedicationManager(token=tracker.sender_id)
+        success, message = medmanager.save_reminder(reminder_data)
+
+        if not success:
+            response = "Sorry, I couldn't save your reminder information. Would you like to try again?"
+            attachment = {
+                "query_response": response,
+                "type": "text",
+                "status": "error"
+            }
+            dispatcher.utter_message(attachment=attachment)
             return [
-                ActiveLoop("reminder_form"),
+                ActiveLoop(None),
+                SlotSet("current_step", None)
             ]
         
-        # Format the data for user confirmation
-        confirmation = self._format_reminder_confirmation(reminder_data)
-        dispatcher.utter_message(confirmation)
+        # Success 
+        dispatcher.utter_message(
+            attachment={
+                "query_response": "Great! I've set up your reminder. What else can I do for you?",
+                "type": "text",
+                "status": "success"
+            }
+        )
         
-        # Ask for confirmation
-        dispatcher.utter_message("Does this look correct? (yes/no)")
-        return [SlotSet("awaiting_reminder_confirmation", True)]
+        return [
+            ActiveLoop(None),
+            SlotSet("current_step", None),
+
+            # Clear reminder slots
+            SlotSet("frequency", None),
+            SlotSet("per_day_frequency", None),
+            SlotSet("quantity", None),
+            SlotSet("reminder_time", None),
+            SlotSet("alert_type", None),
+            SlotSet("reminder_day", None)
+        ]
+
     
     def _format_reminder_confirmation(self, reminder_data: Dict) -> str:
         """Format reminder data for user confirmation."""
@@ -1728,100 +1964,6 @@ class ActionSubmitReminderForm(BaseAction):
             SlotSet("awaiting_reminder_confirmation", None),
             {"text": "All done! Your medication has been successfully added with reminders."}
         ]
-    
-from rasa_sdk import Tracker, Action
-from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet, ActiveLoop
-
-class ActionHandleRefillDecision(Action):
-    def name(self):
-        return "action_handle_refill_decision"
-
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: dict):
-        latest_intent = tracker.latest_message.get("intent", {}).get("name")
-        builder = ResponseBuilder(token=tracker.sender_id)
-
-        if tracker.get_slot("current_step") == "ask_refill":
-            if latest_intent == "affirm":
-                # Open refill form
-                dispatcher.utter_message(text="Great! Let's set up refill info.")
-                return [SlotSet("current_step", None), ActiveLoop("refill_form")]
-            elif latest_intent == "deny":
-                # Ask about reminder
-                dispatcher.utter_message(text="No problem! Would you like to add reminder information?")
-                return [SlotSet("current_step", "ask_reminder")]
-            else:
-                dispatcher.utter_message(text="Please answer yes or no.")
-                return []
-
-class ActionHandleReminderDecision(BaseAction):
-    """Handles yes/no decision about reminders."""
-    
-    def name(self) -> Text:
-        return "action_handle_reminder_decision"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                       tracker: Tracker,
-                       domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        latest_intent = tracker.latest_message.get("intent", {}).get("name")
-        builder = ResponseBuilder(token=tracker.sender_id)
-        
-        if tracker.get_slot("current_step") == "ask_reminder":
-            if latest_intent == "affirm":
-                # Open reminder form
-                dispatcher.utter_message(text="Perfect! Let's set up your reminders.")
-                return [SlotSet("current_step", None), ActiveLoop("reminder_form")]
-            elif latest_intent == "deny":
-                dispatcher.utter_message(text="That's fine. What else can I help you with?")
-                return [SlotSet("current_step", None)]
-            else:
-                dispatcher.utter_message(text="Please answer yes or no.")
-                return []
-
-class ActionHandleReminderConfirmation(BaseAction):
-    """Handles confirmation for reminder setup."""
-    
-    def name(self) -> Text:
-        return "action_handle_reminder_confirmation"
-    
-    def run_with_slots(self, dispatcher: CollectingDispatcher,
-                       tracker: Tracker,
-                       domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        intent = tracker.get_intent_of_latest_message()
-        
-        if intent == "affirm":
-            # Save reminder to API
-            reminder_data = {
-                "user_medication_id": tracker.get_slot("user_medication_id"),
-                "frequency_type": tracker.get_slot("frequency_type"),
-                "frequency_period": tracker.get_slot("frequency_period"),
-                "reminder_day": tracker.get_slot("reminder_day"),
-                "time_period": tracker.get_slot("time_period"),
-                "quantity": tracker.get_slot("quantity"),
-                "snooze": 15,
-                "alert_type": tracker.get_slot("alert_type"),
-                "reminder_time": tracker.get_slot("reminder_time")
-            }
-            
-            # Save reminder
-            success, message = self._save_reminder_to_api(tracker, reminder_data)
-            
-            if success:
-                dispatcher.utter_message("Reminder setup complete!")
-            else:
-                dispatcher.utter_message(f"Error saving reminder: {message}")
-            
-            return ActionSubmitReminderForm()._complete_flow(success, message)
-        
-        elif intent == "deny":
-            # User wants to change something - reactivate form
-            dispatcher.utter_message("Let's adjust the reminder settings.")
-            return [
-                ActiveLoop("reminder_form"),
-                SlotSet("awaiting_reminder_confirmation", None)
-            ]
     
 class ActionListMedications(Action):
     """List all medication names for the user."""
@@ -2741,10 +2883,1038 @@ class ActionMedicationAdherence(Action):
     
         
 class ActionCustomFallback(Action):
+    def __init__(self):
+        self.uncertainty_classifier = get_classifier()
+
     def name(self):
         return "action_custom_fallback"       
+    
+    def get_uncertainty_response(self, slot: str) -> str:
+        """Get appropriate response for uncertainty based on slot"""
         
+        responses = {
+            
+            "medication_name": "No problem! You can check the medication bottle or prescription and tell me when you're ready.",
+            "medication_type": "That's okay! If you're not sure about the type, common types are tablet, capsule, or liquid.",
+            "medication_dose": "No problem! You can check the medication label. Common dosages are like 500mg, 10mg, or 5ml.",
+            "medication_colour": "That's fine! You can give me any color. It's just to make it easier for you to recognize the medicine on the app.",
+            "medication_instructions": "That's okay! Common instructions include 'take with food' or 'twice daily'. You can give me 'None'",
+
+            # ADD REMINDER FORM SLOTS
+            "per_day_frequency": "No problem! Common options are once, twice, or thrice per day. How many times a day would you like to take this medication?",
+            "alert_type": "That's okay! You can choose between 'voice' or 'alarm' for your reminder. Which would you prefer?",
+            "reminder_day": "No problem! You can tell me which days of the week you need reminders, like 'Monday, Wednesday, Friday' or 'every day'.",
+            "frequency": "That's okay! You can tell me how long you need reminders, like '30 days', '6 months', or '1 year'.",
+            "quantity": "No problem! The quantity is usually shown on the prescription, like '500mg' or '5ml'. What does it say?",
+            "reminder_time": "That's okay! You can tell me what time you'd like to be reminded, like '9 am' or '20:30'."
+        }
+        
+        # Return a string, not a list
+        return responses.get(slot, "No problem! Take your time and let me know when you're ready.")
+
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        logger.debug("="*80)
+        logger.debug("🔧 ACTION_CUSTOM_FALLBACK STARTING")
+        
+        if tracker.active_loop:
+            form_name = tracker.active_loop.get("name")
+            requested_slot = tracker.get_slot("requested_slot")
+            user_text = tracker.latest_message.get('text', '').strip()
+            user_text_lower = user_text.lower()
+            
+            logger.debug(f"Form '{form_name}' - Slot: {requested_slot}")
+            logger.debug(f"User text: '{user_text}'")
+            
+            # STEP 1: Direct uncertainty check (highest priority)
+            direct_uncertainty = [
+                "dont know", "don't know", "do not know", "dunno", "idk", "dk",
+                "not sure", "no idea", "no clue", "forgot", "forget",
+                "cant remember", "can't remember", "don't recall", "dont recall",
+                "i don't know", "i dont know", "i do not know", "i'm not sure",
+                "i am not sure", "i have no idea", "i forgot", "i can't remember"
+            ]
+            
+            if user_text_lower in direct_uncertainty or any(phrase == user_text_lower for phrase in direct_uncertainty):
+                logger.debug("Direct uncertainty match - providing helpful response")
+                response = self.get_uncertainty_response(requested_slot)
+                attachment = send_response(response)
+                dispatcher.utter_message(attachment=attachment)
+                return [
+                    ActiveLoop(form_name),
+                    SlotSet("requested_slot", requested_slot),
+                    FollowupAction("action_listen")
+                ]
+            
+            # STEP 2: ML classification (second priority)
+            ml_result = self.uncertainty_classifier.predict(user_text)
+            logger.debug(f"ML: {ml_result['category']} (conf: {ml_result['confidence']:.3f})")
+            
+            # If ML says UNCERTAIN with decent confidence, trust it
+            if ml_result['is_uncertain'] and ml_result['confidence'] > 0.55:  # Lowered threshold
+                logger.debug(f"ML says UNCERTAIN ({ml_result['confidence']:.3f}) - providing helpful response")
+                response = self.get_uncertainty_response(requested_slot)
+                attachment = send_response(response)
+                dispatcher.utter_message(attachment=attachment)
+                return [
+                    ActiveLoop(form_name),
+                    SlotSet("requested_slot", requested_slot),
+                    FollowupAction("action_listen")
+                ]
+            
+            # If ML says CERTAIN with high confidence, let form handle
+            if not ml_result['is_uncertain'] and ml_result['confidence'] > 0.80:
+                logger.debug("High confidence CERTAIN - letting form handle")
+                return [ActiveLoop(form_name)]
+            
+            # STEP 3: Rule-based handling (lowest priority)
+            logger.debug("Falling back to rule-based handling")
+            return self.handle_with_rules(dispatcher, tracker, domain, form_name, requested_slot, user_text)
+        
+        return self.handle_openai_fallback(dispatcher, tracker)
+    
+    def handle_with_rules(self, dispatcher, tracker, domain, form_name, requested_slot, user_text):
+        
+        # Handle form-related fallbacks
+        if tracker.active_loop:
+            form_name = tracker.active_loop.get("name")
+            requested_slot = tracker.get_slot("requested_slot")
+            user_text = tracker.latest_message.get('text', '').lower()
+            
+            logger.debug(f"Form '{form_name}' ACTIVE - Handling form-specific fallback")
+            logger.debug(f"Requested slot: {requested_slot}")
+            logger.debug(f"User text: '{user_text}'")
+            
+            # Handle medication form specifically
+            if form_name == "medication_form":
+                
+                # ==================== MEDICATION NAME HANDLING ====================
+                if requested_slot == "medication_name":
+                    # Case 1: User gives medication type instead of name
+                    common_types = ["pill", "tablet", "capsule", "liquid", "injection", "cream", "ointment", "syrup", "drops", "inhaler", "spray", "patch"]
+                    for med_type in common_types:
+                        if med_type in user_text:
+                            response = f"I understand it's a {med_type}, but I need the specific medication name. What is it called?"
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                    
+                    # Case 2: User gives colour instead of name
+                    common_colours = ["red", "blue", "white", "yellow", "green", "orange", "purple", "pink", "black", "grey", "brown", "clear", "translucent"]
+                    for colour in common_colours:
+                        if colour in user_text:
+                            response = f"I see it's {colour}, but I need the medication name first. What's it called?"
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                    
+                    # Case 3: User asks a question
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "I'm here to help you add a medication. The name is usually printed on the box or bottle. What does it say?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                
+                    
+                    # Case 4: Check if it looks like a real medication name
+                    import re
+                    
+                    # Patterns that suggest it's a medication name
+                    medication_patterns = [
+                        r'[A-Za-z]+[0-9]+',        # Letters followed by numbers (Lisinopril10)
+                        r'[0-9]+\s*mg',            # Number with mg
+                        r'[0-9]+\s*mcg',           # Number with mcg
+                        r'[0-9]+\s*ml',            # Number with ml
+                        r'[0-9]+\s*mg\s*tablet',   # Number with mg and tablet
+                        r'[0-9]+\s*mg\s*capsule',  # Number with mg and capsule
+                    ]
+                    
+                    # Common medication names
+                    common_medications = [
+                        "lipitor", "lisinopril", "metformin", "amoxicillin", "synthroid",
+                        "omeprazole", "gabapentin", "amlodipine", "losartan", "albuterol",
+                        "ibuprofen", "acetaminophen", "paracetamol", "aspirin", "warfarin",
+                        "clopidogrel", "metoprolol", "prednisone", "fluoxetine", "sertraline"
+                    ]
+                    
+                    # Check if it matches any pattern
+                    is_medication = any(re.search(pattern, user_text, re.IGNORECASE) for pattern in medication_patterns)
+                    
+                    # Check if it contains a common medication name
+                    contains_common_med = any(med in user_text for med in common_medications)
+                    
+                    # Check if it has reasonable length and only contains letters/numbers/spaces
+                    words = user_text.split()
+                    looks_reasonable = len(words) <= 4 and all(word.isalnum() or word.isspace() or word in ['.', '-'] for word in user_text)
+                    
+                    if is_medication or contains_common_med or looks_reasonable:
+                        logger.debug(f"Potential medication name detected: '{user_text}' - Filling the slot")
+                        return [SlotSet("medication_name", user_text.title()),
+                                ActiveLoop(form_name)]
+                    else:
+                        # Doesn't look like a medication name, ask again
+                        response = "I need the name of the medication. What is it called?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                
+                # ==================== MEDICATION TYPE HANDLING ====================
+                elif requested_slot == "medication_type":
+                    valid_types = ["pill", "tablet", "capsule", "liquid", "injection", "cream", "ointment", "syrup", "drops", "inhaler", "spray", "patch"]
+                    
+                    # Check if user gave a valid type
+                    found_type = None
+                    for med_type in valid_types:
+                        if med_type in user_text:
+                            found_type = med_type
+                            break
+                    
+                    if found_type:
+                        # User gave a valid type - let form handle it
+                        logger.debug(f"Valid medication type detected: '{found_type}' - letting form handle it")
+                        return [
+                            ActiveLoop(form_name)
+                        ]
+                    else:
+                        # Check for uncertainty
+                        unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                        if any(phrase in user_text for phrase in unsure_phrases):
+                            response = "That's okay! If you're not sure about the type, you can describe the medication or check the packaging. Common types are tablet, capsule, or liquid."
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot)
+                            ]
+                        
+                        # Check for questions
+                        question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                        if any(word in user_text for word in question_words):
+                            response = f"To help me categorize it correctly, could you tell me if it's a {', '.join(valid_types[:5])} or something else?"
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                        
+                        # Default response for invalid type
+                        response = f"I need to know the medication type. Is it a {', '.join(valid_types[:5])}?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                
+                # ==================== MEDICATION COLOUR HANDLING ====================
+                elif requested_slot == "medication_colour":
+                    valid_colours = ["red", "blue", "white", "yellow", "green", "orange", "purple", "pink", "black", "grey", "brown", "clear", "translucent"]
+                    
+                    # Check if user gave a valid colour
+                    found_colour = None
+                    for colour in valid_colours:
+                        if colour in user_text:
+                            found_colour = colour
+                            break
+                    
+                    if found_colour:
+                        # User gave a valid colour - let form handle it
+                        logger.debug(f"Valid colour detected: '{found_colour}' - letting form handle it")
+                        return [
+                            ActiveLoop(form_name)
+                        ]
+                    else:
+                        # Handle uncertainty
+                        unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                        if any(phrase in user_text for phrase in unsure_phrases):
+                            response = "That's fine! You can give me any color. It's not that important. "
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                        
+                        # Handle colour descriptions
+                        colour_desc = {
+                            "light": "light colours like white or yellow",
+                            "dark": "dark colours like blue, brown, or black",
+                            "bright": "bright colours like red, orange, or pink",
+                            "pastel": "pastel colours like light blue or light pink"
+                        }
+                        
+                        for desc, suggestion in colour_desc.items():
+                            if desc in user_text:
+                                response = f"Could you be more specific about the colour? For example, {suggestion}."
+                                attachment = send_response(response)
+                                dispatcher.utter_message(attachment=attachment)
+                                return [
+                                    ActiveLoop(form_name),
+                                    SlotSet("requested_slot", requested_slot),
+                                    FollowupAction('action_listen')
+                                ]
+                        
+                        # Default response
+                        response = f"What colour is the medication? Common colours are: {', '.join(valid_colours[:7])}."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction('action_listen')
+                        ]
+                
+                # ==================== MEDICATION DOSE HANDLING ====================
+                elif requested_slot == "medication_dose":
+                    import re
+
+                    # Check if response contains numbers
+                    has_numbers = bool(re.search(r'\d+', user_text))
+                    # Check if response contains common dosage units
+                    units = ["mg", "ml", "mcg", "g", "gram", "milligram", "milliliter", "microgram", "IU", "puff", "drop", "tablet", "capsule"]
+                    has_units = any(unit.lower() in user_text.lower() for unit in units)
+
+                    if has_numbers and has_units:
+                        # Looks like a valid dose - directly set slot and continue
+                        logger.debug('Looks like valid medication dose')
+                        return [
+                            SlotSet("medication_dose", user_text.strip()),
+                            ActiveLoop(form_name)
+                        ]
+                    elif has_numbers:
+                        # Contains numbers but no recognizable unit - let form validate
+                        logger.debug(f"Response contains numbers but no unit - letting form validate dose")
+                        return [
+                            ActiveLoop(form_name)
+                        ]
+                    else:
+                        # Handle uncertainty
+                        unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                        if any(phrase in user_text.lower() for phrase in unsure_phrases):
+                            response = "No problem! You can check the medication label for the dosage. Common dosages are like 500mg, 10mg, or 5ml."
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+
+                        # Handle questions
+                        question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                        if any(word in user_text.lower() for word in question_words):
+                            response = "The dosage is usually shown on the medication label, like '500mg' or '10ml'. What's the dosage for this medication?"
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction('action_listen')
+                            ]
+
+                        # Handle common units without numbers
+                        if any(unit.lower() in user_text.lower() for unit in units):
+                            response = "I need both the number and unit for the dosage. For example, '500mg' or '10ml'."
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction('action_listen')
+                            ]
+
+                        # Default response
+                        response = "What's the dosage? Please include both the number and unit, like '500mg' or '10ml'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction('action_listen')
+                        ]
+
+                
+                # ==================== MEDICATION INSTRUCTIONS HANDLING ====================
+                elif requested_slot == "medication_instructions":
+                    # Handle special cases
+                    if "none" in user_text or "no instructions" in user_text or "skip" in user_text:
+                        # Let the form handle "none" case
+                        logger.debug("User indicates no instructions - letting form handle")
+                        return [
+                            ActiveLoop(form_name)
+                        ]
+                    
+                    # Handle uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "That's okay! Common instructions include 'take with food' or 'twice daily'. You can give me 'None' if there isn't any."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction('action_listen')
+                        ]
+                    
+                    # Handle questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "Instructions might include when to take it, with or without food, or any special directions. What special instructions apply to this medication?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction('action_listen')
+                        ]
+                    
+                    # If response seems like valid instructions, let form handle
+                    if len(user_text.split()) >= 2:  # At least a couple of words
+                        logger.debug("Response seems like valid instructions - letting form handle")
+                        return [
+                            ActiveLoop(form_name)
+                        ]
+                    
+                    # Default response
+                    response = "Are there any special instructions for this medication? (You can say 'none' if there aren't any)"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction('action_listen')
+                    ]
+
+            # ==================== REFILL FORM HANDLING ====================
+            elif form_name == "refill_form":
+                
+                # ==================== STOCK LEVEL HANDLING ====================
+                if requested_slot == "stock_level":
+                    
+                    # STEP 1: Direct uncertainty check (highest priority)
+                    direct_uncertainty = [
+                        "dont know", "don't know", "do not know", "dunno", "idk", "dk",
+                        "not sure", "no idea", "no clue", "forgot", "forget",
+                        "cant remember", "can't remember", "don't recall", "dont recall",
+                        "i don't know", "i dont know", "i do not know", "i'm not sure",
+                        "i am not sure", "i have no idea", "i forgot", "i can't remember",
+                        "not certain", "not really sure", "haven't a clue", "drawing a blank"
+                    ]
+                    
+                    if user_text in direct_uncertainty or any(phrase == user_text for phrase in direct_uncertainty):
+                        logger.debug("Refill stock_level - Direct uncertainty match")
+                        response = "That's okay! You can check the bottle and tell me approximately how many pills are left. Even a rough estimate helps!"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # 🔥 STEP 2: Check for numbers (valid stock level)
+                    import re
+                    numbers = re.findall(r'\d+', user_text)
+                    
+                    if numbers:
+                        # Has numbers - might be valid stock level, let form validate
+                        logger.debug(f"Refill stock_level - Contains numbers: {numbers}, letting form handle")
+                        return [ActiveLoop(form_name)]
+                    
+                    # 🔥 STEP 3: Handle questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        logger.debug("Refill stock_level - Question detected")
+                        response = "I need to know approximately how many pills you have left. You can check the bottle and give me a rough number."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # STEP 4: Handle vague responses
+                    vague_phrases = ["few", "some", "several", "couple", "many", "lots", "plenty", "enough", "not many", "a lot", "a few"]
+                    if any(phrase in user_text for phrase in vague_phrases):
+                        logger.debug("Refill stock_level - Vague response detected")
+                        response = "That helps a bit! Could you give me a more specific number? Even an estimate like 'about 10' or 'maybe 20' works."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # STEP 5: Handle units without numbers
+                    units = ["pills", "tablets", "capsules", "strips", "doses", "units", "ml", "mg"]
+                    if any(unit in user_text for unit in units) and not numbers:
+                        logger.debug("Refill stock_level - Units without numbers detected")
+                        response = "I need both the number and what you're counting. For example, '15 tablets' or '2 strips'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # STEP 7: Default response
+                    logger.debug("Refill stock_level - No pattern matched, asking again")
+                    response = "How many pills do you have left? Just give me an approximate number."
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+                
+                # ==================== REFILL DAY HANDLING ====================
+                elif requested_slot == "refill_day":
+                    
+                    # STEP 1: Direct uncertainty check (highest priority)
+                    direct_uncertainty = [
+                        "dont know", "don't know", "do not know", "dunno", "idk", "dk",
+                        "not sure", "no idea", "no clue", "forgot", "forget",
+                        "cant remember", "can't remember", "don't recall", "dont recall",
+                        "i don't know", "i dont know", "i do not know", "i'm not sure",
+                        "i am not sure", "i have no idea", "i forgot", "i can't remember",
+                        "not certain", "not really sure", "haven't a clue", "drawing a blank"
+                    ]
+                    
+                    if user_text in direct_uncertainty or any(phrase == user_text for phrase in direct_uncertainty):
+                        logger.debug("Refill refill_day - Direct uncertainty match")
+                        response = "No problem! When you know approximately how many days until you need a refill, just let me know."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # STEP 2: Check for numbers (valid refill day)
+                    import re
+                    numbers = re.findall(r'\d+', user_text)
+                    
+                    if numbers:
+                        # Has numbers - might be valid refill day, let form validate
+                        logger.debug(f"Refill refill_day - Contains numbers: {numbers}, saving the exact text")
+                        return [SlotSet("refill_day", user_text.title()),
+                                ActiveLoop(form_name)]
+                    
+                    # STEP 3: Handle questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        logger.debug("Refill refill_day - Question detected")
+                        response = "I need to know when you'll need a refill. For example, 'in 7 days' or 'about 2 weeks'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # STEP 4: Handle vague time expressions
+                    time_phrases = {
+                        "soon": "soon, like in a few days?",
+                        "next week": "next week?",
+                        "this week": "this week?",
+                        "next month": "next month?",
+                        "couple days": "a couple of days?",
+                        "few days": "a few days?",
+                        "couple weeks": "a couple of weeks?",
+                        "few weeks": "a few weeks?"
+                    }
+                    
+                    for phrase, clarification in time_phrases.items():
+                        if phrase in user_text:
+                            logger.debug(f"Refill refill_day - Vague time phrase '{phrase}' detected")
+                            response = f"When you say {clarification} I need the actual number of days to set up the reminder properly."
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                    
+                    # STEP 5: Handle day of week mentions
+                    days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                    for day in days:
+                        if day in user_text:
+                            logger.debug(f"Refill refill_day - Day of week '{day}' detected")
+                            # You might want special handling for day-of-week vs days-until
+                            response = f"To set up a refill reminder, I need to know in how many days you'll need a refill, not which day of the week."
+                            attachment = send_response(response)
+                            dispatcher.utter_message(attachment=attachment)
+                            return [
+                                ActiveLoop(form_name),
+                                SlotSet("requested_slot", requested_slot),
+                                FollowupAction("action_listen")
+                            ]
+                    
+                    # STEP 7: Default response
+                    logger.debug("Refill refill_day - No pattern matched, asking again")
+                    response = "In how many days will you need a refill? Please give me a number, like '30' or '60'."
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+            
+            # ==================== REMINDER FORM HANDLING ====================
+            elif form_name == "reminder_form":
+                
+                # ==================== PER DAY FREQUENCY HANDLING ====================
+                if requested_slot == "per_day_frequency":
+                    
+                    # Valid frequency options
+                    valid_frequencies = ["once", "twice", "thrice", "1", "2", "3", "one", "two", "three"]
+                    
+                    # Check if user gave a valid frequency
+                    found_frequency = None
+                    for freq in valid_frequencies:
+                        if freq in user_text:
+                            found_frequency = freq
+                            break
+                    
+                    if found_frequency:
+                        logger.debug(f"Valid frequency detected: '{found_frequency}' - letting form handle")
+                        return [ActiveLoop(form_name)]
+                    
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "That's okay! Common options are once, twice, or thrice per day. How many times a day would you like to take this medication?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "I need to know how many times a day you take this medication. For example, 'once', 'twice', or 'thrice' daily."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Default response
+                    response = "How many times a day would you like to be reminded? (e.g., once, twice, thrice)"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+                
+                # ==================== ALERT TYPE HANDLING ====================
+                elif requested_slot == "alert_type":
+                    
+                    # Valid alert types
+                    valid_types = ["voice", "alarm", "notification", "sound"]
+                    
+                    # Check if user gave a valid type
+                    found_type = None
+                    for alert_type in valid_types:
+                        if alert_type in user_text:
+                            found_type = alert_type
+                            break
+                    
+                    if found_type:
+                        logger.debug(f"Valid alert type detected: '{found_type}' - letting form handle")
+                        return [ActiveLoop(form_name)]
+                    
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "That's okay! You can choose between 'voice' or 'alarm' for your reminder. Voice reads the medication name, alarm just makes a sound."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "You can choose 'voice' for a spoken reminder that says the medication name, or 'alarm' for a standard notification sound."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Default response
+                    response = "Would you prefer a 'voice' reminder or an 'alarm'?"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+                
+                # ==================== REMINDER DAY HANDLING ====================
+                elif requested_slot == "reminder_day":
+                    
+                    # Valid days
+                    days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", 
+                            "mon", "tue", "wed", "thu", "fri", "sat", "sun", "weekdays", "weekends", "every day", "daily"]
+                    
+                    # Check if any day mentioned
+                    found_days = []
+                    for day in days:
+                        if day in user_text:
+                            found_days.append(day)
+                    
+                    if found_days:
+                        logger.debug(f"Days detected: {found_days} - letting form handle")
+                        return [SlotSet('reminder_day', found_days),
+                                ActiveLoop(form_name)]
+                    
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "That's okay! You can tell me which days of the week you need reminders, like 'Monday, Wednesday, Friday' or 'every day'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "You can choose specific days like 'Monday and Thursday', or say 'every day' for daily reminders."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Handle vague responses
+                    vague_phrases = ["some days", "few days", "certain days", "specific days"]
+                    if any(phrase in user_text for phrase in vague_phrases):
+                        response = "Which specific days would you like to be reminded? For example, 'Monday, Wednesday, Friday' or 'every day'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Default response
+                    response = "Which days would you like to be reminded? (e.g., 'Monday, Wednesday, Friday' or 'every day')"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+                
+                # ==================== FREQUENCY HANDLING ====================
+                elif requested_slot == "frequency":
+                    import re
+
+                    user_text_lower = user_text.lower()
+
+                    # Regex to find a number + optional space + time unit
+                    match = re.search(r'(\d+)\s*(day|days|week|weeks|month|months|year|years)', user_text_lower)
+
+                    if match:
+                        # Extract number + unit and save as frequency
+                        frequency_value = match.group(0)  # e.g., '5 days', '2 weeks'
+                        logger.debug(f"Frequency - Valid duration detected: {frequency_value}")
+                        return [SlotSet("frequency", frequency_value),
+                            ActiveLoop(form_name)
+                        ]
+
+                    # Check for numbers without units
+                    numbers = re.findall(r'\d+', user_text_lower)
+                    if numbers:
+                        logger.debug(f"Frequency - Numbers detected but no units: {numbers}")
+                        response = "Please include the time unit with the number, like '5 days' or '2 weeks'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+
+                    # Check for units without numbers
+                    time_units = ["day", "days", "week", "weeks", "month", "months", "year", "years"]
+                    has_units = any(unit in user_text_lower for unit in time_units)
+                    if has_units and not numbers:
+                        logger.debug("Frequency - Units without numbers detected")
+                        response = "I need both the number and time unit. For example, '30 days', '6 months', or '1 year'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text_lower for phrase in unsure_phrases):
+                        response = "No problem! You can tell me how long you need reminders, like '30 days', '6 months', or '1 year'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text_lower for word in question_words):
+                        response = "I need to know how long you'll be taking this medication. For example, '30 days', '6 months', or 'ongoing'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+
+                    # Handle vague responses
+                    vague_phrases = ["long time", "short time", "awhile", "a while", "not sure how long"]
+                    if any(phrase in user_text_lower for phrase in vague_phrases):
+                        response = "If you know approximately how long, that helps. Like '3 months' or '1 year'. If it's ongoing, just say 'ongoing'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+
+                    # Default response
+                    response = "How long would you like to receive reminders? (e.g., '30 days', '6 months', or 'ongoing')"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+
+                
+                # ==================== QUANTITY HANDLING ====================
+                elif requested_slot == "quantity":
+                    
+                    # Check for numbers with units
+                    import re
+                    quantity_pattern = r'(\d+(?:\.\d+)?)\s*(mg|ml|mcg|g|iu|unit|units|tablet|tablets|capsule|capsules|pill|pills|drop|drops|puff|puffs|spray|sprays|injection|injections)'
+                    match = re.search(quantity_pattern, user_text, re.IGNORECASE)
+                    
+                    if match:
+                        number = match.group(1)
+                        unit = match.group(2).lower()
+
+                        # Normalize plural to singular (optional)
+                        if unit.endswith("s"):
+                            unit = unit[:-1]
+
+                        quantity_value = f"{number} {unit}"
+
+                        logger.debug(f"Extracted quantity: {quantity_value}")
+
+                        return [
+                            SlotSet("quantity", quantity_value),
+                            ActiveLoop(form_name)
+                        ]
+                    
+                    # Check for numbers only
+                    numbers = re.findall(r'\d+', user_text)
+                    if numbers:
+                        logger.debug("Numbers detected but no units - might need clarification")
+                        response = "I see a number, but I need the unit too. For example, '500mg' or '5ml'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for units only
+                    units = ["mg", "ml", "mcg", "g", "iu", "unit", "tablet", "capsule", "pill", "drop"]
+                    has_units = any(unit in user_text for unit in units)
+                    
+                    if has_units and not numbers:
+                        logger.debug("Units detected without numbers")
+                        response = "I need both the number and unit. For example, '500mg' or '5ml'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "No problem! The quantity is usually shown on the prescription, like '500mg' or '5ml'. What does it say?"
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "The quantity is the dose amount, usually shown with a number and unit like '500mg' or '10ml'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Default response
+                    response = "What's the quantity or dose? Please include both number and unit, like '500mg' or '5ml'."
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+                
+                # ==================== REMINDER TIME HANDLING ====================
+                elif requested_slot == "reminder_time":
+                    
+                    # Check for time patterns
+                    import re
+                    time_patterns = [
+                        r'\d{1,2}:\d{2}\s*(am|pm)',  # 9:30 am, 14:30
+                        r'\d{1,2}\s*(am|pm)',         # 9 am, 2 pm
+                        r'\d{1,2}:\d{2}',              # 09:30, 14:30
+                        r'(morning|afternoon|evening|night|noon|midnight)'
+                    ]
+                    
+                    has_time = any(re.search(pattern, user_text, re.IGNORECASE) for pattern in time_patterns)
+                    
+                    if has_time:
+                        logger.debug("Time pattern detected - letting form handle")
+                        return [ActiveLoop(form_name)]
+                    
+                    # Check for multiple times (separated by and/&/,)
+                    if " and " in user_text or " & " in user_text or "," in user_text:
+                        # Might be multiple times, let form's parsing handle it
+                        logger.debug("Multiple times possible - letting form handle")
+                        return [ActiveLoop(form_name)]
+                    
+                    # Check for uncertainty
+                    unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
+                    if any(phrase in user_text for phrase in unsure_phrases):
+                        response = "That's okay! You can tell me what time you'd like to be reminded, like '9 am' or '20:30'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Check for questions
+                    question_words = ["what", "why", "how", "when", "where", "which", "?"]
+                    if any(word in user_text for word in question_words):
+                        response = "You can tell me the time in formats like '9 am', '14:30', or 'morning'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Handle vague time references
+                    vague_times = ["early", "late", "sometime", "whenever", "anytime"]
+                    if any(vague in user_text for vague in vague_times):
+                        response = "I need a specific time for the reminder. For example, '9 am' or '20:30'."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+                    
+                    # Default response
+                    response = "What time would you like to be reminded? (e.g., '9 am', '14:30', 'morning')"
+                    attachment = send_response(response)
+                    dispatcher.utter_message(attachment=attachment)
+                    return [
+                        ActiveLoop(form_name),
+                        SlotSet("requested_slot", requested_slot),
+                        FollowupAction("action_listen")
+                    ]
+
+            logger.debug("No specific form handling matched - re-activating form to try again")
+            return [
+                ActiveLoop(form_name),
+                SlotSet("requested_slot", requested_slot)
+            ]
+        
+    def handle_openai_fallback(self, dispatcher, tracker):
+        # If no form is active, use OpenAI fallback
+        logger.debug("No active form - using OpenAI fallback")
+        
         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
                     2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
@@ -2758,20 +3928,6 @@ class ActionCustomFallback(Action):
                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
 
                 """  
-        logger.debug("="*80)
-        logger.debug("🔧 ACTION_CUSTOM_FALLBACK STARTING")
-        logger.debug(f"Active loop: {tracker.active_loop}")
-        logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
-        logger.debug("="*80)
-        
-        # CRITICAL: SKIP OpenAI fallback if ANY form is active
-        if tracker.active_loop:
-            form_name = tracker.active_loop.get("name")
-            logger.debug(f"Form '{form_name}' ACTIVE - SKIPPING OPENAI")
-            logger.debug("Returning empty list to let form handle it")
-            return []  # ← This should stop the OpenAI call!
-        
-        prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant..."""
         
         try:
             user_query = tracker.latest_message['text']

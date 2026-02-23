@@ -81,7 +81,7 @@ class MedicationManager:
         
         if success:
             self._medications_cache = None  # Clear cache
-        
+        logger.debug(f'save_reminder result: success = {success}, message={message}')
         return success, message 
     
     def get_medication_tracking(self, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:

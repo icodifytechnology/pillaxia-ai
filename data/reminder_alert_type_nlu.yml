@@ -1,0 +1,61 @@
+version: "3.1"
+
+nlu:
+- intent: provide_alert_type
+  examples: |
+    - let's do [voice](alert_type)
+    - maybe [alarm](alert_type)
+    - I’ll take [alarm](alert_type)
+    - [voice](alert_type)
+    - [alarm](alert_type)
+    - yeah [alarm](alert_type)
+    - I prefer [voice](alert_type) for the reminder.
+    - probably [voice](alert_type)
+    - Make it [alarm](alert_type)
+    - hmm [alarm](alert_type)
+    - go with [alarm](alert_type)
+    - [alarm](alert_type) is fine
+    - Change it to [voice](alert_type)
+    - [alarm](alert_type) is okay
+    - For the reminder, choose [alarm](alert_type).
+    - Change it to [alarm](alert_type)
+    - Please make the alert sound [voice](alert_type).
+    - let's do [alarm](alert_type)
+    - uh [voice](alert_type)
+    - Use [voice](alert_type)
+    - [voice](alert_type) is fine
+    - I prefer [alarm](alert_type) for the reminder.
+    - [alarm](alert_type)
+    - just [alarm](alert_type)
+    - maybe [voice](alert_type)
+    - yeah [voice](alert_type)
+    - [voice](alert_type) works
+    - For the reminder, choose [voice](alert_type).
+    - Please use [voice](alert_type)
+    - [voice](alert_type) will be fine
+    - probably [alarm](alert_type)
+    - I want [alarm](alert_type)
+    - [voice](alert_type) is okay
+    - go with [voice](alert_type)
+    - I'd like the notification to use [voice](alert_type).
+    - Please use [alarm](alert_type)
+    - that’s fine, [alarm](alert_type)
+    - I’ll take [voice](alert_type)
+    - okay [alarm](alert_type)
+    - that’s fine, [voice](alert_type)
+    - [alarm](alert_type) will be fine
+    - just [voice](alert_type)
+    - Use [alarm](alert_type)
+    - Make it [voice](alert_type)
+    - uh [alarm](alert_type)
+    - Please make the alert sound [alarm](alert_type).
+    - Can you set the reminder to [alarm](alert_type)?
+    - hmm [voice](alert_type)
+    - [alarm](alert_type) works
+    - [voice](alert_type)
+    - Set it to [alarm](alert_type)
+    - Set it to [voice](alert_type)
+    - I'd like the notification to use [alarm](alert_type).
+    - I want [voice](alert_type)
+    - okay [voice](alert_type)
+    - Can you set the reminder to [voice](alert_type)?

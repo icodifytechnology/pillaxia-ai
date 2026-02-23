@@ -424,41 +424,60 @@
       "In how many days would you need to refill the medication?"
     ]
   },
-  "ask_reminder_wants_reminders": {
-    "casual": [
-      "Would you like me to set up reminders for this medication? (yes/no)"
-    ],
-    "formal": [
-      "Would you like to set up reminders for this medication? (yes/no)"
-    ]
-  },
 
-  "ask_reminder_frequency_type": {
+  "ask_frequency": {
     "casual": [
-      "How long should the reminder run? (day, week, month, year)"
+      "For how long would you like to setup the reminder for? (e.g, 1 day, 1 week, 2 months)"
     ],
     "formal": [
       "For what duration would you like to save the reminder? (e.g., day, week, month, year)"
     ]
   },
 
-  "ask_reminder_frequency_period": {
+  "ask_per_day_frequency": {
     "casual": [
-      "How many {frequency_type}s should I remind you for? (e.g., 1, 2)"
+      "How many times a day should I remind you? (once, twice, thrice)"
     ],
     "formal": [
-      "How many {frequency_type}s would you like to be reminded? (e.g., 1, 2)"
+      "How many times a day would you like to receive reminders? (e.g., once, twice, thrice)"
     ]
   },
 
-  "ask_reminder_time_period": {
-    "casual": [
-      "How many times per {frequency_type} should I remind you? (once, twice, thrice)"
-    ],
-    "formal": [
-      "How many times per {frequency_type} would you like to receive reminders? (e.g., once, twice, thrice)"
-    ]
-  },
+"ask_quantity": {
+  "casual": [
+    "How much medicine should I remind you to take? (e.g., 1 mg, 1 tablet, 5 ml)"
+  ],
+  "formal": [
+    "Please specify the dosage amount for the reminder (e.g., 1 mg, 1 tablet, 5 ml)."
+  ]
+},
+
+"ask_reminder_time": {
+  "casual": [
+    "What time should I remind you? (e.g., 8 AM, 14:30)"
+  ],
+  "formal": [
+    "At what time would you like to receive the reminder? (e.g., 8:00 AM or 14:30)"
+  ]
+},
+
+"ask_alert_type": {
+  "casual": [
+    "How would you like to be notified — voice or alarm?"
+  ],
+  "formal": [
+    "Please select the type of alert you prefer: voice notification or alarm."
+  ]
+},
+
+"ask_reminder_day": {
+  "casual": [
+    "What days should I set the reminder for? You can say something like Monday and Friday, weekdays, or every day."
+  ],
+  "formal": [
+    "Please specify the days on which the reminder should be scheduled (e.g., Monday and Friday, weekdays, or every day)."
+  ]
+},
 
   "submit_medication": {
     "casual": [
@@ -502,6 +521,14 @@
     ],
     "formal": [
       "Okay. Would you like to setup reminder for the medication?"
+    ]
+  },
+      "reminder-deny": {
+    "casual": [
+      "Okay. You can setup the reminder for it later. What else can i do for you now?"
+    ],
+    "formal": [
+      "Okay. What can I assit you with today?"
     ]
   }
 }

@@ -100,24 +100,66 @@ rules:
   - action: action_submit_refill_form
   - action: action_listen
 
-# - rule: Handle affirm after refill deny - start reminder form
-#   condition:
-#     - slot_was_set:
-#       - current_step: ask_reminder
-#   steps:
-#     - intent: affirm
-#     - action: reminder_form
-#     - active_loop: reminder_form
+- rule: Handle affirm after refill submission - start refill form
+  condition:
+    - slot_was_set:
+      - current_step: ask_reminder
+  steps:
+    - action: action_submit_refill_form
+    - action: action_listen
+    - intent: affirm
+    - action: reminder_form
+    - active_loop: reminder_form
+
+- rule: Handle deny after refill submission - finish
+  condition:
+    - slot_was_set:
+      - current_step: ask_reminder 
+  steps:
+    - action: action_submit_refill_form
+    - action: action_listen
+    - or:
+      - intent: deny
+      - intent: skip
+    - action: action_handle_reminder_deny
+    - action: action_listen
+
+- rule: Submit reminder form
+  condition:
+    - active_loop: reminder_form
+  steps:
+  - action: reminder_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_submit_reminder_form
+  - action: action_listen
   
-# - rule: Handle deny after refill deny - finish
-#   condition:
-#     - slot_was_set:
-#       - current_step: ask_reminder
-#   steps:
-#     - or: 
-#       - intent: deny
-#       - intent: skip
-#     - action: action_handle_reminder_deny
+- rule: Handle deny after refill deny - finish
+  condition:
+    - slot_was_set:
+      - current_step: ask_reminder
+  steps:
+    - or: 
+      - intent: deny
+      - intent: skip
+    - action: action_handle_reminder_deny
+    - action: action_listen
+
+
+- rule: Handle affirm after refill deny 
+  condition:
+    - slot_was_set:
+      - current_step: ask_reminder
+  steps: 
+    - intent: affirm
+    - action: reminder_form
+    - active_loop: reminder_form
+
+- rule: After reminder deny - wait for next input
+  steps:
+    - action: action_handle_reminder_deny
+    - action: action_listen
 
 - rule: List Medications
   steps:
@@ -145,6 +187,35 @@ rules:
   steps: 
   - intent: out_of_scope
   - action: action_custom_fallback
+
+- rule: Handle refill form fallback
+  condition:
+    - active_loop: refill_form
+  steps:
+    - intent: nlu_fallback
+    - action: action_custom_fallback
+
+
+- rule: Fallback for invalid refill_day
+  condition:
+  - active_loop: refill_form
+  steps:
+  - action: action_custom_fallback
+  - action: refill_form
+
+- rule: Handle medication form fallback
+  condition:
+    - active_loop: medication_form
+  steps:
+    - intent: nlu_fallback
+    - action: action_custom_fallback
+
+- rule: Handle reminder form fallback
+  condition:
+    - active_loop: reminder_form
+  steps:
+    - intent: nlu_fallback
+    - action: action_custom_fallback
 
 - rule: Today's medication
   steps: 
@@ -329,18 +400,4 @@ rules:
     - active_loop: medication_form
   steps:
     - intent: medication_adherence
-    - action: action_handle_form_interruption
-
-- rule: Affirming medication addition cancellation
-  condition:
-    - active_loop: medication_form
-  steps:
-    - intent: affirm
-    - action: action_cancel_form
-
-- rule: Denying medication addition cancellation
-  condition:
-    - active_loop: medication_form
-  steps:
-    - intent: deny
     - action: action_handle_form_interruption
