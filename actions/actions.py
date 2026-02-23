@@ -194,7 +194,9 @@ class ActionGreet(BaseAction):
             logger.info(f"Sent greeting: '{attachment}'")
         except Exception as e:
             logger.error(f"Error building greeting: {e}", exc_info=True)
-            dispatcher.utter_message(text="Hello! Nice to see you.")
+            response = "Hello! Nice to see you."
+            attachment = send_response(attachment)
+            dispatcher.utter_message(attachment=attachment)
         
         return []
 
@@ -227,7 +229,9 @@ class ActionGoodbye(BaseAction):
             logger.info(f"Sent goodbye: '{attachment}'")
         except Exception as e:
             logger.error(f"Error building goodbye: {e}", exc_info=True)
-            dispatcher.utter_message(text="Goodbye! Take care.")
+            response = "Goodbye! Take care."
+            attachment = send_response(response)
+            dispatcher.utter_message(attachment=attachment)
         
         return []
     
@@ -275,7 +279,8 @@ class ActionIamabot(Action):
         except Exception as e:
             logger.error(f"Error in action_iamabot: {e}", exc_info=True)
             error_message = "I'm having trouble responding right now. I'm a chatbot here to help you!"
-            dispatcher.utter_message(text=error_message)
+            attachment = send_response(error_message)
+            dispatcher.utter_message(attachment=attachment)
         
         logger.debug("Bot identity query handled successfully")
         return []
@@ -426,7 +431,6 @@ class ValidateMedicationForm(FormValidationAction):
         logger.debug('######### VALIDATING MEDICATION TYPE #########')
 
         if not slot_value or len(slot_value.strip()) < 2:
-            dispatcher.utter_message("Please specify the medication type.")
             return {"medication_type": None}
         
         return {
@@ -460,10 +464,6 @@ class ValidateMedicationForm(FormValidationAction):
                 "medication_colour": colour_lower,
                 "requested_slot": "medication_dose"}
         else:
-            dispatcher.utter_message(
-                f"Please choose from these colours: {', '.join(valid_colours)}. "
-                f"Which colour would you like?"
-            )
             return {"medication_colour": None}
 
     async def validate_medication_dose(
@@ -511,10 +511,6 @@ class ValidateMedicationForm(FormValidationAction):
             return result
         
         # If empty, ask for confirmation
-        dispatcher.utter_message(
-            "You haven't provided any instructions. Is that correct? "
-            "(say 'yes' to continue, or provide instructions)"
-        )
         result = {"medication_instructions": None}
         logger.debug(f"Returning (empty case): {result}")
         return result
@@ -1176,151 +1172,6 @@ class ValidateReminderForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_reminder_form"
 
-    # async def required_slots(
-    #     self,
-    #     domain_slots: List[Text],
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> List[Text]:
-    #     """Dynamically determine required slots based on user choices."""
-    #     # DEBUG: Log current state
-    #     logger.debug("="*80)
-    #     logger.debug("REQUIRED_SLOTS DEBUG:")
-    #     logger.debug(f"Active loop: {tracker.active_loop}")
-    #     logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
-    #     logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
-    #     logger.debug(f"Latest text: '{tracker.latest_message.get('text')}'")
-    #     logger.debug("="*80)
-
-    #     all_slots = [
-    #         "frequency",
-    #         "per_day_frequency",
-    #         "quantity",
-    #         "reminder_time",
-    #         "alert_type",
-    #         "reminder_day"
-    #     ]
-
-    #     required = []
-    #     for slot in all_slots:
-    #         slot_value = tracker.get_slot(slot)
-
-    #         # Custom fallback trigger for invalid user input for 'frequency'
-    #         if slot == "frequency" and slot_value is None:
-    #             user_input = tracker.latest_message.get("text", "")
-    #             if not self.is_valid_frequency(user_input):
-    #                 dispatcher.utter_message(text="Hmm, I didn't quite get that. Can you specify the frequency clearly?")
-    #                 # Trigger fallback action
-    #                 return [FollowupAction("action_custom_fallback")]
-
-    #         if slot_value is None or slot_value == "":
-    #             required.append(slot)
-    #         else:
-    #             logger.debug(f"Slot '{slot}' is already filled: {slot_value}")
-
-    #     logger.debug(f"Required slots: {required}")
-    #     return required
-
-    # def is_valid_frequency(self, text: str) -> bool:
-    #     """Simple check to see if user input can be interpreted as a frequency."""
-    #     text = text.lower()
-    #     valid_keywords = ["day", "week", "month"]
-    #     return any(word in text for word in valid_keywords)
-    
-    async def validate_frequency(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate combined frequency slot like '5 years', '3 days', etc."""
-
-        logger.debug("VALIDATING COMBINED FREQUENCY")
-
-        if not slot_value:
-            return {"frequency": None}
-
-        slot_value = str(slot_value).lower().strip()
-
-        # Regex to extract number + unit
-        match = re.match(r"(\d+)\s*(day|days|week|weeks|month|months|year|years)", slot_value)
-
-        if not match:
-            response = "Please enter a valid duration like '5 days', '2 weeks', or '1 month'."
-            attachment = send_response(response)
-            dispatcher.utter_message(attachment=attachment)
-            return {"frequency": None}
-
-        count = int(match.group(1))
-        unit = match.group(2)
-
-        # Normalize unit to singular
-        unit_mapping = {
-            "days": "day",
-            "weeks": "week",
-            "months": "month",
-            "years": "year"
-        }
-
-        unit = unit_mapping.get(unit, unit)
-
-        if count <= 0:
-            return {"frequency": None}
-
-        # Optional: store normalized format
-        normalized_value = f"{count} {unit}"
-
-        return {"frequency": normalized_value}
-    
-    # async def validate_time_period(
-    #     self,
-    #     slot_value: Any,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Validate times per period (once/twice/thrice)."""
-    #     if not slot_value:
-    #         return {"time_period": None}
-        
-    #     valid_periods = ["once", "twice", "thrice"]
-    #     slot_value_lower = str(slot_value).lower().strip()
-        
-    #     # Map variations
-    #     period_mapping = {
-    #         "1": "once",
-    #         "one": "once",
-    #         "1x": "once",
-    #         "one time": "once",
-    #         "single": "once",
-    #         "2": "twice",
-    #         "two": "twice",
-    #         "2x": "twice",
-    #         "two times": "twice",
-    #         "double": "twice",
-    #         "3": "thrice",
-    #         "three": "thrice",
-    #         "3x": "thrice",
-    #         "three times": "thrice",
-    #         "triple": "thrice"
-    #     }
-        
-    #     # Check mapped values
-    #     if slot_value_lower in period_mapping:
-    #         slot_value_lower = period_mapping[slot_value_lower]
-        
-    #     # Validate
-    #     if slot_value_lower in valid_periods:
-    #         # Get frequency context
-    #         freq_type = tracker.get_slot("frequency_type")
-    #         freq_period = tracker.get_slot("frequency_period")
-            
-    #         return {"time_period": slot_value_lower}
-    #     else:
-    #         return {"time_period": None}
-    
     async def validate_quantity(
         self,
         slot_value: Any,
@@ -1371,10 +1222,10 @@ class ValidateReminderForm(FormValidationAction):
             return {"quantity": quantity}
             
         except (ValueError, TypeError):
-            dispatcher.utter_message(
-                "Please enter a valid number of pills/units. "
-                "For example: '1 pill', '2 tablets', or just '1'."
-            )
+            # dispatcher.utter_message(
+            #     "Please enter a valid number of pills/units. "
+            #     "For example: '1 pill', '2 tablets', or just '1'."
+            # )
             return {"quantity": None}
     
     async def validate_reminder_time(
@@ -1402,10 +1253,10 @@ class ValidateReminderForm(FormValidationAction):
             else:
                 # Need more times
                 remaining = times_needed - len(slot_value)
-                dispatcher.utter_message(
-                    f"I have {len(slot_value)} time(s). Need {remaining} more. "
-                    f"What time? (e.g., 8:00 AM)"
-                )
+                # dispatcher.utter_message(
+                #     f"I have {len(slot_value)} time(s). Need {remaining} more. "
+                #     f"What time? (e.g., 8:00 AM)"
+                # )
                 return {"reminder_time": slot_value}
         
         # Convert string input to list if needed
