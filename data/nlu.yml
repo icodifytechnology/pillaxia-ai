@@ -40,8 +40,10 @@ nlu:
     - no
     - nope
     - nah
+    - na
     - not really
     - no thanks
+    - no, thank you
     - I don't think so
     - negative
     - never
@@ -49,142 +51,97 @@ nlu:
     - absolutely not
     - by no means
     - definitely not
-    - nah, I'm good
-    - not now
-    - no way
-    - I’d rather not
-    - I don’t want to
-    - not interested
-    - I’ll pass
-    - maybe later, not now
-    - don’t
-    - nevermind
-    - nope, thanks
-    - no, thank you
     - not for me
-    - I’m okay, no
-    - that’s a no
+    - I'd rather not
+    - I don't want to
+    - not interested
+    - I'll pass
+    - I'm good
+    - nah, I'm good
+    - I'm okay, no
+    - that's a no
+    - no way
+    - nty
     - skip
-    - leave it
-    - I’ll skip that
-    - not this time
+    - pass
+    - next
+    - not now
+    - later
     - not today
+    - not this time
+    - maybe later
+    - I'll do it later
+    - can we skip this?
+    - let's skip
+    - skip that
+    - I'll skip that
+    - skip for now
+    - we can skip it
+    - hold off
+    - put it off
+    - postpone
+    - delay it
+    - do it later
+    - I'll get to it later
+    - can wait
+    - pause for now
+    - let's do it another time
+    - don't bother
+    - next
+    - pass on that
 
 - intent: cancel_form
   examples: |
     - cancel
     - stop
-    - nevermind
-    - never mind
-    - forget it
-    - I changed my mind
-    - abort
-    - actually, cancel that
-    - please cancel
-    - can we stop this?
-    - I don’t want to continue
-    - let’s stop here
-    - exit
     - quit
-    - scrap that
-    - ignore my last request
-    - don’t go ahead with it
-    - I don’t need this anymore
-    - that’s all, cancel it
-    - stop the process
-    - discontinue
-    - I’d like to cancel this
-    - can you cancel it?
-    - never mind, I’m good
-    - scratch that
-    - please stop this
-    - cancel the request
+    - exit
     - end this
+    - halt
+    - abort
     - terminate it
     - back out
-    - nope, cancel
-    - not anymore
-    - forget what I just said
-    - never mind about that
-    - let’s forget it
-    - we can skip that
-    - I changed my decision
-    - put that on hold
-    - don’t continue with that
-    - stop everything
-    - halt
     - call it off
     - pull the plug
     - nix that
+    - abort mission
+    - never mind
+    - nevermind
+    - forget it
+    - scratch that
+    - I changed my mind
+    - I changed my decision
+    - forget what I just said
+    - never mind about that
+    - let's forget it
+    - retract that
     - remove that
     - cancel everything
-    - forget the last step
-    - retract that
-    - stop now
+    - stop the process
+    - cancel the request
+    - don't go ahead with it
+    - don't continue with that
+    - stop everything
+    - put that on hold
+    - can we stop this?
+    - I don't want to continue
+    - let's stop here
+    - that's all, cancel it
+    - I'd like to cancel this
+    - can you cancel it?
+    - actually, cancel that
+    - please cancel
+    - please stop this
     - pls cancel
-    - umm, cancel that
     - ok, stop now
-    - abort mission
-
-- intent: provide_medication_colour
-  examples: |
-      - [red](medication_colour)
-      - [blue](medication_colour)
-      - [white](medication_colour)
-      - [yellow](medication_colour)
-      - [green](medication_colour)
-      - [orange](medication_colour)
-      - [purple](medication_colour)
-      - [pink](medication_colour)
-      - [black](medication_colour)
-      - [grey](medication_colour)
-      - [brown](medication_colour)
-
-- intent: provide_medication_dose
-  examples: |
-      - the dose is [500]mg(medication_dose)
-      - it's [10]ml(medication_dose)
-      - I take [1] pill(medication_dose)
-      - it's [2] tablets(medication_dose)
-      - the dosage is [5] mg(medication_dose)
-      - I take [3] capsules(medication_dose)
-
-- intent: provide_medication_instructions     
-  examples: |
-      - I take it [with food](medication_instructions)
-      - I take it [before bed](medication_instructions)
-      - I take it [in the morning](medication_instructions)
-      - I take it [at night](medication_instructions)
-      - I take it [after meals](medication_instructions)
-      - I take it [as needed](medication_instructions)
-
-- intent: skip
-  examples: |
-    - skip
-    - pass
-    - not now
-    - later
-    - I'll do it later
-    - maybe later
-    - can we skip this?
-    - let's skip
-    - skip that
-    - not this time
-    - leave it
-    - I’ll skip that
-    - skip for now
-    - we can skip it
-    - hold off
-    - put it off
-    - do it later
-    - postpone
-    - not interested right now
-    - skip it for now
-    - let’s do it another time
-    - delay it
-    - I’ll get to it later
-    - can wait
-    - pause for now
+    - umm, cancel that
+    - nope, cancel
+    - not anymore
+    - scrap that
+    - ignore my last request
+    - discontinue
+    - never mind, I'm good
+    - we can skip that
 
 - intent: greet
   examples: |

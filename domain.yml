@@ -4,9 +4,7 @@ intents:
   - greet
   - goodbye
   - affirm
-  - confused
   - deny
-  - skip
   - bot_challenge
   - add_medication
   - cancel_form
@@ -31,10 +29,8 @@ intents:
   - provide_medication_dose
   - provide_medication_instructions
   - provide_stock_level
-  - provide_refill_day
-  - provide_frequency
+  - provide_time_period
   - provide_per_day_frequency
-  - provide_quantity  # can we use provide_medication_dose to fill it up?
   - provide_reminder_time
   - provide_alert_type
   - provide_reminder_day
@@ -89,13 +85,11 @@ entities:
   - medication_name
   - medication_type
   - medication_colour
-  - medication_dose
+  - medication_dosage
   - medication_instructions
   - stock_level
-  - refill_day
-  - frequency
+  - time_period
   - per_day_frequency
-  - quantity
   - reminder_time
   - alert_type
   - reminder_day
@@ -193,7 +187,7 @@ slots:
     type: text
     mappings: 
       - type: from_entity
-        entity: medication_dose
+        entity: medication_dosage
         conditions:
             - active_loop: medication_form
               requested_slot: medication_dose
@@ -226,7 +220,7 @@ slots:
     type: float
     mappings: 
       - type: from_entity
-        entity: refill_day
+        entity: time_period
         conditions:
           - active_loop: refill_form
             requested_slot: refill_day
@@ -235,8 +229,7 @@ slots:
     type: text
     mappings: 
      - type: from_entity
-       entity: frequency
-       intent: provide_frequency
+       entity: time_period
        conditions:
           - active_loop: reminder_form
             requested_slot: frequency
@@ -254,7 +247,7 @@ slots:
     type: float
     mappings: 
      - type: from_entity
-       entity: quantity
+       entity: medication_dosage
        conditions:
           - active_loop: reminder_form
             requested_slot: quantity 
@@ -306,6 +299,24 @@ slots:
       influence_conversation: false
       mappings:
         - type: custom
+
+  pending_medication_confirmation:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  fuzzy_result:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  original_medication_input:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
 
 forms:
   medication_form:

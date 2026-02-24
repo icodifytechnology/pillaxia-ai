@@ -3,503 +3,603 @@ version: "3.1"
 nlu:
 - intent: provide_medication_dose
   examples: |
-    - Doctor prescribed [50 puff](medication_dose) every 12 hours
-    - I use [1000IU](medication_dose)
-    - Doctor prescribed [250 g](medication_dose)
-    - I take [250 ml](medication_dose)
-    - I use [100 IU](medication_dose)
-    - My dose is [10 drop](medication_dose) as needed
-    - Doctor prescribed [4 puff](medication_dose) once daily
-    - [1 drop](medication_dose)
-    - Doctor prescribed [250 ml](medication_dose)
-    - Doctor prescribed [4 ml](medication_dose)
-    - Doctor prescribed [250mg](medication_dose) as needed
-    - I take [10mg](medication_dose)
-    - [250 mg](medication_dose) every 8 hours
-    - I take [2drop](medication_dose)
-    - Doctor prescribed [2capsule](medication_dose) once daily
-    - My dose is [1IU](medication_dose)
-    - I take [1000mg](medication_dose) every 8 hours
-    - My dose is [1000 IU](medication_dose) every 8 hours
-    - [50capsule](medication_dose)
-    - My dose is [1000 tablet](medication_dose) three times a day
-    - My dose is [20mg](medication_dose)
-    - My dose is [50g](medication_dose)
-    - My dose is [250 ml](medication_dose)
-    - [1 capsule](medication_dose) every 8 hours
-    - Doctor prescribed [10 drop](medication_dose)
-    - Doctor prescribed [1 g](medication_dose)
-    - My dose is [4g](medication_dose) three times a day
-    - [500IU](medication_dose)
-    - My dose is [5 g](medication_dose) once daily
-    - I take [2 tablet](medication_dose) three times a day
-    - [2drop](medication_dose)
-    - I take [20 IU](medication_dose)
-    - I take [4 tablet](medication_dose) three times a day
-    - [500mg](medication_dose)
-    - Doctor prescribed [10 mg](medication_dose)
-    - I use [20 ml](medication_dose) as needed
-    - I take [20 drop](medication_dose)
-    - [50 puff](medication_dose) every 8 hours
-    - Doctor prescribed [3ml](medication_dose) every 12 hours
-    - Doctor prescribed [100 puff](medication_dose) twice daily
-    - My dose is [2capsule](medication_dose)
-    - I take [10puff](medication_dose) twice daily
-    - I use [100 ml](medication_dose)
-    - I use [1000capsule](medication_dose)
-    - I take [500 capsule](medication_dose)
-    - My dose is [250 IU](medication_dose)
-    - My dose is [500 capsule](medication_dose)
-    - I use [2 drop](medication_dose)
-    - I take [10 tablet](medication_dose)
-    - Doctor prescribed [250tablet](medication_dose)
-    - [500ml](medication_dose) once daily
-    - Doctor prescribed [1puff](medication_dose) twice daily
-    - I take [100 capsule](medication_dose)
-    - I take [3capsule](medication_dose) as needed
-    - My dose is [3capsule](medication_dose) every 8 hours
-    - [1000drop](medication_dose)
-    - My dose is [20drop](medication_dose)
-    - I use [5capsule](medication_dose)
-    - My dose is [100puff](medication_dose) once daily
-    - Doctor prescribed [5 tablet](medication_dose)
-    - Doctor prescribed [1000drop](medication_dose)
-    - I use [250 mg](medication_dose)
-    - My dose is [5 g](medication_dose)
-    - Doctor prescribed [4ml](medication_dose)
-    - I take [5 capsule](medication_dose)
-    - My dose is [20 mg](medication_dose)
-    - [4capsule](medication_dose) once daily
-    - I use [4 mg](medication_dose)
-    - [250capsule](medication_dose) once daily
-    - I use [4 drop](medication_dose) every 12 hours
-    - I use [3 tablet](medication_dose) three times a day
-    - I use [3 IU](medication_dose) every 12 hours
-    - I use [750 IU](medication_dose)
-    - I use [10 IU](medication_dose) every 8 hours
-    - [250mg](medication_dose)
-    - Doctor prescribed [500 drop](medication_dose) every 8 hours
-    - [4 capsule](medication_dose) as needed
-    - My dose is [3 puff](medication_dose) every 8 hours
-    - Doctor prescribed [500tablet](medication_dose)
-    - [1000capsule](medication_dose) every 12 hours
-    - I use [10 g](medication_dose) every 8 hours
-    - I use [10 puff](medication_dose)
-    - [20 capsule](medication_dose)
-    - I take [5drop](medication_dose)
-    - [20 capsule](medication_dose) three times a day
-    - I take [1ml](medication_dose)
-    - Doctor prescribed [2 IU](medication_dose)
-    - I take [4 mg](medication_dose)
-    - I take [5g](medication_dose) three times a day
-    - Doctor prescribed [250 IU](medication_dose) as needed
-    - Doctor prescribed [500capsule](medication_dose) three times a day
-    - I take [750tablet](medication_dose) twice daily
-    - [3 drop](medication_dose)
-    - I use [1puff](medication_dose) twice daily
-    - I use [10puff](medication_dose)
-    - I use [100 g](medication_dose)
-    - I take [250 puff](medication_dose)
-    - Doctor prescribed [50g](medication_dose) every 12 hours
-    - I use [10ml](medication_dose)
-    - [2 IU](medication_dose)
-    - [750puff](medication_dose)
-    - Doctor prescribed [1tablet](medication_dose) once daily
-    - [100 mg](medication_dose)
-    - I take [5tablet](medication_dose)
-    - I use [2 tablet](medication_dose)
-    - I use [1 mg](medication_dose)
-    - Doctor prescribed [10 IU](medication_dose) once daily
-    - I take [4 g](medication_dose)
-    - [5 ml](medication_dose)
-    - My dose is [750 g](medication_dose) as needed
-    - My dose is [250mg](medication_dose) twice daily
-    - I take [100 mg](medication_dose) every 12 hours
-    - [4 mg](medication_dose) three times a day
-    - I use [750puff](medication_dose)
-    - My dose is [5puff](medication_dose) as needed
-    - My dose is [5mg](medication_dose) every 8 hours
-    - Doctor prescribed [50IU](medication_dose)
-    - Doctor prescribed [1000tablet](medication_dose)
-    - My dose is [5 ml](medication_dose)
-    - I use [500 tablet](medication_dose)
-    - My dose is [20 IU](medication_dose) once daily
-    - I use [500capsule](medication_dose) once daily
-    - I take [4g](medication_dose) once daily
-    - I use [1000 mg](medication_dose)
-    - Doctor prescribed [50 capsule](medication_dose)
-    - I use [3 drop](medication_dose) every 8 hours
-    - My dose is [10 tablet](medication_dose)
-    - [2puff](medication_dose)
-    - [10 capsule](medication_dose)
-    - I use [1 capsule](medication_dose) every 12 hours
-    - I use [3 puff](medication_dose) twice daily
-    - Doctor prescribed [10mg](medication_dose)
-    - Doctor prescribed [50 IU](medication_dose) twice daily
-    - Doctor prescribed [1000g](medication_dose) once daily
-    - Doctor prescribed [5 g](medication_dose) every 8 hours
-    - [1000mg](medication_dose)
-    - [4puff](medication_dose)
-    - My dose is [50g](medication_dose) as needed
-    - I use [3 g](medication_dose)
-    - My dose is [500 ml](medication_dose)
-    - My dose is [3 puff](medication_dose)
-    - My dose is [4tablet](medication_dose) twice daily
-    - My dose is [500 puff](medication_dose)
-    - [2 mg](medication_dose)
-    - [250drop](medication_dose)
-    - Doctor prescribed [10 tablet](medication_dose)
-    - My dose is [100 capsule](medication_dose)
-    - Doctor prescribed [5 mg](medication_dose)
-    - My dose is [1 IU](medication_dose)
-    - [4tablet](medication_dose)
-    - I use [500drop](medication_dose)
-    - [500 g](medication_dose)
-    - Doctor prescribed [500 tablet](medication_dose)
-    - Doctor prescribed [10ml](medication_dose) every 12 hours
-    - I take [10puff](medication_dose)
-    - I take [500 tablet](medication_dose)
-    - My dose is [4 drop](medication_dose)
-    - Doctor prescribed [4 IU](medication_dose)
-    - Doctor prescribed [750 IU](medication_dose)
-    - [20 drop](medication_dose)
-    - I use [10 capsule](medication_dose)
-    - I take [10g](medication_dose)
-    - My dose is [50 capsule](medication_dose)
-    - [3IU](medication_dose)
-    - My dose is [1drop](medication_dose)
-    - I use [10tablet](medication_dose) as needed
-    - [3 IU](medication_dose)
-    - My dose is [10 IU](medication_dose)
-    - My dose is [250 puff](medication_dose)
-    - I use [2tablet](medication_dose)
-    - I take [2 capsule](medication_dose)
-    - Doctor prescribed [500 IU](medication_dose)
-    - I use [10IU](medication_dose) twice daily
-    - I use [250IU](medication_dose) every 12 hours
-    - I take [3g](medication_dose)
-    - I take [20tablet](medication_dose)
-    - Doctor prescribed [500 ml](medication_dose)
-    - Doctor prescribed [3 g](medication_dose)
-    - [1 mg](medication_dose)
-    - I take [100puff](medication_dose)
-    - I use [2 mg](medication_dose) every 12 hours
-    - I use [1000 mg](medication_dose) once daily
-    - I use [1IU](medication_dose) twice daily
-    - Doctor prescribed [250 puff](medication_dose) twice daily
-    - Doctor prescribed [250puff](medication_dose) as needed
-    - Doctor prescribed [20IU](medication_dose)
-    - I use [1capsule](medication_dose) once daily
-    - My dose is [250 g](medication_dose) once daily
-    - I take [5puff](medication_dose)
-    - I use [4drop](medication_dose) three times a day
-    - I use [3 ml](medication_dose) three times a day
-    - [5 IU](medication_dose)
-    - Doctor prescribed [4 tablet](medication_dose)
-    - [100 puff](medication_dose)
-    - [3 drop](medication_dose) as needed
-    - I take [50drop](medication_dose) as needed
-    - Doctor prescribed [5drop](medication_dose)
-    - [1000mg](medication_dose) three times a day
-    - Doctor prescribed [4capsule](medication_dose) twice daily
-    - My dose is [100tablet](medication_dose) as needed
-    - I take [100 g](medication_dose)
-    - I take [250 g](medication_dose)
-    - I use [750 ml](medication_dose) every 12 hours
-    - [2capsule](medication_dose) as needed
-    - I take [4IU](medication_dose) three times a day
-    - [100tablet](medication_dose)
-    - Doctor prescribed [4drop](medication_dose)
-    - [2capsule](medication_dose)
-    - I take [3tablet](medication_dose)
-    - Doctor prescribed [1000capsule](medication_dose)
-    - Doctor prescribed [10IU](medication_dose)
-    - I use [4 IU](medication_dose)
-    - I take [4mg](medication_dose) as needed
-    - Doctor prescribed [4 g](medication_dose)
-    - [750capsule](medication_dose)
-    - Doctor prescribed [5 drop](medication_dose)
-    - I take [2drop](medication_dose) every 12 hours
-    - I take [250mg](medication_dose) as needed
-    - Doctor prescribed [5capsule](medication_dose)
-    - I take [1000IU](medication_dose) three times a day
-    - [50 tablet](medication_dose) every 8 hours
-    - I take [20 puff](medication_dose)
-    - [250puff](medication_dose)
-    - [100capsule](medication_dose) every 8 hours
-    - My dose is [10IU](medication_dose)
-    - Doctor prescribed [5mg](medication_dose) every 12 hours
-    - Doctor prescribed [500drop](medication_dose)
-    - I take [3IU](medication_dose)
-    - Doctor prescribed [4 g](medication_dose) every 8 hours
-    - My dose is [20 tablet](medication_dose) twice daily
-    - I use [4 tablet](medication_dose)
-    - I use [50IU](medication_dose)
-    - I take [1 drop](medication_dose)
-    - I take [2 g](medication_dose)
-    - I take [250 capsule](medication_dose)
-    - I take [2 tablet](medication_dose)
-    - [10drop](medication_dose)
-    - Doctor prescribed [2mg](medication_dose)
-    - I take [1 puff](medication_dose)
-    - Doctor prescribed [1000 capsule](medication_dose)
-    - I take [10tablet](medication_dose)
-    - My dose is [50 IU](medication_dose)
-    - Doctor prescribed [250 capsule](medication_dose) every 12 hours
-    - I take [750puff](medication_dose)
-    - I use [5tablet](medication_dose)
-    - My dose is [2ml](medication_dose)
-    - Doctor prescribed [3 capsule](medication_dose)
-    - [5IU](medication_dose) every 12 hours
-    - I take [100ml](medication_dose)
-    - I take [50g](medication_dose)
-    - I take [100drop](medication_dose)
-    - Doctor prescribed [2 tablet](medication_dose)
-    - Doctor prescribed [100 IU](medication_dose) three times a day
-    - I use [500g](medication_dose)
-    - Doctor prescribed [250 drop](medication_dose)
-    - I take [50 puff](medication_dose)
-    - [50puff](medication_dose)
-    - My dose is [500puff](medication_dose) every 8 hours
-    - I take [3 IU](medication_dose) as needed
-    - Doctor prescribed [3 ml](medication_dose)
-    - I take [50IU](medication_dose)
-    - I take [1000 g](medication_dose) twice daily
-    - I use [20 g](medication_dose) twice daily
-    - Doctor prescribed [20 puff](medication_dose)
-    - My dose is [20puff](medication_dose)
-    - I take [750capsule](medication_dose)
-    - My dose is [50capsule](medication_dose)
-    - I use [50 ml](medication_dose)
-    - My dose is [3drop](medication_dose)
-    - My dose is [250g](medication_dose)
-    - I take [4 drop](medication_dose) once daily
-    - My dose is [2 IU](medication_dose)
-    - [500drop](medication_dose)
-    - I use [500 drop](medication_dose)
-    - I take [4 drop](medication_dose)
-    - [250 capsule](medication_dose)
-    - My dose is [500 mg](medication_dose) as needed
-    - I take [500puff](medication_dose) every 8 hours
-    - I take [5 g](medication_dose)
-    - I take [1000 IU](medication_dose)
-    - I use [10tablet](medication_dose)
-    - I use [10drop](medication_dose)
-    - I take [750 ml](medication_dose) once daily
-    - I use [1000 drop](medication_dose)
-    - [250 g](medication_dose) three times a day
-    - [50 tablet](medication_dose)
-    - Doctor prescribed [20 ml](medication_dose) three times a day
-    - Doctor prescribed [20 ml](medication_dose)
-    - I use [1capsule](medication_dose)
-    - [4ml](medication_dose)
-    - I take [3IU](medication_dose) every 12 hours
-    - [5capsule](medication_dose) every 12 hours
-    - [2 capsule](medication_dose) three times a day
-    - I take [20mg](medication_dose) as needed
-    - [2 drop](medication_dose)
-    - I take [2IU](medication_dose)
-    - [500 ml](medication_dose) once daily
-    - My dose is [250mg](medication_dose)
-    - [750 g](medication_dose) every 12 hours
-    - I take [4capsule](medication_dose) every 12 hours
-    - [1 puff](medication_dose) every 12 hours
-    - I use [20 tablet](medication_dose) three times a day
-    - I use [20 IU](medication_dose)
-    - My dose is [750 IU](medication_dose)
-    - I take [250IU](medication_dose)
-    - I use [10 mg](medication_dose)
-    - I take [100g](medication_dose)
-    - I use [3puff](medication_dose)
-    - [50 drop](medication_dose)
-    - I use [10 ml](medication_dose)
-    - My dose is [50 g](medication_dose) once daily
-    - Doctor prescribed [4puff](medication_dose) as needed
-    - I take [50 ml](medication_dose) three times a day
-    - [500 puff](medication_dose)
-    - My dose is [750mg](medication_dose)
-    - I take [4 puff](medication_dose)
-    - I take [50 mg](medication_dose)
-    - I take [10capsule](medication_dose)
-    - My dose is [750 drop](medication_dose) as needed
-    - My dose is [3 drop](medication_dose)
-    - I take [250 IU](medication_dose) every 8 hours
-    - My dose is [3 tablet](medication_dose) once daily
-    - I use [10puff](medication_dose) three times a day
-    - [20g](medication_dose) once daily
-    - Doctor prescribed [4g](medication_dose)
-    - Doctor prescribed [250drop](medication_dose)
-    - I use [750g](medication_dose) as needed
-    - [10 mg](medication_dose) twice daily
-    - I take [3 tablet](medication_dose)
-    - [1IU](medication_dose)
-    - I take [2 mg](medication_dose)
-    - [20 drop](medication_dose) once daily
-    - I take [500 IU](medication_dose)
-    - I take [1000 mg](medication_dose)
-    - I use [50 puff](medication_dose)
-    - I take [500 ml](medication_dose) every 12 hours
-    - I take [100 IU](medication_dose) twice daily
-    - Doctor prescribed [1 tablet](medication_dose) once daily
-    - I take [2g](medication_dose) every 12 hours
-    - I use [2puff](medication_dose)
-    - [250 g](medication_dose)
-    - Doctor prescribed [3mg](medication_dose) as needed
-    - I use [5 tablet](medication_dose)
-    - My dose is [1000drop](medication_dose)
-    - My dose is [1000tablet](medication_dose)
-    - My dose is [750 ml](medication_dose) twice daily
-    - I use [500 ml](medication_dose) as needed
-    - My dose is [750tablet](medication_dose) twice daily
-    - [20 tablet](medication_dose) once daily
-    - My dose is [2puff](medication_dose)
-    - My dose is [50drop](medication_dose)
-    - I use [5mg](medication_dose)
-    - I take [20 tablet](medication_dose) three times a day
-    - My dose is [750g](medication_dose) every 8 hours
-    - Doctor prescribed [1000g](medication_dose)
-    - My dose is [4capsule](medication_dose)
-    - My dose is [500tablet](medication_dose) once daily
-    - Doctor prescribed [250capsule](medication_dose)
-    - I use [10 drop](medication_dose) twice daily
-    - I use [2mg](medication_dose) as needed
-    - I use [100ml](medication_dose) as needed
-    - I use [250 capsule](medication_dose) once daily
-    - I use [750IU](medication_dose) three times a day
-    - Doctor prescribed [4 drop](medication_dose)
-    - Doctor prescribed [1000 mg](medication_dose)
-    - I take [20ml](medication_dose) every 8 hours
-    - [100mg](medication_dose)
-    - I use [750IU](medication_dose)
-    - My dose is [4 tablet](medication_dose)
-    - My dose is [100 g](medication_dose) once daily
-    - [250capsule](medication_dose)
-    - Doctor prescribed [1 mg](medication_dose) every 12 hours
-    - My dose is [20 IU](medication_dose)
-    - I take [750 capsule](medication_dose)
-    - [10puff](medication_dose) as needed
-    - I use [2capsule](medication_dose) once daily
-    - I use [3 mg](medication_dose)
-    - My dose is [750mg](medication_dose) twice daily
-    - I take [750 puff](medication_dose)
-    - [1000puff](medication_dose) every 12 hours
-    - Doctor prescribed [250drop](medication_dose) twice daily
-    - My dose is [100 mg](medication_dose)
-    - I use [50 tablet](medication_dose)
-    - My dose is [4 IU](medication_dose) every 12 hours
-    - I take [250 mg](medication_dose) as needed
-    - My dose is [10 g](medication_dose) as needed
-    - I take [10drop](medication_dose) once daily
-    - [4 g](medication_dose) as needed
-    - Doctor prescribed [2g](medication_dose)
-    - My dose is [1000 puff](medication_dose)
-    - My dose is [750puff](medication_dose)
-    - I use [100tablet](medication_dose)
-    - Doctor prescribed [1000 puff](medication_dose)
-    - I take [4 puff](medication_dose) as needed
-    - My dose is [2 puff](medication_dose)
-    - I use [50 IU](medication_dose)
-    - I take [1000ml](medication_dose) once daily
-    - I use [2IU](medication_dose)
-    - I use [5puff](medication_dose)
-    - [2g](medication_dose)
-    - Doctor prescribed [10 ml](medication_dose)
-    - [1000 g](medication_dose)
-    - I take [3tablet](medication_dose) three times a day
-    - I use [100g](medication_dose) twice daily
-    - Doctor prescribed [20 g](medication_dose) every 12 hours
-    - My dose is [250ml](medication_dose)
-    - [50 ml](medication_dose)
-    - I take [250g](medication_dose) every 12 hours
-    - I use [50g](medication_dose)
-    - I take [3ml](medication_dose)
-    - My dose is [1000g](medication_dose)
-    - [20tablet](medication_dose)
-    - [10 drop](medication_dose)
-    - My dose is [750ml](medication_dose)
-    - I use [2ml](medication_dose)
-    - [2mg](medication_dose)
-    - I use [500ml](medication_dose)
-    - Doctor prescribed [50tablet](medication_dose)
-    - Doctor prescribed [250 g](medication_dose) as needed
-    - [1000tablet](medication_dose) as needed
-    - I use [750capsule](medication_dose) once daily
-    - I take [10 drop](medication_dose)
-    - I use [10 mg](medication_dose) as needed
-    - I use [3IU](medication_dose) three times a day
-    - Doctor prescribed [3puff](medication_dose)
-    - I take [3mg](medication_dose) as needed
-    - Doctor prescribed [3IU](medication_dose) every 8 hours
-    - [750g](medication_dose)
-    - [3capsule](medication_dose)
-    - I use [750 ml](medication_dose)
-    - [50drop](medication_dose) every 12 hours
-    - Doctor prescribed [500puff](medication_dose)
-    - I take [50capsule](medication_dose)
-    - I use [1IU](medication_dose)
-    - I use [4 capsule](medication_dose)
-    - My dose is [1capsule](medication_dose)
-    - I use [50capsule](medication_dose)
-    - [500capsule](medication_dose)
-    - I use [4 capsule](medication_dose) as needed
-    - I take [1 ml](medication_dose)
-    - I take [2tablet](medication_dose) every 8 hours
-    - Doctor prescribed [1drop](medication_dose) every 12 hours
-    - Doctor prescribed [2puff](medication_dose)
-    - I use [500 IU](medication_dose)
-    - My dose is [20IU](medication_dose) twice daily
-    - My dose is [10 drop](medication_dose)
-    - I use [250 puff](medication_dose)
-    - [1000 IU](medication_dose)
-    - My dose is [2tablet](medication_dose)
-    - I use [20 drop](medication_dose)
-    - Doctor prescribed [250 mg](medication_dose)
-    - My dose is [5 drop](medication_dose) every 8 hours
-    - Doctor prescribed [1g](medication_dose) every 12 hours
-    - My dose is [500 IU](medication_dose)
-    - Doctor prescribed [1drop](medication_dose)
-    - My dose is [10tablet](medication_dose) as needed
-    - I use [50IU](medication_dose) three times a day
-    - Doctor prescribed [100 drop](medication_dose)
-    - I take [4 ml](medication_dose)
-    - Doctor prescribed [50 tablet](medication_dose)
-    - I take [750 drop](medication_dose)
-    - I take [2 ml](medication_dose) three times a day
-    - I use [5g](medication_dose) three times a day
-    - I take [10 ml](medication_dose) twice daily
-    - My dose is [750puff](medication_dose) as needed
-    - I use [50 drop](medication_dose) once daily
-    - I use [1 ml](medication_dose) as needed
-    - I take [1000 puff](medication_dose)
-    - I take [50 IU](medication_dose)
-    - Doctor prescribed [100g](medication_dose)
-    - I take [1000 drop](medication_dose)
-    - I take [4ml](medication_dose)
-    - My dose is [2 g](medication_dose)
-    - I use [1000g](medication_dose)
-    - My dose is [100capsule](medication_dose)
-    - Doctor prescribed [3drop](medication_dose) once daily
-    - [3ml](medication_dose)
-    - My dose is [250 capsule](medication_dose)
-    - I use [1 drop](medication_dose) as needed
-    - Doctor prescribed [250g](medication_dose) as needed
-    - I use [50 g](medication_dose)
-    - My dose is [100 puff](medication_dose) every 8 hours
-    - [250 drop](medication_dose)
-    - Doctor prescribed [500g](medication_dose) every 8 hours
-    - I take [750mg](medication_dose) as needed
-    - I take [1 ml](medication_dose) twice daily
-    - I use [20 puff](medication_dose)
-    - Doctor prescribed [10drop](medication_dose)
-    - [20 IU](medication_dose)
-    - I take [1 mg](medication_dose) twice daily
-    - Doctor prescribed [20 drop](medication_dose)
-    - [1 IU](medication_dose)
-    - Doctor prescribed [750 mg](medication_dose)
-    - [100IU](medication_dose) twice daily
-    - Doctor prescribed [2tablet](medication_dose)
-    - I take [20drop](medication_dose) as needed
-    - [1000g](medication_dose) as needed
-    - I use [1000mg](medication_dose)
-    - Doctor prescribed [100capsule](medication_dose) as needed
-    - I use [1mg](medication_dose) as needed
+    - [1drop](medication_dosage)
+    - I use [20g](medication_dosage) every 12 hours
+    - Doctor prescribed [750 capsule](medication_dosage)
+    - I use [1000 mg](medication_dosage) every 12 hours
+    - My dose is [20puff](medication_dosage)
+    - Remind me to take [3 puff](medication_dosage)
+    - Doctor prescribed [100 tablet](medication_dosage) three times a day
+    - I use [20g](medication_dosage)
+    - I use [250IU](medication_dosage) twice daily
+    - I take [750 puff](medication_dosage) as needed
+    - Remind me to take [100 puff](medication_dosage)
+    - I take [750 tablet](medication_dosage) three times a day
+    - My dose is [1000 ml](medication_dosage) once daily
+    - [2 IU](medication_dosage) every 8 hours
+    - Doctor prescribed [250ml](medication_dosage)
+    - I take [750capsule](medication_dosage) three times a day
+    - I take [5tablet](medication_dosage)
+    - Please record [4 tablet](medication_dosage) as my dose
+    - I use [100g](medication_dosage)
+    - Set my dosage to [100ml](medication_dosage)
+    - I take [100IU](medication_dosage) every 8 hours
+    - I take [1 capsule](medication_dosage)
+    - My dose is [4IU](medication_dosage)
+    - I take [250mg](medication_dosage)
+    - I take [5puff](medication_dosage) every 12 hours
+    - I take [3mg](medication_dosage) every 12 hours
+    - My dose is [10capsule](medication_dosage)
+    - Please record [5capsule](medication_dosage) as my dose
+    - Please record [20drop](medication_dosage) as my dose
+    - I use [1IU](medication_dosage)
+    - I use [500IU](medication_dosage)
+    - My dose is [750ml](medication_dosage)
+    - I use [4g](medication_dosage) twice daily
+    - [4 g](medication_dosage) three times a day
+    - Doctor prescribed [3 mg](medication_dosage) once daily
+    - [20mg](medication_dosage)
+    - I use [1 puff](medication_dosage)
+    - My dose is [5 g](medication_dosage) every 12 hours
+    - [50 drop](medication_dosage)
+    - Set my dosage to [20puff](medication_dosage)
+    - Remind me to take [3puff](medication_dosage)
+    - [50 tablet](medication_dosage) three times a day
+    - I use [20puff](medication_dosage)
+    - Doctor prescribed [500g](medication_dosage)
+    - I use [1 IU](medication_dosage)
+    - I use [500 mg](medication_dosage) as needed
+    - Set my dosage to [5ml](medication_dosage)
+    - [10tablet](medication_dosage)
+    - [250mg](medication_dosage)
+    - My dose is [10capsule](medication_dosage) three times a day
+    - I use [750g](medication_dosage)
+    - [3IU](medication_dosage)
+    - My dose is [750drop](medication_dosage)
+    - My dose is [1mg](medication_dosage)
+    - My dose is [100mg](medication_dosage) every 8 hours
+    - Doctor prescribed [500 drop](medication_dosage)
+    - Set my dosage to [20 puff](medication_dosage)
+    - Please record [10 mg](medication_dosage) as my dose
+    - I use [1 ml](medication_dosage)
+    - Set my dosage to [1000IU](medication_dosage)
+    - Remind me to take [20 IU](medication_dosage)
+    - [3 tablet](medication_dosage) every 8 hours
+    - My dose is [5 mg](medication_dosage) every 12 hours
+    - Set my dosage to [1 g](medication_dosage)
+    - [100 g](medication_dosage) twice daily
+    - My dose is [20 g](medication_dosage)
+    - My dose is [3 puff](medication_dosage)
+    - My dose is [50g](medication_dosage)
+    - I use [1000ml](medication_dosage)
+    - Set my dosage to [1drop](medication_dosage)
+    - I use [100tablet](medication_dosage)
+    - I use [5 tablet](medication_dosage)
+    - I take [10tablet](medication_dosage) as needed
+    - Doctor prescribed [750 g](medication_dosage) as needed
+    - My dose is [20 IU](medication_dosage) as needed
+    - I take [5mg](medication_dosage)
+    - I take [750 ml](medication_dosage) every 12 hours
+    - [750capsule](medication_dosage)
+    - I take [2 ml](medication_dosage)
+    - Please record [20 tablet](medication_dosage) as my dose
+    - I take [3 IU](medication_dosage)
+    - Remind me to take [500 puff](medication_dosage)
+    - [4 IU](medication_dosage)
+    - My dose is [250 g](medication_dosage) twice daily
+    - I take [1 puff](medication_dosage)
+    - I take [100 tablet](medication_dosage)
+    - Remind me to take [100 g](medication_dosage)
+    - [5 mg](medication_dosage) once daily
+    - Please record [5puff](medication_dosage) as my dose
+    - My dose is [250 mg](medication_dosage)
+    - Remind me to take [2 g](medication_dosage)
+    - Set my dosage to [3 drop](medication_dosage)
+    - [750puff](medication_dosage) every 8 hours
+    - Remind me to take [10 ml](medication_dosage)
+    - Doctor prescribed [100 capsule](medication_dosage)
+    - I use [3 tablet](medication_dosage)
+    - Doctor prescribed [4mg](medication_dosage)
+    - I use [2drop](medication_dosage)
+    - I use [1000g](medication_dosage)
+    - Please record [50 g](medication_dosage) as my dose
+    - Doctor prescribed [5capsule](medication_dosage) every 8 hours
+    - Please record [750puff](medication_dosage) as my dose
+    - Please record [1 ml](medication_dosage) as my dose
+    - Please record [250IU](medication_dosage) as my dose
+    - My dose is [3ml](medication_dosage)
+    - Doctor prescribed [3 drop](medication_dosage) as needed
+    - Set my dosage to [5drop](medication_dosage)
+    - Remind me to take [250drop](medication_dosage)
+    - [10drop](medication_dosage)
+    - [20 mg](medication_dosage)
+    - I take [500ml](medication_dosage)
+    - [250 capsule](medication_dosage)
+    - I use [4 ml](medication_dosage)
+    - Please record [1000 g](medication_dosage) as my dose
+    - Please record [500 drop](medication_dosage) as my dose
+    - I take [20 tablet](medication_dosage)
+    - [50 g](medication_dosage)
+    - Please record [2 capsule](medication_dosage) as my dose
+    - Doctor prescribed [1000 g](medication_dosage) every 12 hours
+    - [250puff](medication_dosage)
+    - Remind me to take [4tablet](medication_dosage)
+    - I take [750IU](medication_dosage) every 8 hours
+    - Doctor prescribed [250 drop](medication_dosage)
+    - I take [750 capsule](medication_dosage)
+    - My dose is [10g](medication_dosage) every 12 hours
+    - Set my dosage to [10IU](medication_dosage)
+    - Doctor prescribed [3 capsule](medication_dosage)
+    - Set my dosage to [20 g](medication_dosage)
+    - [4ml](medication_dosage)
+    - I take [10 capsule](medication_dosage)
+    - My dose is [500 capsule](medication_dosage)
+    - Remind me to take [10mg](medication_dosage)
+    - Doctor prescribed [50 tablet](medication_dosage)
+    - Set my dosage to [5 g](medication_dosage)
+    - My dose is [2 drop](medication_dosage)
+    - Please record [500 puff](medication_dosage) as my dose
+    - I take [250tablet](medication_dosage)
+    - I use [100 IU](medication_dosage) three times a day
+    - Doctor prescribed [250 puff](medication_dosage)
+    - My dose is [50IU](medication_dosage)
+    - Doctor prescribed [500 IU](medication_dosage)
+    - My dose is [250 mg](medication_dosage) every 8 hours
+    - [750IU](medication_dosage)
+    - Set my dosage to [4puff](medication_dosage)
+    - I take [2 g](medication_dosage)
+    - Remind me to take [5drop](medication_dosage)
+    - [4mg](medication_dosage)
+    - [250capsule](medication_dosage)
+    - Remind me to take [250 capsule](medication_dosage)
+    - Please record [3 IU](medication_dosage) as my dose
+    - I take [50 puff](medication_dosage)
+    - Doctor prescribed [50IU](medication_dosage)
+    - Doctor prescribed [750 drop](medication_dosage)
+    - I take [100ml](medication_dosage)
+    - Please record [100tablet](medication_dosage) as my dose
+    - I use [500mg](medication_dosage)
+    - Remind me to take [1000mg](medication_dosage)
+    - Doctor prescribed [50 puff](medication_dosage)
+    - [3 ml](medication_dosage)
+    - Doctor prescribed [500mg](medication_dosage)
+    - I take [500 mg](medication_dosage) every 8 hours
+    - Doctor prescribed [750IU](medication_dosage)
+    - Remind me to take [250tablet](medication_dosage)
+    - I take [20 drop](medication_dosage) every 12 hours
+    - I take [1mg](medication_dosage) three times a day
+    - I use [50 IU](medication_dosage) three times a day
+    - Doctor prescribed [2 drop](medication_dosage)
+    - My dose is [4 capsule](medication_dosage)
+    - My dose is [5g](medication_dosage) as needed
+    - Doctor prescribed [1000puff](medication_dosage)
+    - Set my dosage to [500mg](medication_dosage)
+    - I take [500g](medication_dosage)
+    - Doctor prescribed [250 ml](medication_dosage)
+    - [2 ml](medication_dosage)
+    - I take [1000tablet](medication_dosage)
+    - [750capsule](medication_dosage) every 12 hours
+    - Please record [4 capsule](medication_dosage) as my dose
+    - [500mg](medication_dosage)
+    - Doctor prescribed [50 drop](medication_dosage) once daily
+    - Doctor prescribed [500 g](medication_dosage)
+    - My dose is [10tablet](medication_dosage)
+    - [500 ml](medication_dosage)
+    - Doctor prescribed [250 puff](medication_dosage) every 8 hours
+    - I take [10g](medication_dosage)
+    - I take [4capsule](medication_dosage)
+    - Remind me to take [4 puff](medication_dosage)
+    - Please record [1000g](medication_dosage) as my dose
+    - Doctor prescribed [4puff](medication_dosage)
+    - My dose is [500IU](medication_dosage) once daily
+    - I take [1 ml](medication_dosage)
+    - I use [100 IU](medication_dosage)
+    - [1 puff](medication_dosage)
+    - Please record [2g](medication_dosage) as my dose
+    - I take [1000g](medication_dosage)
+    - I take [50 IU](medication_dosage)
+    - Doctor prescribed [3 drop](medication_dosage)
+    - Doctor prescribed [10mg](medication_dosage) every 12 hours
+    - My dose is [3capsule](medication_dosage)
+    - My dose is [3 IU](medication_dosage)
+    - Please record [750IU](medication_dosage) as my dose
+    - My dose is [1g](medication_dosage)
+    - I take [1000 IU](medication_dosage)
+    - My dose is [250 g](medication_dosage)
+    - Remind me to take [4capsule](medication_dosage)
+    - [4 mg](medication_dosage)
+    - I take [10puff](medication_dosage)
+    - Please record [100 IU](medication_dosage) as my dose
+    - Remind me to take [250capsule](medication_dosage)
+    - I take [20 g](medication_dosage)
+    - [750 g](medication_dosage)
+    - Remind me to take [1 g](medication_dosage)
+    - Doctor prescribed [3capsule](medication_dosage) every 8 hours
+    - Doctor prescribed [10 IU](medication_dosage)
+    - Set my dosage to [750ml](medication_dosage)
+    - [100tablet](medication_dosage) once daily
+    - Please record [500tablet](medication_dosage) as my dose
+    - I use [1000 IU](medication_dosage) twice daily
+    - [5 tablet](medication_dosage)
+    - My dose is [750IU](medication_dosage) once daily
+    - I take [10 puff](medication_dosage)
+    - [1000drop](medication_dosage)
+    - Doctor prescribed [10 drop](medication_dosage)
+    - Remind me to take [2 mg](medication_dosage)
+    - [250drop](medication_dosage) three times a day
+    - My dose is [100puff](medication_dosage) every 8 hours
+    - Remind me to take [4 g](medication_dosage)
+    - Set my dosage to [250 capsule](medication_dosage)
+    - I use [5drop](medication_dosage) twice daily
+    - [10 tablet](medication_dosage)
+    - My dose is [4 tablet](medication_dosage)
+    - I use [100 tablet](medication_dosage)
+    - Remind me to take [1000g](medication_dosage)
+    - I take [250capsule](medication_dosage)
+    - My dose is [3 ml](medication_dosage)
+    - I take [250 capsule](medication_dosage) three times a day
+    - I take [1000puff](medication_dosage)
+    - Remind me to take [3tablet](medication_dosage)
+    - Doctor prescribed [20g](medication_dosage)
+    - I use [20 puff](medication_dosage) every 8 hours
+    - Doctor prescribed [750 ml](medication_dosage) every 12 hours
+    - My dose is [3 g](medication_dosage)
+    - Please record [100 capsule](medication_dosage) as my dose
+    - Please record [3 tablet](medication_dosage) as my dose
+    - Doctor prescribed [5mg](medication_dosage) as needed
+    - Doctor prescribed [2drop](medication_dosage) once daily
+    - I use [3g](medication_dosage)
+    - I take [500puff](medication_dosage)
+    - My dose is [50ml](medication_dosage)
+    - Doctor prescribed [1tablet](medication_dosage)
+    - I take [1 IU](medication_dosage) three times a day
+    - My dose is [100 mg](medication_dosage)
+    - Doctor prescribed [100 IU](medication_dosage) twice daily
+    - My dose is [4 mg](medication_dosage)
+    - Doctor prescribed [4tablet](medication_dosage)
+    - Set my dosage to [5tablet](medication_dosage)
+    - [750 capsule](medication_dosage)
+    - Doctor prescribed [4 capsule](medication_dosage)
+    - My dose is [4tablet](medication_dosage)
+    - Set my dosage to [1000 IU](medication_dosage)
+    - Doctor prescribed [2 ml](medication_dosage) every 8 hours
+    - [10 puff](medication_dosage) once daily
+    - My dose is [500 drop](medication_dosage)
+    - [20IU](medication_dosage)
+    - Set my dosage to [750puff](medication_dosage)
+    - Please record [750 mg](medication_dosage) as my dose
+    - Doctor prescribed [500 puff](medication_dosage) once daily
+    - [750ml](medication_dosage)
+    - [4 tablet](medication_dosage)
+    - [750 mg](medication_dosage) as needed
+    - Set my dosage to [500drop](medication_dosage)
+    - Set my dosage to [20 mg](medication_dosage)
+    - My dose is [1puff](medication_dosage)
+    - I use [4 drop](medication_dosage)
+    - Remind me to take [4drop](medication_dosage)
+    - Doctor prescribed [20 g](medication_dosage) once daily
+    - Remind me to take [250 drop](medication_dosage)
+    - Please record [3puff](medication_dosage) as my dose
+    - Set my dosage to [4 puff](medication_dosage)
+    - My dose is [1tablet](medication_dosage)
+    - My dose is [3IU](medication_dosage)
+    - My dose is [100capsule](medication_dosage) every 12 hours
+    - My dose is [5mg](medication_dosage)
+    - [5g](medication_dosage)
+    - [1 IU](medication_dosage)
+    - Remind me to take [50g](medication_dosage)
+    - I take [250 g](medication_dosage)
+    - [250IU](medication_dosage) as needed
+    - Please record [500 mg](medication_dosage) as my dose
+    - [50ml](medication_dosage)
+    - I use [750 capsule](medication_dosage)
+    - My dose is [1000drop](medication_dosage)
+    - My dose is [3 drop](medication_dosage) once daily
+    - Please record [4g](medication_dosage) as my dose
+    - [750mg](medication_dosage)
+    - Please record [250 ml](medication_dosage) as my dose
+    - My dose is [50 g](medication_dosage)
+    - Doctor prescribed [100mg](medication_dosage)
+    - My dose is [250 drop](medication_dosage) once daily
+    - Set my dosage to [1 puff](medication_dosage)
+    - My dose is [1IU](medication_dosage)
+    - I use [50 puff](medication_dosage) once daily
+    - I use [4puff](medication_dosage)
+    - Doctor prescribed [2 capsule](medication_dosage)
+    - Please record [5 drop](medication_dosage) as my dose
+    - Doctor prescribed [10ml](medication_dosage) every 12 hours
+    - Remind me to take [750 IU](medication_dosage)
+    - I take [250ml](medication_dosage)
+    - I take [5ml](medication_dosage)
+    - I use [5IU](medication_dosage)
+    - I use [750ml](medication_dosage)
+    - Doctor prescribed [500tablet](medication_dosage) every 8 hours
+    - I use [5 IU](medication_dosage) as needed
+    - I use [20 IU](medication_dosage) once daily
+    - Doctor prescribed [5IU](medication_dosage) every 12 hours
+    - [4 tablet](medication_dosage) every 12 hours
+    - [4drop](medication_dosage) twice daily
+    - I use [250 capsule](medication_dosage)
+    - Set my dosage to [100 mg](medication_dosage)
+    - I take [2 drop](medication_dosage) three times a day
+    - My dose is [20 ml](medication_dosage)
+    - Remind me to take [750ml](medication_dosage)
+    - Please record [5 g](medication_dosage) as my dose
+    - [3 mg](medication_dosage)
+    - [1000 tablet](medication_dosage)
+    - I use [50 drop](medication_dosage)
+    - I use [750 tablet](medication_dosage) every 12 hours
+    - Doctor prescribed [50 IU](medication_dosage)
+    - Doctor prescribed [4 ml](medication_dosage)
+    - Set my dosage to [500capsule](medication_dosage)
+    - Doctor prescribed [20 puff](medication_dosage)
+    - My dose is [1drop](medication_dosage) three times a day
+    - [20 capsule](medication_dosage) every 12 hours
+    - [3mg](medication_dosage) every 12 hours
+    - I take [10 tablet](medication_dosage) as needed
+    - My dose is [2IU](medication_dosage)
+    - I take [3 ml](medication_dosage)
+    - I use [10 capsule](medication_dosage) twice daily
+    - My dose is [20 capsule](medication_dosage)
+    - Please record [5 puff](medication_dosage) as my dose
+    - I use [250 mg](medication_dosage)
+    - Doctor prescribed [750tablet](medication_dosage)
+    - Doctor prescribed [20 capsule](medication_dosage) three times a day
+    - Please record [250tablet](medication_dosage) as my dose
+    - Please record [500g](medication_dosage) as my dose
+    - [500 IU](medication_dosage)
+    - Remind me to take [750capsule](medication_dosage)
+    - Doctor prescribed [250 tablet](medication_dosage)
+    - Doctor prescribed [500drop](medication_dosage) twice daily
+    - I take [4 g](medication_dosage)
+    - Remind me to take [50 drop](medication_dosage)
+    - [500IU](medication_dosage) once daily
+    - I take [1ml](medication_dosage) as needed
+    - My dose is [750 capsule](medication_dosage)
+    - [100tablet](medication_dosage)
+    - My dose is [50puff](medication_dosage)
+    - Please record [750 capsule](medication_dosage) as my dose
+    - [1 IU](medication_dosage) twice daily
+    - I use [10capsule](medication_dosage)
+    - [50 ml](medication_dosage)
+    - I take [250 ml](medication_dosage)
+    - [3puff](medication_dosage)
+    - I use [3 puff](medication_dosage)
+    - Please record [50capsule](medication_dosage) as my dose
+    - Doctor prescribed [10 puff](medication_dosage) as needed
+    - [4 puff](medication_dosage)
+    - Doctor prescribed [250 g](medication_dosage)
+    - I use [1IU](medication_dosage) once daily
+    - My dose is [100 g](medication_dosage)
+    - I take [5drop](medication_dosage) three times a day
+    - Remind me to take [1000 IU](medication_dosage)
+    - Doctor prescribed [100 g](medication_dosage) every 12 hours
+    - I use [500g](medication_dosage) as needed
+    - I take [100drop](medication_dosage)
+    - I take [4 puff](medication_dosage)
+    - I take [20 ml](medication_dosage)
+    - [50capsule](medication_dosage) three times a day
+    - I take [50 ml](medication_dosage) once daily
+    - I use [100capsule](medication_dosage) three times a day
+    - Remind me to take [4 drop](medication_dosage)
+    - Doctor prescribed [2 puff](medication_dosage)
+    - Remind me to take [2 ml](medication_dosage)
+    - Remind me to take [5 capsule](medication_dosage)
+    - I use [4 tablet](medication_dosage) every 12 hours
+    - My dose is [750 drop](medication_dosage) every 12 hours
+    - I take [20 puff](medication_dosage) once daily
+    - Doctor prescribed [4 drop](medication_dosage)
+    - Remind me to take [1 IU](medication_dosage)
+    - My dose is [1000 capsule](medication_dosage) three times a day
+    - My dose is [2capsule](medication_dosage)
+    - I take [100g](medication_dosage)
+    - Set my dosage to [1000 ml](medication_dosage)
+    - I take [50 mg](medication_dosage)
+    - I take [20IU](medication_dosage)
+    - Remind me to take [5ml](medication_dosage)
+    - Doctor prescribed [1000 mg](medication_dosage) as needed
+    - [1 g](medication_dosage)
+    - [1000 capsule](medication_dosage)
+    - Remind me to take [750 puff](medication_dosage)
+    - Doctor prescribed [3 puff](medication_dosage)
+    - Remind me to take [1000capsule](medication_dosage)
+    - Doctor prescribed [4tablet](medication_dosage) as needed
+    - [20tablet](medication_dosage) every 8 hours
+    - Doctor prescribed [4ml](medication_dosage)
+    - I use [10 mg](medication_dosage)
+    - I take [3g](medication_dosage)
+    - I take [1000drop](medication_dosage) once daily
+    - My dose is [100drop](medication_dosage)
+    - Doctor prescribed [50capsule](medication_dosage)
+    - [500drop](medication_dosage)
+    - Doctor prescribed [4 tablet](medication_dosage)
+    - Set my dosage to [2 mg](medication_dosage)
+    - [3 g](medication_dosage)
+    - Doctor prescribed [20 tablet](medication_dosage) once daily
+    - My dose is [50drop](medication_dosage)
+    - Set my dosage to [250 g](medication_dosage)
+    - My dose is [5 drop](medication_dosage) once daily
+    - Remind me to take [1drop](medication_dosage)
+    - My dose is [1tablet](medication_dosage) twice daily
+    - [2 g](medication_dosage)
+    - I use [250drop](medication_dosage) every 12 hours
+    - Set my dosage to [20drop](medication_dosage)
+    - My dose is [750puff](medication_dosage) twice daily
+    - [2 puff](medication_dosage) three times a day
+    - Doctor prescribed [3puff](medication_dosage)
+    - I take [50tablet](medication_dosage)
+    - My dose is [2 g](medication_dosage)
+    - Doctor prescribed [3 g](medication_dosage)
+    - My dose is [500 puff](medication_dosage)
+    - Doctor prescribed [4IU](medication_dosage)
+    - I use [100puff](medication_dosage) once daily
+    - [2mg](medication_dosage)
+    - I take [3IU](medication_dosage)
+    - Doctor prescribed [5 drop](medication_dosage) three times a day
+    - Please record [2mg](medication_dosage) as my dose
+    - [1mg](medication_dosage) every 12 hours
+    - Please record [5drop](medication_dosage) as my dose
+    - Set my dosage to [250capsule](medication_dosage)
+    - Doctor prescribed [1000IU](medication_dosage)
+    - I take [50IU](medication_dosage)
+    - Set my dosage to [20 capsule](medication_dosage)
+    - Remind me to take [2tablet](medication_dosage)
+    - [1mg](medication_dosage)
+    - I use [1000 g](medication_dosage)
+    - Doctor prescribed [100capsule](medication_dosage)
+    - Please record [3capsule](medication_dosage) as my dose
+    - My dose is [4 IU](medication_dosage) once daily
+    - I take [1puff](medication_dosage) as needed
+    - [10 g](medication_dosage)
+    - [1000g](medication_dosage)
+    - [500 puff](medication_dosage) as needed
+    - Set my dosage to [750 tablet](medication_dosage)
+    - I take [100puff](medication_dosage) three times a day
+    - My dose is [1000ml](medication_dosage)
+    - I take [750 IU](medication_dosage)
+    - [500 mg](medication_dosage) three times a day
+    - Remind me to take [1000drop](medication_dosage)
+    - Set my dosage to [3IU](medication_dosage)
+    - Doctor prescribed [4drop](medication_dosage)
+    - I use [500tablet](medication_dosage) three times a day
+    - Remind me to take [2 tablet](medication_dosage)
+    - [500 tablet](medication_dosage) as needed
+    - I take [3 tablet](medication_dosage)
+    - Remind me to take [750puff](medication_dosage)
+    - Doctor prescribed [20 mg](medication_dosage) as needed
+    - [50tablet](medication_dosage)
+    - My dose is [50 mg](medication_dosage)
+    - Doctor prescribed [1000 ml](medication_dosage)
+    - [5mg](medication_dosage) twice daily
+    - [5 mg](medication_dosage)
+    - [4IU](medication_dosage) as needed
+    - Doctor prescribed [100 drop](medication_dosage)
+    - I take [50 tablet](medication_dosage)
+    - [750tablet](medication_dosage)
+    - My dose is [1 puff](medication_dosage)
+    - I use [250tablet](medication_dosage)
+    - I take [2capsule](medication_dosage)
+    - Remind me to take [50ml](medication_dosage)
+    - Doctor prescribed [20IU](medication_dosage)
+    - Doctor prescribed [3ml](medication_dosage)
+    - Please record [5tablet](medication_dosage) as my dose
+    - I use [500g](medication_dosage)
+    - Remind me to take [5 ml](medication_dosage)
+    - I take [50ml](medication_dosage)
+    - I use [750 IU](medication_dosage)
+    - Doctor prescribed [250g](medication_dosage) twice daily
+    - My dose is [100 capsule](medication_dosage) as needed
+    - Doctor prescribed [10 ml](medication_dosage)
+    - Set my dosage to [1 IU](medication_dosage)
+    - My dose is [5puff](medication_dosage)
+    - I take [2drop](medication_dosage) as needed
+    - I use [500puff](medication_dosage) as needed
+    - My dose is [500puff](medication_dosage)
+    - [100capsule](medication_dosage) twice daily
+    - I use [3 capsule](medication_dosage)
+    - My dose is [50 tablet](medication_dosage)
+    - Doctor prescribed [750 IU](medication_dosage)
+    - Doctor prescribed [500drop](medication_dosage)
+    - My dose is [500 tablet](medication_dosage) as needed
+    - [3 IU](medication_dosage)
+    - Remind me to take [250 ml](medication_dosage)
+    - [2capsule](medication_dosage)
+    - I use [4IU](medication_dosage)
+    - My dose is [2drop](medication_dosage)
+    - Remind me to take [5IU](medication_dosage)
+    - Set my dosage to [5 puff](medication_dosage)
+    - [1puff](medication_dosage) twice daily
+    - [5IU](medication_dosage)
+    - I take [4 tablet](medication_dosage)
+    - I take [5ml](medication_dosage) every 12 hours
+    - My dose is [500mg](medication_dosage) once daily
+    - Please record [100 mg](medication_dosage) as my dose
+    - Doctor prescribed [5 IU](medication_dosage) once daily
+    - I take [1000 drop](medication_dosage) every 8 hours
+    - Doctor prescribed [2mg](medication_dosage) twice daily
+    - I take [500 puff](medication_dosage)
+    - [1000mg](medication_dosage)
+    - My dose is [100 drop](medication_dosage) once daily
+    - [500capsule](medication_dosage)
+    - I use [3mg](medication_dosage) every 8 hours
+    - [3mg](medication_dosage)
+    - Set my dosage to [1IU](medication_dosage)
+    - My dose is [50mg](medication_dosage)
+    - Please record [50 drop](medication_dosage) as my dose
+    - My dose is [750 mg](medication_dosage)
+    - Remind me to take [4IU](medication_dosage)
+    - [3ml](medication_dosage)
+    - Please record [2 mg](medication_dosage) as my dose
+    - I use [750tablet](medication_dosage) as needed
+    - I use [50drop](medication_dosage)
+    - Doctor prescribed [3drop](medication_dosage) every 12 hours
+    - My dose is [20drop](medication_dosage) every 12 hours
+    - [50g](medication_dosage)
+    - Set my dosage to [500IU](medication_dosage)
+    - Please record [10mg](medication_dosage) as my dose
+    - [3 tablet](medication_dosage)
+    - I take [1000tablet](medication_dosage) every 8 hours
+    - I use [1000IU](medication_dosage)
+    - [20 IU](medication_dosage)
+    - My dose is [10 ml](medication_dosage) every 8 hours
+    - I take [10mg](medication_dosage)
+    - [4capsule](medication_dosage) once daily
+    - My dose is [2capsule](medication_dosage) twice daily
+    - I take [10 mg](medication_dosage)
+    - [250 ml](medication_dosage)
+    - I use [3g](medication_dosage) every 12 hours
+    - I use [4ml](medication_dosage)
+    - Please record [750 g](medication_dosage) as my dose
+    - I use [750mg](medication_dosage)
+    - [20 g](medication_dosage) as needed
+    - Doctor prescribed [5mg](medication_dosage)
+    - My dose is [750 tablet](medication_dosage) once daily
+    - Set my dosage to [5 IU](medication_dosage)
+    - My dose is [10mg](medication_dosage)
+    - [5 g](medication_dosage)
+    - I take [250tablet](medication_dosage) twice daily
+    - I use [2 g](medication_dosage)
+    - [4puff](medication_dosage)
+    - Set my dosage to [250 IU](medication_dosage)
+    - Remind me to take [3g](medication_dosage)
+    - My dose is [5 tablet](medication_dosage)
+    - My dose is [5 capsule](medication_dosage)
+    - Doctor prescribed [100g](medication_dosage) twice daily
+    - Please record [4tablet](medication_dosage) as my dose
+    - My dose is [2 tablet](medication_dosage)
+    - [1000 puff](medication_dosage) once daily
+    - [1IU](medication_dosage)
+    - Set my dosage to [50 drop](medication_dosage)
+    - [500 puff](medication_dosage)
+    - Set my dosage to [750capsule](medication_dosage)
+    - Doctor prescribed [2puff](medication_dosage)
+    - Doctor prescribed [3 IU](medication_dosage) twice daily
+    - Doctor prescribed [3 ml](medication_dosage)
+    - I use [3puff](medication_dosage)
+    - Remind me to take [50 capsule](medication_dosage)
+    - I take [2 puff](medication_dosage)
+    - Remind me to take [100 capsule](medication_dosage)
+    - I take [10 g](medication_dosage) once daily
+    - I use [20 tablet](medication_dosage)
+    - Doctor prescribed [20ml](medication_dosage)
+    - My dose is [20 mg](medication_dosage)
+    - My dose is [100puff](medication_dosage)
+    - I take [2 mg](medication_dosage)
+    - [250drop](medication_dosage)
+    - My dose is [100IU](medication_dosage) every 8 hours
+    - Doctor prescribed [1 drop](medication_dosage)
+    - Remind me to take [20g](medication_dosage)
+    - Doctor prescribed [3tablet](medication_dosage) every 8 hours
+    - I take [1000capsule](medication_dosage)
+    - [1 drop](medication_dosage)
+    - I use [1000 puff](medication_dosage) three times a day
+    - My dose is [1ml](medication_dosage) twice daily
+    - I use [1 drop](medication_dosage) twice daily
+    - I use [5puff](medication_dosage)
+    - Doctor prescribed [2tablet](medication_dosage)
+    - Remind me to take [4ml](medication_dosage)
+    - Doctor prescribed [5 ml](medication_dosage) three times a day
+    - I take [3tablet](medication_dosage)
+    - My dose is [2puff](medication_dosage) twice daily
+    - Set my dosage to [2 drop](medication_dosage)
+    - I take [5tablet](medication_dosage) every 12 hours

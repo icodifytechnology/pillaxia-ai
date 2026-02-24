@@ -1,0 +1,405 @@
+version: "3.1"
+
+nlu:
+- intent: provide_medication_colour
+  examples: |
+    - Let's go with [pale grey](medication_colour)
+    - It's [dark yellow](medication_colour) in color
+    - I would say [deep grey](medication_colour)
+    - maybe [pale green](medication_colour)
+    - It's a [pale grey](medication_colour) pill
+    - Make it [black](medication_colour)
+    - it's [pale red](medication_colour)
+    - The medication is [light red](medication_colour)
+    - Use [grey](medication_colour)
+    - Let's go with [dark black](medication_colour)
+    - it is [light blue](medication_colour)
+    - It's [bright pink](medication_colour) in color
+    - it is [bright yellow](medication_colour)
+    - [dark purple](medication_colour) one
+    - [bright green](medication_colour) one
+    - it is [green](medication_colour)
+    - it's [light yellow](medication_colour)
+    - the [light yellow](medication_colour) one
+    - it's [bright yellow](medication_colour)
+    - the [purple](medication_colour) one
+    - it is [bright black](medication_colour)
+    - It's [dark brown](medication_colour) in color
+    - It's a [deep blue](medication_colour) pill
+    - The medication is [pale blue](medication_colour)
+    - probably [light blue](medication_colour)
+    - it's [deep yellow](medication_colour)
+    - The medication is [pale black](medication_colour)
+    - I would say [deep purple](medication_colour)
+    - The medication is [bright white](medication_colour)
+    - Use [light blue](medication_colour)
+    - [pink](medication_colour) one
+    - The medication is [deep brown](medication_colour)
+    - the [pale red](medication_colour) one
+    - It's [pale pink](medication_colour) in color
+    - It's [light blue](medication_colour) in color
+    - maybe [bright orange](medication_colour)
+    - it's [bright purple](medication_colour)
+    - the [blue](medication_colour) one
+    - the [deep purple](medication_colour) one
+    - It's a [light black](medication_colour) pill
+    - It's [orange](medication_colour) in color
+    - Use [light grey](medication_colour)
+    - I would say [pale white](medication_colour)
+    - It's a [dark purple](medication_colour) pill
+    - [yellow](medication_colour) one
+    - maybe [light black](medication_colour)
+    - It's [grey](medication_colour) in color
+    - it is [purple](medication_colour)
+    - Use [dark pink](medication_colour)
+    - Use [light pink](medication_colour)
+    - [dark brown](medication_colour) one
+    - the [light pink](medication_colour) one
+    - probably [purple](medication_colour)
+    - Make it [pale black](medication_colour)
+    - Make it [dark green](medication_colour)
+    - probably [bright red](medication_colour)
+    - [green](medication_colour)
+    - Make it [deep purple](medication_colour)
+    - I would say [pale grey](medication_colour)
+    - Use [orange](medication_colour)
+    - probably [deep brown](medication_colour)
+    - Let's go with [deep brown](medication_colour)
+    - I would say [purple](medication_colour)
+    - It's a [dark black](medication_colour) pill
+    - Make it [dark white](medication_colour)
+    - it's [grey](medication_colour)
+    - Use [deep orange](medication_colour)
+    - The medication is [bright grey](medication_colour)
+    - [bright red](medication_colour) one
+    - probably [dark purple](medication_colour)
+    - [bright pink](medication_colour)
+    - Let's go with [bright black](medication_colour)
+    - Make it [grey](medication_colour)
+    - maybe [grey](medication_colour)
+    - Use [pale pink](medication_colour)
+    - it's [black](medication_colour)
+    - it's [dark purple](medication_colour)
+    - probably [deep purple](medication_colour)
+    - it's [dark white](medication_colour)
+    - Let's go with [pale purple](medication_colour)
+    - Make it [dark pink](medication_colour)
+    - maybe [dark yellow](medication_colour)
+    - The medication is [light blue](medication_colour)
+    - It's [white](medication_colour) in color
+    - The medication is [orange](medication_colour)
+    - it's [bright red](medication_colour)
+    - It's a [deep white](medication_colour) pill
+    - maybe [deep purple](medication_colour)
+    - [dark purple](medication_colour)
+    - Make it [bright red](medication_colour)
+    - [bright purple](medication_colour)
+    - maybe [bright purple](medication_colour)
+    - The medication is [bright pink](medication_colour)
+    - It's [light purple](medication_colour) in color
+    - it's [dark red](medication_colour)
+    - It's [dark white](medication_colour) in color
+    - maybe [light grey](medication_colour)
+    - It's [dark grey](medication_colour) in color
+    - I would say [light pink](medication_colour)
+    - [deep yellow](medication_colour) one
+    - it is [pale brown](medication_colour)
+    - it is [deep brown](medication_colour)
+    - It's a [bright black](medication_colour) pill
+    - [deep brown](medication_colour)
+    - the [deep pink](medication_colour) one
+    - [deep green](medication_colour)
+    - Use [bright white](medication_colour)
+    - maybe [bright yellow](medication_colour)
+    - it's [bright orange](medication_colour)
+    - probably [dark green](medication_colour)
+    - Make it [pale red](medication_colour)
+    - probably [yellow](medication_colour)
+    - maybe [dark brown](medication_colour)
+    - I would say [dark red](medication_colour)
+    - It's a [light white](medication_colour) pill
+    - The medication is [dark green](medication_colour)
+    - Make it [deep grey](medication_colour)
+    - [pale green](medication_colour)
+    - I would say [green](medication_colour)
+    - Let's go with [dark red](medication_colour)
+    - It's [deep yellow](medication_colour) in color
+    - [pale red](medication_colour) one
+    - Let's go with [light green](medication_colour)
+    - Use [deep green](medication_colour)
+    - [light green](medication_colour)
+    - the [light green](medication_colour) one
+    - [brown](medication_colour) one
+    - Make it [purple](medication_colour)
+    - I would say [deep brown](medication_colour)
+    - probably [green](medication_colour)
+    - the [bright blue](medication_colour) one
+    - I would say [orange](medication_colour)
+    - Use [light white](medication_colour)
+    - Use [blue](medication_colour)
+    - it is [dark grey](medication_colour)
+    - it is [light red](medication_colour)
+    - It's [pale grey](medication_colour) in color
+    - Make it [light white](medication_colour)
+    - Let's go with [dark orange](medication_colour)
+    - Make it [deep yellow](medication_colour)
+    - maybe [red](medication_colour)
+    - The medication is [pale pink](medication_colour)
+    - probably [deep orange](medication_colour)
+    - probably [pale black](medication_colour)
+    - The medication is [pale grey](medication_colour)
+    - [bright black](medication_colour) one
+    - it's [pale purple](medication_colour)
+    - I would say [dark white](medication_colour)
+    - probably [light white](medication_colour)
+    - [deep blue](medication_colour)
+    - it's [pale grey](medication_colour)
+    - I would say [bright brown](medication_colour)
+    - It's a [deep orange](medication_colour) pill
+    - the [brown](medication_colour) one
+    - [deep pink](medication_colour) one
+    - I would say [light orange](medication_colour)
+    - [light red](medication_colour) one
+    - It's a [deep green](medication_colour) pill
+    - Use [red](medication_colour)
+    - The medication is [light yellow](medication_colour)
+    - maybe [bright grey](medication_colour)
+    - [dark grey](medication_colour)
+    - I would say [white](medication_colour)
+    - Make it [blue](medication_colour)
+    - I would say [pale brown](medication_colour)
+    - maybe [dark orange](medication_colour)
+    - Let's go with [bright pink](medication_colour)
+    - Let's go with [deep orange](medication_colour)
+    - Make it [orange](medication_colour)
+    - [light grey](medication_colour) one
+    - the [pale yellow](medication_colour) one
+    - Let's go with [light yellow](medication_colour)
+    - the [dark brown](medication_colour) one
+    - Make it [dark orange](medication_colour)
+    - probably [brown](medication_colour)
+    - it's [bright grey](medication_colour)
+    - [light brown](medication_colour)
+    - The medication is [white](medication_colour)
+    - [pale purple](medication_colour) one
+    - Use [deep red](medication_colour)
+    - Let's go with [deep red](medication_colour)
+    - the [grey](medication_colour) one
+    - I would say [bright pink](medication_colour)
+    - it's [light orange](medication_colour)
+    - the [red](medication_colour) one
+    - It's [deep purple](medication_colour) in color
+    - it's [deep green](medication_colour)
+    - the [green](medication_colour) one
+    - maybe [green](medication_colour)
+    - Use [pale brown](medication_colour)
+    - [pale purple](medication_colour)
+    - Use [light red](medication_colour)
+    - it's [deep purple](medication_colour)
+    - maybe [light yellow](medication_colour)
+    - Use [pale red](medication_colour)
+    - maybe [pale brown](medication_colour)
+    - the [bright red](medication_colour) one
+    - maybe [dark purple](medication_colour)
+    - Let's go with [bright green](medication_colour)
+    - Let's go with [light orange](medication_colour)
+    - It's a [light orange](medication_colour) pill
+    - I would say [black](medication_colour)
+    - It's [dark pink](medication_colour) in color
+    - I would say [bright red](medication_colour)
+    - Let's go with [pale brown](medication_colour)
+    - It's a [pale yellow](medication_colour) pill
+    - Make it [deep green](medication_colour)
+    - The medication is [deep green](medication_colour)
+    - It's a [deep grey](medication_colour) pill
+    - Make it [pale grey](medication_colour)
+    - maybe [light red](medication_colour)
+    - I would say [deep black](medication_colour)
+    - the [bright green](medication_colour) one
+    - the [pale grey](medication_colour) one
+    - It's [deep blue](medication_colour) in color
+    - maybe [light orange](medication_colour)
+    - probably [pale orange](medication_colour)
+    - It's a [pale brown](medication_colour) pill
+    - [purple](medication_colour)
+    - Make it [light green](medication_colour)
+    - the [pale purple](medication_colour) one
+    - I would say [bright green](medication_colour)
+    - maybe [bright black](medication_colour)
+    - [bright pink](medication_colour) one
+    - Let's go with [deep purple](medication_colour)
+    - it's [pale yellow](medication_colour)
+    - probably [deep blue](medication_colour)
+    - Make it [bright black](medication_colour)
+    - [white](medication_colour) one
+    - [deep black](medication_colour) one
+    - Let's go with [bright purple](medication_colour)
+    - it's [pale green](medication_colour)
+    - [dark grey](medication_colour) one
+    - it is [dark yellow](medication_colour)
+    - maybe [dark green](medication_colour)
+    - maybe [bright green](medication_colour)
+    - [light black](medication_colour)
+    - the [bright white](medication_colour) one
+    - the [bright grey](medication_colour) one
+    - Use [dark red](medication_colour)
+    - maybe [light white](medication_colour)
+    - [pale yellow](medication_colour)
+    - it's [orange](medication_colour)
+    - probably [light brown](medication_colour)
+    - probably [light black](medication_colour)
+    - I would say [light black](medication_colour)
+    - it is [bright white](medication_colour)
+    - maybe [deep pink](medication_colour)
+    - The medication is [deep orange](medication_colour)
+    - [light pink](medication_colour) one
+    - [bright brown](medication_colour)
+    - probably [light pink](medication_colour)
+    - Make it [dark grey](medication_colour)
+    - [red](medication_colour)
+    - It's a [pale green](medication_colour) pill
+    - The medication is [pale orange](medication_colour)
+    - I would say [bright blue](medication_colour)
+    - the [dark grey](medication_colour) one
+    - The medication is [deep black](medication_colour)
+    - [light blue](medication_colour)
+    - maybe [dark black](medication_colour)
+    - [light purple](medication_colour) one
+    - it's [bright blue](medication_colour)
+    - Make it [red](medication_colour)
+    - The medication is [dark white](medication_colour)
+    - The medication is [light black](medication_colour)
+    - Use [light purple](medication_colour)
+    - maybe [pale red](medication_colour)
+    - Make it [bright green](medication_colour)
+    - It's a [light blue](medication_colour) pill
+    - The medication is [dark black](medication_colour)
+    - Let's go with [deep black](medication_colour)
+    - It's a [bright purple](medication_colour) pill
+    - [bright red](medication_colour)
+    - The medication is [purple](medication_colour)
+    - Let's go with [dark green](medication_colour)
+    - it is [bright pink](medication_colour)
+    - It's a [deep yellow](medication_colour) pill
+    - I would say [grey](medication_colour)
+    - the [deep white](medication_colour) one
+    - The medication is [deep purple](medication_colour)
+    - It's [deep white](medication_colour) in color
+    - The medication is [bright purple](medication_colour)
+    - the [light black](medication_colour) one
+    - [pale brown](medication_colour)
+    - probably [dark white](medication_colour)
+    - Let's go with [deep white](medication_colour)
+    - it is [pale purple](medication_colour)
+    - The medication is [light brown](medication_colour)
+    - It's a [light pink](medication_colour) pill
+    - I would say [dark brown](medication_colour)
+    - [dark white](medication_colour)
+    - the [dark blue](medication_colour) one
+    - The medication is [deep grey](medication_colour)
+    - It's a [bright green](medication_colour) pill
+    - Make it [green](medication_colour)
+    - probably [pink](medication_colour)
+    - it's [green](medication_colour)
+    - It's [red](medication_colour) in color
+    - [deep grey](medication_colour)
+    - Use [dark yellow](medication_colour)
+    - it is [pink](medication_colour)
+    - It's [bright white](medication_colour) in color
+    - Use [deep yellow](medication_colour)
+    - maybe [bright pink](medication_colour)
+    - Use [deep brown](medication_colour)
+    - Make it [brown](medication_colour)
+    - probably [pale purple](medication_colour)
+    - probably [deep pink](medication_colour)
+    - maybe [brown](medication_colour)
+    - it's [light green](medication_colour)
+    - Let's go with [deep yellow](medication_colour)
+    - the [bright brown](medication_colour) one
+    - probably [bright black](medication_colour)
+    - It's [bright orange](medication_colour) in color
+    - probably [pale red](medication_colour)
+    - I would say [light grey](medication_colour)
+    - Make it [deep white](medication_colour)
+    - maybe [deep green](medication_colour)
+    - Make it [dark brown](medication_colour)
+    - It's a [pale pink](medication_colour) pill
+    - probably [pale yellow](medication_colour)
+    - the [light red](medication_colour) one
+    - it is [dark pink](medication_colour)
+    - I would say [deep orange](medication_colour)
+    - [dark black](medication_colour) one
+    - it is [pale green](medication_colour)
+    - it's [pale black](medication_colour)
+    - It's [light orange](medication_colour) in color
+    - I would say [dark orange](medication_colour)
+    - it's [brown](medication_colour)
+    - It's a [dark white](medication_colour) pill
+    - [yellow](medication_colour)
+    - probably [pale white](medication_colour)
+    - [dark yellow](medication_colour) one
+    - [pale green](medication_colour) one
+    - The medication is [bright black](medication_colour)
+    - it is [light pink](medication_colour)
+    - Use [light black](medication_colour)
+    - It's [light brown](medication_colour) in color
+    - [dark black](medication_colour)
+    - It's a [bright pink](medication_colour) pill
+    - probably [light grey](medication_colour)
+    - It's a [dark brown](medication_colour) pill
+    - probably [light green](medication_colour)
+    - probably [black](medication_colour)
+    - [light green](medication_colour) one
+    - The medication is [deep red](medication_colour)
+    - it is [light green](medication_colour)
+    - the [pale black](medication_colour) one
+    - It's a [blue](medication_colour) pill
+    - I would say [dark pink](medication_colour)
+    - maybe [deep black](medication_colour)
+    - it is [deep yellow](medication_colour)
+    - It's [dark blue](medication_colour) in color
+    - Use [light green](medication_colour)
+    - Use [deep white](medication_colour)
+    - the [dark black](medication_colour) one
+    - Let's go with [pale pink](medication_colour)
+    - the [light purple](medication_colour) one
+    - [bright blue](medication_colour) one
+    - It's a [pale purple](medication_colour) pill
+    - maybe [deep red](medication_colour)
+    - It's [dark purple](medication_colour) in color
+    - The medication is [pale purple](medication_colour)
+    - Use [dark blue](medication_colour)
+    - It's [deep orange](medication_colour) in color
+    - The medication is [black](medication_colour)
+    - It's a [light yellow](medication_colour) pill
+    - probably [deep black](medication_colour)
+    - it's [light white](medication_colour)
+    - it is [grey](medication_colour)
+    - [pale pink](medication_colour)
+    - it's [blue](medication_colour)
+    - It's [dark orange](medication_colour) in color
+    - maybe [yellow](medication_colour)
+    - it's [bright pink](medication_colour)
+    - Let's go with [pale white](medication_colour)
+    - [light red](medication_colour)
+    - Let's go with [pale blue](medication_colour)
+    - I would say [pale purple](medication_colour)
+    - [bright yellow](medication_colour) one
+    - it is [orange](medication_colour)
+    - Make it [pale blue](medication_colour)
+    - It's [deep pink](medication_colour) in color
+    - Use [bright grey](medication_colour)
+    - probably [blue](medication_colour)
+    - I would say [dark green](medication_colour)
+    - [pale red](medication_colour)
+    - I would say [blue](medication_colour)
+    - it is [deep red](medication_colour)
+    - It's a [bright yellow](medication_colour) pill
+    - I would say [light green](medication_colour)
+    - It's a [dark blue](medication_colour) pill
+    - the [pale orange](medication_colour) one
+    - maybe [light pink](medication_colour)
+    - Let's go with [pale black](medication_colour)
+    - [bright blue](medication_colour)
+    - Make it [light black](medication_colour)
+    - probably [orange](medication_colour)

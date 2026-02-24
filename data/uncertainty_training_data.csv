@@ -14,10 +14,6 @@ text,category
 "no idea",UNCERTAIN
 "forgot",UNCERTAIN
 "can't remember",UNCERTAIN
-"maybe",UNCERTAIN
-"I think",UNCERTAIN
-"probably",UNCERTAIN
-"might be",UNCERTAIN
 "what should I do",UNCERTAIN
 "how do I find it",UNCERTAIN
 "can you help",UNCERTAIN
@@ -68,7 +64,6 @@ text,category
 "Drawing a blank",UNCERTAIN
 "It slipped my mind",UNCERTAIN
 "I think it's Lisinopril",UNCERTAIN
-"Maybe 10mg",UNCERTAIN
 "Probably Metformin",UNCERTAIN
 "It might be insulin",UNCERTAIN
 "I guess it's 500mg",UNCERTAIN
@@ -111,10 +106,6 @@ text,category
 "no idea",UNCERTAIN
 "forgot",UNCERTAIN
 "can't remember",UNCERTAIN
-"maybe",UNCERTAIN
-"I think",UNCERTAIN
-"probably",UNCERTAIN
-"might be",UNCERTAIN
 "what should I do",UNCERTAIN
 "how do I find it",UNCERTAIN
 "can you help",UNCERTAIN
@@ -165,7 +156,6 @@ text,category
 "Drawing a blank",UNCERTAIN
 "It slipped my mind",UNCERTAIN
 "I think it's Lisinopril",UNCERTAIN
-"Maybe 10mg",UNCERTAIN
 "Probably Metformin",UNCERTAIN
 "It might be insulin",UNCERTAIN
 "I guess it's 500mg",UNCERTAIN

@@ -518,7 +518,7 @@ class MedicationManager:
             "wheat": "#F5DEB3",
             "white": "#FFFFFF",
             "whitesmoke": "#F5F5F5",
-            "yellow": "#FFFF00",
+            "yellow": "#F4D35E",
             "yellowgreen": "#9ACD32"
         }
 

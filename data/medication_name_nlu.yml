@@ -3,1038 +3,2003 @@ version: "3.1"
 nlu:
 - intent: provide_medication_name
   examples: |
-    - Add [Asp](medication_name) for me
-    - [Amgevita](medication_name) 500mg please
-    - [progestrone](medication_name)
-    - I take [Olanzapine](medication_name)
-    - I take [Magnesium Glycenate](medication_name)
-    - [levocet](medication_name) 500mg please
-    - Record [sertaline](medication_name)
-    - Add [lor](medication_name) for me
-    - [Cet](medication_name)
-    - Record [magnesium glycinate](medication_name)
-    - [fluticasone](medication_name) 500mg please
-    - Add [Alprazolam](medication_name) for me
-    - [panto](medication_name) 500mg please
-    - [Bupropion](medication_name)
-    - [Co Enzyme Q10](medication_name)
-    - Record [progesteron](medication_name)
-    - [fluticasone](medication_name)
-    - [Symbocort](medication_name)
-    - [prednisolone](medication_name) 500mg please
-    - Record [Mirtazapine](medication_name)
-    - [magnesium glycenate](medication_name)
-    - [N Acetylcysteine](medication_name) 500mg please
-    - Add [Amlodipn](medication_name) for me
-    - [Vitd](medication_name) 500mg please
-    - [simvast](medication_name)
-    - I take [Mefanamic Acid](medication_name)
-    - Add [levothyrox](medication_name) for me
-    - [buprenorphine](medication_name)
-    - I take [Levocitirizine](medication_name)
-    - Add [magnesium glycinatee](medication_name) for me
-    - Add [Dabigatran](medication_name) for me
-    - Record [Amox](medication_name)
-    - Add [apixaban](medication_name) for me
-    - I take [Azithromycin](medication_name)
-    - Record [acetylcystein](medication_name)
-    - [progesterone](medication_name)
-    - [Ranitidine](medication_name)
-    - I take [Metoprolol](medication_name)
-    - [vit. d](medication_name) 500mg please
-    - Add [ciprofloxacin](medication_name) for me
-    - [Hydrocodone](medication_name)
-    - [terbinafine](medication_name) 500mg please
-    - Add [Estradiol](medication_name) for me
-    - [Magnesium Glycinate](medication_name) 500mg please
-    - Add [domperidone](medication_name) for me
-    - [clonazepam](medication_name) 500mg please
-    - I take [furosemid](medication_name)
-    - Record [co enzyme q10](medication_name)
-    - I take [Ranitidine](medication_name)
-    - [Rosuvastin](medication_name)
-    - I take [Furosemide](medication_name)
-    - [Terbinafin](medication_name)
-    - [pregabalin](medication_name) 500mg please
-    - [metoprololol](medication_name) 500mg please
-    - I take [estradiol](medication_name)
-    - Record [Citalopram](medication_name)
-    - [Atorvastine](medication_name) 500mg please
-    - I take [Alprazolam](medication_name)
-    - Add [amphotericin b](medication_name) for me
-    - [Amphotericin B](medication_name) 500mg please
-    - Record [buprenorphine](medication_name)
-    - Add [mefenamic acid](medication_name) for me
-    - [pantoprazole](medication_name)
-    - Add [atorvastin](medication_name) for me
-    - [Terbinafine](medication_name)
-    - Add [Acetylcysteine](medication_name) for me
-    - Record [Escitlop](medication_name)
-    - Add [metoprololol](medication_name) for me
-    - [esomeprazol](medication_name) 500mg please
-    - [Levocetrizine](medication_name)
-    - Add [Progesteron](medication_name) for me
-    - Record [atorvastatin](medication_name)
-    - I take [tramad](medication_name)
-    - [Ciprofloxacin](medication_name)
-    - Record [Insulin Lispro](medication_name)
-    - Add [terbinafinee](medication_name) for me
-    - Record [symbicort](medication_name)
-    - Record [Aspirn](medication_name)
-    - Record [Budesonide](medication_name)
-    - I take [progestrone](medication_name)
-    - Add [Carbamazepine](medication_name) for me
-    - [aspirn](medication_name) 500mg please
-    - Add [cetirizine](medication_name) for me
-    - I take [Lospinil](medication_name)
-    - [amgevitta](medication_name)
-    - I take [aspirn](medication_name)
-    - [Amoxacillin](medication_name) 500mg please
-    - Record [Terbinafine](medication_name)
-    - Add [codeine](medication_name) for me
-    - [magnesium glycenate](medication_name) 500mg please
-    - Record [Amoxicillin](medication_name)
-    - [atorvast](medication_name)
-    - [vit. d](medication_name)
-    - I take [Augmentn](medication_name)
-    - Record [Salicylic Acid](medication_name)
-    - Record [metoprololol](medication_name)
-    - Add [nac](medication_name) for me
-    - Add [Omeprazol](medication_name) for me
-    - Add [Symbocort](medication_name) for me
-    - I take [Codeine](medication_name)
-    - [metfomin](medication_name)
-    - Add [Sertraline](medication_name) for me
-    - I take [levocitirizine](medication_name)
-    - [Lorazepam](medication_name) 500mg please
-    - [Terbinafinee](medication_name) 500mg please
-    - [Terbinafine](medication_name)
-    - Add [Tramodol](medication_name) for me
-    - [Topiramate](medication_name)
-    - I take [ticagrelor](medication_name)
-    - Add [salicylic acid](medication_name) for me
-    - Record [paracitamol](medication_name)
-    - [Amoxacillin](medication_name)
-    - [albuterol](medication_name)
-    - [Lisinopril](medication_name)
-    - Record [domperidone](medication_name)
-    - Add [Progestrone](medication_name) for me
-    - I take [Ceftriaxone](medication_name)
-    - [vit d](medication_name)
-    - I take [Clopidogrel](medication_name)
-    - Record [lisinopril](medication_name)
-    - [Rosuvastatin](medication_name) 500mg please
-    - [augmentin](medication_name)
-    - [Amgevta](medication_name)
-    - [acetylcystein](medication_name)
-    - Add [ondansetron](medication_name) for me
-    - I take [lisinopril](medication_name)
-    - Record [sertraline](medication_name)
-    - Add [fluconazole](medication_name) for me
-    - Record [Codeine](medication_name)
-    - Add [Ibuprfen](medication_name) for me
-    - [Desloratadine](medication_name) 500mg please
-    - I take [levocetrizine](medication_name)
-    - Add [Levocet](medication_name) for me
-    - Add [esomeprazole](medication_name) for me
-    - I take [doxycycline](medication_name)
-    - I take [pregabalin](medication_name)
-    - Add [Ibuprofen](medication_name) for me
-    - Record [Amgevta](medication_name)
-    - Record [Formoterol](medication_name)
-    - [Mefenmic Acid](medication_name)
-    - Add [valproic acid](medication_name) for me
-    - I take [salbutamol](medication_name)
-    - [Amphotericin B](medication_name)
-    - Add [Paracetmol](medication_name) for me
-    - [escitalopram](medication_name)
-    - [Salmeterol](medication_name)
-    - Add [ceftriaxone](medication_name) for me
-    - Record [Coenzyme Q10](medication_name)
-    - [cet](medication_name) 500mg please
-    - Add [Rivaroxaban](medication_name) for me
-    - Record [amgevitta](medication_name)
-    - [estradiol](medication_name)
-    - I take [Atorvastin](medication_name)
-    - [Ceftriaxone](medication_name)
-    - I take [hydrocortisone](medication_name)
-    - Add [warfarin](medication_name) for me
-    - Record [cetirizine](medication_name)
-    - [ticagrelor](medication_name) 500mg please
-    - I take [cet](medication_name)
-    - Add [Morphine](medication_name) for me
-    - Record [omerpazole](medication_name)
-    - Add [mefenmic acid](medication_name) for me
-    - Record [valproic acid](medication_name)
-    - [Amoxcillin](medication_name) 500mg please
-    - [lamotrigine](medication_name) 500mg please
-    - [Atorvastin](medication_name) 500mg please
-    - Record [Amlodipn](medication_name)
-    - I take [Terbinafinee](medication_name)
-    - [Cetirizine](medication_name) 500mg please
-    - I take [Mefenamic Acid](medication_name)
-    - [budesonide](medication_name)
-    - [Mefenmic Acid](medication_name) 500mg please
-    - Add [metoprol](medication_name) for me
-    - Add [augment](medication_name) for me
-    - Record [cefuroxime](medication_name)
-    - Record [fluconazole](medication_name)
-    - Record [Codeine](medication_name)
-    - I take [Levocetirizine](medication_name)
-    - [levocitirizine](medication_name)
-    - [N-Acetylcysteine](medication_name)
-    - Record [progesterone](medication_name)
-    - Add [bupropion](medication_name) for me
-    - Add [Azithromycin](medication_name) for me
-    - Record [Insulin](medication_name)
-    - I take [Prednisolone](medication_name)
-    - Add [amoxcillin](medication_name) for me
-    - Record [metronidazole](medication_name)
-    - [mefenamic](medication_name) 500mg please
-    - [atorvastine](medication_name)
-    - I take [buprenorphine](medication_name)
-    - I take [losartanette](medication_name)
-    - I take [metoprol](medication_name)
-    - I take [symbocort](medication_name)
-    - Record [paracetamol](medication_name)
-    - [Rivaroxaban](medication_name)
-    - I take [levothyr](medication_name)
-    - Record [Omeprazol](medication_name)
-    - Add [Clindamycin](medication_name) for me
-    - Record [ibuprfen](medication_name)
-    - [Ibroprofen](medication_name)
-    - Record [Terbinafin](medication_name)
-    - [rosuvastin](medication_name) 500mg please
-    - [Ondansetron](medication_name) 500mg please
-    - I take [rantidine](medication_name)
-    - [losartan](medication_name)
-    - I take [Formoterol](medication_name)
-    - I take [progesterone](medication_name)
-    - [Levothyr](medication_name) 500mg please
-    - Add [Olanzapine](medication_name) for me
-    - Record [fluoxetine](medication_name)
-    - [Simvastatin](medication_name)
-    - [Clozapine](medication_name)
-    - Record [Sertralin](medication_name)
-    - Record [Fluticasone](medication_name)
-    - I take [asp](medication_name)
-    - [levocitirizine](medication_name)
-    - [Augmentin](medication_name) 500mg please
-    - [Codeine](medication_name)
-    - [Clindamycin](medication_name)
-    - Record [Atenolol](medication_name)
-    - I take [losartn](medication_name)
-    - [ibuprfen](medication_name) 500mg please
-    - Record [Asp](medication_name)
-    - Add [coenzyme q10](medication_name) for me
-    - Record [Albutrol](medication_name)
-    - [Tetracycline](medication_name)
-    - I take [Ibuprofen](medication_name)
-    - I take [symbicortt](medication_name)
-    - I take [Tetracycline](medication_name)
-    - I take [Cetirizine](medication_name)
-    - I take [tramadol](medication_name)
-    - Add [Buprenorphine](medication_name) for me
-    - [carbamazepine](medication_name) 500mg please
-    - Record [olanzapine](medication_name)
-    - I take [Ibuprfen](medication_name)
-    - [ciprofloxacin](medication_name) 500mg please
-    - [Insulin Aspart](medication_name)
-    - [furosemid](medication_name) 500mg please
-    - [sertraline](medication_name) 500mg please
-    - I take [Phenytoin](medication_name)
-    - I take [Hydrocodone](medication_name)
-    - Record [Lospinil](medication_name)
-    - I take [Codeine](medication_name)
-    - [terbafin](medication_name) 500mg please
-    - Record [tramodol](medication_name)
-    - I take [metronidazole](medication_name)
-    - [loperamide](medication_name) 500mg please
-    - [n-acetylcysteine](medication_name) 500mg please
-    - Add [Simvast](medication_name) for me
-    - [Terbafin](medication_name)
-    - Add [cefuroxime](medication_name) for me
-    - I take [Fluticasone](medication_name)
-    - I take [atenolol](medication_name)
-    - [Lorazepam](medication_name)
-    - Record [Simvast](medication_name)
-    - Record [Salbutamol](medication_name)
-    - [Symbicortt](medication_name)
-    - Add [Paracetamol](medication_name) for me
-    - I take [insulin lispro](medication_name)
-    - I take [Mefenmic Acid](medication_name)
-    - [Mesalazine](medication_name) 500mg please
-    - I take [Loratadin](medication_name)
-    - [Esomeprazloe](medication_name)
-    - [esomeprazol](medication_name)
-    - I take [estradol](medication_name)
-    - Record [Bupropion](medication_name)
-    - Add [Fluticasone](medication_name) for me
-    - [Estradol](medication_name) 500mg please
-    - [Levocetrizine](medication_name) 500mg please
-    - Record [Duloxetine](medication_name)
-    - Record [Ticagrelor](medication_name)
-    - Add [pregabalin](medication_name) for me
-    - Record [N Acetylcysteine](medication_name)
-    - [albutrol](medication_name) 500mg please
-    - Add [metoprolol](medication_name) for me
-    - [Tetracycline](medication_name) 500mg please
-    - [Vit D](medication_name) 500mg please
-    - [Sertralin](medication_name)
-    - Record [Levocet](medication_name)
-    - Add [Gabapentin](medication_name) for me
-    - Add [vitd](medication_name) for me
-    - I take [amgevita](medication_name)
-    - Record [hydrocodone](medication_name)
-    - Add [esomperazole](medication_name) for me
-    - [coenzyme q10](medication_name) 500mg please
-    - Record [Corticosteroid](medication_name)
-    - I take [Prednison](medication_name)
-    - I take [Lor](medication_name)
-    - [amlodipine](medication_name) 500mg please
-    - I take [terbafin](medication_name)
-    - Add [rosuvastin](medication_name) for me
-    - [levocitirizine](medication_name) 500mg please
-    - Record [Amoxcillin](medication_name)
-    - [Vitd](medication_name)
-    - [risperidone](medication_name) 500mg please
-    - Record [Losartan](medication_name)
-    - Add [prednison](medication_name) for me
-    - Add [escit](medication_name) for me
-    - I take [Simvastatin](medication_name)
-    - [Phenytoin](medication_name) 500mg please
-    - Add [Co Enzyme Q10](medication_name) for me
-    - [Levocetrizine](medication_name)
-    - Add [Coenzymeq10](medication_name) for me
-    - [metoprololol](medication_name)
-    - Record [Ranitidine](medication_name)
-    - [Terbinafin](medication_name) 500mg please
-    - Add [Terbinafin](medication_name) for me
-    - [Levocetirizine](medication_name)
-    - Record [Pantoprazole](medication_name)
-    - I take [metronidazole](medication_name)
-    - [mesalazine](medication_name)
-    - Add [topiramate](medication_name) for me
-    - Record [Furosem](medication_name)
-    - [Prednisolone](medication_name)
-    - Add [levocitirizine](medication_name) for me
-    - [estradiol](medication_name)
-    - Record [Vitamin D](medication_name)
-    - [Gabapentin](medication_name)
-    - [terbinafinee](medication_name) 500mg please
-    - [Lamotrigine](medication_name)
-    - I take [amlodipn](medication_name)
-    - Record [Losartn](medication_name)
-    - [Metfor](medication_name)
-    - Record [N-Acetylcysteine](medication_name)
-    - Add [clonazepam](medication_name) for me
-    - I take [fluconazole](medication_name)
-    - [Metformn](medication_name)
-    - Add [amlodipine](medication_name) for me
-    - I take [metformn](medication_name)
-    - Record [Tetracycline](medication_name)
-    - [apixaban](medication_name)
-    - [insulin](medication_name)
-    - Record [Levocetirizine](medication_name)
-    - Add [venlafaxine](medication_name) for me
-    - [salicylic acid](medication_name)
-    - [levofloxacin](medication_name) 500mg please
-    - [Warfarin](medication_name) 500mg please
-    - [Simvastin](medication_name)
-    - Add [Paracetml](medication_name) for me
-    - Add [Hydrocodone](medication_name) for me
-    - I take [Insulin Glargine](medication_name)
-    - Record [Alprazolam](medication_name)
-    - I take [mefenamic](medication_name)
-    - [Rosuvastatine](medication_name) 500mg please
-    - Add [n-acetylcysteine](medication_name) for me
-    - [montelukast](medication_name)
-    - [Salbutamol](medication_name)
-    - [Metronidazole](medication_name)
-    - Record [Ibuprof](medication_name)
-    - [ceftriaxone](medication_name) 500mg please
-    - Record [albuterol](medication_name)
-    - I take [Oxycodone](medication_name)
-    - [Furosem](medication_name) 500mg please
-    - Record [Tramad](medication_name)
-    - Add [Montelukast](medication_name) for me
-    - I take [Terbinafin](medication_name)
-    - [insulin lispro](medication_name)
-    - [Levothyroxine](medication_name) 500mg please
-    - [paracetamol](medication_name)
-    - I take [levocetrizine](medication_name)
-    - Record [Amlodpin](medication_name)
-    - [metfor](medication_name) 500mg please
-    - [esomeprazole](medication_name) 500mg please
-    - I take [coenzyme q10](medication_name)
-    - Add [Codeine](medication_name) for me
-    - I take [albuterol](medication_name)
-    - Record [omeprazole](medication_name)
-    - [Mirtazapine](medication_name)
-    - Add [Salmeterol](medication_name) for me
-    - I take [n-acetylcysteine](medication_name)
-    - [amgevita](medication_name)
-    - I take [Clonazepam](medication_name)
-    - Add [Omerpazole](medication_name) for me
-    - [Codeine](medication_name) 500mg please
-    - [Losartanette](medication_name)
-    - [atenolol](medication_name)
-    - [levocet](medication_name)
-    - [Prednison](medication_name) 500mg please
-    - I take [metfomin](medication_name)
-    - Add [Tramad](medication_name) for me
-    - Add [Hydrocortisone](medication_name) for me
-    - Record [ciprofloxacin](medication_name)
-    - [progesteron](medication_name)
-    - [rosuvastatin](medication_name)
-    - [cefuroxime](medication_name)
-    - [Terbinafine](medication_name) 500mg please
-    - [Citalopram](medication_name) 500mg please
-    - Add [Amgevta](medication_name) for me
-    - Record [pregabalin](medication_name)
-    - [Insulin Lispro](medication_name) 500mg please
-    - Add [Lamotrigine](medication_name) for me
-    - I take [Paracetamol](medication_name)
-    - I take [progestorone](medication_name)
-    - I take [valproic acid](medication_name)
-    - Add [Atorvast](medication_name) for me
-    - [amlodipn](medication_name)
-    - Add [Pantoprazole](medication_name) for me
-    - Add [Quetiapine](medication_name) for me
-    - [atorvastatin](medication_name)
-    - [Hydrocortisone](medication_name) 500mg please
-    - Record [Cet](medication_name)
-    - [Acetylcystein](medication_name) 500mg please
-    - [albuterol](medication_name) 500mg please
-    - Add [losartanette](medication_name) for me
-    - [Ibuprofen](medication_name) 500mg please
-    - Record [paracetml](medication_name)
-    - Record [escit](medication_name)
-    - [montelukast](medication_name) 500mg please
-    - I take [paroxetine](medication_name)
-    - [fluconazole](medication_name) 500mg please
-    - [diazepam](medication_name)
-    - [Aspirn](medication_name)
-    - Record [Dabigatran](medication_name)
-    - Add [levocetrizine](medication_name) for me
-    - [Coenzyme Q10](medication_name)
-    - [furosemid](medication_name)
-    - [losartanette](medication_name) 500mg please
-    - Add [Aspirn](medication_name) for me
-    - [asprin](medication_name) 500mg please
-    - I take [Insulin](medication_name)
-    - Record [estradiol](medication_name)
-    - [Asp](medication_name)
-    - Add [Sertaline](medication_name) for me
-    - Record [mefenamic](medication_name)
-    - Record [morphine](medication_name)
-    - [azithromycin](medication_name)
-    - Record [Gabapentin](medication_name)
-    - Record [augment](medication_name)
-    - [tiotropium](medication_name) 500mg please
-    - I take [Amoxicillin](medication_name)
-    - [olanzapine](medication_name)
-    - [Formoterol](medication_name)
-    - Add [augmentine](medication_name) for me
-    - I take [ibroprofen](medication_name)
-    - Record [Simvastatin](medication_name)
-    - I take [Amgevitta](medication_name)
-    - I take [Symbocort](medication_name)
-    - I take [tiotropium](medication_name)
-    - [lisinoprill](medication_name) 500mg please
-    - Record [Topiramate](medication_name)
-    - [Symbicort](medication_name) 500mg please
-    - Add [Amox](medication_name) for me
-    - I take [warfarin](medication_name)
-    - [oxazepam](medication_name)
-    - [pantoprazole](medication_name) 500mg please
-    - Add [Terbafin](medication_name) for me
-    - I take [Oxazepam](medication_name)
-    - [Oxazepam](medication_name) 500mg please
-    - [Sertaline](medication_name) 500mg please
-    - [Omerpazole](medication_name) 500mg please
-    - Add [Progesterone](medication_name) for me
-    - [aspirin](medication_name) 500mg please
-    - I take [albutrol](medication_name)
-    - I take [magnesium glycinate](medication_name)
-    - I take [coq10](medication_name)
-    - Record [Aripiprazole](medication_name)
-    - [Azithromycin](medication_name) 500mg please
-    - Add [estradiol](medication_name) for me
-    - Record [Acetylcysteine](medication_name)
-    - I take [Amgevta](medication_name)
-    - I take [Cetirizin](medication_name)
-    - Add [terbinafin](medication_name) for me
-    - [Levothyrox](medication_name) 500mg please
-    - [amgevitta](medication_name) 500mg please
-    - Record [risperidone](medication_name)
-    - I take [Terbinafin](medication_name)
-    - I take [Venlafaxine](medication_name)
-    - Add [Rantidine](medication_name) for me
-    - [Estradiol](medication_name) 500mg please
-    - I take [acetylcysteine](medication_name)
-    - [losartn](medication_name) 500mg please
-    - Add [Insulin Aspart](medication_name) for me
-    - I take [bupropion](medication_name)
-    - Add [Augmentin](medication_name) for me
-    - Add [Insulin Lispro](medication_name) for me
-    - [Prednisolone](medication_name) 500mg please
-    - I take [Progesteron](medication_name)
-    - I take [Fluoxetine](medication_name)
-    - [Levothyr](medication_name)
-    - Add [atenolol](medication_name) for me
-    - [mefanamic acid](medication_name)
-    - Record [Aspirin](medication_name)
-    - Record [estradiol](medication_name)
-    - Record [mefanamic acid](medication_name)
-    - I take [Vit. D](medication_name)
-    - I take [levocet](medication_name)
-    - Add [losartan](medication_name) for me
-    - I take [Ibuprof](medication_name)
-    - [paracetml](medication_name)
-    - Record [ibroprofen](medication_name)
-    - [hydrochlorothiazide](medication_name)
-    - Record [Furosemide](medication_name)
-    - I take [Corticosteroid](medication_name)
-    - [Levocetirizine](medication_name) 500mg please
-    - Add [levothyroxine](medication_name) for me
-    - Add [Metformin](medication_name) for me
-    - [loperamide](medication_name)
-    - [Amlodpin](medication_name) 500mg please
-    - Record [pantoprazol](medication_name)
-    - Record [amgevita](medication_name)
-    - Record [Amphotericin B](medication_name)
-    - Add [symbocort](medication_name) for me
-    - Add [ticagrelor](medication_name) for me
-    - Add [insulin](medication_name) for me
-    - [Symbicort](medication_name)
-    - I take [Metoprololol](medication_name)
-    - Add [Mag Glycinate](medication_name) for me
-    - [Salicylic Acid](medication_name) 500mg please
-    - I take [co enzyme q10](medication_name)
-    - Record [mesalazine](medication_name)
-    - I take [mesalazine](medication_name)
-    - [Valproic Acid](medication_name) 500mg please
-    - Add [acetylcystein](medication_name) for me
-    - Record [Clozapine](medication_name)
-    - [Omerpazole](medication_name)
-    - Add [Metformn](medication_name) for me
-    - Record [levocet](medication_name)
-    - Add [Pantoprazol](medication_name) for me
-    - [Olanzapine](medication_name) 500mg please
-    - [loratadine](medication_name) 500mg please
-    - I take [Cefuroxime](medication_name)
-    - Record [Coenzymeq10](medication_name)
-    - Add [clozapine](medication_name) for me
-    - [Desloratadine](medication_name)
-    - [Clonazepam](medication_name)
-    - I take [insulin aspart](medication_name)
-    - I take [Amoxacillin](medication_name)
-    - I take [quetiapine](medication_name)
-    - Add [Levocetirizine](medication_name) for me
-    - Add [metfomin](medication_name) for me
-    - I take [Sertralin](medication_name)
-    - Record [prednisolone](medication_name)
-    - I take [Esomperazole](medication_name)
-    - Record [Clindamycin](medication_name)
-    - Record [apixaban](medication_name)
-    - [progestorone](medication_name)
-    - [panto](medication_name)
-    - [morphine](medication_name) 500mg please
-    - [Symbicortt](medication_name) 500mg please
-    - Add [panto](medication_name) for me
-    - [Lisinoprill](medication_name)
-    - [Citalopram](medication_name)
-    - [Aripiprazole](medication_name)
-    - Add [terbinafine](medication_name) for me
-    - [aspirin](medication_name)
-    - Record [esomperazole](medication_name)
-    - [Mirtazapine](medication_name) 500mg please
-    - Record [Montelukast](medication_name)
-    - I take [citalopram](medication_name)
-    - [furosemide](medication_name)
-    - [diazepam](medication_name) 500mg please
-    - [escitlop](medication_name)
-    - [Sertaline](medication_name)
-    - Add [terbinafinee](medication_name) for me
-    - Add [Prednisolone](medication_name) for me
-    - Record [terbafin](medication_name)
-    - [Metoprolol](medication_name) 500mg please
-    - Record [augmentin](medication_name)
-    - Record [Diazepam](medication_name)
-    - Add [coq10](medication_name) for me
-    - [Metformin](medication_name) 500mg please
-    - Add [lisinoprill](medication_name) for me
-    - I take [metformin](medication_name)
-    - I take [apixaban](medication_name)
-    - Record [Venlafaxine](medication_name)
-    - Add [Albuterol](medication_name) for me
-    - [Alprazolam](medication_name) 500mg please
-    - [Omeprazol](medication_name)
-    - [Asprin](medication_name)
-    - Add [desloratadine](medication_name) for me
-    - [losartn](medication_name)
-    - [Augmentine](medication_name) 500mg please
-    - I take [omerpazole](medication_name)
-    - [Cefuroxime](medication_name) 500mg please
-    - Record [Azithromycin](medication_name)
-    - I take [Loratadine](medication_name)
-    - [escit](medication_name)
-    - I take [symbicort](medication_name)
-    - [Clozapine](medication_name) 500mg please
-    - [Terbinafin](medication_name) 500mg please
-    - [Metoprol](medication_name)
-    - [paracitamol](medication_name)
-    - Add [Paroxetine](medication_name) for me
-    - [Amoxicillin](medication_name) 500mg please
-    - [Augmentine](medication_name)
-    - Record [Esomeprazole](medication_name)
-    - [levothyroxine](medication_name)
-    - Add [Diazepam](medication_name) for me
-    - [Amox](medication_name) 500mg please
-    - [Ticagrelor](medication_name)
-    - Add [vit d](medication_name) for me
-    - Add [clopidogrel](medication_name) for me
-    - Record [oxazepam](medication_name)
-    - [Paracetml](medication_name) 500mg please
-    - I take [Omeprazole](medication_name)
-    - [Terbinafin](medication_name)
-    - I take [Esomeprazol](medication_name)
-    - [Venlafaxine](medication_name)
-    - [Amgevta](medication_name) 500mg please
-    - [Furosem](medication_name)
-    - Add [insulin glargine](medication_name) for me
-    - [omeprazol](medication_name) 500mg please
-    - [escitlop](medication_name) 500mg please
-    - [Levocetirizine](medication_name) 500mg please
-    - I take [Amlodpin](medication_name)
-    - Add [estradiol](medication_name) for me
-    - Add [tiotropium](medication_name) for me
-    - Record [Rivaroxaban](medication_name)
-    - [lospinil](medication_name) 500mg please
-    - [simvastin](medication_name) 500mg please
-    - [doxycycline](medication_name) 500mg please
-    - [Paroxetine](medication_name)
-    - [rantidine](medication_name)
-    - Record [asprin](medication_name)
-    - I take [vitd](medication_name)
-    - [sertralin](medication_name) 500mg please
-    - [paracetmol](medication_name)
-    - [Quetiapine](medication_name) 500mg please
-    - I take [salmeterol](medication_name)
-    - [Hydrochlorothiazide](medication_name) 500mg please
-    - [ondansetron](medication_name)
-    - Add [Levothyr](medication_name) for me
-    - [estradiol](medication_name) 500mg please
-    - [lor](medication_name) 500mg please
-    - Add [Corticosteroid](medication_name) for me
-    - I take [risperidone](medication_name)
-    - I take [rosvastatin](medication_name)
-    - I take [Levothyrox](medication_name)
-    - Record [terbafin](medication_name)
-    - Add [terbinafine](medication_name) for me
-    - Add [levocet](medication_name) for me
-    - Record [Rosuvastatine](medication_name)
-    - Record [Rosuvastatin](medication_name)
-    - Record [Ceftriaxone](medication_name)
-    - I take [Lisinoprill](medication_name)
-    - I take [diazepam](medication_name)
-    - [Paroxetine](medication_name) 500mg please
-    - [Apixaban](medication_name) 500mg please
-    - [clopidogrel](medication_name) 500mg please
-    - Add [symbicort](medication_name) for me
-    - Add [Furosemide](medication_name) for me
-    - Add [vitamin d](medication_name) for me
-    - [domperidone](medication_name)
-    - I take [escit](medication_name)
-    - Add [Loratadin](medication_name) for me
-    - [coenzymeq10](medication_name)
-    - Record [estradiol](medication_name)
-    - [dabigatran](medication_name) 500mg please
-    - [Progesteron](medication_name) 500mg please
-    - I take [aripiprazole](medication_name)
-    - I take [Montelukast](medication_name)
-    - Record [Escitalopram](medication_name)
-    - [buprenorphine](medication_name) 500mg please
-    - [Oxycodone](medication_name) 500mg please
-    - [Escit](medication_name) 500mg please
-    - Record [Mefenmic Acid](medication_name)
-    - I take [methadone](medication_name)
-    - Record [Furosemid](medication_name)
-    - I take [hydrochlorothiazide](medication_name)
-    - [levocet](medication_name)
-    - Add [Oxazepam](medication_name) for me
-    - Record [Cetirizin](medication_name)
-    - Record [Metoprol](medication_name)
-    - [n acetylcysteine](medication_name)
-    - [Mefenamic](medication_name)
-    - I take [rosuvastin](medication_name)
-    - Add [amlodpin](medication_name) for me
-    - Add [Lisinopril](medication_name) for me
-    - [Progestrone](medication_name) 500mg please
-    - [metoprolol](medication_name)
-    - Add [Loperamide](medication_name) for me
-    - [Levocet](medication_name) 500mg please
-    - I take [estradiol](medication_name)
-    - [alprazolam](medication_name)
-    - [methadone](medication_name)
-    - I take [Sertraline](medication_name)
-    - I take [magnesium glycinatee](medication_name)
-    - [rosvastatin](medication_name) 500mg please
-    - Add [Levocetrizine](medication_name) for me
-    - I take [aspirin](medication_name)
-    - I take [Augmentine](medication_name)
-    - I take [acetylcystein](medication_name)
-    - [insulin](medication_name) 500mg please
-    - Add [mesalazine](medication_name) for me
-    - Record [warfarin](medication_name)
-    - Record [Losartanette](medication_name)
-    - I take [morphine](medication_name)
-    - Record [coq10](medication_name)
-    - [Rivaroxaban](medication_name) 500mg please
-    - [losartan](medication_name) 500mg please
-    - Record [Tramadol](medication_name)
-    - [atorvast](medication_name) 500mg please
-    - Record [rosuvastin](medication_name)
-    - Record [lor](medication_name)
-    - [metronidazole](medication_name) 500mg please
-    - I take [amlodipine](medication_name)
-    - [esomperazole](medication_name) 500mg please
-    - [levocetrizine](medication_name) 500mg please
-    - Record [Metfomin](medication_name)
-    - [magnesium glycinatee](medication_name) 500mg please
-    - [tramodol](medication_name)
-    - [salbutamol](medication_name) 500mg please
-    - [atorvastatin](medication_name) 500mg please
-    - [Insulin Glargine](medication_name) 500mg please
-    - [Sertraline](medication_name)
-    - [Coenzymeq10](medication_name) 500mg please
-    - I take [Levocetirizine](medication_name)
-    - Add [n acetylcysteine](medication_name) for me
-    - Record [hydrocortisone](medication_name)
-    - [tramadol](medication_name) 500mg please
-    - Add [aripiprazole](medication_name) for me
-    - [fluconazole](medication_name)
-    - [Esomeprazole](medication_name)
-    - [symbocort](medication_name) 500mg please
-    - I take [Loperamide](medication_name)
-    - I take [terbinafine](medication_name)
-    - Add [prednisolone](medication_name) for me
-    - Add [Furosem](medication_name) for me
-    - [Rosuvastatine](medication_name)
-    - Record [Terbinafinee](medication_name)
-    - [amlodpin](medication_name)
-    - Add [phenytoin](medication_name) for me
-    - Record [rantidine](medication_name)
-    - [Ibuprof](medication_name)
-    - I take [domperidone](medication_name)
-    - Add [simvastin](medication_name) for me
-    - Add [risperidone](medication_name) for me
-    - Record [atorvast](medication_name)
-    - [coq10](medication_name)
-    - Add [budesonide](medication_name) for me
-    - Add [Asprin](medication_name) for me
-    - I take [Atorvast](medication_name)
-    - Record [Amoxacillin](medication_name)
-    - Record [desloratadine](medication_name)
-    - Record [Esomeprazol](medication_name)
-    - [carbamazepine](medication_name)
-    - I take [furosem](medication_name)
-    - [amox](medication_name)
-    - I take [Esomeprazole](medication_name)
-    - [budesonide](medication_name) 500mg please
-    - [atenolol](medication_name) 500mg please
-    - [esomperazole](medication_name)
-    - [Levothyrox](medication_name)
-    - Add [Fluoxetine](medication_name) for me
-    - [topiramate](medication_name) 500mg please
-    - [Ibuprof](medication_name) 500mg please
-    - I take [Levocet](medication_name)
-    - I take [levofloxacin](medication_name)
-    - [Nac](medication_name)
-    - [Aripiprazole](medication_name) 500mg please
-    - [fluoxetine](medication_name)
-    - [symbocort](medication_name)
-    - [Pantoprazol](medication_name) 500mg please
-    - [Metronidazole](medication_name) 500mg please
-    - [duloxetine](medication_name)
-    - [Augment](medication_name)
-    - [Magnesium Glycinate](medication_name)
-    - Record [carbamazepine](medication_name)
-    - Record [Progestrone](medication_name)
-    - I take [amphotericin b](medication_name)
-    - I take [Ciprofloxacin](medication_name)
-    - Add [mirtazapine](medication_name) for me
-    - Record [amlodipine](medication_name)
-    - Record [Simvastin](medication_name)
-    - [Vitamin D](medication_name) 500mg please
-    - Add [hydrochlorothiazide](medication_name) for me
-    - [ibroprofen](medication_name) 500mg please
-    - Add [Ranitidine](medication_name) for me
-    - [vitamin d](medication_name)
-    - Add [citalopram](medication_name) for me
-    - [Tramad](medication_name) 500mg please
-    - [Amoxicillin](medication_name)
-    - Add [ibroprofen](medication_name) for me
-    - [Mag Glycinate](medication_name) 500mg please
-    - [Risperidone](medication_name)
-    - I take [asprin](medication_name)
-    - Record [Loratadin](medication_name)
-    - [loratadin](medication_name)
-    - I take [salicylic acid](medication_name)
-    - Add [metfor](medication_name) for me
-    - I take [Vit D](medication_name)
-    - Add [estradol](medication_name) for me
-    - Record [terbinafin](medication_name)
-    - [Amoxcillin](medication_name)
-    - Record [ibuprofen](medication_name)
-    - [nac](medication_name) 500mg please
-    - [acetylcysteine](medication_name) 500mg please
-    - [Metronidazole](medication_name)
-    - Record [Symbicortt](medication_name)
-    - I take [lamotrigine](medication_name)
-    - [Methadone](medication_name) 500mg please
-    - I take [panto](medication_name)
-    - [magnesium glycinatee](medication_name)
-    - [Terbafin](medication_name)
-    - I take [amoxcillin](medication_name)
-    - Add [Levocitirizine](medication_name) for me
-    - Record [Symbocort](medication_name)
-    - Add [terbafin](medication_name) for me
-    - I take [Clozapine](medication_name)
-    - Add [levocetirizine](medication_name) for me
-    - Record [levocitirizine](medication_name)
-    - I take [Rosuvastatin](medication_name)
-    - Add [Atorvastatin](medication_name) for me
-    - [salmeterol](medication_name) 500mg please
-    - Record [Progestorone](medication_name)
-    - [Omeprazole](medication_name) 500mg please
-    - Add [metronidazole](medication_name) for me
-    - Add [levofloxacin](medication_name) for me
-    - [Codeine](medication_name)
-    - I take [Terbinafinee](medication_name)
-    - [lor](medication_name)
-    - I take [mirtazapine](medication_name)
-    - Add [magnesium glycenate](medication_name) for me
-    - [terbinafinee](medication_name)
-    - [amlodipine](medication_name)
-    - Record [levocetrizine](medication_name)
-    - [Insulin Glargine](medication_name)
-    - [hydrocodone](medication_name) 500mg please
-    - [Insulin Aspart](medication_name) 500mg please
-    - [gabapentin](medication_name) 500mg please
-    - Record [Loratadine](medication_name)
-    - [Augmentn](medication_name)
-    - Add [amoxacillin](medication_name) for me
-    - [loratadine](medication_name)
-    - Record [terbinafinee](medication_name)
-    - Record [Tiotropium](medication_name)
-    - I take [paracitamol](medication_name)
-    - [Paracetamol](medication_name) 500mg please
-    - [cetirizine](medication_name)
-    - I take [Budesonide](medication_name)
-    - I take [Nac](medication_name)
-    - Add [Rosvastatin](medication_name) for me
-    - Record [Levothyr](medication_name)
-    - Record [prednisolone](medication_name)
-    - I take [n acetylcysteine](medication_name)
-    - [Warfarin](medication_name)
-    - Record [rosvastatin](medication_name)
-    - Add [rosuvastatine](medication_name) for me
-    - Record [Quetiapine](medication_name)
-    - [Tiotropium](medication_name)
-    - [rosvastatin](medication_name)
-    - Record [Lisinoprill](medication_name)
-    - Record [Paroxetine](medication_name)
-    - [Bupropion](medication_name) 500mg please
-    - [progestorone](medication_name) 500mg please
-    - [omeprazole](medication_name)
-    - [Mefanamic Acid](medication_name) 500mg please
-    - Record [Levocitirizine](medication_name)
-    - [Simvastatin](medication_name) 500mg please
-    - [lospinil](medication_name)
-    - Add [vit. d](medication_name) for me
-    - Record [paracetmol](medication_name)
-    - Record [Metfor](medication_name)
-    - [Codeine](medication_name) 500mg please
-    - Record [Lorazepam](medication_name)
-    - Record [Metronidazole](medication_name)
-    - Add [Cetirizin](medication_name) for me
-    - Add [Lospinil](medication_name) for me
-    - Add [Formoterol](medication_name) for me
-    - Record [loperamide](medication_name)
-    - Record [Levocetirizine](medication_name)
-    - Record [Atorvastine](medication_name)
-    - [Oxycodone](medication_name)
-    - Add [Rosuvastatin](medication_name) for me
-    - Record [Augmentine](medication_name)
-    - Record [Oxycodone](medication_name)
-    - [Ibuprfen](medication_name)
-    - [Metformin](medication_name)
-    - I take [Ondansetron](medication_name)
-    - I take [Augmentin](medication_name)
-    - [ranitidine](medication_name) 500mg please
-    - I take [Paracetml](medication_name)
-    - I take [Amox](medication_name)
-    - I take [escitalopram](medication_name)
-    - Record [metoprolol](medication_name)
-    - [Doxycycline](medication_name)
-    - I take [rosuvastatine](medication_name)
-    - Record [Nac](medication_name)
-    - Add [oxycodone](medication_name) for me
-    - I take [sertaline](medication_name)
-    - I take [Terbafin](medication_name)
-    - [Furosemide](medication_name) 500mg please
-    - I take [Losartan](medication_name)
-    - Add [Esomeprazloe](medication_name) for me
-    - Record [salmeterol](medication_name)
-    - [atorvastin](medication_name)
-    - Add [augmentn](medication_name) for me
-    - Record [Levocetrizine](medication_name)
-    - Add [loratadine](medication_name) for me
-    - I take [Simvastin](medication_name)
-    - [mefenamic acid](medication_name)
-    - [Symbocort](medication_name) 500mg please
-    - I take [Gabapentin](medication_name)
-    - I take [levothyroxine](medication_name)
-    - Record [mefenamic acid](medication_name)
-    - I take [duloxetine](medication_name)
-    - I take [Lorazepam](medication_name)
-    - Add [Albutrol](medication_name) for me
-    - [corticosteroid](medication_name)
-    - Record [Panto](medication_name)
-    - Add [sertralin](medication_name) for me
-    - I take [Atorvastine](medication_name)
-    - Add [Mefanamic Acid](medication_name) for me
-    - [Prednisolone](medication_name)
-    - [Terbafin](medication_name) 500mg please
-    - I take [Tramodol](medication_name)
-    - Record [Levothyroxine](medication_name)
-    - [metformn](medication_name) 500mg please
-    - I take [omeprazol](medication_name)
-    - Record [estradol](medication_name)
-    - [Pregabalin](medication_name)
-    - [rantidine](medication_name) 500mg please
-    - Record [metformn](medication_name)
-    - Add [Simvastatin](medication_name) for me
-    - Record [Prednison](medication_name)
-    - Record [terbinafine](medication_name)
-    - Add [Tetracycline](medication_name) for me
-    - Record [magnesium glycenate](medication_name)
-    - [hydrocortisone](medication_name)
-    - [augmentn](medication_name) 500mg please
-    - Record [Magnesium Glycinatee](medication_name)
-    - Record [Vitd](medication_name)
-    - [Ibuprofen](medication_name)
-    - [clindamycin](medication_name) 500mg please
-    - I take [Carbamazepine](medication_name)
-    - Add [Amgevitta](medication_name) for me
-    - [Augment](medication_name) 500mg please
-    - I take [Rivaroxaban](medication_name)
-    - Add [metronidazole](medication_name) for me
-    - I take [Pantoprazol](medication_name)
-    - [Pantoprazol](medication_name)
-    - Record [Lamotrigine](medication_name)
-    - Add [Amoxicillin](medication_name) for me
-    - [duloxetine](medication_name) 500mg please
-    - [Asp](medication_name) 500mg please
-    - Add [Symbicortt](medication_name) for me
-    - [cetirizin](medication_name)
-    - [Quetiapine](medication_name)
-    - [Estradol](medication_name)
-    - Record [insulin aspart](medication_name)
-    - Record [Ondansetron](medication_name)
-    - Add [Salbutamol](medication_name) for me
-    - [fluoxetine](medication_name) 500mg please
-    - [albutrol](medication_name)
-    - [tramodol](medication_name) 500mg please
-    - [Domperidone](medication_name) 500mg please
-    - Record [atorvastin](medication_name)
-    - Record [Doxycycline](medication_name)
-    - Record [metformin](medication_name)
-    - Add [amgevita](medication_name) for me
-    - Record [Hydrochlorothiazide](medication_name)
-    - Record [Augmentn](medication_name)
-    - I take [Prednisolone](medication_name)
-    - [tramadol](medication_name)
-    - [amlodipn](medication_name) 500mg please
-    - Add [Escitalopram](medication_name) for me
-    - Add [Escitlop](medication_name) for me
-    - Add [Doxycycline](medication_name) for me
-    - Record [Insulin Glargine](medication_name)
-    - [Prednison](medication_name)
-    - Add [losartn](medication_name) for me
-    - I take [Esomeprazloe](medication_name)
-    - Add [Cet](medication_name) for me
-    - [Dabigatran](medication_name)
-    - Add [lorazepam](medication_name) for me
-    - I take [Augment](medication_name)
-    - Add [Esomeprazol](medication_name) for me
-    - [Escitalopram](medication_name) 500mg please
-    - Add [atorvastine](medication_name) for me
-    - [phenytoin](medication_name)
-    - [mefenamic acid](medication_name) 500mg please
-    - Record [Levothyrox](medication_name)
-    - [Co Enzyme Q10](medication_name) 500mg please
-    - I take [Pantoprazole](medication_name)
-    - Record [Levofloxacin](medication_name)
-    - [formoterol](medication_name) 500mg please
-    - Add [Mefenamic](medication_name) for me
-    - [Coq10](medication_name) 500mg please
-    - I take [Estradiol](medication_name)
-    - I take [desloratadine](medication_name)
-    - [Progesterone](medication_name) 500mg please
-    - Add [methadone](medication_name) for me
-    - I take [Coenzymeq10](medication_name)
-    - Add [Magnesium Glycinate](medication_name) for me
-    - [acetylcysteine](medication_name)
-    - I take [topiramate](medication_name)
-    - I take [Terbinafine](medication_name)
-    - Record [Clonazepam](medication_name)
-    - [morphine](medication_name)
-    - Record [phenytoin](medication_name)
-    - [simvast](medication_name) 500mg please
-    - [Terbinafinee](medication_name)
-    - Record [mag glycinate](medication_name)
-    - [clopidogrel](medication_name)
-    - [loratadin](medication_name) 500mg please
+    - Add [Allegra](medication_name)
+    - Add [Amoxycillin](medication_name) 250mg.
+    - Add [Asp](medication_name) 250mg,
+    - Add [Atenol](medication_name) 250mg
+    - Add [Atenol](medication_name),
+    - Add [Ativan](medication_name) 250mg
+    - Add [Bup](medication_name)
+    - Add [Buprenorphine](medication_name) 250mg
+    - Add [Bupro](medication_name)
+    - Add [Calcium Carbonate](medication_name)
+    - Add [Cipro](medication_name)!
+    - Add [Citalo](medication_name) 250mg
+    - Add [DIAZEPAM](medication_name) 250mg.
+    - Add [Desyrel](medication_name) 250mg
+    - Add [Dha](medication_name)
+    - Add [Dia](medication_name) 250mg
+    - Add [Dox](medication_name)
+    - Add [Dox](medication_name) 250mg.
+    - Add [Duloxetin](medication_name)
+    - Add [Duloxetin](medication_name) 250mg
+    - Add [Fexofen](medication_name) 250mg!
+    - Add [Flonase](medication_name) 250mg.
+    - Add [Folic](medication_name) 250mg,
+    - Add [Furosemide](medication_name) 250mg,
+    - Add [Glipiz](medication_name)
+    - Add [Glipizide](medication_name)
+    - Add [Glyburide](medication_name) 250mg
+    - Add [Hctz](medication_name) 250mg
+    - Add [Hydrocodone](medication_name).
+    - Add [INSULIN](medication_name) 250mg
+    - Add [Keflex](medication_name)
+    - Add [Klonopin](medication_name),
+    - Add [Levoxyl](medication_name)!
+    - Add [Lorazepam](medication_name)
+    - Add [Losartn](medication_name) 250mg
+    - Add [Lyrica](medication_name)
+    - Add [Mag glycinate](medication_name)
+    - Add [Magnesium glycinate](medication_name) 250mg
+    - Add [Miconazole](medication_name) 250mg
+    - Add [Montel](medication_name)?
+    - Add [Motrin](medication_name)!
+    - Add [NYSTATIN](medication_name) 250mg
+    - Add [Norvasc](medication_name) 250mg,
+    - Add [OMEGA-3](medication_name)
+    - Add [Omeprazol](medication_name).
+    - Add [Oxycodone](medication_name)
+    - Add [PCM](medication_name) 250mg
+    - Add [Pantoprazole](medication_name)
+    - Add [Paracetmol](medication_name)
+    - Add [Prednisone](medication_name).
+    - Add [Pregabalin](medication_name)
+    - Add [Pulmicort](medication_name) 250mg
+    - Add [Risper](medication_name) 250mg
+    - Add [Risperidon](medication_name)
+    - Add [Sertraline](medication_name) 250mg!
+    - Add [Trama](medication_name) 250mg?
+    - Add [Valium](medication_name) 250mg
+    - Add [Valium](medication_name)?
+    - Add [Vit B12](medication_name) 250mg
+    - Add [Zyprexa](medication_name)
+    - Add [abilify](medication_name)?
+    - Add [acetylsalicylic](medication_name)
+    - Add [albu](medication_name)
+    - Add [albuterol](medication_name)
+    - Add [apap](medication_name).
+    - Add [aspirn](medication_name) 250mg
+    - Add [ator](medication_name)
+    - Add [atorvastin](medication_name) 250mg.
+    - Add [b12](medication_name).
+    - Add [budesonide](medication_name)
+    - Add [bup](medication_name) 250mg
+    - Add [bupro](medication_name)
+    - Add [cipro](medication_name) 250mg
+    - Add [clarinex](medication_name)
+    - Add [clindam](medication_name) 250mg!
+    - Add [clopidogrel](medication_name) 250mg,
+    - Add [coq10](medication_name) 250mg
+    - Add [diazep](medication_name) 250mg!
+    - Add [diclofenac](medication_name),
+    - Add [dulo](medication_name)
+    - Add [epa](medication_name)
+    - Add [esomeprazole](medication_name),
+    - Add [fexo](medication_name) 250mg
+    - Add [fexofen](medication_name) 250mg
+    - Add [fexofen](medication_name) 250mg,
+    - Add [flovent](medication_name)?
+    - Add [folate](medication_name) 250mg
+    - Add [glargine](medication_name).
+    - Add [hydrochlorothiazide](medication_name)
+    - Add [hydrocodone](medication_name),
+    - Add [lasix](medication_name) 250mg!
+    - Add [levo](medication_name)
+    - Add [lexapro](medication_name),
+    - Add [ome](medication_name)
+    - Add [oxycodone](medication_name) 250mg!
+    - Add [paroxetin](medication_name)
+    - Add [q10](medication_name) 250mg
+    - Add [salicylic acid](medication_name)?
+    - Add [singulair](medication_name)!
+    - Add [sitagliptin](medication_name)
+    - Add [valium](medication_name),
+    - Add [xyzal](medication_name).
+    - Been taking [Abilify](medication_name) for a while
+    - Been taking [Amoxacillin](medication_name) for a while
+    - Been taking [Amoxicillin](medication_name) for a while
+    - Been taking [Amoxycillin](medication_name) for a while
+    - Been taking [Buprenorphine](medication_name) for a while!
+    - Been taking [Ciprofloxacin](medication_name) for a while
+    - Been taking [Deslor](medication_name) for a while
+    - Been taking [Diazep](medication_name) for a while
+    - Been taking [Fexofen](medication_name) for a while
+    - Been taking [Fluox](medication_name) for a while,
+    - Been taking [Formoterol](medication_name) for a while
+    - Been taking [Gabapent](medication_name) for a while
+    - Been taking [HCTZ](medication_name) for a while?
+    - Been taking [Insulin Lispro](medication_name) for a while
+    - Been taking [Insulin glargine](medication_name) for a while
+    - Been taking [Lantus](medication_name) for a while,
+    - Been taking [Losartn](medication_name) for a while
+    - Been taking [Miconazole](medication_name) for a while.
+    - Been taking [NYSTATIN](medication_name) for a while
+    - Been taking [Neurontin](medication_name) for a while
+    - Been taking [Norvasc](medication_name) for a while
+    - Been taking [Prednisone](medication_name) for a while
+    - Been taking [Prinivil](medication_name) for a while
+    - Been taking [Protonix](medication_name) for a while!
+    - Been taking [Quetiapin](medication_name) for a while,
+    - Been taking [Rami](medication_name) for a while?
+    - Been taking [Sertra](medication_name) for a while
+    - Been taking [Sertra](medication_name) for a while.
+    - Been taking [Zestril](medication_name) for a while
+    - Been taking [Zestril](medication_name) for a while,
+    - Been taking [acetylsalicylic](medication_name) for a while
+    - Been taking [asa](medication_name) for a while,
+    - Been taking [ativan](medication_name) for a while
+    - Been taking [atorvastatin](medication_name) for a while
+    - Been taking [augmentn](medication_name) for a while,
+    - Been taking [cetirizin](medication_name) for a while
+    - Been taking [citalopram](medication_name) for a while?
+    - Been taking [diclofenac](medication_name) for a while?
+    - Been taking [escitalopram](medication_name) for a while
+    - Been taking [esomeprazol](medication_name) for a while!
+    - Been taking [fish oil](medication_name) for a while,
+    - Been taking [hydrochlorothiazide](medication_name) for a while
+    - Been taking [insulin lispro](medication_name) for a while
+    - Been taking [insuline](medication_name) for a while,
+    - Been taking [januvia](medication_name) for a while
+    - Been taking [lamotrigine](medication_name) for a while
+    - Been taking [lysinopril](medication_name) for a while
+    - Been taking [metfor](medication_name) for a while
+    - Been taking [metop](medication_name) for a while.
+    - Been taking [mirta](medication_name) for a while!
+    - Been taking [montelukast](medication_name) for a while!
+    - Been taking [nexium](medication_name) for a while
+    - Been taking [ome](medication_name) for a while
+    - Been taking [paracitamol](medication_name) for a while
+    - Been taking [rami](medication_name) for a while
+    - Been taking [rantidine](medication_name) for a while
+    - Been taking [risper](medication_name) for a while?
+    - Been taking [risperidon](medication_name) for a while
+    - Been taking [rosuva](medication_name) for a while
+    - Been taking [salbutamol](medication_name) for a while
+    - Been taking [sertralin](medication_name) for a while
+    - Been taking [trazodone](medication_name) for a while
+    - Been taking [vit b12](medication_name) for a while,
+    - Been taking [vitamin d](medication_name) for a while
+    - Can you add [Alprazolam](medication_name)
+    - Can you add [Amoxycillin](medication_name)
+    - Can you add [Asprin](medication_name)!
+    - Can you add [Azith](medication_name)!
+    - Can you add [Azithrom](medication_name)
+    - Can you add [Bupro](medication_name)
+    - Can you add [Bupro](medication_name),
+    - Can you add [Ciproflox](medication_name),
+    - Can you add [Claritin](medication_name)
+    - Can you add [Clinda](medication_name)?
+    - Can you add [Clonazep](medication_name)
+    - Can you add [DIAZEPAM](medication_name)
+    - Can you add [Doxicycline](medication_name)
+    - Can you add [Famo](medication_name)
+    - Can you add [Flonase](medication_name)
+    - Can you add [Folic acid](medication_name)
+    - Can you add [Formoterol](medication_name)
+    - Can you add [GLIPIZIDE](medication_name)
+    - Can you add [Gabapentin](medication_name)?
+    - Can you add [Insulin](medication_name)
+    - Can you add [METHADONE](medication_name),
+    - Can you add [Mag glycinate](medication_name)
+    - Can you add [Magnesium](medication_name)
+    - Can you add [Metfor](medication_name)
+    - Can you add [Metoprolol](medication_name)
+    - Can you add [Metronidazole](medication_name),
+    - Can you add [NAPROXEN](medication_name).
+    - Can you add [Norvasc](medication_name)?
+    - Can you add [Novolog](medication_name)?
+    - Can you add [Omega-3](medication_name),
+    - Can you add [Omeprazole](medication_name)
+    - Can you add [Paraceta](medication_name)!
+    - Can you add [Rani](medication_name)
+    - Can you add [Rantidine](medication_name)
+    - Can you add [Rhinocort](medication_name)
+    - Can you add [alpra](medication_name)
+    - Can you add [amlopin](medication_name)?
+    - Can you add [augmentn](medication_name)
+    - Can you add [azithromycin](medication_name)?
+    - Can you add [clindam](medication_name)
+    - Can you add [coenzyme q10](medication_name)
+    - Can you add [coq10](medication_name)
+    - Can you add [crestor](medication_name)
+    - Can you add [deslor](medication_name)
+    - Can you add [fluoxetine](medication_name)
+    - Can you add [fluoxetine](medication_name)!
+    - Can you add [glucotrol](medication_name)!
+    - Can you add [lisinopril](medication_name)
+    - Can you add [losartn](medication_name)
+    - Can you add [mag glycinate](medication_name)
+    - Can you add [mag glycinate](medication_name)?
+    - Can you add [magnesium glycinate](medication_name)
+    - Can you add [magnesium](medication_name),
+    - Can you add [metronida](medication_name)
+    - Can you add [peni](medication_name)?
+    - Can you add [rosuva](medication_name).
+    - Can you add [ubiquinone](medication_name)!
+    - Can you add [valium](medication_name)
+    - Can you add [valsar](medication_name)
+    - Can you add [ventolin](medication_name)
+    - Can you add [zithromax](medication_name)
+    - Do you know [APIXABAN](medication_name)?
+    - Do you know [Acetylsalicylic](medication_name)?
+    - Do you know [Ativan](medication_name)?
+    - Do you know [Atorva](medication_name)?
+    - Do you know [Cephalex](medication_name)?,
+    - Do you know [Claritin](medication_name)?
+    - Do you know [Clopidogrel](medication_name)?
+    - Do you know [Cymbalta](medication_name)?.
+    - Do you know [Desloratadine](medication_name)?
+    - Do you know [Famotidine](medication_name)??
+    - Do you know [Fish oil](medication_name)?!
+    - Do you know [Fluox](medication_name)?
+    - Do you know [Fluti](medication_name)?,
+    - Do you know [Fluti](medication_name)??
+    - Do you know [Folic acid](medication_name)?
+    - Do you know [Humalog](medication_name)?!
+    - Do you know [Hydrocodone](medication_name)?
+    - Do you know [IBUPROFEN](medication_name)?.
+    - Do you know [Ibroprofen](medication_name)?
+    - Do you know [Lamotrigine](medication_name)?
+    - Do you know [Lantus](medication_name)?
+    - Do you know [Mag glycinate](medication_name)?
+    - Do you know [Methadone](medication_name)?
+    - Do you know [Metronidazole](medication_name)?
+    - Do you know [Multivitamin](medication_name)?
+    - Do you know [Omeprazol](medication_name)??
+    - Do you know [Paraceta](medication_name)?
+    - Do you know [Parox](medication_name)?
+    - Do you know [Phenytoin](medication_name)??
+    - Do you know [Prega](medication_name)?
+    - Do you know [Ramip](medication_name)??
+    - Do you know [Singulair](medication_name)?
+    - Do you know [Tramad](medication_name)?,
+    - Do you know [Val](medication_name)?.
+    - Do you know [aleve](medication_name)?
+    - Do you know [alprazolam](medication_name)??
+    - Do you know [amox](medication_name)?
+    - Do you know [ateno](medication_name)?
+    - Do you know [azithromycin](medication_name)?
+    - Do you know [cephal](medication_name)?
+    - Do you know [cipro](medication_name)?
+    - Do you know [deslo](medication_name)??
+    - Do you know [desloratadine](medication_name)?!
+    - Do you know [duloxetin](medication_name)?
+    - Do you know [fexo](medication_name)??
+    - Do you know [flagyl](medication_name)?
+    - Do you know [folate](medication_name)?
+    - Do you know [ins](medication_name)?,
+    - Do you know [insulin aspart](medication_name)?
+    - Do you know [levocet](medication_name)?
+    - Do you know [losartan](medication_name)?.
+    - Do you know [metformin](medication_name)?,
+    - Do you know [mg glycinate](medication_name)?
+    - Do you know [paracetamol](medication_name)?
+    - Do you know [paracetml](medication_name)?
+    - Do you know [ranitidine](medication_name)?.
+    - Do you know [risperidone](medication_name)?.
+    - Do you know [salbutamol](medication_name)?
+    - Do you know [sertralin](medication_name)?
+    - Do you know [tramad](medication_name)?!
+    - Do you know [trazo](medication_name)?
+    - For my blood pressure, I take [ALBUTEROL](medication_name)
+    - For my blood pressure, I take [Alpra](medication_name)
+    - For my blood pressure, I take [Alprazolam](medication_name)!
+    - For my blood pressure, I take [Aripiprazole](medication_name)
+    - For my blood pressure, I take [Azithrom](medication_name)!
+    - For my blood pressure, I take [Ciproflox](medication_name)
+    - For my blood pressure, I take [Coenzyme Q10](medication_name)
+    - For my blood pressure, I take [Deslor](medication_name)
+    - For my blood pressure, I take [Esomeprazol](medication_name)
+    - For my blood pressure, I take [Fish oil](medication_name)?
+    - For my blood pressure, I take [Folic acid](medication_name)
+    - For my blood pressure, I take [Hctz](medication_name)!
+    - For my blood pressure, I take [Insulin Aspart](medication_name)
+    - For my blood pressure, I take [Lorazepam](medication_name)
+    - For my blood pressure, I take [Magnesium](medication_name)
+    - For my blood pressure, I take [Metop](medication_name),
+    - For my blood pressure, I take [Mirta](medication_name).
+    - For my blood pressure, I take [Morphine](medication_name),
+    - For my blood pressure, I take [NYSTATIN](medication_name).
+    - For my blood pressure, I take [Norvasc](medication_name)
+    - For my blood pressure, I take [Prednisolone](medication_name)?
+    - For my blood pressure, I take [Quetiapin](medication_name),
+    - For my blood pressure, I take [Rosuvastatin](medication_name)
+    - For my blood pressure, I take [Simvastin](medication_name)
+    - For my blood pressure, I take [Synthroid](medication_name)
+    - For my blood pressure, I take [VALSARTAN](medication_name)?
+    - For my blood pressure, I take [Valproic Acid](medication_name)
+    - For my blood pressure, I take [Voltaren](medication_name)
+    - For my blood pressure, I take [abilify](medication_name).
+    - For my blood pressure, I take [amox](medication_name)
+    - For my blood pressure, I take [aspirin](medication_name)
+    - For my blood pressure, I take [caco3](medication_name)
+    - For my blood pressure, I take [calcium carbonate](medication_name)?
+    - For my blood pressure, I take [citalopram](medication_name)
+    - For my blood pressure, I take [clindamycin](medication_name)
+    - For my blood pressure, I take [codeine](medication_name).
+    - For my blood pressure, I take [fish oil](medication_name)
+    - For my blood pressure, I take [flonase](medication_name)
+    - For my blood pressure, I take [fluox](medication_name),
+    - For my blood pressure, I take [fluticasone](medication_name)?
+    - For my blood pressure, I take [folate](medication_name)
+    - For my blood pressure, I take [glucophage](medication_name).
+    - For my blood pressure, I take [ibuprofen](medication_name)
+    - For my blood pressure, I take [loperamide](medication_name)
+    - For my blood pressure, I take [lorazep](medication_name)!
+    - For my blood pressure, I take [mag glycinate](medication_name).
+    - For my blood pressure, I take [methadone](medication_name)
+    - For my blood pressure, I take [mirtazapine](medication_name)
+    - For my blood pressure, I take [nexium](medication_name)
+    - For my blood pressure, I take [omeprazol](medication_name)?
+    - For my blood pressure, I take [tiotropium](medication_name)!
+    - For my blood pressure, I take [trazodone](medication_name)!
+    - For my blood pressure, I take [val](medication_name),
+    - For my blood pressure, I take [val](medication_name).
+    - For my blood pressure, I take [valsar](medication_name)!
+    - For my blood pressure, I take [ventolin](medication_name)?
+    - For my blood pressure, I take [zyrtec](medication_name)!
+    - Have you heard of [Amoxicil](medication_name)?
+    - Have you heard of [Bude](medication_name)?
+    - Have you heard of [Cleocin](medication_name)?
+    - Have you heard of [Coq10](medication_name)?
+    - Have you heard of [Famotid](medication_name)?
+    - Have you heard of [Ibuprof](medication_name)?
+    - Have you heard of [Januvia](medication_name)?,
+    - Have you heard of [LOSARTAN](medication_name)?
+    - Have you heard of [Lisinoprill](medication_name)?
+    - Have you heard of [Losartn](medication_name)?
+    - Have you heard of [Mag Glycinate](medication_name)?
+    - Have you heard of [NAPROXEN](medication_name)?
+    - Have you heard of [Novolog](medication_name)?
+    - Have you heard of [Ondansetron](medication_name)?.
+    - Have you heard of [Pantoprazole](medication_name)?
+    - Have you heard of [Pen](medication_name)?.
+    - Have you heard of [Prednisone](medication_name)?!
+    - Have you heard of [Pulmicort](medication_name)?,
+    - Have you heard of [Rami](medication_name)?
+    - Have you heard of [Val](medication_name)?
+    - Have you heard of [Zyrtec](medication_name)?
+    - Have you heard of [acetaminophen](medication_name)?
+    - Have you heard of [acetaminophen](medication_name)?!
+    - Have you heard of [allegra](medication_name)?
+    - Have you heard of [alpraz](medication_name)?
+    - Have you heard of [dabigatran](medication_name)?,
+    - Have you heard of [deslor](medication_name)?
+    - Have you heard of [fish oil](medication_name)?!
+    - Have you heard of [folate](medication_name)?
+    - Have you heard of [glipizide](medication_name)?
+    - Have you heard of [humalog](medication_name)?
+    - Have you heard of [ins](medication_name)?
+    - Have you heard of [levo](medication_name)?
+    - Have you heard of [lora](medication_name)?!
+    - Have you heard of [losartan](medication_name)?.
+    - Have you heard of [naprosyn](medication_name)?
+    - Have you heard of [novolog](medication_name)?
+    - Have you heard of [olanzapine](medication_name)?.
+    - Have you heard of [proair](medication_name)?.
+    - Have you heard of [quetiapin](medication_name)?.
+    - Have you heard of [rami](medication_name)?
+    - Have you heard of [salicylic acid](medication_name)?
+    - Have you heard of [valsar](medication_name)?
+    - I need [Atenol](medication_name)
+    - I need [Ativan](medication_name)
+    - I need [Ativan](medication_name).
+    - I need [Atorvastin](medication_name)
+    - I need [Augmentine](medication_name)
+    - I need [CODEINE](medication_name)!
+    - I need [Cal Carb](medication_name).
+    - I need [Celexa](medication_name)?
+    - I need [Codeine](medication_name)
+    - I need [Cozaar](medication_name)?
+    - I need [Diclofenac](medication_name)
+    - I need [Doxicycline](medication_name)
+    - I need [Escit](medication_name)
+    - I need [Fluoxetin](medication_name)?
+    - I need [Fluti](medication_name)?
+    - I need [Glargine](medication_name)
+    - I need [Glipiz](medication_name)
+    - I need [Hctz](medication_name).
+    - I need [IBUPROFEN](medication_name)
+    - I need [Lisinopril](medication_name),
+    - I need [Lorazepam](medication_name)!
+    - I need [Losartan](medication_name)
+    - I need [Magnesium Glycinate](medication_name)
+    - I need [Met](medication_name)
+    - I need [Morphine](medication_name)
+    - I need [OMEGA-3](medication_name)?
+    - I need [Omeprazole](medication_name)
+    - I need [Omerpazole](medication_name)
+    - I need [Oxycodone](medication_name)
+    - I need [Pravachol](medication_name)
+    - I need [RAMIPRIL](medication_name)!
+    - I need [Ramip](medication_name)
+    - I need [Salbutamol](medication_name)
+    - I need [Sertraline](medication_name)
+    - I need [Singulair](medication_name)!
+    - I need [TRAMADOL](medication_name),
+    - I need [Terbinafine](medication_name).
+    - I need [Xyzal](medication_name)
+    - I need [allegra](medication_name)!
+    - I need [b12](medication_name),
+    - I need [brufen](medication_name)
+    - I need [bupropion](medication_name)
+    - I need [calcium carbonate](medication_name)
+    - I need [clonazepam](medication_name).
+    - I need [coq10](medication_name)
+    - I need [dulo](medication_name)
+    - I need [flagyl](medication_name)!
+    - I need [flovent](medication_name)!
+    - I need [fluoxetine](medication_name),
+    - I need [folic acid](medication_name)
+    - I need [glipizide](medication_name)?
+    - I need [levo](medication_name),
+    - I need [lexapro](medication_name)
+    - I need [motrin](medication_name)
+    - I need [panto](medication_name)
+    - I need [pepcid](medication_name)
+    - I need [prega](medication_name)!
+    - I need [prega](medication_name).
+    - I need [simvastatin](medication_name)
+    - I need [vitamin d](medication_name)
+    - I take [APAP](medication_name),
+    - I take [ASA](medication_name)!
+    - I take [AUGMENTIN](medication_name)
+    - I take [Acetaminophen](medication_name)
+    - I take [Acetylcysteine](medication_name),
+    - I take [Albutrol](medication_name) for pain?
+    - I take [Allegra](medication_name) for pain
+    - I take [Aripiprazol](medication_name)
+    - I take [Aspirin](medication_name) 500mg!
+    - I take [Atenol](medication_name) 500mg
+    - I take [Atenol](medication_name) for pain
     - I take [Atorvastatin](medication_name)
-    - I take [Metfor](medication_name)
-    - [Valproic Acid](medication_name)
-    - Record [methadone](medication_name)
-    - Add [Paracitamol](medication_name) for me
-    - Add [ibuprof](medication_name) for me
-    - [Venlafaxine](medication_name) 500mg please
-    - Record [Vit. D](medication_name)
-    - Record [Vit D](medication_name)
-    - [Levocetirizine](medication_name)
-    - [Cetirizin](medication_name) 500mg please
-    - Add [tramadol](medication_name) for me
-    - [levofloxacin](medication_name)
-    - [levocitirizine](medication_name) 500mg please
-    - Add [furosemid](medication_name) for me
-    - I take [Simvast](medication_name)
-    - Record [Esomeprazloe](medication_name)
-    - [lisinopril](medication_name) 500mg please
-    - [Corticosteroid](medication_name) 500mg please
-    - [esomeprazloe](medication_name) 500mg please
-    - [metfomin](medication_name) 500mg please
-    - Add [Progestorone](medication_name) for me
-    - [metoprol](medication_name) 500mg please
-    - I take [Mag Glycinate](medication_name)
-    - [tramad](medication_name)
-    - Add [Aspirin](medication_name) for me
-    - [estradiol](medication_name)
-    - I take [paracetmol](medication_name)
-    - [Estradiol](medication_name) 500mg please
-    - Add [Duloxetine](medication_name) for me
-    - Record [clopidogrel](medication_name)
-    - Add [Omeprazole](medication_name) for me
-    - [paracetmol](medication_name) 500mg please
-    - I take [Vitamin D](medication_name)
-    - Record [Symbocort](medication_name)
-    - I take [Escitlop](medication_name)
-    - I take [dabigatran](medication_name)
-    - [Paracitamol](medication_name) 500mg please
-    - [Mag Glycinate](medication_name)
-    - I take [clindamycin](medication_name)
+    - I take [Augmentn](medication_name)
+    - I take [BUPROPION](medication_name)
+    - I take [Brufen](medication_name) 500mg
+    - I take [CaCO3](medication_name) 500mg
+    - I take [Calcium](medication_name)
+    - I take [Carbamazepine](medication_name)?
+    - I take [Celexa](medication_name)
+    - I take [Ciproflox](medication_name) 500mg
+    - I take [Ciprofloxacin](medication_name) 500mg.
+    - I take [Cita](medication_name) for pain
+    - I take [Citalo](medication_name)
+    - I take [Claritin](medication_name) for pain
+    - I take [Cleocin](medication_name)
+    - I take [Clonazepam](medication_name) 500mg.
+    - I take [Cod](medication_name) 500mg?
+    - I take [Dabigatran](medication_name) for pain
+    - I take [Deslor](medication_name)!
+    - I take [Diazepam](medication_name)
+    - I take [Diazepam](medication_name) for pain
+    - I take [Diclofen](medication_name) 500mg
+    - I take [Diovan](medication_name) for pain?
+    - I take [Dulo](medication_name) for pain
+    - I take [Escitalopram](medication_name) 500mg
+    - I take [Esomeprazol](medication_name)
+    - I take [Esomeprazole](medication_name) 500mg!
+    - I take [Famotidine](medication_name) 500mg?
+    - I take [Fexo](medication_name) for pain
+    - I take [Fexofen](medication_name),
+    - I take [Flovent](medication_name)
+    - I take [Flutic](medication_name) for pain.
+    - I take [Fluticasone](medication_name) 500mg?
+    - I take [Fluticasone](medication_name) for pain
+    - I take [Folic Acid](medication_name)
+    - I take [Formoterol](medication_name) 500mg
+    - I take [HCTZ](medication_name)
+    - I take [HCTZ](medication_name) 500mg,
+    - I take [Hydrochlorothiazide](medication_name) 500mg,
+    - I take [Ibuprofen](medication_name) for pain
+    - I take [Ins](medication_name)
+    - I take [Insulin glargine](medication_name) for pain
+    - I take [Insulin](medication_name) 500mg
+    - I take [Keflex](medication_name) for pain
+    - I take [Keflex](medication_name).
+    - I take [Levothyrox](medication_name) 500mg?
+    - I take [Lisinop](medication_name),
+    - I take [Lisinopril](medication_name)
+    - I take [Lisinoprill](medication_name) 500mg?
+    - I take [METHADONE](medication_name) for pain
+    - I take [Magnesium Glycinate](medication_name) 500mg
+    - I take [Magnesium](medication_name)
+    - I take [Met](medication_name) for pain!
+    - I take [Metop](medication_name)
+    - I take [Mirtazapin](medication_name) for pain,
+    - I take [Nystatin](medication_name) for pain
+    - I take [Olanzapine](medication_name)
+    - I take [Omega 3](medication_name) 500mg
+    - I take [Omeprazole](medication_name)
+    - I take [Omerpazole](medication_name) for pain
+    - I take [PHENYTOIN](medication_name) for pain
+    - I take [Parox](medication_name)!
+    - I take [Parox](medication_name).
+    - I take [Pcm](medication_name) 500mg.
+    - I take [Penic](medication_name)?
+    - I take [Penicillin](medication_name)
+    - I take [Pepcid](medication_name) 500mg.
+    - I take [Phenytoin](medication_name) 500mg
+    - I take [Quetiapine](medication_name)
+    - I take [Rantidine](medication_name) for pain
+    - I take [Rhinocort](medication_name) for pain
+    - I take [Risper](medication_name) 500mg.
+    - I take [Risperidone](medication_name)
+    - I take [Rosuva](medication_name) for pain.
+    - I take [Salicylic Acid](medication_name)
+    - I take [Salicylic Acid](medication_name) for pain
+    - I take [Sertra](medication_name)
+    - I take [Sertralin](medication_name)
+    - I take [Sitagliptin](medication_name) 500mg
+    - I take [Sitagliptin](medication_name)?
+    - I take [Synthroid](medication_name)?
+    - I take [Trazodon](medication_name) 500mg
+    - I take [VALSARTAN](medication_name) for pain
+    - I take [Valproic Acid](medication_name) 500mg
+    - I take [Valproic Acid](medication_name) for pain!
+    - I take [Valproic acid](medication_name) for pain!
+    - I take [Valsar](medication_name) for pain
+    - I take [Venla](medication_name) 500mg
+    - I take [Vit D3](medication_name) for pain!
+    - I take [Zyrtec](medication_name) for pain
+    - I take [abilify](medication_name) for pain.
+    - I take [acetylsalicylic](medication_name) for pain
+    - I take [albu](medication_name) for pain
+    - I take [albutrol](medication_name)
+    - I take [allegra](medication_name) 500mg
+    - I take [alprazolam](medication_name) 500mg
+    - I take [alprazolam](medication_name)?
+    - I take [amlodipine](medication_name) for pain
+    - I take [amlodipn](medication_name) for pain?
+    - I take [amlopin](medication_name) 500mg
+    - I take [amoxicillin](medication_name) 500mg
+    - I take [amoxicillin](medication_name) for pain
+    - I take [apixaban](medication_name) 500mg
+    - I take [aripiprazol](medication_name) 500mg?
+    - I take [aspart](medication_name) 500mg
+    - I take [asprin](medication_name) 500mg
+    - I take [atorvastatin](medication_name)!
+    - I take [atorvastin](medication_name) for pain
+    - I take [augmentn](medication_name) 500mg
+    - I take [azithro](medication_name) 500mg
+    - I take [azithrom](medication_name) for pain
+    - I take [budesonide](medication_name) for pain,
+    - I take [bupropion](medication_name) for pain,
+    - I take [calcium](medication_name) for pain,
+    - I take [cephal](medication_name) 500mg
+    - I take [cephalex](medication_name) 500mg,
+    - I take [citalopram](medication_name) for pain.
+    - I take [clona](medication_name) 500mg
+    - I take [clonazep](medication_name)
+    - I take [cobalamin](medication_name)
+    - I take [codein](medication_name) for pain
+    - I take [crestor](medication_name) for pain
+    - I take [cymbalta](medication_name) 500mg
+    - I take [dexamethasone](medication_name)
+    - I take [dexamethasone](medication_name) 500mg
+    - I take [dha](medication_name) for pain
+    - I take [diclofenac](medication_name)!
+    - I take [duloxetine](medication_name) 500mg
+    - I take [flagyl](medication_name) 500mg
+    - I take [fluox](medication_name) 500mg
+    - I take [fluox](medication_name) 500mg.
+    - I take [fluoxetine](medication_name)
+    - I take [folate](medication_name)
+    - I take [humalog](medication_name)?
+    - I take [ibroprofen](medication_name) for pain,
+    - I take [ibuprfen](medication_name) for pain
+    - I take [ibuprofen](medication_name) 500mg!
+    - I take [insulin aspart](medication_name)!
+    - I take [insulin lispro](medication_name) 500mg
+    - I take [levothyroxine](medication_name) 500mg.
+    - I take [levoxyl](medication_name) for pain!
+    - I take [levoxyl](medication_name)!
+    - I take [lexapro](medication_name) 500mg
+    - I take [lispro](medication_name)
+    - I take [lorazep](medication_name)?
+    - I take [losar](medication_name) for pain
+    - I take [losartan](medication_name) for pain
+    - I take [lysinopril](medication_name)
+    - I take [lysinopril](medication_name)?
+    - I take [methadone](medication_name) 500mg!
+    - I take [metro](medication_name) 500mg?
+    - I take [mirta](medication_name) 500mg!
+    - I take [monte](medication_name) for pain,
+    - I take [naprox](medication_name) 500mg!
+    - I take [naprox](medication_name).
+    - I take [norvasc](medication_name) 500mg
+    - I take [omega-3](medication_name) for pain
+    - I take [panto](medication_name) for pain
+    - I take [paracetamol](medication_name)
+    - I take [peni](medication_name),
+    - I take [pregabal](medication_name).
+    - I take [prilosec](medication_name) 500mg
+    - I take [proair](medication_name)
+    - I take [prozac](medication_name),
+    - I take [q10](medication_name)
+    - I take [ramip](medication_name) 500mg
+    - I take [rani](medication_name) for pain
+    - I take [risperdal](medication_name) 500mg
+    - I take [rivaroxaban](medication_name) 500mg
+    - I take [salbutamol](medication_name)
+    - I take [salmeterol](medication_name) 500mg
+    - I take [sertraline](medication_name)!
+    - I take [simva](medication_name) for pain.
+    - I take [tenormin](medication_name) for pain
+    - I take [terbinafine](medication_name)
+    - I take [trazo](medication_name)
+    - I take [trazodon](medication_name) for pain
+    - I take [valproic acid](medication_name) 500mg
+    - I take [venla](medication_name).
+    - I take [vitamin b9](medication_name)?
+    - I take [wellbutrin](medication_name) 500mg
+    - I take [zithromax](medication_name) 500mg
+    - I take [zyprexa](medication_name) for pain
+    - I take [zyprexa](medication_name) for pain,
+    - I use [Amoxicillin](medication_name)
+    - I use [Asprin](medication_name)
+    - I use [Azithro](medication_name)!
+    - I use [Citalopram](medication_name)
+    - I use [Clarinex](medication_name),
+    - I use [Fluoxetin](medication_name)
+    - I use [Hydrochlorothiazide](medication_name)
+    - I use [Lorazepam](medication_name)
+    - I use [Met](medication_name)
+    - I use [Metformn](medication_name).
+    - I use [Miconazole](medication_name)!
+    - I use [Miconazole](medication_name).
+    - I use [NAPROXEN](medication_name)!
+    - I use [Naproxen](medication_name),
+    - I use [PHENYTOIN](medication_name)
+    - I use [Paracetml](medication_name)
+    - I use [Paroxetin](medication_name)
+    - I use [Penicillin](medication_name).
+    - I use [Pravachol](medication_name),
+    - I use [Risperidon](medication_name)!
+    - I use [TRAZODONE](medication_name),
+    - I use [Wellbutrin](medication_name).
+    - I use [Xyzal](medication_name)
+    - I use [Zocor](medication_name)
+    - I use [ateno](medication_name)?
+    - I use [calcium carbonate](medication_name)
+    - I use [ciproxin](medication_name)?
+    - I use [clindam](medication_name)!
+    - I use [cod](medication_name)
+    - I use [famotid](medication_name).
+    - I use [fish oil](medication_name)
+    - I use [glipizide](medication_name)?
+    - I use [levothyroxine](medication_name)
+    - I use [lipitor](medication_name)
+    - I use [lora](medication_name)
+    - I use [losar](medication_name),
+    - I use [met](medication_name)
+    - I use [metronida](medication_name)
+    - I use [omega-3](medication_name),
+    - I use [omeprazol](medication_name)
+    - I use [paraceta](medication_name)
+    - I use [pcm](medication_name)
+    - I use [prednisone](medication_name)
+    - I use [proair](medication_name)
+    - I use [pulmicort](medication_name),
+    - I use [rami](medication_name)
+    - I use [sitagliptin](medication_name)
+    - I use [trama](medication_name)?
+    - I want to add [Atenolol](medication_name),
+    - I want to add [Azithrom](medication_name)
+    - I want to add [Bude](medication_name).
+    - I want to add [Calcium Carbonate](medication_name)
+    - I want to add [Clindamycin](medication_name)
+    - I want to add [CoQ10](medication_name)
+    - I want to add [Deslo](medication_name)
+    - I want to add [Diovan](medication_name)
+    - I want to add [Fluconazole](medication_name)!
+    - I want to add [Folate](medication_name)
+    - I want to add [Gabapentin](medication_name)!
+    - I want to add [Hydrochlorothiazide](medication_name)
+    - I want to add [Hydrocodone](medication_name)
+    - I want to add [Hydrocortisone](medication_name)
+    - I want to add [Levothyr](medication_name)
+    - I want to add [Lopressor](medication_name),
+    - I want to add [Loratadin](medication_name)
+    - I want to add [METHADONE](medication_name)
+    - I want to add [Olan](medication_name),
+    - I want to add [Ome](medication_name),
+    - I want to add [Risperdal](medication_name),
+    - I want to add [Tiotropium](medication_name)!
+    - I want to add [VALSARTAN](medication_name)
+    - I want to add [Vit D](medication_name)
+    - I want to add [Vitamin B9](medication_name)!
+    - I want to add [amox](medication_name).
+    - I want to add [ateno](medication_name)
+    - I want to add [azithro](medication_name)?
+    - I want to add [bup](medication_name)
+    - I want to add [cal carb](medication_name)
+    - I want to add [cobalamin](medication_name).
+    - I want to add [cozaar](medication_name)
+    - I want to add [dia](medication_name)
+    - I want to add [effexor](medication_name)
+    - I want to add [escitalo](medication_name),
+    - I want to add [escitalopram](medication_name)
+    - I want to add [fexo](medication_name)
+    - I want to add [folate](medication_name)
+    - I want to add [lorazepam](medication_name)
+    - I want to add [magnesium glycinate](medication_name)
+    - I want to add [novolog](medication_name)
+    - I want to add [paracetamol](medication_name)
+    - I want to add [prednisolone](medication_name)!
+    - I want to add [ranitidine](medication_name).
+    - I want to add [rosuvastatin](medication_name)
+    - I want to add [sitagliptin](medication_name)!
+    - I want to add [vit d](medication_name)
+    - I was prescribed [Albutrol](medication_name).
+    - I was prescribed [Ator](medication_name)
+    - I was prescribed [Azithrom](medication_name)
+    - I was prescribed [Azithromycin](medication_name),
+    - I was prescribed [Calcium carbonate](medication_name)
+    - I was prescribed [Calcium](medication_name),
+    - I was prescribed [Celexa](medication_name)
+    - I was prescribed [Cipro](medication_name)
+    - I was prescribed [Ciproflox](medication_name).
+    - I was prescribed [Clindamycin](medication_name)
+    - I was prescribed [Diazepam](medication_name).
+    - I was prescribed [Diclof](medication_name)
+    - I was prescribed [Epa](medication_name)
+    - I was prescribed [Fluoxetine](medication_name)
+    - I was prescribed [Glipizide](medication_name)
+    - I was prescribed [Levocet](medication_name)
+    - I was prescribed [Levothyrox](medication_name)
+    - I was prescribed [Losartn](medication_name)?
+    - I was prescribed [METHADONE](medication_name)
+    - I was prescribed [Metronidazole](medication_name),
+    - I was prescribed [Monte](medication_name)
+    - I was prescribed [Norvasc](medication_name)
+    - I was prescribed [Penic](medication_name)
+    - I was prescribed [Prava](medication_name)
+    - I was prescribed [Pravastin](medication_name),
+    - I was prescribed [Ramip](medication_name)
+    - I was prescribed [Synthroid](medication_name)
+    - I was prescribed [Synthroid](medication_name),
+    - I was prescribed [Ubiquinone](medication_name)
+    - I was prescribed [VALSARTAN](medication_name)!
+    - I was prescribed [Warfarin](medication_name)
+    - I was prescribed [Zestril](medication_name)?
+    - I was prescribed [acetamin](medication_name)
+    - I was prescribed [aripiprazol](medication_name).
+    - I was prescribed [aspirn](medication_name)
+    - I was prescribed [cephalex](medication_name)
+    - I was prescribed [codeine](medication_name)
+    - I was prescribed [escitalo](medication_name)
+    - I was prescribed [gabapent](medication_name)
+    - I was prescribed [levo](medication_name)?
+    - I was prescribed [metformn](medication_name)
+    - I was prescribed [methadone](medication_name).
+    - I was prescribed [mirta](medication_name)
+    - I was prescribed [ome](medication_name)
+    - I was prescribed [paroxetin](medication_name)
+    - I was prescribed [pen](medication_name)
+    - I was prescribed [pravachol](medication_name)?
+    - I was prescribed [rivaroxaban](medication_name)!
+    - I was prescribed [terbinafine](medication_name)
+    - I was prescribed [trazo](medication_name)
+    - I was prescribed [zithromax](medication_name)
+    - I'm on [Albu](medication_name)
+    - I'm on [Asprin](medication_name)
+    - I'm on [Bude](medication_name)
+    - I'm on [Bupro](medication_name)
+    - I'm on [Calciferol](medication_name).
+    - I'm on [Cephalexin](medication_name)?
+    - I'm on [Diclofenac](medication_name)
+    - I'm on [Effexor](medication_name)?
+    - I'm on [Formoterol](medication_name)
+    - I'm on [GLIPIZIDE](medication_name).
+    - I'm on [IBUPROFEN](medication_name),
+    - I'm on [Levothyr](medication_name)
+    - I'm on [Lisinop](medication_name).
+    - I'm on [Lorazep](medication_name)
+    - I'm on [Lorazep](medication_name)?
+    - I'm on [Metfomin](medication_name)
+    - I'm on [Norvasc](medication_name)!
+    - I'm on [Novolog](medication_name),
+    - I'm on [Paracetamol](medication_name)?
+    - I'm on [Paroxetine](medication_name)
+    - I'm on [Paroxetine](medication_name)?
+    - I'm on [Pregabal](medication_name)
+    - I'm on [Pregabal](medication_name).
+    - I'm on [Simva](medication_name)
+    - I'm on [Singulair](medication_name)
+    - I'm on [Zocor](medication_name)
+    - I'm on [Zoloft](medication_name)
+    - I'm on [albu](medication_name)
+    - I'm on [atenolol](medication_name)
+    - I'm on [carbamazepine](medication_name)
+    - I'm on [cod](medication_name)
+    - I'm on [cozaar](medication_name)
+    - I'm on [escit](medication_name)
+    - I'm on [gaba](medication_name).
+    - I'm on [glucotrol](medication_name),
+    - I'm on [hctz](medication_name)!
+    - I'm on [lantus](medication_name)
+    - I'm on [levoxyl](medication_name).
+    - I'm on [lexapro](medication_name),
+    - I'm on [montel](medication_name).
+    - I'm on [motrin](medication_name)
+    - I'm on [neurontin](medication_name)!
+    - I'm on [olanzapin](medication_name).
+    - I'm on [omega-3](medication_name)
+    - I'm on [oxycodone](medication_name)!
+    - I'm on [pregabal](medication_name)!
+    - I'm on [rami](medication_name)
+    - I'm on [ramipril](medication_name)!
+    - I'm on [risper](medication_name)
+    - I'm on [simva](medication_name)
+    - I'm on [val](medication_name)
+    - I'm on [venlafaxin](medication_name)
+    - I'm on [zocor](medication_name)
+    - It's [Albu](medication_name)
+    - It's [Amoxycillin](medication_name)!
+    - It's [Aspirin](medication_name),
+    - It's [Budesonide](medication_name)?
+    - It's [Calcium Carbonate](medication_name)!
+    - It's [Cephalexin](medication_name).
+    - It's [Claritin](medication_name)!
+    - It's [Dia](medication_name)
+    - It's [EPA](medication_name)
+    - It's [Escitalopram](medication_name),
+    - It's [Famo](medication_name)
+    - It's [Fish Oil](medication_name)!
+    - It's [Fluti](medication_name).
+    - It's [Glargine](medication_name)!
+    - It's [Glipiz](medication_name)
+    - It's [Glucophage](medication_name)
+    - It's [Humalog](medication_name).
+    - It's [Levothyrox](medication_name)?
+    - It's [Levoxyl](medication_name)
+    - It's [Lispro](medication_name)
+    - It's [METFORMIN](medication_name)
+    - It's [METHADONE](medication_name)
+    - It's [Metfor](medication_name)
+    - It's [Metformn](medication_name)
+    - It's [Metop](medication_name).
+    - It's [Mirtazapine](medication_name)
+    - It's [Nystatin](medication_name)
+    - It's [Omega-3](medication_name).
+    - It's [Paxil](medication_name)
+    - It's [Prinivil](medication_name)
+    - It's [Pulmicort](medication_name)
+    - It's [RAMIPRIL](medication_name)?
+    - It's [Salicylic acid](medication_name)
+    - It's [Val](medication_name).
+    - It's [Valsartan](medication_name)
+    - It's [acetylsalicylic](medication_name)
+    - It's [albu](medication_name)
+    - It's [amoxacillin](medication_name)
+    - It's [amoxacillin](medication_name)!
+    - It's [ari](medication_name).
+    - It's [aspirin](medication_name)
+    - It's [celexa](medication_name)
+    - It's [cephalexin](medication_name)?
+    - It's [claritin](medication_name)
+    - It's [clinda](medication_name)
+    - It's [dha](medication_name).
+    - It's [escit](medication_name)!
+    - It's [escitalopram](medication_name)
+    - It's [insulin lispro](medication_name)
+    - It's [keflex](medication_name)
+    - It's [neurontin](medication_name)
+    - It's [omega-3](medication_name),
+    - It's [panto](medication_name)?
+    - It's [paracetml](medication_name)!
+    - It's [paracetml](medication_name).
+    - It's [venla](medication_name)
+    - It's [vit b12](medication_name).
+    - It's [warfarin](medication_name)
+    - Just [Amlodipine](medication_name)
+    - Just [Aripiprazol](medication_name)
+    - Just [Aripiprazole](medication_name)!
+    - Just [Calcium Carbonate](medication_name)
+    - Just [Cephalexin](medication_name)!
+    - Just [Cephalexin](medication_name).
+    - Just [Citalopram](medication_name).
+    - Just [Cod](medication_name)?
+    - Just [Cymbalta](medication_name)
+    - Just [Deslor](medication_name)
+    - Just [Diclofenac](medication_name)
+    - Just [Escitalo](medication_name)
+    - Just [Glipizide](medication_name)
+    - Just [INSULIN](medication_name)
+    - Just [Insulin aspart](medication_name)
+    - Just [Levo](medication_name)
+    - Just [Levocet](medication_name)
+    - Just [Lopressor](medication_name)
+    - Just [Metoprolol](medication_name)
+    - Just [Montelukast](medication_name)
+    - Just [Naprox](medication_name)
+    - Just [OMEGA-3](medication_name)
+    - Just [Oxycodone](medication_name)!
+    - Just [Prega](medication_name)?
+    - Just [Pregabal](medication_name).
+    - Just [Q10](medication_name).
+    - Just [Ramip](medication_name)
+    - Just [Remeron](medication_name)
+    - Just [Salmeterol](medication_name)!
+    - Just [Ultram](medication_name)
+    - Just [Valium](medication_name)
+    - Just [caco3](medication_name)
+    - Just [celexa](medication_name)?
+    - Just [cephalexin](medication_name)
+    - Just [ceti](medication_name)!
+    - Just [cetirizin](medication_name)
+    - Just [desloratadine](medication_name)
+    - Just [flutic](medication_name)
+    - Just [glucotrol](medication_name)
+    - Just [hydrochlorothiazide](medication_name)
+    - Just [lisinopril](medication_name)
+    - Just [lopressor](medication_name)!
+    - Just [lopressor](medication_name).
+    - Just [losartan](medication_name)
+    - Just [losartan](medication_name).
+    - Just [magnesium glycinate](medication_name)
+    - Just [mesalazine](medication_name)
+    - Just [metop](medication_name)
+    - Just [monte](medication_name),
+    - Just [omeprazol](medication_name)?
+    - Just [pregabalin](medication_name)
+    - Just [pulmicort](medication_name)
+    - Just [rani](medication_name)!
+    - Just [risperidone](medication_name),
+    - Just [simvastatin](medication_name)
+    - Just [ventolin](medication_name)
+    - Just [zocor](medication_name)
+    - My doctor prescribed [Alpraz](medication_name)
+    - My doctor prescribed [Amlod](medication_name),
+    - My doctor prescribed [Amoxicil](medication_name)
+    - My doctor prescribed [Amoxicillin](medication_name)
+    - My doctor prescribed [Asa](medication_name)
+    - My doctor prescribed [Aspirin](medication_name)
+    - My doctor prescribed [Ateno](medication_name)
+    - My doctor prescribed [Azithro](medication_name)
+    - My doctor prescribed [Bup](medication_name)
+    - My doctor prescribed [Cephalexin](medication_name)
+    - My doctor prescribed [Doxycycline](medication_name)
+    - My doctor prescribed [Escitalo](medication_name)
+    - My doctor prescribed [Fluti](medication_name)
+    - My doctor prescribed [Glargine](medication_name)
+    - My doctor prescribed [Insulin](medication_name)
+    - My doctor prescribed [LOSARTAN](medication_name)
+    - My doctor prescribed [Levothyr](medication_name)
+    - My doctor prescribed [Lispro](medication_name)
+    - My doctor prescribed [Loperamide](medication_name)
+    - My doctor prescribed [Loratadin](medication_name)!
+    - My doctor prescribed [Loratadine](medication_name)
+    - My doctor prescribed [Lorazepam](medication_name)
+    - My doctor prescribed [Metoprolol](medication_name)
+    - My doctor prescribed [Mirta](medication_name)
+    - My doctor prescribed [Omerpazole](medication_name)
+    - My doctor prescribed [Ondansetron](medication_name)
+    - My doctor prescribed [Ondansetron](medication_name)?
+    - My doctor prescribed [Pantoprazole](medication_name)
+    - My doctor prescribed [Pravastatin](medication_name)
+    - My doctor prescribed [Prinivil](medication_name)
+    - My doctor prescribed [Ramipril](medication_name)!
+    - My doctor prescribed [Salicylic Acid](medication_name)
+    - My doctor prescribed [Trazodon](medication_name)
+    - My doctor prescribed [Trazodone](medication_name)
+    - My doctor prescribed [abilify](medication_name)
+    - My doctor prescribed [ator](medication_name)
+    - My doctor prescribed [augmentn](medication_name)?
+    - My doctor prescribed [azithro](medication_name)
+    - My doctor prescribed [azithrom](medication_name)?
+    - My doctor prescribed [bup](medication_name)?
+    - My doctor prescribed [cetirizin](medication_name)
+    - My doctor prescribed [cetirizine](medication_name)
+    - My doctor prescribed [cobalamin](medication_name)
+    - My doctor prescribed [coq10](medication_name)
+    - My doctor prescribed [desloratadine](medication_name)
+    - My doctor prescribed [diclof](medication_name)
+    - My doctor prescribed [flonase](medication_name)
+    - My doctor prescribed [furosemide](medication_name)
+    - My doctor prescribed [gabapentin](medication_name)
+    - My doctor prescribed [hydro](medication_name)
+    - My doctor prescribed [insulin aspart](medication_name)?
+    - My doctor prescribed [insuline](medication_name)
+    - My doctor prescribed [levothyroxine](medication_name),
+    - My doctor prescribed [levothyroxine](medication_name)?
+    - My doctor prescribed [lorazep](medication_name)
+    - My doctor prescribed [metformn](medication_name)
+    - My doctor prescribed [morphine](medication_name).
+    - My doctor prescribed [omega 3](medication_name)!
+    - My doctor prescribed [omerpazole](medication_name)
+    - My doctor prescribed [pen](medication_name)
+    - My doctor prescribed [prilosec](medication_name)
+    - My doctor prescribed [prozac](medication_name)?
+    - My doctor prescribed [quetiapin](medication_name)
+    - My doctor prescribed [sertraline](medication_name)
+    - My doctor prescribed [sita](medication_name)
+    - My doctor prescribed [tramadol](medication_name)!
+    - My doctor prescribed [venla](medication_name)
+    - My medication is [APIXABAN](medication_name)
+    - My medication is [Albu](medication_name)
+    - My medication is [Albuterol](medication_name).
+    - My medication is [Allegra](medication_name)
+    - My medication is [Aripiprazole](medication_name)
+    - My medication is [Aripiprazole](medication_name),
+    - My medication is [Azithromycin](medication_name).
+    - My medication is [CLOZAPINE](medication_name)?
+    - My medication is [Diovan](medication_name),
+    - My medication is [Ibuprfen](medication_name)
+    - My medication is [Ibuprof](medication_name)
+    - My medication is [Levocet](medication_name).
+    - My medication is [Naproxen](medication_name)!
+    - My medication is [Omega 3](medication_name)
+    - My medication is [Panto](medication_name)
+    - My medication is [Pantoprazole](medication_name)
+    - My medication is [Paracetamol](medication_name)
+    - My medication is [Ultram](medication_name)
+    - My medication is [Valproic acid](medication_name).
+    - My medication is [Xyzal](medication_name).
+    - My medication is [amoxicil](medication_name).
+    - My medication is [ativan](medication_name).
+    - My medication is [atorvastatin](medication_name)
+    - My medication is [cephalex](medication_name),
+    - My medication is [ciprofloxacin](medication_name)?
+    - My medication is [citalo](medication_name).
+    - My medication is [clona](medication_name)
+    - My medication is [diclofen](medication_name)
+    - My medication is [diclofen](medication_name)?
+    - My medication is [dox](medication_name)
+    - My medication is [fexofenadine](medication_name)
+    - My medication is [flovent](medication_name)
+    - My medication is [flutic](medication_name)
+    - My medication is [gaba](medication_name)
+    - My medication is [glyburide](medication_name)
+    - My medication is [hydrocortisone](medication_name)?
+    - My medication is [metoprol](medication_name)
+    - My medication is [olan](medication_name)?
+    - My medication is [omega-3](medication_name)
+    - My medication is [panto](medication_name)
+    - My medication is [paroxetine](medication_name)
+    - My medication is [paxil](medication_name)
+    - My medication is [pravachol](medication_name)
+    - My medication is [q10](medication_name)
+    - My medication is [remeron](medication_name)
+    - My medication is [rosuva](medication_name)!
+    - My medication is [trama](medication_name)!
+    - My medication is [tramadol](medication_name),
+    - My medication is [tramadol](medication_name).
+    - My medication is [zocor](medication_name)
+    - Only [Albuterol](medication_name)!
+    - Only [Amlodipine](medication_name)
+    - Only [Atorvastatin](medication_name)
+    - Only [Augmentine](medication_name)
+    - Only [Azithromycin](medication_name)
+    - Only [Caco3](medication_name)
+    - Only [Cal carb](medication_name)
+    - Only [Cephalexin](medication_name)
+    - Only [Citalopram](medication_name)
+    - Only [Clindamycin](medication_name)?
+    - Only [Diclof](medication_name)
+    - Only [Diclofenac](medication_name)
+    - Only [Doxicycline](medication_name)
+    - Only [Dulo](medication_name)
+    - Only [Flonase](medication_name),
+    - Only [Glyburide](medication_name),
+    - Only [Hydro](medication_name)!
+    - Only [Hydrochlorothiazide](medication_name)!
+    - Only [LORAZEPAM](medication_name)
+    - Only [Levocetirizine](medication_name)
+    - Only [Levothyroxine](medication_name)
+    - Only [Lisinoprill](medication_name),
+    - Only [Metoprolol](medication_name)
+    - Only [Mg glycinate](medication_name)
+    - Only [Montel](medication_name)
+    - Only [Neurontin](medication_name)!
+    - Only [Nexium](medication_name)?
+    - Only [Olan](medication_name)
+    - Only [Parox](medication_name)
+    - Only [Phenytoin](medication_name)
+    - Only [Pravastatin](medication_name),
+    - Only [Pravastin](medication_name)
+    - Only [Prozac](medication_name)
+    - Only [Risperdal](medication_name),
+    - Only [Risperdal](medication_name)?
+    - Only [VALSARTAN](medication_name)
+    - Only [Xyzal](medication_name)
+    - Only [Zithromax](medication_name),
+    - Only [acetylsalicylic](medication_name)
+    - Only [albu](medication_name),
+    - Only [amoxacillin](medication_name)
+    - Only [asa](medication_name),
+    - Only [asprin](medication_name)
+    - Only [ateno](medication_name)
+    - Only [budesonide](medication_name)
+    - Only [clona](medication_name).
+    - Only [cozaar](medication_name)
+    - Only [dia](medication_name)!
+    - Only [doxy](medication_name)
+    - Only [furosem](medication_name)
+    - Only [hydrocodone](medication_name).
+    - Only [lora](medication_name)!
+    - Only [magnesium](medication_name)
+    - Only [metfomin](medication_name)
+    - Only [metfor](medication_name)!
+    - Only [metro](medication_name),
+    - Only [metronidazole](medication_name),
+    - Only [omega 3](medication_name)
+    - Only [paroxetine](medication_name).
+    - Only [queti](medication_name)
+    - Only [tramadol](medication_name).
+    - Only [ubiquinone](medication_name)
+    - Only [valproic acid](medication_name)
+    - Only [vitamin d3](medication_name)
+    - Only [vitamin d](medication_name)
+    - Only [voltaren](medication_name),
+    - Please add [APAP](medication_name)
+    - Please add [Aleve](medication_name).
+    - Please add [Azithromycin](medication_name)
+    - Please add [B12](medication_name)
+    - Please add [Carbamazepine](medication_name)
+    - Please add [Claritin](medication_name)
+    - Please add [CoQ10](medication_name),
+    - Please add [Doxicycline](medication_name)
+    - Please add [Doxycycline](medication_name)
+    - Please add [Esomeprazole](medication_name)
+    - Please add [Famotidine](medication_name),
+    - Please add [Fexofenadine](medication_name)!
+    - Please add [Fluoxetine](medication_name).
+    - Please add [Glucophage](medication_name),
+    - Please add [Insulin Lispro](medication_name)
+    - Please add [Lorazep](medication_name)
+    - Please add [Losar](medication_name)!
+    - Please add [Mag Glycinate](medication_name),
+    - Please add [Metronidazole](medication_name),
+    - Please add [Ondansetron](medication_name)
+    - Please add [Paracitamol](medication_name)
+    - Please add [Sertra](medication_name).
+    - Please add [Trazo](medication_name)
+    - Please add [Valsartan](medication_name)!
+    - Please add [aripiprazol](medication_name).
+    - Please add [azithrom](medication_name)!
+    - Please add [azithromycin](medication_name)
+    - Please add [bup](medication_name).
+    - Please add [bupro](medication_name)
+    - Please add [clindam](medication_name)
+    - Please add [clindamycin](medication_name)
+    - Please add [duloxetine](medication_name).
+    - Please add [esomeprazole](medication_name)!
+    - Please add [famotidine](medication_name)
+    - Please add [flonase](medication_name)
+    - Please add [glargine](medication_name)
+    - Please add [glipiz](medication_name)
+    - Please add [lantus](medication_name)
+    - Please add [levothyrox](medication_name)
+    - Please add [lisinopril](medication_name)
+    - Please add [loratadine](medication_name),
+    - Please add [losar](medication_name)
+    - Please add [metoprolol](medication_name)
+    - Please add [metro](medication_name)
+    - Please add [omeprazol](medication_name)
+    - Please add [proair](medication_name)
+    - Please add [quetiapin](medication_name)!
+    - Please add [risperidone](medication_name)!
+    - Please add [tenormin](medication_name)
+    - Please add [ultram](medication_name).
+    - Please add [vitamin d3](medication_name)
+    - Please add [voltaren](medication_name).
+    - Please add [zocor](medication_name)
+    - Prescription for [Acetamin](medication_name)
+    - Prescription for [Alpraz](medication_name)
+    - Prescription for [Asprin](medication_name)
+    - Prescription for [Atorvastatin](medication_name)
+    - Prescription for [Augmentin](medication_name)
+    - Prescription for [Augmentn](medication_name)
+    - Prescription for [Bude](medication_name)
+    - Prescription for [CODEINE](medication_name)
+    - Prescription for [Celexa](medication_name).
+    - Prescription for [Cephal](medication_name)
+    - Prescription for [Ciproflox](medication_name)
+    - Prescription for [Claritin](medication_name)
+    - Prescription for [Clonazepam](medication_name)!
+    - Prescription for [Cozaar](medication_name),
+    - Prescription for [Diazepam](medication_name)
+    - Prescription for [Dulo](medication_name)
+    - Prescription for [Furosem](medication_name)
+    - Prescription for [Hctz](medication_name).
+    - Prescription for [Hydro](medication_name)
+    - Prescription for [Ibuprof](medication_name),
+    - Prescription for [Ibuprof](medication_name)?
+    - Prescription for [Ibuprofen](medication_name)
+    - Prescription for [Lexapro](medication_name)
+    - Prescription for [Met](medication_name)
+    - Prescription for [Methadone](medication_name),
+    - Prescription for [Pravachol](medication_name)
+    - Prescription for [Pregabal](medication_name)
+    - Prescription for [Rami](medication_name)!
+    - Prescription for [Risperidon](medication_name)
+    - Prescription for [Salicylic acid](medication_name).
+    - Prescription for [Tramadol](medication_name)
+    - Prescription for [Ventolin](medication_name),
+    - Prescription for [WARFARIN](medication_name)
+    - Prescription for [Warfarin](medication_name)?
+    - Prescription for [Xanax](medication_name)
+    - Prescription for [Zocor](medication_name)
+    - Prescription for [alpra](medication_name)!
+    - Prescription for [budeson](medication_name)
+    - Prescription for [coenzyme q10](medication_name)
+    - Prescription for [coq10](medication_name)
+    - Prescription for [doxicycline](medication_name)
+    - Prescription for [dulo](medication_name)
+    - Prescription for [famotid](medication_name)
+    - Prescription for [folic](medication_name)!
+    - Prescription for [glyburide](medication_name)
+    - Prescription for [hydrocodone](medication_name).
+    - Prescription for [ibroprofen](medication_name)
+    - Prescription for [keflex](medication_name)
+    - Prescription for [lasix](medication_name)
+    - Prescription for [lispro](medication_name)
+    - Prescription for [loperamide](medication_name)
+    - Prescription for [metopro](medication_name)
+    - Prescription for [montelukast](medication_name)!
+    - Prescription for [nexium](medication_name)
+    - Prescription for [nystatin](medication_name)?
+    - Prescription for [omega-3](medication_name)
+    - Prescription for [omeprazole](medication_name)
+    - Prescription for [pen](medication_name)
+    - Prescription for [penic](medication_name)
+    - Prescription for [prednisolone](medication_name)!
+    - Prescription for [risperidon](medication_name).
+    - Prescription for [synthroid](medication_name)
+    - Prescription for [valium](medication_name)
+    - Prescription for [vitamin d3](medication_name).
+    - Prescription for [zithromax](medication_name)
+    - Put [APAP](medication_name) in my list.
+    - Put [Albutrol](medication_name) in my list.
+    - Put [Aleve](medication_name) in my list.
+    - Put [Amlod](medication_name) in my list
+    - Put [Amox](medication_name) in my list!
+    - Put [Aripiprazole](medication_name) in my list.
+    - Put [Aspart](medication_name) in my list
+    - Put [Aspirn](medication_name) in my list
+    - Put [Atorvastin](medication_name) in my list
+    - Put [Bupro](medication_name) in my list
+    - Put [CaCO3](medication_name) in my list!
+    - Put [Citalo](medication_name) in my list
+    - Put [Clona](medication_name) in my list
+    - Put [Folic Acid](medication_name) in my list.
+    - Put [GLIPIZIDE](medication_name) in my list
+    - Put [Glyburide](medication_name) in my list?
+    - Put [Insulin lispro](medication_name) in my list
+    - Put [Levoxyl](medication_name) in my list
+    - Put [Metronidazole](medication_name) in my list
+    - Put [Naprox](medication_name) in my list
+    - Put [Omerpazole](medication_name) in my list
+    - Put [Pcm](medication_name) in my list
+    - Put [Prinivil](medication_name) in my list
+    - Put [Ramip](medication_name) in my list
+    - Put [Rivaroxaban](medication_name) in my list
+    - Put [Simva](medication_name) in my list
+    - Put [Topiramate](medication_name) in my list!
+    - Put [Tramadol](medication_name) in my list
+    - Put [Valsartan](medication_name) in my list
+    - Put [Venla](medication_name) in my list
+    - Put [amlodipn](medication_name) in my list
+    - Put [clinda](medication_name) in my list
+    - Put [clona](medication_name) in my list,
+    - Put [epa](medication_name) in my list,
+    - Put [esomeprazol](medication_name) in my list
+    - Put [fluticasone](medication_name) in my list
+    - Put [formoterol](medication_name) in my list
+    - Put [glucotrol](medication_name) in my list.
+    - Put [hydrochlor](medication_name) in my list!
+    - Put [ins](medication_name) in my list?
+    - Put [lantus](medication_name) in my list
+    - Put [metformin](medication_name) in my list
+    - Put [metopro](medication_name) in my list
+    - Put [metoprolol](medication_name) in my list
+    - Put [paracetmol](medication_name) in my list
+    - Put [pregabalin](medication_name) in my list?
+    - Put [prozac](medication_name) in my list
+    - Put [queti](medication_name) in my list
+    - Put [quetiapin](medication_name) in my list
+    - Put [sertraline](medication_name) in my list!
+    - Put [simva](medication_name) in my list
+    - Put [simvastatin](medication_name) in my list!
+    - Put [trama](medication_name) in my list
+    - Put [ultram](medication_name) in my list.
+    - Record [Albuterol](medication_name),
+    - Record [Albutrol](medication_name)
+    - Record [Albutrol](medication_name),
+    - Record [Amlopin](medication_name)
+    - Record [Bude](medication_name)
+    - Record [Cephal](medication_name)
+    - Record [Ciproflox](medication_name)
+    - Record [Clozapine](medication_name),
+    - Record [Cod](medication_name)
+    - Record [DHA](medication_name)
+    - Record [Hctz](medication_name).
+    - Record [IBUPROFEN](medication_name)!
+    - Record [Ibuprfen](medication_name)
+    - Record [Ins](medication_name)
+    - Record [Insulin Lispro](medication_name)?
+    - Record [Lexapro](medication_name),
+    - Record [Liothyronine](medication_name)
+    - Record [METHADONE](medication_name)
+    - Record [Metfomin](medication_name)?
+    - Record [Metop](medication_name)!
+    - Record [Mg glycinate](medication_name)
+    - Record [NAPROXEN](medication_name).
+    - Record [NYSTATIN](medication_name)
+    - Record [Nexium](medication_name).
+    - Record [PHENYTOIN](medication_name)
+    - Record [Paracetmol](medication_name)!
+    - Record [Pregabalin](medication_name)
+    - Record [RAMIPRIL](medication_name).
+    - Record [Ranitidine](medication_name)
+    - Record [Rivaroxaban](medication_name)
+    - Record [Vitamin D3](medication_name)!
+    - Record [Vitamin D3](medication_name),
+    - Record [Vitamin D](medication_name)
+    - Record [acetylcysteine](medication_name).
+    - Record [amlod](medication_name)!
+    - Record [asa](medication_name).
+    - Record [atorvastin](medication_name),
+    - Record [augmentn](medication_name),
+    - Record [bupro](medication_name)
+    - Record [bupro](medication_name)?
+    - Record [cephalexin](medication_name)
+    - Record [desloratadine](medication_name)
+    - Record [doxicycline](medication_name)!
+    - Record [dulo](medication_name)
+    - Record [epa](medication_name)
+    - Record [famotidine](medication_name)!
+    - Record [fexo](medication_name)
+    - Record [gabapent](medication_name)
+    - Record [humalog](medication_name)!
+    - Record [klonopin](medication_name)
+    - Record [levocet](medication_name)
+    - Record [lorazepam](medication_name)
+    - Record [paxil](medication_name).
+    - Record [prednisone](medication_name)
+    - Record [rami](medication_name)
+    - Record [ramip](medication_name).
+    - Record [sertralin](medication_name).
+    - Record [synthroid](medication_name)
+    - Record [trama](medication_name)
+    - Record [vit b12](medication_name)
+    - Record [zestril](medication_name).
+    - Save [AUGMENTIN](medication_name)?
+    - Save [Abilify](medication_name)?
+    - Save [Albu](medication_name)
+    - Save [Augmentn](medication_name)
+    - Save [Cal carb](medication_name)
+    - Save [Claritin](medication_name)
+    - Save [Clindamycin](medication_name)
+    - Save [Clopidogrel](medication_name)
+    - Save [Codein](medication_name),
+    - Save [Codeine](medication_name)?
+    - Save [Famotidine](medication_name)
+    - Save [Flutic](medication_name).
+    - Save [Ibuprof](medication_name)
+    - Save [Ibuprofen](medication_name)
+    - Save [Insulin Glargine](medication_name)
+    - Save [Insulin](medication_name)
+    - Save [Januvia](medication_name)
+    - Save [Klonopin](medication_name),
+    - Save [Levothyr](medication_name)
+    - Save [Lyrica](medication_name)
+    - Save [Magnesium glycinate](medication_name)
+    - Save [Mg glycinate](medication_name)?
+    - Save [Multivitamin](medication_name)
+    - Save [Neurontin](medication_name)
+    - Save [Phenytoin](medication_name)
+    - Save [RAMIPRIL](medication_name)
+    - Save [Sertra](medication_name)
+    - Save [Sertraline](medication_name),
+    - Save [Sertraline](medication_name)?
+    - Save [Tramad](medication_name)?
+    - Save [Tramadol](medication_name)
+    - Save [Venla](medication_name).
+    - Save [Vitamin B9](medication_name)?
+    - Save [amlodipine](medication_name)
+    - Save [amlodipine](medication_name)?
+    - Save [aspirin](medication_name)!
+    - Save [aspirin](medication_name),
+    - Save [atenolol](medication_name)
+    - Save [calcium](medication_name)!
+    - Save [ciproxin](medication_name)
+    - Save [clozapine](medication_name)
+    - Save [cobalamin](medication_name)
+    - Save [coq10](medication_name)
+    - Save [diazep](medication_name)
+    - Save [fluox](medication_name)
+    - Save [formoterol](medication_name)
+    - Save [furo](medication_name)
+    - Save [hydrocodone](medication_name).
+    - Save [insuline](medication_name),
+    - Save [lantus](medication_name)
+    - Save [lopressor](medication_name)
+    - Save [loratadine](medication_name)?
+    - Save [metro](medication_name).
+    - Save [metronida](medication_name)?
+    - Save [montelukast](medication_name)
+    - Save [paxil](medication_name)
+    - Save [prednisolone](medication_name)
+    - Save [ranitidine](medication_name)
+    - Save [risperdal](medication_name)
+    - Save [rosuvastatin](medication_name)
+    - Save [salmeterol](medication_name)
+    - Save [vitamin b9](medication_name).
+    - Started [Abilify](medication_name) recently
+    - Started [Aripiprazole](medication_name) recently
+    - Started [Augmentine](medication_name) recently
+    - Started [CODEINE](medication_name) recently
+    - Started [Cetirizine](medication_name) recently!
+    - Started [Clarinex](medication_name) recently!
+    - Started [Coenzyme Q10](medication_name) recently,
+    - Started [Dexamethasone](medication_name) recently
+    - Started [Doxy](medication_name) recently
+    - Started [Dulo](medication_name) recently!
+    - Started [Esomeprazole](medication_name) recently
+    - Started [Furosemide](medication_name) recently
+    - Started [Gaba](medication_name) recently
+    - Started [Glipiz](medication_name) recently
+    - Started [LORAZEPAM](medication_name) recently
+    - Started [Lisinoprill](medication_name) recently
+    - Started [Lorazepam](medication_name) recently?
+    - Started [Lysinopril](medication_name) recently.
+    - Started [OXYCODONE](medication_name) recently?
+    - Started [Omega 3](medication_name) recently.
+    - Started [Paraceta](medication_name) recently,
+    - Started [Penic](medication_name) recently
+    - Started [Pregabal](medication_name) recently!
+    - Started [Q10](medication_name) recently
+    - Started [Ramip](medication_name) recently
+    - Started [Seroquel](medication_name) recently.
+    - Started [VALSARTAN](medication_name) recently
+    - Started [Vitamin D](medication_name) recently
+    - Started [Zantac](medication_name) recently
+    - Started [amoxicillin](medication_name) recently
+    - Started [asa](medication_name) recently
+    - Started [atorvastin](medication_name) recently,
+    - Started [clona](medication_name) recently?
+    - Started [desloratadine](medication_name) recently
+    - Started [dia](medication_name) recently?
+    - Started [diovan](medication_name) recently
+    - Started [insulin glargine](medication_name) recently
+    - Started [lisinop](medication_name) recently!
+    - Started [losartan](medication_name) recently!
+    - Started [monte](medication_name) recently!
+    - Started [olan](medication_name) recently.
+    - Started [pantoprazol](medication_name) recently
+    - Started [paraceta](medication_name) recently
+    - Started [paraceta](medication_name) recently!
+    - Started [pcm](medication_name) recently
+    - Started [pen](medication_name) recently
+    - Started [penicillin](medication_name) recently!
+    - Started [pulmicort](medication_name) recently
+    - What is [Amoxacillin](medication_name)??
+    - What is [Amoxycillin](medication_name)?
+    - What is [Aspart](medication_name)??
+    - What is [Ativan](medication_name)?
+    - What is [Atorva](medication_name)?,
+    - What is [Budeson](medication_name)?,
+    - What is [Budesonide](medication_name)?!
+    - What is [CLOZAPINE](medication_name)?
+    - What is [Ceti](medication_name)?!
+    - What is [Dexamethasone](medication_name)?
+    - What is [Dha](medication_name)?
+    - What is [Gabapentin](medication_name)?
+    - What is [Glipizide](medication_name)?
+    - What is [Hctz](medication_name)??
+    - What is [Klonopin](medication_name)??
+    - What is [LORAZEPAM](medication_name)??
+    - What is [Lisinopril](medication_name)?
+    - What is [Lora](medication_name)?
+    - What is [Met](medication_name)?
+    - What is [Olanzapine](medication_name)?
+    - What is [Panto](medication_name)?
+    - What is [Peni](medication_name)?,
+    - What is [Prednisolone](medication_name)?
+    - What is [Protonix](medication_name)?
+    - What is [Rani](medication_name)?
+    - What is [Ranitidine](medication_name)?
+    - What is [alpraz](medication_name)?!
+    - What is [amoxicillin](medication_name)?
+    - What is [cal carb](medication_name)?.
+    - What is [ciproflox](medication_name)?
+    - What is [cita](medication_name)?
+    - What is [clinda](medication_name)?.
+    - What is [clonazep](medication_name)?
+    - What is [cobalamin](medication_name)?
+    - What is [cozaar](medication_name)?
+    - What is [crestor](medication_name)?
+    - What is [doxy](medication_name)?
+    - What is [fluoxetine](medication_name)?
+    - What is [glyburide](medication_name)?
+    - What is [keflex](medication_name)?
+    - What is [klonopin](medication_name)??
+    - What is [lamotrigine](medication_name)?!
+    - What is [lantus](medication_name)?
+    - What is [levo](medication_name)?,
+    - What is [levocet](medication_name)?!
+    - What is [levocetirizine](medication_name)?
+    - What is [loratadin](medication_name)?,
+    - What is [montelukast](medication_name)?!
+    - What is [nystatin](medication_name)??
+    - What is [olan](medication_name)?
+    - What is [ome](medication_name)?
+    - What is [paracetml](medication_name)?
+    - What is [q10](medication_name)?
+    - What is [queti](medication_name)?
+    - What is [ramipril](medication_name)?
+    - What is [ramipril](medication_name)?.
+    - [ALBUTEROL](medication_name) 10mg!
+    - [ASPIRIN](medication_name).
+    - [Acetaminophen](medication_name)!
+    - [Acetylsalicylic](medication_name) 10mg!
+    - [Albu](medication_name) 5mg daily?
+    - [Aleve](medication_name) 500mg
+    - [Allegra](medication_name) 5mg daily
+    - [Alpraz](medication_name) 5mg daily
+    - [Alpraz](medication_name)?
+    - [Amlod](medication_name) 5mg daily
+    - [Amoxcillin](medication_name) 5mg daily
+    - [Apixaban](medication_name)
+    - [Apixaban](medication_name) 10mg
+    - [Aripiprazole](medication_name) 500mg
+    - [Asa](medication_name) 500mg
+    - [Augmentn](medication_name)!
+    - [Azithromycin](medication_name) 10mg?
+    - [Bude](medication_name) 500mg
+    - [Bupropion](medication_name) 500mg
+    - [Bupropion](medication_name)?
+    - [Cal carb](medication_name) 5mg daily
+    - [Cephal](medication_name) 500mg?
+    - [Cephalex](medication_name) 5mg daily!
+    - [Cetirizine](medication_name)
+    - [Clarinex](medication_name) 5mg daily,
+    - [Clarinex](medication_name) helps with my condition
+    - [Clindam](medication_name) 10mg
+    - [Clona](medication_name) helps with my condition,
+    - [Cobalamin](medication_name),
+    - [Codein](medication_name)
+    - [DHA](medication_name) 10mg.
+    - [DHA](medication_name) 5mg daily.
+    - [Desloratadine](medication_name) 500mg!
+    - [Dia](medication_name) 10mg.
+    - [Diclofen](medication_name)!
+    - [Diclofenac](medication_name)
+    - [Diclofenac](medication_name) 10mg
+    - [Diclofenac](medication_name) 500mg
+    - [Dox](medication_name) 5mg daily?
+    - [Duloxetin](medication_name) 5mg daily
+    - [Effexor](medication_name) 500mg!
+    - [Escitalo](medication_name) 10mg!
+    - [Famo](medication_name) 10mg
+    - [Fexo](medication_name) 10mg.
+    - [Fexofen](medication_name) helps with my condition,
+    - [Fish oil](medication_name) helps with my condition!
+    - [Fish oil](medication_name)!
+    - [Furo](medication_name).
+    - [Glucophage](medication_name) 5mg daily
+    - [Glyburide](medication_name) 10mg!
+    - [Hydrocortisone](medication_name) helps with my condition
+    - [INSULIN](medication_name)
+    - [INSULIN](medication_name) 500mg
+    - [Ibuprof](medication_name) helps with my condition,
+    - [Insulin aspart](medication_name) 5mg daily!
+    - [Insulin](medication_name) 10mg,
+    - [Keflex](medication_name) 10mg,
+    - [Keflex](medication_name) 500mg
+    - [Klonopin](medication_name) helps with my condition
+    - [LORAZEPAM](medication_name) 10mg
+    - [LORAZEPAM](medication_name) 500mg
+    - [Lantus](medication_name) 10mg
+    - [Levocet](medication_name) 5mg daily
+    - [Levothyrox](medication_name) 10mg,
+    - [Levoxyl](medication_name)?
+    - [Lisinop](medication_name).
+    - [Lisinopril](medication_name) helps with my condition
+    - [Lora](medication_name) 500mg
+    - [Loratadin](medication_name) 10mg?
+    - [Lorazepam](medication_name)
+    - [Lorazepam](medication_name) 10mg,
+    - [Losar](medication_name).
+    - [Losartn](medication_name) 10mg.
+    - [Lyrica](medication_name) 500mg?
+    - [METFORMIN](medication_name),
+    - [METHADONE](medication_name)?
+    - [Magnesium](medication_name)
+    - [Mesalazine](medication_name) 10mg
+    - [Metfomin](medication_name)
+    - [Metop](medication_name)
+    - [Metoprol](medication_name)
+    - [Metronidazole](medication_name) 5mg daily
+    - [Mirtazapin](medication_name) 10mg,
+    - [Montelukast](medication_name) 5mg daily
+    - [Multivitamin](medication_name) helps with my condition
+    - [NAPROXEN](medication_name) 10mg
+    - [Naproxen](medication_name) 10mg
+    - [OMEGA-3](medication_name) 5mg daily
+    - [OXYCODONE](medication_name) 10mg,
+    - [Olanzapin](medication_name) 5mg daily,
+    - [Omeprazol](medication_name) 500mg
+    - [Omeprazol](medication_name) 5mg daily,
+    - [Omeprazole](medication_name) 10mg!
+    - [Pantoprazol](medication_name).
+    - [Parox](medication_name) helps with my condition
+    - [Paxil](medication_name) helps with my condition
+    - [Pcm](medication_name)
+    - [Penic](medication_name) 10mg
+    - [Phenytoin](medication_name)!
+    - [Pravastin](medication_name) 10mg
+    - [Prednisolone](medication_name)?
+    - [Pregabal](medication_name) helps with my condition.
+    - [Pregabalin](medication_name) 500mg
+    - [Prinivil](medication_name)
+    - [Q10](medication_name) 10mg!
+    - [RAMIPRIL](medication_name).
+    - [Rani](medication_name) 10mg
+    - [Ranitidine](medication_name)
+    - [Remeron](medication_name) 10mg.
+    - [Risperidon](medication_name) 500mg!
+    - [Risperidone](medication_name) helps with my condition
+    - [Rivaroxaban](medication_name)!
+    - [Salbutamol](medication_name) 10mg
+    - [Seroquel](medication_name)!
+    - [Seroquel](medication_name),
+    - [Simva](medication_name) helps with my condition
+    - [Synthroid](medication_name) 500mg
+    - [Tenormin](medication_name) 10mg?
+    - [Tiotropium](medication_name) helps with my condition.
+    - [Trazo](medication_name) 500mg
+    - [Trazodon](medication_name) 10mg
+    - [Trazodon](medication_name) helps with my condition
+    - [Ultram](medication_name) 10mg
+    - [Venlafaxin](medication_name) 5mg daily
+    - [Venlafaxine](medication_name) helps with my condition
+    - [Ventolin](medication_name) helps with my condition!
+    - [Vitamin D3](medication_name),
+    - [Vitamin D](medication_name)?
+    - [Zantac](medication_name) 5mg daily
+    - [Zocor](medication_name)
+    - [Zyrtec](medication_name) 5mg daily
+    - [Zyrtec](medication_name)?
+    - [amlopin](medication_name) helps with my condition?
+    - [amoxicil](medication_name) 500mg
+    - [asa](medication_name) helps with my condition
+    - [asp](medication_name)
+    - [atenolol](medication_name)
+    - [ator](medication_name) 5mg daily
+    - [atorvastin](medication_name) 500mg
+    - [augmentin](medication_name) 500mg
+    - [augmentine](medication_name) 5mg daily!
+    - [azith](medication_name) 500mg
+    - [azithro](medication_name) 5mg daily
+    - [bude](medication_name)?
+    - [bup](medication_name) 10mg!
+    - [bupro](medication_name)!
+    - [cal carb](medication_name) 500mg
+    - [calciferol](medication_name) helps with my condition
+    - [calcium](medication_name) helps with my condition
+    - [celexa](medication_name) 5mg daily
+    - [cephalex](medication_name) 500mg
+    - [cholecalciferol](medication_name) helps with my condition
+    - [ciproxin](medication_name)
+    - [citalo](medication_name) 10mg
+    - [citalo](medication_name) 5mg daily
+    - [claritin](medication_name) 10mg
+    - [clonazep](medication_name) 10mg
+    - [clonazep](medication_name) helps with my condition
+    - [cozaar](medication_name) 500mg
+    - [dabigatran](medication_name) 10mg.
+    - [desloratadine](medication_name) 10mg
+    - [desyrel](medication_name),
+    - [diclof](medication_name) 10mg
+    - [diovan](medication_name)
+    - [diovan](medication_name) 500mg
+    - [dox](medication_name) 5mg daily?
+    - [doxicycline](medication_name) 10mg!
+    - [escit](medication_name) 5mg daily
+    - [famo](medication_name) helps with my condition
+    - [fexofenadine](medication_name) 10mg
+    - [fexofenadine](medication_name).
+    - [fish oil](medication_name)
+    - [fish oil](medication_name) 10mg.
+    - [fish oil](medication_name) 500mg?
+    - [flutic](medication_name) 5mg daily
+    - [folic](medication_name),
+    - [furo](medication_name) 10mg
+    - [furosemide](medication_name)
+    - [gaba](medication_name) helps with my condition
+    - [hctz](medication_name)
+    - [humalog](medication_name) 500mg
+    - [hydrochlorothiazide](medication_name) 10mg,
+    - [ibroprofen](medication_name) 10mg
+    - [ins](medication_name) 10mg
+    - [insulin aspart](medication_name) 10mg!
+    - [januvia](medication_name) helps with my condition
+    - [klonopin](medication_name) 5mg daily
+    - [levo](medication_name) 10mg.
+    - [lipitor](medication_name)
+    - [lispro](medication_name) 10mg,
+    - [lispro](medication_name) 10mg.
+    - [lopressor](medication_name) helps with my condition
+    - [loratadine](medication_name) 5mg daily
+    - [losartan](medication_name) 500mg
+    - [losartn](medication_name) 10mg
+    - [lyrica](medication_name) 500mg?
+    - [magnesium](medication_name) 10mg,
+    - [met](medication_name)
+    - [metfomin](medication_name) 500mg.
+    - [metformn](medication_name)
+    - [metformn](medication_name) 500mg!
+    - [metronida](medication_name) 500mg
+    - [miconazole](medication_name) 500mg,
+    - [miconazole](medication_name) 500mg?
+    - [multivitamin](medication_name) 500mg!
+    - [naprox](medication_name) 500mg
+    - [neurontin](medication_name) helps with my condition
+    - [norvasc](medication_name)
+    - [nystatin](medication_name) 5mg daily
+    - [olanzapin](medication_name) 500mg
+    - [olanzapine](medication_name) 5mg daily
+    - [omeprazol](medication_name) 10mg!
+    - [omeprazole](medication_name) 10mg?
+    - [omeprazole](medication_name) 500mg!
+    - [omerpazole](medication_name) 5mg daily
+    - [paracitamol](medication_name) 5mg daily?
+    - [parox](medication_name) 10mg
+    - [paroxetin](medication_name) 500mg
+    - [pen](medication_name) 10mg
+    - [peni](medication_name) 5mg daily
+    - [pepcid](medication_name) 10mg.
+    - [pravastin](medication_name) helps with my condition
+    - [prednisone](medication_name) 5mg daily
+    - [proair](medication_name) 10mg
+    - [proair](medication_name) helps with my condition
+    - [protonix](medication_name) 500mg
+    - [queti](medication_name) 5mg daily!
+    - [rami](medication_name) helps with my condition
+    - [risper](medication_name)
+    - [risperdal](medication_name) 10mg
+    - [risperidon](medication_name) 500mg
+    - [risperidone](medication_name) helps with my condition
+    - [rosuvastin](medication_name) 10mg
+    - [seroquel](medication_name) helps with my condition
+    - [sertraline](medication_name) 5mg daily
+    - [sitagliptin](medication_name) 10mg,
+    - [synthroid](medication_name) 10mg
+    - [synthroid](medication_name) 500mg.
+    - [terbinafine](medication_name) helps with my condition,
+    - [trama](medication_name) 5mg daily!
+    - [tramadol](medication_name) 10mg?
+    - [tramadol](medication_name) helps with my condition
+    - [trazodone](medication_name)
+    - [valium](medication_name) 5mg daily
+    - [valproic acid](medication_name) helps with my condition
+    - [venlafaxine](medication_name)?
+    - [ventolin](medication_name) 10mg
+    - [vit b12](medication_name) 500mg.
+    - [vit d](medication_name) 500mg
+    - [vitamin d](medication_name) 5mg daily
+    - [xyzal](medication_name) helps with my condition!
+    - [zyprexa](medication_name) 5mg daily
+    - [zyprexa](medication_name) helps with my condition
+    - drug [ALBUTEROL](medication_name)?
+    - drug [Albuterol](medication_name)
+    - drug [Amlodipn](medication_name)
+    - drug [BUPROPION](medication_name)
+    - drug [CLOZAPINE](medication_name).
+    - drug [Carbamazepine](medication_name)
+    - drug [DIAZEPAM](medication_name)
+    - drug [Duloxetin](medication_name)!
+    - drug [Duloxetin](medication_name),
+    - drug [Duloxetine](medication_name),
+    - drug [Duloxetine](medication_name)?
+    - drug [Esomeprazole](medication_name),
+    - drug [Gaba](medication_name)
+    - drug [Glyburide](medication_name)
+    - drug [Lorazep](medication_name)!
+    - drug [Mag Glycinate](medication_name)?
+    - drug [Metfor](medication_name)!
+    - drug [Olanzapine](medication_name)
+    - drug [Olanzapine](medication_name).
+    - drug [PCM](medication_name)
+    - drug [Panto](medication_name),
+    - drug [Phenytoin](medication_name)!
+    - drug [Phenytoin](medication_name),
+    - drug [Prilosec](medication_name)
+    - drug [Q10](medication_name)!
+    - drug [Q10](medication_name)?
+    - drug [Rantidine](medication_name).
+    - drug [Simvastatin](medication_name)
+    - drug [Synthroid](medication_name)!
+    - drug [TRAZODONE](medication_name)
+    - drug [Tramad](medication_name)
+    - drug [allegra](medication_name)
+    - drug [asprin](medication_name)
+    - drug [ateno](medication_name)?
+    - drug [augmentn](medication_name)
+    - drug [azith](medication_name)
+    - drug [bupropion](medication_name)!
+    - drug [celexa](medication_name).
+    - drug [claritin](medication_name)
+    - drug [codein](medication_name).
+    - drug [coenzyme q10](medication_name)
+    - drug [flutic](medication_name)
+    - drug [keflex](medication_name)
+    - drug [lipitor](medication_name)
+    - drug [metoprol](medication_name)
+    - drug [mg glycinate](medication_name)
+    - drug [morphine](medication_name)
+    - drug [novolog](medication_name)
+    - drug [novolog](medication_name),
+    - drug [pen](medication_name)!
+    - drug [pulmicort](medication_name)
+    - drug [risperdal](medication_name),
+    - drug [tramadol](medication_name)
+    - drug [valsar](medication_name)
+    - drug [warfarin](medication_name)!
+    - it's [Acetaminophen](medication_name).
+    - it's [Amoxcillin](medication_name)?
+    - it's [Ateno](medication_name)
+    - it's [Atenolol](medication_name)
+    - it's [Azithromycin](medication_name)
+    - it's [Bup](medication_name)
+    - it's [Clindamycin](medication_name)
+    - it's [Diovan](medication_name)
+    - it's [Dox](medication_name)
+    - it's [Escitalopram](medication_name)?
+    - it's [Fluox](medication_name).
+    - it's [Folic](medication_name)
+    - it's [Formoterol](medication_name)
+    - it's [Glipizide](medication_name)!
+    - it's [Januvia](medication_name)
+    - it's [Lisinopril](medication_name)!
+    - it's [Lisinopril](medication_name).
+    - it's [Magnesium](medication_name).
+    - it's [Metoprolol](medication_name)?
+    - it's [Mirtazapin](medication_name)
+    - it's [Omeprazol](medication_name)
+    - it's [Oxycodone](medication_name)
+    - it's [Paracetml](medication_name)
+    - it's [Quetiapin](medication_name)
+    - it's [Salicylic acid](medication_name)
+    - it's [Ubiquinone](medication_name)?
+    - it's [Zyprexa](medication_name)
+    - it's [acetylcysteine](medication_name)
+    - it's [altace](medication_name)
+    - it's [apap](medication_name).
+    - it's [aspart](medication_name)
+    - it's [ator](medication_name)
+    - it's [augmentine](medication_name)!
+    - it's [augmentine](medication_name)?
+    - it's [bude](medication_name)
+    - it's [cozaar](medication_name)
+    - it's [diclofen](medication_name)
+    - it's [eso](medication_name)
+    - it's [fexofenadine](medication_name)
+    - it's [fluconazole](medication_name)
+    - it's [folate](medication_name)
+    - it's [levothyrox](medication_name)
+    - it's [lisinopril](medication_name)
+    - it's [metfomin](medication_name)
+    - it's [metfomin](medication_name),
+    - it's [metformin](medication_name)
+    - it's [mirtazapin](medication_name).
+    - it's [naproxen](medication_name)!
+    - it's [ome](medication_name)
+    - it's [pcm](medication_name)
+    - it's [ramip](medication_name)
+    - it's [vitamin b12](medication_name).
+    - it's [warfarin](medication_name)
+    - it's [zocor](medication_name).
+    - just [Altace](medication_name)
+    - just [Amoxicil](medication_name).
+    - just [Aripiprazol](medication_name)
+    - just [Atenolol](medication_name)
+    - just [Ator](medication_name)!
+    - just [Cobalamin](medication_name).
+    - just [Coq10](medication_name)
+    - just [Diclof](medication_name),
+    - just [Doxycycline](medication_name),
+    - just [LOSARTAN](medication_name)?
+    - just [Lisinop](medication_name)
+    - just [Loratadine](medication_name)
+    - just [Metop](medication_name)!
+    - just [Oxycodone](medication_name)
+    - just [Prednisolone](medication_name)
+    - just [Prinivil](medication_name)
+    - just [Prozac](medication_name)
+    - just [Queti](medication_name)!
+    - just [Simvastin](medication_name)
+    - just [Tiotropium](medication_name)
+    - just [Trazo](medication_name)?
+    - just [Ultram](medication_name)
+    - just [Valproic Acid](medication_name)
+    - just [advil](medication_name)
+    - just [albutrol](medication_name)?
+    - just [aripiprazole](medication_name)
+    - just [atorvastatin](medication_name)
+    - just [cetirizine](medication_name)?
+    - just [clindamycin](medication_name)
+    - just [diazepam](medication_name).
+    - just [diclofen](medication_name)
+    - just [epa](medication_name)
+    - just [fluoxetin](medication_name)
+    - just [flutic](medication_name)
+    - just [glucophage](medication_name)
+    - just [humalog](medication_name)
+    - just [ibuprof](medication_name)!
+    - just [ibuprofen](medication_name)?
+    - just [klonopin](medication_name)
+    - just [metfor](medication_name).
+    - just [montel](medication_name)!
+    - just [ome](medication_name)!
+    - just [paraceta](medication_name)
+    - just [pregabalin](medication_name)
+    - just [sertralin](medication_name),
+    - just [singulair](medication_name)!
+    - just [tiotropium](medication_name)
+    - just [tylenol](medication_name),
+    - just [val](medication_name)
+    - just [venlafaxin](medication_name)
+    - just [zithromax](medication_name)!
+    - med [ASPIRIN](medication_name)?
+    - med [Advil](medication_name)
+    - med [Aripiprazole](medication_name)!
+    - med [Aspirn](medication_name)
+    - med [BUPROPION](medication_name)
+    - med [Ciprofloxacin](medication_name)?
+    - med [Claritin](medication_name)
+    - med [Codein](medication_name)?
+    - med [Diclof](medication_name)?
+    - med [Doxycycline](medication_name),
+    - med [Duloxetine](medication_name)
+    - med [Escit](medication_name)
+    - med [Fish oil](medication_name)!
+    - med [Flagyl](medication_name),
+    - med [Gabapentin](medication_name)
+    - med [IBUPROFEN](medication_name)
+    - med [Insulin aspart](medication_name)
+    - med [Lamotrigine](medication_name)!
+    - med [MORPHINE](medication_name)
+    - med [Nexium](medication_name)
+    - med [Nystatin](medication_name)
+    - med [OXYCODONE](medication_name)
+    - med [Paracetmol](medication_name)?
+    - med [Pepcid](medication_name)
+    - med [Quetiapine](medication_name)
+    - med [Rosuva](medication_name)
+    - med [Tylenol](medication_name)
+    - med [Xyzal](medication_name).
+    - med [advil](medication_name).
+    - med [amlodipn](medication_name)
+    - med [amoxicillin](medication_name)
+    - med [asprin](medication_name)
+    - med [ativan](medication_name)!
+    - med [cholecalciferol](medication_name)
+    - med [diazep](medication_name)
+    - med [levothyroxine](medication_name)
+    - med [lisinop](medication_name),
+    - med [lisinopril](medication_name)
+    - med [lorazepam](medication_name)
+    - med [morphine](medication_name)
+    - med [novolog](medication_name)?
+    - med [paracetml](medication_name)
+    - med [pcm](medication_name).
+    - med [salbutamol](medication_name)
+    - med [trama](medication_name)?
+    - med [trazo](medication_name)
+    - med [trazodon](medication_name)
+    - med [ubiquinone](medication_name)?
+    - med [wellbutrin](medication_name)
