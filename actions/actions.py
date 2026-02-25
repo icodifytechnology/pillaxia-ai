@@ -48,6 +48,22 @@ def send_response(response: str):
     
     return attachment
 
+def send_response_with_buttons(response: str, buttons: list):
+    """
+    Send the text response in attachment format with buttons.
+
+    buttons: list of dicts with 'title' and 'payload'
+    Example: [{"title": "Once", "payload": "once"}]
+    """
+    attachment = {
+        "query_response": response,
+        "type": "buttons-array",
+        "status": "success",
+        "data": buttons
+    }
+
+    return attachment
+
 class BaseAction(Action, ABC):
     """Abstract base class for all actions that need user preferences"""
     
@@ -956,9 +972,19 @@ class ActionSubmitMedicationForm(BaseAction):
             "type": "text",
             "status": "success"
             }
+            dispatcher.utter_message(attachment=attachment)
             return [
                 ActiveLoop(None),
-                SlotSet("current_step", None)
+                SlotSet("current_step", None),
+                SlotSet("medication_name", None),
+                SlotSet("medication_type", None),
+                SlotSet("medication_colour", None),
+                SlotSet("medication_dose", None),
+                SlotSet("medication_instructions", None),
+                SlotSet("form_prompt", None),
+                SlotSet("fuzzy_result", None),
+                SlotSet("original_medication_input", None),
+                SlotSet("pending_medication_confirmation", None)
             ]
         
         # Use ResponseBuilder for success + refill prompt
@@ -974,7 +1000,11 @@ class ActionSubmitMedicationForm(BaseAction):
             SlotSet("medication_type", None),
             SlotSet("medication_colour", None),
             SlotSet("medication_dose", None),
-            SlotSet("medication_instructions", None)
+            SlotSet("medication_instructions", None),
+            SlotSet("form_prompt", None),
+            SlotSet("fuzzy_result", None),
+            SlotSet("original_medication_input", None),
+            SlotSet("pending_medication_confirmation", None)
         ]
     
 class ActionHandleFormInterruption(BaseAction):
@@ -1120,13 +1150,13 @@ class ValidateRefillForm(FormValidationAction):
         
         # MINIMAL UPDATE: If no numbers found, reject and ask again
         if not numbers:
-            dispatcher.utter_message(
-                attachment={
-                    "query_response": "Please enter a valid number for stock level (e.g., 15, 30, 60).",
-                    "type": "text",
-                    "status": "success"
-                }
-            )
+            # dispatcher.utter_message(
+            #     attachment={
+            #         "query_response": "Please enter a valid number for stock level (e.g., 15, 30, 60).",
+            #         "type": "text",
+            #         "status": "success"
+            #     }
+            # )
             return {"stock_level": None}
         
         # If we have numbers, use the first one
@@ -1134,34 +1164,34 @@ class ValidateRefillForm(FormValidationAction):
             stock = int(numbers[0])
             
             if stock < 0:
-                dispatcher.utter_message(
-                    attachment={
-                        "query_response": "Please enter a positive number for stock level.",
-                        "type": "text",
-                        "status": "success"
-                    }
-                )
+                # dispatcher.utter_message(
+                #     attachment={
+                #         "query_response": "Please enter a positive number for stock level.",
+                #         "type": "text",
+                #         "status": "success"
+                #     }
+                # )
                 return {"stock_level": None}
             
             if stock < 7:
-                dispatcher.utter_message(
-                    attachment={
-                        "query_response": f"Only {stock} left? You might need a refill soon!",
-                        "type": "text",
-                        "status": "success"
-                    }
-                )
+                # dispatcher.utter_message(
+                #     attachment={
+                #         "query_response": f"Only {stock} left? You might need a refill soon!",
+                #         "type": "text",
+                #         "status": "success"
+                #     }
+                # )
             
-            return {"stock_level": stock}
+                return {"stock_level": stock}
             
         except (ValueError, TypeError):
-            dispatcher.utter_message(
-                attachment={
-                    "query_response": "Please enter a valid number for stock level.",
-                    "type": "text",
-                    "status": "success"
-                }
-            )
+            # dispatcher.utter_message(
+            #     attachment={
+            #         "query_response": "Please enter a valid number for stock level.",
+            #         "type": "text",
+            #         "status": "success"
+            #     }
+            # )
             return {"stock_level": None}
 
     async def validate_refill_day(
@@ -1413,6 +1443,15 @@ class ActionAskFrequency(BaseAction):
     def run_with_slots(self, dispatcher, tracker, domain):
         """Asks frequency from the user"""
         
+        prompt = tracker.get_slot('form_prompt')
+
+        if prompt ==  "deny_redo":
+            response = 'Okay, What would you like to do next?'
+            attachment = send_response(response)
+            dispatcher.utter_message(attachment=attachment)
+            return [SlotSet("form_prompt", None),
+                    ActiveLoop(None)]
+        
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_frequency")
         dispatcher.utter_message(attachment=response)
@@ -1422,12 +1461,23 @@ class ActionAskPerDayFrequency(BaseAction):
     def name(self) -> Text:
         return "action_ask_per_day_frequency"
     
-    def run_with_slots(self, dispatcher, tracker, domain):
-        """Asks Per day frequency from the user"""
+    def run_with_slots(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        """Ask the user how many times a day to remind, with buttons."""
+
+        # The message
+        response = "How many times a day should I remind you?"
         
-        builder = ResponseBuilder(tracker.sender_id, tracker)
-        response = builder.build_response(intent="ask_per_day_frequency")
-        dispatcher.utter_message(attachment=response)
+        # Buttons
+        buttons = [
+            {"title": "Once", "payload": "/inform{\"per_day_frequency\":\"once\"}"},
+            {"title": "Twice", "payload": "/inform{\"per_day_frequency\":\"twice\"}"},
+            {"title": "Thrice", "payload": "/inform{\"per_day_frequency\":\"thrice\"}"},
+        ]
+
+        attachment = send_response_with_buttons(response, buttons)
+        # Send the message with buttons
+        dispatcher.utter_message(attachment=attachment)
+
         return []
     
 class ActionAskQuantity(BaseAction):
@@ -1484,6 +1534,63 @@ class ValidateReminderForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_reminder_form"
 
+    async def validate_frequency(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate and normalize frequency (e.g., '30 days', '2 weeks')."""
+        requested_slot = tracker.get_slot('requested_slot')
+        if requested_slot != "frequency":
+            return None
+        
+        current_step = tracker.get_slot('current_step')
+        intent = tracker.latest_message.get("intent", {}).get("name")
+        
+        
+        if current_step == "pending_confirmation":
+            if intent == "affirm":
+                return {'requested_slot': 'frequency'}
+            
+            elif intent == "deny":
+                return {"form_prompt": "deny_redo"}
+            
+        if not slot_value:
+            return {"frequency": None}
+
+        value = str(slot_value).lower().strip()
+
+        # Handle "a week", "a month"
+        value = value.replace("a ", "1 ")
+
+        # Regex: number + time unit
+        pattern = r"^(\d+)\s*(day|days|week|weeks|month|months|year|years)$"
+        match = re.match(pattern, value)
+
+        # if not match:
+        #     dispatcher.utter_message(text="Please enter something like '30 days', '2 weeks', or '1 month'.")
+        #     return {"frequency": None}
+
+        number = int(match.group(1))
+        unit = match.group(2)
+
+        # if number <= 0:
+        #     dispatcher.utter_message(text="The duration must be greater than 0.")
+        #     return {"frequency": None}
+
+        # Normalize plural properly
+        if number == 1:
+            unit = unit.rstrip("s")  # singular
+        else:
+            if not unit.endswith("s"):
+                unit += "s"
+
+        normalized = f"{number} {unit}"
+
+        return {"frequency": normalized}
+        
     async def validate_quantity(
         self,
         slot_value: Any,
@@ -1532,6 +1639,19 @@ class ValidateReminderForm(FormValidationAction):
             # )
             return {"quantity": None}
     
+    # Mappings for spelled-out hours and minutes
+    NUMBER_WORDS = {
+        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+        "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+        "eleven": 11, "twelve": 12
+    }
+
+    MINUTE_WORDS = {
+        "o'clock": 0, "zero": 0, "five": 5, "ten": 10, "fifteen": 15,
+        "twenty": 20, "twenty-five": 25, "thirty": 30, "thirty-five": 35,
+        "forty": 40, "forty-five": 45, "fifty": 50, "fifty-five": 55
+    }
+
     async def validate_reminder_time(
         self,
         slot_value: Any,
@@ -1539,64 +1659,128 @@ class ValidateReminderForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate reminder times based on time_period."""
+        """Validate and normalize reminder_time to 24-hour HH:MM format."""
+
         if not slot_value:
             return {"reminder_time": None}
-        
-        time_period = tracker.get_slot("time_period")
-        times_needed = {
-            "once": 1,
-            "twice": 2,
-            "thrice": 3
-        }.get(time_period, 1)
-        
-        # If slot_value is already a list (from previous validation)
-        if isinstance(slot_value, list):
-            if len(slot_value) >= times_needed:
-                return {"reminder_time": slot_value}
-            else:
-                # Need more times
-                remaining = times_needed - len(slot_value)
-                # dispatcher.utter_message(
-                #     f"I have {len(slot_value)} time(s). Need {remaining} more. "
-                #     f"What time? (e.g., 8:00 AM)"
-                # )
-                return {"reminder_time": slot_value}
-        
-        # Convert string input to list if needed
-        current_times = tracker.get_slot("reminder_time") or []
-        if not isinstance(current_times, list):
-            current_times = []
-        
-        # Parse time input
-        time_input = str(slot_value)
-        parsed_time = self._parse_time_input(time_input)
-        
-        if parsed_time:
-            # Add to list
-            current_times.append(parsed_time)
-            
-            # Check if we have enough times
-            if len(current_times) >= times_needed:
-                # Sort times chronologically
-                current_times.sort()
-                time_list_str = ", ".join(current_times)
-                # dispatcher.utter_message(f"Perfect! Reminders set for: {time_list_str}")
-                return {"reminder_time": current_times}
-            else:
-                remaining = times_needed - len(current_times)
-                # if remaining == 1:
-                #     dispatcher.utter_message(f"Great! Need 1 more time. What time?")
-                # else:
-                #     dispatcher.utter_message(f"Got it! Need {remaining} more times. What's the next time?")
-                return {"reminder_time": current_times}
-        else:
-            # dispatcher.utter_message(
-            #     "Please enter a valid time in 12-hour or 24-hour format. "
-            #     "Examples: '8:00 AM', '14:30', '9 PM'."
-            # )
-            return {"reminder_time": current_times}
+
+        # Ensure we always work with a list
+        times = slot_value if isinstance(slot_value, list) else [slot_value]
+        normalized_times: List[str] = []
+
+        for time_str in times:
+            value = str(time_str).lower().strip()
+
+            # ------------------------
+            # Special phrases
+            # ------------------------
+            if value == "12 noon":
+                normalized_times.append("12:00")
+                continue
+
+            # Friendly phrases (e.g., "6 in the morning")
+            friendly_match = re.match(r"(\d{1,2})\s+in the\s+(morning|afternoon|evening|night)", value)
+            if friendly_match:
+                hour = int(friendly_match.group(1))
+                period = friendly_match.group(2)
+
+                if period == "morning":
+                    if hour == 12:
+                        hour = 0
+                elif period in ["afternoon", "evening", "night"]:
+                    if hour != 12:
+                        hour += 12
+
+                normalized_times.append(f"{hour:02d}:00")
+                continue
+
+            # 12-hour numeric (e.g., 8 am, 8:30 pm)
+            match_12h = re.match(r"(\d{1,2})(?::(\d{2}))?\s*(am|pm)", value)
+            if match_12h:
+                hour = int(match_12h.group(1))
+                minute = int(match_12h.group(2)) if match_12h.group(2) else 0
+                period = match_12h.group(3)
+
+                if period == "pm" and hour != 12:
+                    hour += 12
+                if period == "am" and hour == 12:
+                    hour = 0
+
+                normalized_times.append(f"{hour:02d}:{minute:02d}")
+                continue
+
+            # 24-hour numeric (e.g., 20:30)
+            match_24h = re.match(r"^(\d{2}):(\d{2})$", value)
+            if match_24h:
+                hour = int(match_24h.group(1))
+                minute = int(match_24h.group(2))
+                if 0 <= hour <= 23 and 0 <= minute <= 59:
+                    normalized_times.append(f"{hour:02d}:{minute:02d}")
+                    continue
+
+            # ------------------------
+            # Spelled-out numbers (e.g., "eight thirty am")
+            # ------------------------
+            spelled_match = re.match(
+                r"(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)"
+                r"(?: (o'clock|zero|five|ten|fifteen|twenty|twenty-five|thirty|thirty-five|forty|forty-five|fifty|fifty-five))?\s*(am|pm)",
+                value
+            )
+            if spelled_match:
+                hour_word = spelled_match.group(1)
+                minute_word = spelled_match.group(2) or "o'clock"
+                period = spelled_match.group(3)
+
+                hour = NUMBER_WORDS.get(hour_word, None)
+                minute = MINUTE_WORDS.get(minute_word, None)
+                if hour is not None and minute is not None:
+                    if period == "pm" and hour != 12:
+                        hour += 12
+                    if period == "am" and hour == 12:
+                        hour = 0
+                    normalized_times.append(f"{hour:02d}:{minute:02d}")
+                    continue
+
+        if not normalized_times:
+            dispatcher.utter_message(
+                text="Please enter a valid time like '8 am', '20:30', '6 in the morning', or 'eight thirty am'."
+            )
+            return {"reminder_time": None}
+
+        # Remove duplicates while preserving order
+        seen = set()
+        normalized_times = [t for t in normalized_times if not (t in seen or seen.add(t))]
+
+        return {"reminder_time": normalized_times}
     
+    async def validate_per_day_frequency(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate per-day frequency (once, twice, thrice)."""
+        logger.debug('VALIDATING PER DAY FREQUENCY')
+        if not slot_value:
+            return {"per_day_frequency": None}
+
+        value = str(slot_value).lower().strip()
+
+        valid_values = {
+            "once": "once",
+            "twice": "twice",
+            "thrice": "thrice",
+        }
+
+        if value in valid_values:
+            return {"per_day_frequency": valid_values[value]}
+
+        # dispatcher.utter_message(
+        #     text="Please choose once, twice, or thrice per day."
+        # )
+        return {"per_day_frequency": None}
+
     async def validate_reminder_day(
         self,
         slot_value: Any,
@@ -1977,31 +2161,78 @@ class ActionSubmitReminderForm(BaseAction):
         # -----------------------------
         # Validate and normalize reminder_day
         # -----------------------------
+
         valid_days = {
             "mon": "monday",
             "monday": "monday",
+            "mondays": "monday",
+
             "tue": "tuesday",
             "tues": "tuesday",
             "tuesday": "tuesday",
+            "tuesdays": "tuesday",
+
             "wed": "wednesday",
             "wednesday": "wednesday",
+            "wednesdays": "wednesday",
+
             "thu": "thursday",
             "thurs": "thursday",
             "thursday": "thursday",
+            "thursdays": "thursday",
+
             "fri": "friday",
             "friday": "friday",
+            "fridays": "friday",
+
             "sat": "saturday",
             "saturday": "saturday",
+            "saturdays": "saturday",
+
             "sun": "sunday",
-            "sunday": "sunday"
+            "sunday": "sunday",
+            "sundays": "sunday",
+        }
+
+        # Group mappings
+        group_mappings = {
+            "weekday": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+            "weekdays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+
+            "weekend": ["saturday", "sunday"],
+            "weekends": ["saturday", "sunday"],
+
+            "every day": [
+                "monday", "tuesday", "wednesday",
+                "thursday", "friday", "saturday", "sunday"
+            ],
+            "everyday": [
+                "monday", "tuesday", "wednesday",
+                "thursday", "friday", "saturday", "sunday"
+            ],
+            "daily": [
+                "monday", "tuesday", "wednesday",
+                "thursday", "friday", "saturday", "sunday"
+            ],
         }
 
         normalized_days = []
+
         if reminder_day:
             for day in reminder_day:
                 day_lower = day.lower().strip()
-                if day_lower in valid_days:
+
+                # Remove "morning" / "evening"
+                day_lower = day_lower.replace("morning", "").replace("evening", "").strip()
+
+                # Handle group expressions
+                if day_lower in group_mappings:
+                    normalized_days.extend(group_mappings[day_lower])
+
+                # Handle single day values
+                elif day_lower in valid_days:
                     normalized_days.append(valid_days[day_lower])
+
                 else:
                     logger.warning(f"Ignoring invalid reminder_day value: '{day}'")
 
@@ -2010,8 +2241,8 @@ class ActionSubmitReminderForm(BaseAction):
         normalized_days = [x for x in normalized_days if not (x in seen or seen.add(x))]
 
         reminder_day = normalized_days
-        logger.debug(f"Normalized reminder_day: {reminder_day}")
 
+        logger.debug(f"Normalized reminder_day: {reminder_day}")
         # -----------------------------
         # Build final reminder data
         # -----------------------------
@@ -2042,8 +2273,13 @@ class ActionSubmitReminderForm(BaseAction):
             }
             dispatcher.utter_message(attachment=attachment)
             return [
-                ActiveLoop(None),
-                SlotSet("current_step", None)
+                SlotSet("current_step", "pending_confirmation"),
+                SlotSet("frequency", None),
+                SlotSet("per_day_frequency", None),
+                SlotSet("quantity", None),
+                SlotSet("reminder_time", None),
+                SlotSet("alert_type", None),
+                SlotSet("reminder_day", None)
             ]
         
         # Success 
@@ -2416,7 +2652,7 @@ class ActionTodaysMedication(Action):
                 attachment = {
                             "query_response": reply,
                             "data": [],
-                            "type": "String",
+                            "type": "text",
                             "status": "success"
                 }
             else:
@@ -2424,7 +2660,7 @@ class ActionTodaysMedication(Action):
                 attachment = {
                                 "query_response": reply,
                                 "data": [],
-                                "type": "string",
+                                "type": "text",
                                 "status": "success"
                 }
         except Exception as e:
@@ -2432,7 +2668,7 @@ class ActionTodaysMedication(Action):
             attachment = {
                     "query_response": reply,
                     "data": [],
-                    "type": "string",
+                    "type": "text",
                     "status": "failed"
             }
         dispatcher.utter_message(attachment=attachment)
@@ -2624,7 +2860,7 @@ class ActionMedicationTaken(Action):
             attachment = {
                         "query_response": " ".join(messages) if messages else "No medication activity recorded.",
                         "data": [],
-                        "type": "string",
+                        "type": "text",
                         "status": "success"
                     }
         except Exception as ex:
@@ -2632,7 +2868,7 @@ class ActionMedicationTaken(Action):
             attachment = {
                 "query_response": reply,
                 "data": str(ex),
-                "type": "string",
+                "type": "text",
                 "status": "failed"
             }
         dispatcher.utter_message(attachment=attachment)
@@ -2670,7 +2906,7 @@ class ActionMedicationTaken(Action):
 #                 attachment = {
 #                     "query_response": reply,
 #                     "data": [],
-#                     "type": "string",
+#                     "type": "text",
 #                     "status": "success"
 #                 }
 #             else:
@@ -2678,7 +2914,7 @@ class ActionMedicationTaken(Action):
 #                 attachment = {
 #                     "query_response": reply,
 #                     "data": [],
-#                     "type": "string",
+#                     "type": "text",
 #                     "status": "failed"
 #                 }
             
@@ -2776,7 +3012,7 @@ class ActionRefillInformation(Action):
                 attachment = {
                     "query_response": reply,
                     "data": [],
-                    "type": "string",
+                    "type": "text",
                     "status": "success"
                 }
             else:
@@ -2789,7 +3025,7 @@ class ActionRefillInformation(Action):
                 attachment = {
                     "query_response": reply,
                     "data": [],
-                    "type": "string",
+                    "type": "text",
                     "status": "failed"
                 }
             
@@ -3112,10 +3348,7 @@ class ActionCustomFallback(Action):
                 ]
             
             # Low confidence - treat as uncertain
-            logger.debug("Low fuzzy confidence - treating as UNCERTAIN")
-            response = self.get_uncertainty_response(requested_slot)
-            attachment = send_response(response)
-            dispatcher.utter_message(attachment=attachment)
+            logger.debug("Low fuzzy confidence - storing raw input as medication_name")
             return [
                 ActiveLoop(form_name),
                 SlotSet("requested_slot", requested_slot),
@@ -3819,7 +4052,40 @@ class ActionCustomFallback(Action):
     def _handle_per_day_frequency(self, dispatcher, tracker, requested_slot, user_text, user_text_lower, form_name):
         """Handle per day frequency slot."""
         
-        # Valid frequency options
+        # FIRST: Check if this is an /inform command
+        if user_text.startswith('/inform{'):
+            logger.debug(f"Detected /inform command: {user_text}")
+            try:
+                import json
+                # Extract the JSON part (remove '/inform' prefix)
+                json_str = user_text[7:]  # Remove first 7 characters '/inform'
+                data = json.loads(json_str)
+                
+                # Look for per_day_frequency in the JSON
+                if 'per_day_frequency' in data:
+                    frequency = data['per_day_frequency']
+                    logger.debug(f"Extracted frequency from /inform: {frequency}")
+                    
+                    # Validate the extracted frequency
+                    valid_frequencies = ["once", "twice", "thrice", "1", "2", "3", "one", "two", "three"]
+                    if frequency in valid_frequencies:
+                        return [SlotSet('per_day_frequency', frequency),
+                                ActiveLoop(form_name)]
+                    else:
+                        # Invalid frequency in command
+                        response = f"'{frequency}' is not a valid option. Please choose once, twice, or thrice."
+                        attachment = send_response(response)
+                        dispatcher.utter_message(attachment=attachment)
+                        return [
+                            ActiveLoop(form_name),
+                            SlotSet("requested_slot", requested_slot),
+                            FollowupAction("action_listen")
+                        ]
+            except (json.JSONDecodeError, IndexError) as e:
+                logger.error(f"Failed to parse /inform command: {e}")
+                # Fall through to normal handling
+        
+        # Original validation logic (now as fallback)
         valid_frequencies = ["once", "twice", "thrice", "1", "2", "3", "one", "two", "three"]
         
         # Check if user gave a valid frequency
@@ -3830,8 +4096,9 @@ class ActionCustomFallback(Action):
                 break
         
         if found_frequency:
-            logger.debug(f"Valid frequency detected: '{found_frequency}' - letting form handle")
-            return [ActiveLoop(form_name)]
+            logger.debug(f"Valid frequency detected: '{found_frequency}' - Filling up the slot")
+            return [SlotSet('per_day_frequency', found_frequency ),
+                    ActiveLoop(form_name)]
         
         # Check for uncertainty
         unsure_phrases = ["don't know", "not sure", "no idea", "forget", "cant remember", "can't remember", "dunno"]
@@ -4264,7 +4531,7 @@ class ActionCustomFallback(Action):
             attachment = {
                 "query_response": data,
                 "data": [],
-                "type": "string",
+                "type": "text",
                 "status": "success"
             }
 
@@ -4281,7 +4548,7 @@ class ActionCustomFallback(Action):
                 "query_response": reply,
                 "error": error_message,
                 "data": [],
-                "type": "string",
+                "type": "text",
                 "status": "failed"
             }
 
@@ -4292,7 +4559,7 @@ class ActionCustomFallback(Action):
                 "query_response": reply,
                 "error": str(e),
                 "data": [],
-                "type": "string",
+                "type": "text",
                 "status": "failed"
             }
 
