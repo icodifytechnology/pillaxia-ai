@@ -86,7 +86,6 @@ rules:
     - action: action_listen
     - or:
       - intent: deny
-      - intent: skip
     - action: action_handle_refill_deny
 
 - rule: Submit refill form
@@ -120,7 +119,6 @@ rules:
     - action: action_listen
     - or:
       - intent: deny
-      - intent: skip
     - action: action_handle_reminder_deny
     - action: action_listen
 
@@ -142,10 +140,26 @@ rules:
   steps:
     - or: 
       - intent: deny
-      - intent: skip
     - action: action_handle_reminder_deny
     - action: action_listen
 
+- rule: Confirm suggested medication
+  condition:
+    - active_loop: medication_form
+    - slot_was_set:
+      - pending_medication_confirmation
+  steps:
+    - intent: affirm
+    - action: validate_medication_form
+
+- rule: Reject suggested medication
+  condition:
+    - active_loop: medication_form
+    - slot_was_set:
+      - pending_medication_confirmation
+  steps:
+    - intent: deny
+    - action: action_ask_medication_name
 
 - rule: Handle affirm after refill deny 
   condition:
@@ -266,13 +280,6 @@ rules:
   steps:
   - intent: check_medication_taken
   - action: action_check_medication
-
-- rule: Skip refill information
-  condition:
-    - active_loop: refill_form
-  steps:
-    - intent: skip
-    - action: action_submit_refill_form
 
 ## FORM INTERRUPTION RULE:
 

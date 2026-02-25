@@ -436,10 +436,10 @@
 
   "ask_per_day_frequency": {
     "casual": [
-      "How many times a day should I remind you? (once, twice, thrice)"
+      "How many times a day should I remind you?"
     ],
     "formal": [
-      "How many times a day would you like to receive reminders? (e.g., once, twice, thrice)"
+      "How many times a day would you like to receive reminders?"
     ]
   },
 
