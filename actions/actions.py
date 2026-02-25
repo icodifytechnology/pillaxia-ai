@@ -423,7 +423,9 @@ class ValidateMedicationForm(FormValidationAction):
     def _fuzzy_match_medication_name(self, text: str) -> Optional[Union[str, Dict]]:
         """
         Perform fuzzy matching for medication names on the provided text.
-        ALWAYS asks for confirmation for matches above threshold.
+        - 100% match: returns the medication name directly (no confirmation)
+        - 65-99% match: asks for confirmation
+        - Below 65: no match
         """
         try:
             from fuzzywuzzy import process, fuzz
@@ -451,8 +453,12 @@ class ValidateMedicationForm(FormValidationAction):
             # Get the best match
             best_match, best_score = matches[0]
             
-            # CONFIDENCE THRESHOLDS
-            # Even high confidence matches will ask for confirmation
+            # CASE 1: Perfect match (100%) - accept immediately
+            if best_score == 100:
+                logger.debug(f"Perfect match found: {best_match} - accepting without confirmation")
+                return best_match  # Return string directly
+            
+            # CASE 2: High confidence match (65-99%) - ask for confirmation
             if best_score >= 65:
                 logger.debug(f"Match found: {best_match} ({best_score}) - asking for confirmation")
                 return {
@@ -463,7 +469,7 @@ class ValidateMedicationForm(FormValidationAction):
                     "alternatives": [(m, s) for m, s in matches[1:]]  # Store alternatives for debugging
                 }
             
-            # Very low confidence - no match
+            # CASE 3: Low confidence - no match
             logger.debug(f"Low confidence - best match: {best_match} ({best_score}) - no confirmation")
             
             # Check if there's a much better second match (rare case)
@@ -3347,7 +3353,7 @@ class ActionCustomFallback(Action):
                     FollowupAction("action_listen")
                 ]
             
-            # Low confidence - treat as uncertain
+            # Low confidence 
             logger.debug("Low fuzzy confidence - storing raw input as medication_name")
             return [
                 ActiveLoop(form_name),
