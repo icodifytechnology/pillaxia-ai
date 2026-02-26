@@ -1480,7 +1480,8 @@ class ActionAskPerDayFrequency(BaseAction):
             {"title": "Thrice", "payload": "/inform{\"per_day_frequency\":\"thrice\"}"},
         ]
 
-        attachment = send_response_with_buttons(response, buttons)
+        attachment = send_response(response)
+        # attachment = send_response_with_buttons(response, buttons)
         # Send the message with buttons
         dispatcher.utter_message(attachment=attachment)
 
