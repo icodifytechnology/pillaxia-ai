@@ -298,9 +298,41 @@ class ActionIamabot(Action):
         logger.debug("Bot identity query handled successfully")
         return []
 
+class ActionInitializeMedicationList(Action):
+
+    def name(self) -> Text:
+        return "action_initialize_medication_list"
+
+    async def run(
+        self, dispatcher, tracker, domain: Dict[Text, Any]
+    ) -> List[Dict[Text, Any]]:
+
+        logger.debug('ACTION INITIALIZE MEDICATION LIST')
+        # Initialize MedManager with user's token
+        medmanager = MedicationManager(token=tracker.sender_id)
+
+        # Fetch all medications using your existing method
+        all_meds = medmanager.get_all_medications() or {}
+        logger.debug(f'FETCHED MED:  {all_meds}')
+
+        # Extract medication names (assuming dict format)
+        # e.g., {"medications": [{"name": "Paracetamol"}, {"name": "Ibuprofen"}]}
+        medicine_list = [med.get("name") for med in all_meds.get("items", []) if med.get("name")]
+
+        logger.debug(f'SLOTSET medicine_list : {medicine_list}')
+        # Fill the slot so validate_medication_name can use it
+        return [SlotSet("medicine_list", medicine_list)]
+    
 class ActionAskMedicationName(BaseAction):
     def name(self) -> Text:
         return "action_ask_medication_name"
+    
+    def _get_slot_from_events(self, tracker, slot_name, max_events=20):
+        """Get slot value from events as fallback"""
+        for event in reversed(tracker.events[-max_events:]):
+            if event.get('event') == 'slot' and event.get('name') == slot_name:
+                return event.get('value')
+        return None
     
     def run_with_slots(self, dispatcher, tracker, domain):
         "Asks medication name to the user"
@@ -312,13 +344,37 @@ class ActionAskMedicationName(BaseAction):
             if event.get('event') == 'slot':
                 logger.debug(f"  {event.get('name')} = {event.get('value')}")
         
+        # Try to get prompt from current slot
         prompt = tracker.get_slot("form_prompt")
+        
+        # If not in current slot, check recent events
+        if not prompt:
+            prompt = self._get_slot_from_events(tracker, "form_prompt")
+            logger.debug(f"Recovered prompt from events: {prompt}")
+        
+        # If still no prompt, infer from state
+        if not prompt:
+            # Check if medication was just set to None (duplicate case)
+            med_name = tracker.get_slot("medication_name")
+            last_med_events = []
+            for event in reversed(tracker.events[-10:]):
+                if event.get('event') == 'slot' and event.get('name') == 'medication_name':
+                    last_med_events.append(event.get('value'))
+            
+            # If medication_name was recently set to None after having a value
+            if None in last_med_events and any(v for v in last_med_events if v):
+                logger.debug("Detected medication_name cleared - likely duplicate")
+                prompt = "duplicate_name"
+
         fuzzy_result = tracker.get_slot('fuzzy_result')
         original_input = tracker.get_slot('original_medication_input')
 
         logger.debug(f'Prompt: {prompt}')
         logger.debug(f'Fuzzy result: {fuzzy_result}')
         logger.debug(f'in action_ask_medication_name original input: {original_input}')
+        
+        # Track if we need to clear the prompt
+        clear_prompt = True
         
         if prompt == "multiple_meds":
             response_text = "Please provide only one medication at a time. Which one would you like to add?"
@@ -327,8 +383,17 @@ class ActionAskMedicationName(BaseAction):
                 "type": "text",
                 "status": "success"
             })
-            return [SlotSet("form_prompt", None)]
-        
+            # Keep clear_prompt = True since we're done with this prompt
+            
+        elif prompt == "duplicate_name":
+            response_text = "You already have this medicine saved. Can you give me a different medication name?"
+            dispatcher.utter_message(attachment={
+                "query_response": response_text,
+                "type": "text",
+                "status": "success"
+            })
+            # Keep clear_prompt = True since we're done with this prompt
+
         elif prompt == "fuzzy_match" and fuzzy_result:
             dispatcher.utter_message(attachment={
                 "query_response": fuzzy_result, 
@@ -340,10 +405,9 @@ class ActionAskMedicationName(BaseAction):
             entities = tracker.latest_message.get('entities', [])
             medication_entities = [e.get('value') for e in entities if e.get('entity') == 'medication_name']
             
-            events_to_return = [
-                SlotSet("form_prompt", None),
-                SlotSet("fuzzy_result", None)
-            ]
+            events_to_return = []
+            # DON'T clear form_prompt here - we need it for the next validation
+            clear_prompt = False  # ← Don't clear the prompt
             
             # If we have an entity, use it as original input
             if medication_entities:
@@ -354,14 +418,32 @@ class ActionAskMedicationName(BaseAction):
                 logger.debug(f"PRESERVING original input: {original_input}")
                 events_to_return.append(SlotSet("original_medication_input", original_input))
             
+            # Clear fuzzy_result but NOT form_prompt
+            events_to_return.append(SlotSet("fuzzy_result", None))
+            
             logger.debug(f"Returning events: {events_to_return}")
+            
+            # Return early with our events
             return events_to_return
+        elif prompt == "fuzzy_match":
+            response_text = "You already have this medicine saved. Can you give me a different medication name?"
+            dispatcher.utter_message(attachment={
+                "query_response": response_text,
+                "type": "text",
+                "status": "success"
+            })
+            
         else:
             builder = ResponseBuilder(tracker.sender_id, tracker)
             response = builder.build_response(intent="ask_medication_name")
             dispatcher.utter_message(attachment=response)
+            # Keep clear_prompt = True for normal flow
 
-        return [SlotSet("form_prompt", None)]
+        # Only clear form_prompt if we're done with it
+        if clear_prompt:
+            return [SlotSet("form_prompt", None)]
+        else:
+            return []  # Don't clear form_prompt
 
 class ActionAskMedicationType(BaseAction):
     def name(self) -> Text:
@@ -419,6 +501,14 @@ class ValidateMedicationForm(FormValidationAction):
 
     def name(self) -> Text:
         return "validate_medication_form"
+    
+    def _is_duplicate_medication(self, medication_name: str, tracker: Tracker) -> bool:
+        """Check if medication already exists in medicine_list slot (exact match, case-insensitive)."""
+        medicine_list = tracker.get_slot("medicine_list") or []
+        
+        # Normalize for safe comparison
+        normalized_existing = [m.lower().strip() for m in medicine_list]
+        return medication_name.lower().strip() in normalized_existing
     
     def _fuzzy_match_medication_name(self, text: str) -> Optional[Union[str, Dict]]:
         """
@@ -521,6 +611,13 @@ class ValidateMedicationForm(FormValidationAction):
         # If we have a direct medication entity, use it
         if medication_entities:
             direct_med = medication_entities[0]
+
+            # DUPLICATE CHECK
+            if self._is_duplicate_medication(direct_med, tracker):
+                logger.debug(f'DUPLICATE MED FOUND!')
+                return {"medication_name": None, "form_prompt": "duplicate_name"}
+            
+            logger.debug('No duplicate med found')
             logger.debug(f"Direct medication entity found: {direct_med}")
 
             # If we're in confirmation mode, clear pending
@@ -588,16 +685,36 @@ class ValidateMedicationForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         logger.debug('######### VALIDATING MEDICATION NAME #########')
-        logger.debug(f"validate_medication_name called with slot_value: {slot_value}, original_medication_input value: {tracker.get_slot('original_medication_input')}")
+        logger.debug(f"validate_medication_name called with slot_value: {slot_value}, original_medication_input value: {tracker.get_slot('original_medication_input')}, form_prompt: {tracker.get_slot('form_prompt')}")
         
         # CHECK 1: If we have a slot_value AND it came from a denial (original_input exists)
         original_input = tracker.get_slot('original_medication_input')
         intent = tracker.latest_message.get('intent', {}).get('name')
         text = tracker.latest_message.get('text', '').lower().strip()
+        form_prompt = tracker.get_slot('form_prompt')
+
+        # Skip validation if duplicate detected
+        if form_prompt == "duplicate_name":
+            logger.debug(f"RETURNING from validate with form_prompt=duplicate_name")
+            logger.debug(f"Stack trace for debugging:", exc_info=True)  # This will show the call stack
+            return {
+                "medication_name": None,
+                "form_prompt": "duplicate_name",
+                "original_medication_input": original_input
+            }
         
         # If this is a denial response with a valid slot_value, accept it immediately
         if (intent == "deny" or text.startswith(("no", "nope", "not"))) and slot_value:
-            logger.debug(f"Denial response with slot_value: {slot_value} - accepting without fuzzy matching")
+            logger.debug(f"Denial response with slot_value: {slot_value} - running duplicate checking")
+            final_name = slot_value.title()
+
+            if self._is_duplicate_medication(final_name, tracker):
+                return {
+                    "medication_name": None,
+                    "form_prompt": "duplicate_name",
+                    "pending_medication_confirmation": None
+                }
+            
             return {
                 "medication_name": slot_value,
                 "pending_medication_confirmation": None,
@@ -609,7 +726,16 @@ class ValidateMedicationForm(FormValidationAction):
         
         # If this is an affirmation response with a valid slot_value, accept it immediately
         if (intent == "affirm" or text in ["yes", "yeah", "yep", "correct", "right", "sure"]) and slot_value:
-            logger.debug(f"Affirm response with slot_value: {slot_value} - accepting without fuzzy matching")
+            logger.debug(f"Affirm response with slot_value: {slot_value} - running duplicate checking")
+            final_name = slot_value.title()
+
+            if self._is_duplicate_medication(final_name, tracker):
+                return {
+                    "medication_name": None,
+                    "form_prompt": "duplicate_name",
+                    "pending_medication_confirmation": None
+                }
+            
             return {
                 "medication_name": slot_value,
                 "pending_medication_confirmation": None,
@@ -682,9 +808,18 @@ class ValidateMedicationForm(FormValidationAction):
                     logger.debug(f"FULL RETURN DICT: {result}")
                     return result
                 elif isinstance(fuzzy_result, str):
-                    logger.debug(f"Fuzzy match accepted: {fuzzy_result}")
+                    final_name = fuzzy_result.title()
+
+                    # DUPLICATE CHECK
+                    if self._is_duplicate_medication(final_name, tracker):
+                        return {
+                            "medication_name": None,
+                            "form_prompt": "duplicate_name"
+                        }
+
+                    logger.debug(f"Fuzzy match accepted: {final_name}")
                     return {
-                        "medication_name": fuzzy_result.title(),
+                        "medication_name": final_name,
                         "requested_slot": "medication_type"
                     }
         
@@ -698,9 +833,17 @@ class ValidateMedicationForm(FormValidationAction):
                 return {"medication_name": None}
                 
             capitalized_name = cleaned_name.title()
+            
+            # DUPLICATE CHECK
+            if self._is_duplicate_medication(capitalized_name, tracker):
+                return {
+                    "medication_name": None,
+                    "form_prompt": "duplicate_name"
+                }
+
             return {
                 "medication_name": capitalized_name,
-                "original_medication_input": original_input,  # 👈 Save original entity
+                "original_medication_input": original_input,
                 "requested_slot": "medication_type"
             }
         
@@ -709,9 +852,18 @@ class ValidateMedicationForm(FormValidationAction):
             cleaned = slot_value.strip()
             if len(cleaned) >= 2:
                 logger.debug(f"Accepting slot_value: {cleaned}")
+                final_name = cleaned.title()
+
+                # DUPLICATE CHECK
+                if self._is_duplicate_medication(final_name, tracker):
+                    return {
+                        "medication_name": None,
+                        "form_prompt": "duplicate_name"
+                    }
+
                 return {
-                    "medication_name": cleaned.title(),
-                    "original_medication_input": cleaned,  # 👈 Save original slot value
+                    "medication_name": final_name,
+                    "original_medication_input": cleaned,
                     "requested_slot": "medication_type"
                 }
         
@@ -846,7 +998,8 @@ class ActionCancelForm(BaseAction):
                 SlotSet("medication_instructions", None),
                 SlotSet("pending_medication_confirmation", None),
                 SlotSet("fuzzy_result", None),
-                SlotSet("original_medication_input", None)
+                SlotSet("original_medication_input", None),
+                SlotSet('form_prompt', None)
             ]
             
         elif active_loop == "refill_form":
@@ -1535,11 +1688,87 @@ class ActionAskReminderDay(BaseAction):
         dispatcher.utter_message(attachment=response)
         return []
     
+import re
+from typing import Any, Dict, Text, Optional
+from rasa_sdk import Tracker
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.forms import FormValidationAction
+import logging
+
+logger = logging.getLogger(__name__)
+
 class ValidateReminderForm(FormValidationAction):
     """Validates slots for reminder form with smart dependency handling."""
     
     def name(self) -> Text:
         return "validate_reminder_form"
+
+    @staticmethod
+    def normalize_time_unit(number: int, unit: str) -> str:
+        """Normalize time unit to proper singular/plural form."""
+        unit = unit.lower().rstrip('s')  # Remove trailing 's' for base form
+        
+        # Map to proper plural
+        unit_map = {
+            "day": "days",
+            "week": "weeks", 
+            "month": "months",
+            "year": "years"
+        }
+        
+        if number == 1:
+            return f"{number} {unit}"
+        else:
+            return f"{number} {unit_map.get(unit, unit + 's')}"
+        
+    async def extract_frequency(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        """
+        Minimal function to extract frequency from user message.
+        Checks NLU entities first, then falls back to pattern matching.
+        """
+        logger.debug('EXTRACTING FREQUENCY')
+
+        requested_slot = tracker.get_slot('requested_slot')
+        if requested_slot != 'frequency':
+            logger.debug(f'Skipping extract_frequency!! requested_slot: {requested_slot}')
+            return {}
+        
+        # 1. Check for time_period entity from NLU
+        for entity in tracker.latest_message.get("entities", []):
+            if entity.get("entity") == "time_period":
+                logger.debug('Extracting from entity')
+                return {"frequency": entity.get("value")}  # Return as dict
+        
+        # 2. Fallback: extract from text
+        text = tracker.latest_message.get("text", "").lower().strip()
+
+        if not text:
+            logger.debug('Not text')
+            return {}  # Return empty dict, not None
+        
+        # Match patterns like "30 days", "2 weeks", "1 month", "a week"
+        patterns = [
+            r'(\d+)\s*(day|days|week|weeks|month|months|year|years)',
+            r'(a|an)\s+(day|week|month|year)',
+            r'in\s+(\d+)\s*(day|days|week|weeks|month|months|year|years)'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text)
+            if match:
+                groups = match.groups()
+                if groups[0] in ['a', 'an']:
+                    return {"frequency": f"1 {groups[1]}"}  # Return as dict
+                else:
+                    return {"frequency": f"{groups[0]} {groups[1]}"}  # Return as dict
+        
+        # Check if just a number (assume days)
+        if re.match(r'^\d+$', text):
+            return {"frequency": f"{text} days"}  # Return as dict
+        
+        return {}  # Return empty dict if nothing found
 
     async def validate_frequency(
         self,
@@ -1548,56 +1777,89 @@ class ValidateReminderForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate and normalize frequency (e.g., '30 days', '2 weeks')."""
+        """Validate and normalize frequency (e.g., '30 days', '2 weeks', 'a month')."""
+        logger.debug('VALIDATING FREQUENCY')
         requested_slot = tracker.get_slot('requested_slot')
         if requested_slot != "frequency":
-            return None
+            return {"frequency": slot_value}  # Don't validate if not requested
         
         current_step = tracker.get_slot('current_step')
         intent = tracker.latest_message.get("intent", {}).get("name")
         
-        
+        # Handle confirmation flow
         if current_step == "pending_confirmation":
             if intent == "affirm":
                 return {'requested_slot': 'frequency'}
-            
             elif intent == "deny":
                 return {"form_prompt": "deny_redo"}
-            
+        
+        # If no value provided, try to extract from entities first
         if not slot_value:
-            return {"frequency": None}
+            # Check if there's a time_period entity from NLU
+            entities = tracker.latest_message.get("entities", [])
+            for entity in entities:
+                if entity.get("entity") == "time_period":
+                    slot_value = entity.get("value")
+                    logger.debug(f"Extracted frequency from entity: {slot_value}")
+                    break
+            
+            if not slot_value:
+                return {"frequency": None}
 
         value = str(slot_value).lower().strip()
 
-        # Handle "a week", "a month"
-        value = value.replace("a ", "1 ")
+        # Handle "a week", "a month", "an hour" (from your training data)
+        if value.startswith("a ") or value.startswith("an "):
+            value = value.replace("a ", "1 ").replace("an ", "1 ")
 
-        # Regex: number + time unit
-        pattern = r"^(\d+)\s*(day|days|week|weeks|month|months|year|years)$"
-        match = re.match(pattern, value)
-
-        # if not match:
-        #     dispatcher.utter_message(text="Please enter something like '30 days', '2 weeks', or '1 month'.")
-        #     return {"frequency": None}
+        # Pattern for time periods: number + time unit
+        # Supports: days, weeks, months, years (singular/plural)
+        time_unit_pattern = r"^(\d+)\s*(day|days|week|weeks|month|months|year|years)$"
+        
+        # Also handle "1week" without space
+        time_unit_no_space = r"^(\d+)(day|days|week|weeks|month|months|year|years)$"
+        
+        match = re.match(time_unit_pattern, value)
+        if not match:
+            match = re.match(time_unit_no_space, value)
+        
+        if not match:
+            # Check if it's just a number (assume days)
+            number_only = re.match(r"^(\d+)$", value)
+            if number_only:
+                number = int(number_only.group(1))
+                unit = "days" if number != 1 else "day"
+                normalized = f"{number} {unit}"
+                logger.debug(f"Assumed number {number} as {normalized}")
+                return {"frequency": normalized}
+            
+            # Check for common phrases from your training data
+            if "in " in value:
+                # Extract number from phrases like "in 30 days"
+                in_pattern = r"in\s+(\d+)\s*(day|days|week|weeks|month|months|year|years)"
+                in_match = re.search(in_pattern, value)
+                if in_match:
+                    number = int(in_match.group(1))
+                    unit = in_match.group(2)
+                    normalized = self.normalize_time_unit(number, unit)
+                    return {"frequency": normalized}
+            
+            dispatcher.utter_message(
+                text="Please tell me for how long. For example: '30 days', '2 weeks', or '1 month'."
+            )
+            return {"frequency": None}
 
         number = int(match.group(1))
         unit = match.group(2)
 
-        # if number <= 0:
-        #     dispatcher.utter_message(text="The duration must be greater than 0.")
-        #     return {"frequency": None}
+        if number <= 0:
+            dispatcher.utter_message(text="The duration must be greater than 0.")
+            return {"frequency": None}
 
         # Normalize plural properly
-        if number == 1:
-            unit = unit.rstrip("s")  # singular
-        else:
-            if not unit.endswith("s"):
-                unit += "s"
-
-        normalized = f"{number} {unit}"
-
+        normalized = self.normalize_time_unit(number, unit)
         return {"frequency": normalized}
-        
+    
     async def validate_quantity(
         self,
         slot_value: Any,
@@ -1605,46 +1867,187 @@ class ValidateReminderForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate quantity of medication per dose."""
-        if slot_value is None:
-            return {"quantity": None}
+        """Validate quantity of medication (supports units like mg, ml, IU, tablets)."""
+        logger.debug('VALIDATING QUANTITY')
+        requested_slot = tracker.get_slot('requested_slot')
+        if requested_slot != "quantity":
+            return {"quantity": slot_value}  # Don't validate if not requested
         
-        try:
-            # Extract number
-            import re
-            if isinstance(slot_value, str):
-                match = re.search(r'(\d+)', slot_value)
-                if match:
-                    quantity = int(match.group(1))
-                else:
-                    # Try word to number
-                    word_to_number = {
-                        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
-                        "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-                        "a": 1, "an": 1, "single": 1, "double": 2, "triple": 3
-                    }
-                    quantity = word_to_number.get(slot_value.lower(), None)
-                    if quantity is None:
-                        raise ValueError
-            else:
-                quantity = int(slot_value)
+        # If no value provided, try to extract from entities
+        if not slot_value:
+            entities = tracker.latest_message.get("entities", [])
+            for entity in entities:
+                if entity.get("entity") == "medication_dosage":
+                    slot_value = entity.get("value")
+                    logger.debug(f"Extracted quantity from entity: {slot_value}")
+                    break
             
+            if not slot_value:
+                return {"quantity": None}
+
+        value = str(slot_value).lower().strip()
+        
+        # Extract quantity with unit (based on your training data)
+        # Patterns: "10 mg", "5 ml", "100 IU", "1 tablet", etc.
+        
+        # Pattern for number + unit
+        unit_pattern = r"^(\d+(?:\.\d+)?)\s*([a-z]+)$"
+        match = re.match(unit_pattern, value)
+        
+        if match:
+            quantity_num = float(match.group(1))
+            unit = match.group(2).lower()
             
-            # Get medication dose for context
-            medication_dose = tracker.get_slot("medication_dose")
+            # Validate that quantity is positive
+            if quantity_num <= 0:
+                # dispatcher.utter_message(text="The quantity must be greater than 0.")
+                return {"quantity": None}
+            
+            # Store as float but preserve the unit information
+            # You might want to store unit separately or combine
+            formatted_quantity = f"{quantity_num} {unit}"
+            logger.debug(f"Extracted quantity with unit: {formatted_quantity}")
+            
+            # Provide context with medication dose if available
+            # medication_dose = tracker.get_slot("medication_dose")
             # if medication_dose:
-            #     dispatcher.utter_message(f"Perfect! {quantity} pill(s) of {medication_dose} each time.")
+            #     dispatcher.utter_message(
+            #         text=f"Perfect! I'll remind you to take {formatted_quantity} ({medication_dose} strength) each time."
+            #     )
             # else:
-            #     dispatcher.utter_message(f"Got it! {quantity} pill(s) each time.")
+            #     dispatcher.utter_message(text=f"Got it! {formatted_quantity} each time.")
             
-            return {"quantity": quantity}
+            # Store as float for calculations, but we have the full string if needed
+            return {"quantity": quantity_num}
+        
+        # Try to extract just a number (assume pills/tablets)
+        number_pattern = r"^(\d+(?:\.\d+)?)$"
+        number_match = re.match(number_pattern, value)
+        
+        if number_match:
+            quantity_num = float(number_match.group(1))
             
-        except (ValueError, TypeError):
-            # dispatcher.utter_message(
-            #     "Please enter a valid number of pills/units. "
-            #     "For example: '1 pill', '2 tablets', or just '1'."
-            # )
-            return {"quantity": None}
+            if quantity_num <= 0:
+                dispatcher.utter_message(text="The quantity must be greater than 0.")
+                return {"quantity": None}
+            
+            # Determine if it's likely tablets/pills
+            unit = "tablet" if quantity_num == 1 else "tablets"
+            formatted = f"{quantity_num} {unit}"
+            
+            medication_dose = tracker.get_slot("medication_dose")
+            if medication_dose:
+                dispatcher.utter_message(
+                    text=f"Got it! {formatted} of {medication_dose} each time."
+                )
+            else:
+                dispatcher.utter_message(text=f"Got it! {formatted} each time.")
+            
+            return {"quantity": quantity_num}
+        
+        # Check for word numbers (one, two, etc.)
+        word_to_number = {
+            "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+            "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+            "a": 1, "an": 1, "single": 1, "double": 2, "triple": 3
+        }
+        
+        if value in word_to_number:
+            quantity_num = word_to_number[value]
+            unit = "tablet" if quantity_num == 1 else "tablets"
+            formatted = f"{quantity_num} {unit}"
+            
+            medication_dose = tracker.get_slot("medication_dose")
+            if medication_dose:
+                dispatcher.utter_message(text=f"Got it! {formatted} of {medication_dose} each time.")
+            else:
+                dispatcher.utter_message(text=f"Got it! {formatted} each time.")
+            
+            return {"quantity": quantity_num}
+        
+        # If nothing matches
+        dispatcher.utter_message(
+            text="Please enter a valid quantity with units. For example: '10 mg', '5 ml', or '1 tablet'."
+        )
+        return {"quantity": None}
+
+    async def validate_per_day_frequency(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        """Validate how many times per day (once, twice, thrice)."""
+        logger.debug('VALIDATING PER_DAY_FREQUENCY')
+        requested_slot = tracker.get_slot('requested_slot')
+        if requested_slot != "per_day_frequency":
+            return {"per_day_frequency": slot_value}
+        
+        if not slot_value:
+            # Try to extract from medication_instructions if that was the intent
+            intent = tracker.latest_message.get("intent", {}).get("name")
+            if intent == "provide_medication_instructions":
+                entities = tracker.latest_message.get("entities", [])
+                for entity in entities:
+                    if entity.get("entity") == "medication_instructions":
+                        instructions = entity.get("value", "").lower()
+                        # Map common instructions to frequency
+                        if "once" in instructions or "daily" in instructions:
+                            slot_value = "once"
+                        elif "twice" in instructions:
+                            slot_value = "twice"
+                        elif "thrice" in instructions or "three times" in instructions:
+                            slot_value = "thrice"
+                        logger.debug(f"Mapped medication_instructions '{instructions}' to '{slot_value}'")
+                        break
+            
+            if not slot_value:
+                return {"per_day_frequency": None}
+        
+        value = str(slot_value).lower().strip()
+        
+        # Normalize common variations
+        frequency_map = {
+            "once": "once",
+            "1": "once",
+            "one": "once",
+            "single": "once",
+            "1 time": "once",
+            "once daily": "once",
+            "once a day": "once",
+            "qd": "once",  # medical abbreviation
+            
+            "twice": "twice",
+            "2": "twice",
+            "two": "twice",
+            "double": "twice",
+            "2 times": "twice",
+            "twice daily": "twice",
+            "twice a day": "twice",
+            "bid": "twice",  # medical abbreviation
+            
+            "thrice": "thrice",
+            "3": "thrice",
+            "three": "thrice",
+            "triple": "thrice",
+            "3 times": "thrice",
+            "three times daily": "thrice",
+            "three times a day": "thrice",
+            "tid": "thrice",  # medical abbreviation
+        }
+        
+        for key, normalized in frequency_map.items():
+            if key in value or value == key:
+                logger.debug(f"Mapped '{value}' to '{normalized}'")
+                dispatcher.utter_message(text=f"Got it! I'll remind you {normalized} daily.")
+                return {"per_day_frequency": normalized}
+        
+        # If no match
+        dispatcher.utter_message(
+            text="How many times a day should I remind you? Please say 'once', 'twice', or 'thrice'."
+        )
+        return {"per_day_frequency": None}
     
     # Mappings for spelled-out hours and minutes
     NUMBER_WORDS = {
@@ -1667,7 +2070,8 @@ class ValidateReminderForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
         """Validate and normalize reminder_time to 24-hour HH:MM format."""
-
+        
+        logger.debug('VALIDATING REMINDER TIME')
         if not slot_value:
             return {"reminder_time": None}
 
@@ -1760,33 +2164,33 @@ class ValidateReminderForm(FormValidationAction):
 
         return {"reminder_time": normalized_times}
     
-    async def validate_per_day_frequency(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> Dict[Text, Any]:
-        """Validate per-day frequency (once, twice, thrice)."""
-        logger.debug('VALIDATING PER DAY FREQUENCY')
-        if not slot_value:
-            return {"per_day_frequency": None}
+    # async def validate_per_day_frequency(
+    #     self,
+    #     slot_value: Any,
+    #     dispatcher: CollectingDispatcher,
+    #     tracker: Tracker,
+    #     domain: Dict[Text, Any],
+    # ) -> Dict[Text, Any]:
+    #     """Validate per-day frequency (once, twice, thrice)."""
+    #     logger.debug('VALIDATING PER DAY FREQUENCY')
+    #     if not slot_value:
+    #         return {"per_day_frequency": None}
 
-        value = str(slot_value).lower().strip()
+    #     value = str(slot_value).lower().strip()
 
-        valid_values = {
-            "once": "once",
-            "twice": "twice",
-            "thrice": "thrice",
-        }
+    #     valid_values = {
+    #         "once": "once",
+    #         "twice": "twice",
+    #         "thrice": "thrice",
+    #     }
 
-        if value in valid_values:
-            return {"per_day_frequency": valid_values[value]}
+    #     if value in valid_values:
+    #         return {"per_day_frequency": valid_values[value]}
 
-        # dispatcher.utter_message(
-        #     text="Please choose once, twice, or thrice per day."
-        # )
-        return {"per_day_frequency": None}
+    #     # dispatcher.utter_message(
+    #     #     text="Please choose once, twice, or thrice per day."
+    #     # )
+    #     return {"per_day_frequency": None}
 
     async def validate_reminder_day(
         self,
