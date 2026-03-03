@@ -55,6 +55,7 @@ actions:
   - action_stock_level
   - action_check_medication
   - action_medication_adherence
+  - action_initialize_medication_list
   - action_ask_medication_name
   - action_ask_medication_type
   - action_ask_medication_colour
@@ -296,7 +297,7 @@ slots:
 
   form_prompt:
       type: text
-      influence_conversation: false
+      influence_conversation: true
       mappings:
         - type: custom
 
@@ -308,12 +309,18 @@ slots:
 
   fuzzy_result:
     type: text
-    influence_conversation: false
+    influence_conversation: true
     mappings:
       - type: custom
 
   original_medication_input:
     type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  medicine_list:
+    type: list
     influence_conversation: true
     mappings:
       - type: custom

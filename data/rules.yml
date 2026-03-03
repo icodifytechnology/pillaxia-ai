@@ -26,6 +26,7 @@ rules:
 - rule: Activate medication form when user wants to add medication
   steps:
   - intent: add_medication
+  - action: action_initialize_medication_list
   - action: medication_form
   - active_loop: medication_form
 
