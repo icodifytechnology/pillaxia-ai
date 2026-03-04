@@ -931,6 +931,31 @@ class ValidateMedicationForm(FormValidationAction):
                     return {"medication_dose": ent["value"]}
         return {}
         
+    async def extract_medication_instructions(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        """Extract medication instructions."""
+        
+        # CRITICAL: Only run if we're currently asking for medication_instructions
+        requested_slot = tracker.get_slot("requested_slot")
+        if requested_slot != "medication_instructions":
+            logger.debug(f"Skipping extract_medication_instructions - requested slot is '{requested_slot}'")
+            return {}
+        
+        logger.debug('extract_medication_instructions called')
+        
+        # Get the raw user text
+        user_text = tracker.latest_message.get('text', '').strip()
+        
+        # If user says something like "none", we want to capture that
+        none_patterns = ['none', 'no instructions', 'skip', 'n/a', 'na', 'nothing']
+        
+        if user_text.lower() in none_patterns or any(pattern in user_text.lower() for pattern in none_patterns):
+            logger.debug(f"User indicated no instructions with: '{user_text}'")
+            return {"medication_instructions": user_text}
+        
+        # Otherwise, let the normal extraction happen
+        return {}
 
     async def validate_medication_instructions(
         self,
@@ -943,27 +968,57 @@ class ValidateMedicationForm(FormValidationAction):
         
         logger.debug('######### VALIDATING MEDICATION INSTRUCTIONS #########')
         
-        # If user explicitly says "none"
-        if slot_value and slot_value.lower().strip() == "none":
+        # Get the raw user text as well
+        user_text = tracker.latest_message.get('text', '').lower().strip()
+        
+        logger.debug(f"User text: '{user_text}', Slot value: '{slot_value}'")
+        
+        # Words/phrases that indicate no instructions
+        none_phrases = [
+            'none', 'no', 'n/a', 'na', 'not applicable', 'nothing',
+            'no instructions', 'without instructions', 'none needed',
+            'not needed', 'skip', 'ignore', 'dont have', "don't have",
+            'no thanks', 'no thank you', 'no thx', 'none thanks'
+        ]
+        
+        # Check for "none" patterns in either slot_value or raw text
+        text_to_check = user_text
+        if slot_value and isinstance(slot_value, str):
+            text_to_check = slot_value.lower().strip()
+        
+        # Check for "none" patterns
+        is_none_response = any(
+            phrase in text_to_check or text_to_check == phrase 
+            for phrase in none_phrases
+        )
+        
+        if is_none_response:
+            logger.debug(f"User indicated no instructions (matched: '{text_to_check}')")
             result = {
-                "medication_instructions": "No instructions provided",
-                "requested_slot": None  # Form is complete
+                "medication_instructions": "None"
             }
             logger.debug(f"Returning (none case): {result}")
             return result
         
         # If user provides instructions
         if slot_value and slot_value.strip():
+            # Clean up the instructions
+            instructions = slot_value.strip()
+            
+            # Capitalize first letter
+            if instructions and len(instructions) > 0:
+                instructions = instructions[0].upper() + instructions[1:]
+            
             result = {
-                "medication_instructions": slot_value.strip()
+                "medication_instructions": instructions,
+                "requested_slot": "medication_type"  # Move to next slot
             }
             logger.debug(f"Returning (normal case): {result}")
             return result
         
-        # If empty, ask for confirmation
-        result = {"medication_instructions": None}
-        logger.debug(f"Returning (empty case): {result}")
-        return result
+        # If we get here, no valid input
+        logger.debug("No valid instructions provided - asking again")
+        return {"medication_instructions": None}
 
 class ActionCancelForm(BaseAction):
     """Cancels the active form."""
