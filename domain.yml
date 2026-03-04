@@ -325,6 +325,12 @@ slots:
     mappings:
       - type: custom
 
+  form_interrupted:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom
+      
 forms:
   medication_form:
     ignored_intents:

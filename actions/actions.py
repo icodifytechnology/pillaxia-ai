@@ -321,7 +321,8 @@ class ActionInitializeMedicationList(Action):
 
         logger.debug(f'SLOTSET medicine_list : {medicine_list}')
         # Fill the slot so validate_medication_name can use it
-        return [SlotSet("medicine_list", medicine_list)]
+        return [SlotSet("medicine_list", medicine_list),
+                SlotSet('current_step', "medication_form")]
     
 class ActionAskMedicationName(BaseAction):
     def name(self) -> Text:
@@ -1010,8 +1011,7 @@ class ValidateMedicationForm(FormValidationAction):
                 instructions = instructions[0].upper() + instructions[1:]
             
             result = {
-                "medication_instructions": instructions,
-                "requested_slot": "medication_type"  # Move to next slot
+                "medication_instructions": instructions
             }
             logger.debug(f"Returning (normal case): {result}")
             return result
@@ -1062,7 +1062,6 @@ class ActionCancelForm(BaseAction):
             response = "Okay. I've stopped adding the refill information. What would you like to do next?"
             attachment = {
                 "query_response": response,
-                "data": [],
                 "type": "text",
                 "status": "success"
             }
@@ -1080,7 +1079,6 @@ class ActionCancelForm(BaseAction):
             response = "Okay. I have I've stopped adding the reminder. What would you like to do next?"
             attachment = {
                 "query_response": response,
-                "data": [],
                 "type": "text",
                 "status": "success"
             }
@@ -1228,33 +1226,49 @@ class ActionHandleFormInterruption(BaseAction):
     def run_with_slots(self, dispatcher, tracker, domain):
 
         intent = tracker.latest_message.get("intent", {}).get("name")
-
-        if intent == "deny":
-            logger.debug("✅ User denied cancellation - returning to form")
-
-            # Get the current requested slot
-            requested_slot = tracker.get_slot("requested_slot")
-
-            # Re-activate the form explicitly
-            return [
-                ActiveLoop("medication_form"),  # Reactivate the form
-                FollowupAction("validate_medication_form")  # Run validation
-            ]
         
-        # Otherwise treat as interruption
+        # Get the active form
+        active_loop = tracker.active_loop.get("name") if tracker.active_loop else None
+        logger.debug(f"Active loop: {active_loop}")
+
+        # Map form names to display text
+        form_display = {
+            "medication_form": "adding a medication",
+            "refill_form": "setting up refill information",
+            "reminder_form": "setting up a reminder"
+        }
+
+        # Get the appropriate display text for the current form
+        current_action = form_display.get(active_loop, "completing a task")
+
+         # Pass to ResponseBuilder
         builder = ResponseBuilder(tracker.sender_id, tracker)
 
         if intent == "greet":
-            intent = "greet-form"
-            response = builder.build_response(intent)
+            logger.debug('Form interrupted with Greet intent. Asking for cancel confirmation')
+            response = builder.build_response(
+                intent="greet-form", 
+                current_action=current_action  # Pass the context
+            )
+            logger.debug(f'Response: {response}')
+            dispatcher.utter_message(attachment=response)
+
+            return [
+                SlotSet("form_interrupted", True)
+            ]
+        
         else:
-            intent = "form-interrupt"
-            response = builder.build_response(intent)
+            response = builder.build_response(
+                intent="form-interrupt",
+                current_action=current_action  # Pass the context
+            )
 
-        logger.debug(f'Response: {response}')
-        dispatcher.utter_message(attachment=response)
+            logger.debug(f'Response: {response}')
+            dispatcher.utter_message(attachment=response)
 
-        return []
+            return [
+                SlotSet("form_interrupted", True)
+            ]
 
 class ActionHandleRefillDeny(BaseAction):
     def name(self) -> Text:
@@ -1285,22 +1299,30 @@ class ActionAskStockLevel(BaseAction):
     
     def run_with_slots(self, dispatcher, tracker, domain):
         "Asks refill stock level to the user"
-
+        
+        logger.debug("ActionAskStockLevel - Basic ask")
+        
+        # Just the basic question - fallback handles all edge cases
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_stock_level")
         dispatcher.utter_message(attachment=response)
+        
         return []
 
-class ActionAskRefillInDays(BaseAction):
+class ActionAskRefillDay(BaseAction):
     def name(self) -> Text:
         return "action_ask_refill_day"
     
     def run_with_slots(self, dispatcher, tracker, domain):
         "Asks refill days to the user"
-
+        
+        logger.debug("ActionAskRefillDay - Basic ask")
+        
+        # Just the basic question - fallback handles all edge cases
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_refill_day")
         dispatcher.utter_message(attachment=response)
+        
         return []
     
 class ValidateRefillForm(FormValidationAction):
@@ -1317,29 +1339,18 @@ class ValidateRefillForm(FormValidationAction):
         domain: Dict[Text, Any],
     ) -> List[Text]:
         """Determine which slots are still required."""
-        # DEBUG: Log current state
         logger.debug("="*80)
         logger.debug("REQUIRED_SLOTS DEBUG:")
         logger.debug(f"Active loop: {tracker.active_loop}")
         logger.debug(f"Requested slot: {tracker.get_slot('requested_slot')}")
-        logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
-        logger.debug(f"Latest text: '{tracker.latest_message.get('text')}'")
         logger.debug("="*80)
         
-        # List of all slots in order
-        all_slots = [
-            "stock_level",
-            "refill_day"
-        ]
+        all_slots = ["stock_level", "refill_day"]
         
-        # Check which slots are still empty
         required = []
         for slot in all_slots:
-            slot_value = tracker.get_slot(slot)
-            if slot_value is None or slot_value == "":
+            if tracker.get_slot(slot) is None:
                 required.append(slot)
-            else:
-                logger.debug(f"Slot '{slot}' is already filled: {slot_value}")
         
         logger.debug(f"Required slots: {required}")
         return required
@@ -1351,61 +1362,34 @@ class ValidateRefillForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
-        """Validate stock level, handling wrong intent predictions."""
+        """Minimal validation for stock level."""
         
-        intent = tracker.latest_message.get("intent", {}).get("name")
-        text = tracker.latest_message.get("text", "")
+        logger.debug('######### VALIDATING STOCK LEVEL #########')
         
-        logger.debug(f"Validating stock level with intent: {intent}, value: {slot_value}")
-        
-        # Try to extract number from text
+        # Extract numbers from the text
         import re
+        text = tracker.latest_message.get("text", "")
         numbers = re.findall(r'\d+', text)
         
-        # MINIMAL UPDATE: If no numbers found, reject and ask again
         if not numbers:
-            # dispatcher.utter_message(
-            #     attachment={
-            #         "query_response": "Please enter a valid number for stock level (e.g., 15, 30, 60).",
-            #         "type": "text",
-            #         "status": "success"
-            #     }
-            # )
+            # No numbers found - validation fails, fallback will handle
+            logger.debug("No numbers found for stock level")
             return {"stock_level": None}
         
-        # If we have numbers, use the first one
         try:
             stock = int(numbers[0])
             
+            # Basic validation: must be positive
             if stock < 0:
-                # dispatcher.utter_message(
-                #     attachment={
-                #         "query_response": "Please enter a positive number for stock level.",
-                #         "type": "text",
-                #         "status": "success"
-                #     }
-                # )
+                logger.debug(f"Negative stock level: {stock}")
                 return {"stock_level": None}
             
-            if stock < 7:
-                # dispatcher.utter_message(
-                #     attachment={
-                #         "query_response": f"Only {stock} left? You might need a refill soon!",
-                #         "type": "text",
-                #         "status": "success"
-                #     }
-                # )
-            
-                return {"stock_level": stock}
+            # Valid stock level
+            logger.debug(f"Valid stock level: {stock}")
+            return {"stock_level": stock}
             
         except (ValueError, TypeError):
-            # dispatcher.utter_message(
-            #     attachment={
-            #         "query_response": "Please enter a valid number for stock level.",
-            #         "type": "text",
-            #         "status": "success"
-            #     }
-            # )
+            logger.debug(f"Invalid stock level value")
             return {"stock_level": None}
 
     async def validate_refill_day(
@@ -1415,44 +1399,35 @@ class ValidateRefillForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
+        """Minimal validation for refill day."""
         
-        text = tracker.latest_message.get("text", "")
-        entities = tracker.latest_message.get("entities", [])
+        logger.debug('######### VALIDATING REFILL DAY #########')
         
-        logger.debug(f"Validating refill_day with text: '{text}'")
-        logger.debug(f"Entities found: {entities}")
-        
-        # FIX: Check if there's a frequency entity that should map to refill_day
-        for entity in entities:
-            if entity.get("entity") == "frequency":
-                frequency_value = entity.get("value")
-                logger.debug(f"Found frequency entity: '{frequency_value}' - mapping to refill_day")
-                
-                # Extract number from the frequency
-                import re
-                numbers = re.findall(r'\d+', frequency_value)
-                if numbers:
-                    days = int(numbers[0])
-                    if days > 0 and days <= 365:
-                        return {"refill_day": days}
-        
-        # Also check the raw text for numbers
+        # Extract numbers from the text
         import re
+        text = tracker.latest_message.get("text", "")
         numbers = re.findall(r'\d+', text)
-        if numbers:
-            days = int(numbers[0])
-            if days > 0 and days <= 365:
-                return {"refill_day": days}
         
-        # If no valid number found
-        dispatcher.utter_message(
-            attachment={
-                "query_response": "Please enter a valid number of days (e.g., 7, 30, 90).",
-                "type": "text",
-                "status": "success"
-            }
-        )
-        return {"refill_day": None}
+        if not numbers:
+            # No numbers found - validation fails, fallback will handle
+            logger.debug("No numbers found for refill day")
+            return {"refill_day": None}
+        
+        try:
+            days = int(numbers[0])
+            
+            # Basic validation: reasonable range (1-365 days)
+            if days < 1 or days > 365:
+                logger.debug(f"Refill day out of range: {days}")
+                return {"refill_day": None}
+            
+            # Valid refill day
+            logger.debug(f"Valid refill day: {days}")
+            return {"refill_day": days}
+            
+        except (ValueError, TypeError):
+            logger.debug(f"Invalid refill day value")
+            return {"refill_day": None}
       
 class ActionSubmitRefillForm(BaseAction):
     """Submits refill form and moves to reminders."""

@@ -499,19 +499,19 @@
 
   "greet-form": {
     "casual": [
-      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+      "Hello {name}! We are in the process of {current_action}. Would you like to cancel it?"
     ],
     "formal": [
-      "Hello {name}! We are in the process of adding a medication. Would you like to cancel it?"
+      "Hello {name}! We are currently {current_action}. Would you like to cancel this process?"
     ]
   },
-  
+
   "form-interrupt": {
     "casual": [
-      "We are in the process of adding a medication. Would you like to cancel it?"
+      "We are in the process of {current_action}. Would you like to cancel it?"
     ],
     "formal": [
-      "We are in the process of adding a medication. Would you like to cancel it?"
+      "We are currently {current_action}. Would you like to cancel this process?"
     ]
   },
 
