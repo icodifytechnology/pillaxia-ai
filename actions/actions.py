@@ -2837,11 +2837,19 @@ class ActionListMedications(Action):
                 builder = ResponseBuilder(tracker.sender_id, tracker)
                 attachment = builder.build_response("no_medications")
             else:
+                # Create structured data array with each medication as an item
+                medications_data = [
+                    {
+                        "name": name
+                    }
+                    for idx, name in enumerate(medication_names)
+                ]
+                
                 builder = ResponseBuilder(tracker.sender_id, tracker)
                 attachment = builder.build_response(
                     "list_medications",
-                    medications=", ".join(medication_names),
-                    count=len(medication_names)
+                    data=medications_data,  # Pass as data array
+                    count=len(medication_names)  # Still pass count for the text
                 )
                 logger.debug(f"Found {len(medication_names)} medications")
             

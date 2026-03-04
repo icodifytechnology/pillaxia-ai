@@ -60,27 +60,33 @@
       "I hope you have a pleasant {time_of_day}, {name}."
     ]
   },
-  "list_medications": {
+"list_medications": {
   "casual": [
-    "Here’s what you’re currently taking: {medications}",
-    "These are the medications I have on your list: {medications}",
-    "You’re currently taking: {medications}",
-    "Here’s your medication list: {medications}",
-    "I’ve got these meds saved for you: {medications}",
-    "This is what I see in your medication list: {medications}",
-    "Here are your current meds: {medications}",
-    "You’ve got these medications listed: {medications}",
-    "Here’s what you’re taking right now, {name}: {medications}",
-    "This is what I have saved for you, {name}: {medications}"
+    "Here’s what you’re currently taking ({count} medications):",
+    "These are the medications I have on your list ({count} total):",
+    "Here’s your medication list ({count} items):",
+    "I’ve got these meds saved for you ({count} total):",
+    "Here are your current meds ({count} found):"
   ],
   "formal": [
-    "{name}, your current medication list includes: {medications}",
-    "According to your records, you are taking the following medications: {medications}",
-    "Here is an overview of your prescribed medications: {medications}",
-    "{name}, these are the medications currently recorded in your profile: {medications}",
-    "Based on your saved information, your medications are: {medications}"
+    "{name}, your current medication list includes {count} medications:",
+    "According to your records, you are taking the following {count} medications:",
+    "Here is an overview of your {count} prescribed medications:"
   ]
 },
+
+"no_medications": {
+  "casual": [
+    "You don't have any medications saved yet. Would you like to add one?",
+    "I don't see any medications in your list. Want to add your first one?",
+    "Your medication list is empty. Shall we add one now?"
+  ],
+  "formal": [
+    "{name}, you currently have no medications saved in your profile.",
+    "There are no medications recorded for you at this time."
+  ]
+},
+
   "medication_report": {
   "casual": [
     "For the past {day}, you took {taken}/{total} medications ({compliance_rate}% adherence). {problematic_note}",
