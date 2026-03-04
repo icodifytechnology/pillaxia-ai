@@ -28,6 +28,7 @@ class ResponseBuilder:
         placeholders = {
             "name": name,
             "time_of_day": time_of_day,
+            "current_action": context.get("current_action", "completing a task"),  # Default fallback
             **context
         }
         
