@@ -958,6 +958,8 @@ class ValidateMedicationForm(FormValidationAction):
         
         # CRITICAL: Only run if we're currently asking for medication_instructions
         requested_slot = tracker.get_slot("requested_slot")
+        logger.debug(f"extract_medication_instructions - requested_slot: '{requested_slot}'")
+        
         if requested_slot != "medication_instructions":
             logger.debug(f"Skipping extract_medication_instructions - requested slot is '{requested_slot}'")
             return {}
@@ -966,15 +968,84 @@ class ValidateMedicationForm(FormValidationAction):
         
         # Get the raw user text
         user_text = tracker.latest_message.get('text', '').strip()
+        user_text_lower = user_text.lower()
+        logger.debug(f"extract_medication_instructions - user_text: '{user_text}'")
         
-        # If user says something like "none", we want to capture that
-        none_patterns = ['none', 'no instructions', 'skip', 'n/a', 'na', 'nothing']
+        # Comprehensive list of phrases that indicate no instructions (same as validation)
+        none_patterns = [
+            # Direct "none" variations
+            'none', 'n/a', 'na', 'nil', 'null', 'zero', 'nope', 'no',
+            
+            # "No X" variations
+            'no instructions', 'no instruction', 'no special instructions', 'no special instruction',
+            'no specific instructions', 'no specific instruction', 'no particular instructions',
+            'no particular instruction', 'no special', 'no specific', 'no particular',
+            'no need', 'no needs', 'no required', 'no requirements', 'no requirement',
+            
+            # "Not X" variations
+            'not needed', 'not required', 'not necessary', 'not applicable', 'not really',
+            'not any', 'not anything', 'not special', 'not specific', 'not particular',
+            'not really needed', 'not really required', 'not really necessary',
+            "don't need", "don't have", "don't require", "don't want",
+            "doesn't need", "doesn't have", "doesn't require", "doesn't want",
+            "do not need", "do not have", "do not require", "do not want",
+            "does not need", "does not have", "does not require", "does not want",
+            
+            # "Nothing" variations
+            'nothing', 'nothing special', 'nothing specific', 'nothing particular',
+            'nothing needed', 'nothing required', 'nothing to add', 'nothing else',
+            'nothing more', 'nothing really', 'nothing at all',
+            
+            # "Skip" variations
+            'skip', 'skip it', 'skip this', 'skip that', 'skipping', 'skip instructions',
+            'skip the instructions', 'skip this step', 'skip that step',
+            
+            # "Without" variations
+            'without instructions', 'without any instructions', 'without special instructions',
+            'without anything', 'without any',
+            
+            # "I don't know" variations
+            "i don't know", "i dont know", "i do not know", "dunno", "idk", "not sure",
+            "i'm not sure", "i am not sure", "i don't think so", "i dont think so",
+            "i don't think there are", "i dont think there are", "not that i know",
+            
+            # Short/common responses
+            'none thanks', 'no thanks', 'no thank you', 'no thx',
+            'none for me', 'not for me', 'nothing for me',
+            'just none', 'just no', 'just skip',
+            'leave blank', 'leave empty', 'blank', 'empty',
+            
+            # Casual
+            'nah', 'naw', 'naa', 'no way', 'not at all',
+            'none whatsoever', 'absolutely none', 'absolutely not',
+            'definitely not', 'certainly not', 'surely not',
+            'i have none', "i don't have any", "i dont have any",
+            'there are none', "there aren't any", 'there are not any',
+            
+            # Medication-specific
+            'no special directions', 'no special direction', 'no directions',
+            'no direction', 'no special notes', 'no notes', 'no note',
+            'no special considerations', 'no considerations',
+            'just take it', 'just take', 'just consume', 'just use',
+            'take as directed', 'take normally', 'use normally',
+            'standard instructions', 'regular instructions', 'usual instructions',
+            'follow prescription', 'follow label', 'follow bottle',
+            'as prescribed', 'as directed', 'as usual', 'as normal',
+            'like usual', 'like normal', 'same as always',
+            
+            # With "any"
+            'any instructions? no', 'any special? no', 'any? no',
+            'not any instructions', 'not any special', 'not any specific',
+        ]
         
-        if user_text.lower() in none_patterns or any(pattern in user_text.lower() for pattern in none_patterns):
-            logger.debug(f"User indicated no instructions with: '{user_text}'")
+        # Check if user indicates no instructions
+        if any(pattern in user_text_lower for pattern in none_patterns) or user_text_lower in none_patterns:
+            logger.debug(f"User indicated no instructions with: '{user_text}' - returning as slot value")
             return {"medication_instructions": user_text}
         
-        # Otherwise, let the normal extraction happen
+        # For any other text, let the normal extraction happen
+        # The form will automatically use the text as the slot value
+        logger.debug("No special handling - letting form extract normally")
         return {}
 
     async def validate_medication_instructions(
@@ -986,25 +1057,92 @@ class ValidateMedicationForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         """Handle medication instructions."""
         
-        logger.debug('######### VALIDATING MEDICATION INSTRUCTIONS #########')
+        logger.debug('######### VALIDATING MEDICATION INSTRUCTIONS STARTED #########')
+        logger.debug(f"validate_medication_instructions called with slot_value: '{slot_value}', type: {type(slot_value)}")
         
         # Get the raw user text as well
         user_text = tracker.latest_message.get('text', '').lower().strip()
         
         logger.debug(f"User text: '{user_text}', Slot value: '{slot_value}'")
         
-        # Words/phrases that indicate no instructions
+        # If slot_value is None, return None
+        if slot_value is None:
+            logger.debug("slot_value is None - returning None")
+            return {"medication_instructions": None}
+        
+        # Words/phrases that indicate no instructions (your long list)
         none_phrases = [
-            'none', 'no', 'n/a', 'na', 'not applicable', 'nothing',
-            'no instructions', 'without instructions', 'none needed',
-            'not needed', 'skip', 'ignore', 'dont have', "don't have",
-            'no thanks', 'no thank you', 'no thx', 'none thanks'
-        ]
+        # Direct "none" variations
+        'none', 'n/a', 'na', 'nil', 'null', 'zero', 'nope', 'no',
+        
+        # "No X" variations
+        'no instructions', 'no instruction', 'no special instructions', 'no special instruction',
+        'no specific instructions', 'no specific instruction', 'no particular instructions',
+        'no particular instruction', 'no special', 'no specific', 'no particular',
+        'no need', 'no needs', 'no required', 'no requirements', 'no requirement',
+        
+        # "Not X" variations
+        'not needed', 'not required', 'not necessary', 'not applicable', 'not really',
+        'not any', 'not anything', 'not special', 'not specific', 'not particular',
+        'not really needed', 'not really required', 'not really necessary',
+        "don't need", "don't have", "don't require", "don't want",
+        "doesn't need", "doesn't have", "doesn't require", "doesn't want",
+        "do not need", "do not have", "do not require", "do not want",
+        "does not need", "does not have", "does not require", "does not want",
+        
+        # "Nothing" variations
+        'nothing', 'nothing special', 'nothing specific', 'nothing particular',
+        'nothing needed', 'nothing required', 'nothing to add', 'nothing else',
+        'nothing more', 'nothing really', 'nothing at all',
+        
+        # "Skip" variations
+        'skip', 'skip it', 'skip this', 'skip that', 'skipping', 'skip instructions',
+        'skip the instructions', 'skip this step', 'skip that step',
+        
+        # "Without" variations
+        'without instructions', 'without any instructions', 'without special instructions',
+        'without anything', 'without any',
+        
+        # "I don't know" variations
+        "i don't know", "i dont know", "i do not know", "dunno", "idk", "not sure",
+        "i'm not sure", "i am not sure", "i don't think so", "i dont think so",
+        "i don't think there are", "i dont think there are", "not that i know",
+        
+        # Short/common responses
+        'none thanks', 'no thanks', 'no thank you', 'no thx',
+        'none for me', 'not for me', 'nothing for me',
+        'just none', 'just no', 'just skip',
+        'leave blank', 'leave empty', 'blank', 'empty',
+        
+        # Casual
+        'nah', 'naw', 'naa', 'no way', 'not at all',
+        'none whatsoever', 'absolutely none', 'absolutely not',
+        'definitely not', 'certainly not', 'surely not',
+        'i have none', "i don't have any", "i dont have any",
+        'there are none', "there aren't any", 'there are not any',
+        
+        # Medication-specific
+        'no special directions', 'no special direction', 'no directions',
+        'no direction', 'no special notes', 'no notes', 'no note',
+        'no special considerations', 'no considerations',
+        'just take it', 'just take', 'just consume', 'just use',
+        'take as directed', 'take normally', 'use normally',
+        'standard instructions', 'regular instructions', 'usual instructions',
+        'follow prescription', 'follow label', 'follow bottle',
+        'as prescribed', 'as directed', 'as usual', 'as normal',
+        'like usual', 'like normal', 'same as always',
+        
+        # With "any"
+        'any instructions? no', 'any special? no', 'any? no',
+        'not any instructions', 'not any special', 'not any specific',
+    ]
         
         # Check for "none" patterns in either slot_value or raw text
         text_to_check = user_text
         if slot_value and isinstance(slot_value, str):
             text_to_check = slot_value.lower().strip()
+        
+        logger.debug(f"Text to check for none patterns: '{text_to_check}'")
         
         # Check for "none" patterns
         is_none_response = any(
@@ -1012,25 +1150,29 @@ class ValidateMedicationForm(FormValidationAction):
             for phrase in none_phrases
         )
         
+        logger.debug(f"is_none_response: {is_none_response}")
+        
         if is_none_response:
             logger.debug(f"User indicated no instructions (matched: '{text_to_check}')")
             result = {
-                "medication_instructions": "None"
+                "medication_instructions": "None",
+                "requested_slot": None  # Form is complete!
             }
             logger.debug(f"Returning (none case): {result}")
             return result
         
         # If user provides instructions
-        if slot_value and slot_value.strip():
+        if slot_value and isinstance(slot_value, str) and slot_value.strip():
             # Clean up the instructions
             instructions = slot_value.strip()
             
-            # Capitalize first letter
+            # Capitalize first letter of the sentence
             if instructions and len(instructions) > 0:
                 instructions = instructions[0].upper() + instructions[1:]
             
             result = {
-                "medication_instructions": instructions
+                "medication_instructions": instructions,
+                "requested_slot": None  # Form is complete!
             }
             logger.debug(f"Returning (normal case): {result}")
             return result
@@ -3789,7 +3931,8 @@ class ActionCustomFallback(Action):
             # Strong match - let form handle it
             if score >= 85:
                 logger.debug("High fuzzy confidence - treating as CERTAIN")
-                return [ActiveLoop(form_name)]
+                return [SlotSet("medication_name", match.title()),
+                        ActiveLoop(form_name)]
             
             # Medium confidence - ask for confirmation
             if 65 <= score < 85:
@@ -3808,9 +3951,8 @@ class ActionCustomFallback(Action):
             # Low confidence 
             logger.debug("Low fuzzy confidence - storing raw input as medication_name")
             return [
-                ActiveLoop(form_name),
-                SlotSet("requested_slot", requested_slot),
-                FollowupAction("action_listen")
+                SlotSet("medication_name", user_text_lower),
+                ActiveLoop(form_name)
             ]
         
         except ImportError:
