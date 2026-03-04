@@ -137,6 +137,7 @@ rules:
   condition:
     - slot_was_set:
       - current_step: ask_reminder 
+    - active_loop: null
   steps:
     - action: action_submit_refill_form
     - action: action_listen
@@ -160,6 +161,7 @@ rules:
   condition:
     - slot_was_set:
       - current_step: ask_reminder
+    - active_loop: null
   steps:
     - or: 
       - intent: deny
@@ -192,11 +194,6 @@ rules:
     - intent: affirm
     - action: reminder_form
     - active_loop: reminder_form
-
-- rule: After reminder deny - wait for next input
-  steps:
-    - action: action_handle_reminder_deny
-    - action: action_listen
 
 - rule: List Medications
   steps:
@@ -310,7 +307,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - or:
       - intent: affirm
       - intent: cancel
@@ -322,7 +318,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - or:
       - intent: affirm
       - intent: cancel
@@ -334,7 +329,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - or:
       - intent: affirm
       - intent: cancel
@@ -346,7 +340,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - intent: deny
     - action: medication_form
     - active_loop: medication_form
@@ -357,7 +350,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - intent: deny
     - action: refill_form
     - active_loop: refill_form
@@ -368,7 +360,6 @@ rules:
     - slot_was_set:
       - form_interrupted: true
   steps:
-    - action: action_handle_form_interruption
     - intent: deny
     - action: reminder_form
     - active_loop: reminder_form

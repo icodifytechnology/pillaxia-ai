@@ -327,6 +327,7 @@ slots:
 
   form_interrupted:
     type: bool
+    initial_value: false
     influence_conversation: true
     mappings:
       - type: custom

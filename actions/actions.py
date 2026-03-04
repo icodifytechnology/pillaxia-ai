@@ -1062,20 +1062,6 @@ class ActionCancelForm(BaseAction):
             }
             dispatcher.utter_message(attachment=attachment)
             
-            return [
-                ActiveLoop(None),
-                SlotSet("requested_slot", None),
-                SlotSet("medication_name", None),
-                SlotSet("medication_type", None),
-                SlotSet("medication_colour", None),
-                SlotSet("medication_dose", None),
-                SlotSet("medication_instructions", None),
-                SlotSet("pending_medication_confirmation", None),
-                SlotSet("fuzzy_result", None),
-                SlotSet("original_medication_input", None),
-                SlotSet('form_prompt', None)
-            ]
-            
         elif active_loop == "refill_form":
             logger.debug('Cancelling refill form')
             response = "Okay. I've stopped adding the refill information. What would you like to do next?"
@@ -1086,13 +1072,6 @@ class ActionCancelForm(BaseAction):
             }
             dispatcher.utter_message(attachment=attachment)
             
-            return [
-                ActiveLoop(None),
-                SlotSet("requested_slot", None),
-                SlotSet("stock_level", None),
-                SlotSet("refill_day", None)
-            ]
-            
         elif active_loop == "reminder_form":
             logger.debug('Cancelling reminder form')
             response = "Okay. I have I've stopped adding the reminder. What would you like to do next?"
@@ -1102,18 +1081,6 @@ class ActionCancelForm(BaseAction):
                 "status": "success"
             }
             dispatcher.utter_message(attachment=attachment)
-            
-            return [
-                ActiveLoop(None),
-                SlotSet("requested_slot", None),
-                SlotSet("frequency", None),
-                SlotSet("frequency", None),
-                SlotSet("per_day_frequency", None),
-                SlotSet("quantity", None),
-                SlotSet("reminder_time", None),
-                SlotSet("alert_type", None),
-                SlotSet("reminder_day", None)
-            ]
             
         else:
             logger.debug(f'No matching form for active_loop: "{active_loop}"')
@@ -1126,9 +1093,31 @@ class ActionCancelForm(BaseAction):
             }
             dispatcher.utter_message(attachment=attachment)
             
-            return [
+        return [
                 ActiveLoop(None),
-                SlotSet("requested_slot", None)
+                SlotSet("requested_slot", None),
+                SlotSet("medication_name", None),
+                SlotSet("medication_type", None),
+                SlotSet("medication_colour", None),
+                SlotSet("medication_dose", None),
+                SlotSet("medication_instructions", None),
+                SlotSet("pending_medication_confirmation", None),
+                SlotSet("fuzzy_result", None),
+                SlotSet("original_medication_input", None),
+                SlotSet('form_prompt', None),
+                SlotSet("requested_slot", None),
+                SlotSet("requested_slot", None),
+                SlotSet("frequency", None),
+                SlotSet("frequency", None),
+                SlotSet("per_day_frequency", None),
+                SlotSet("quantity", None),
+                SlotSet("reminder_time", None),
+                SlotSet("alert_type", None),
+                SlotSet("reminder_day", None),
+                SlotSet("stock_level", None),
+                SlotSet("refill_day", None),
+                SlotSet("current_step", None),
+                SlotSet('form_interrupted', False)
             ]
 
 class ActionSubmitMedicationForm(BaseAction):
@@ -3812,6 +3801,7 @@ class ActionCustomFallback(Action):
                     ActiveLoop(form_name),
                     SlotSet("requested_slot", requested_slot),
                     SlotSet('pending_medication_confirmation', match.title()),
+                    SlotSet('original_medication_input', user_text_lower),
                     FollowupAction("action_listen")
                 ]
             
