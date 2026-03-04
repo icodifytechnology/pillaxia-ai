@@ -311,7 +311,9 @@ rules:
       - form_interrupted: true
   steps:
     - action: action_handle_form_interruption
-    - intent: affirm
+    - or:
+      - intent: affirm
+      - intent: cancel
     - action: action_cancel_form
 
 - rule: Handle affirm after form interruption - cancel the form - refill form
@@ -321,7 +323,9 @@ rules:
       - form_interrupted: true
   steps:
     - action: action_handle_form_interruption
-    - intent: affirm
+    - or:
+      - intent: affirm
+      - intent: cancel
     - action: action_cancel_form
 
 - rule: Handle affirm after form interruption - cancel the form - reminder form
@@ -331,7 +335,9 @@ rules:
       - form_interrupted: true
   steps:
     - action: action_handle_form_interruption
-    - intent: affirm
+    - or:
+      - intent: affirm
+      - intent: cancel
     - action: action_cancel_form
 
 - rule: Handle deny after form interruption - continue with the form - medication_form
@@ -341,9 +347,7 @@ rules:
       - form_interrupted: true
   steps:
     - action: action_handle_form_interruption
-    - or:
-      - intent: deny
-      - intent: cancel
+    - intent: deny
     - action: medication_form
     - active_loop: medication_form
 
