@@ -135,13 +135,34 @@ class ActionSessionStart(BaseAction):
     
         logger.info(debug_separator("ActionSessionStart"))
         
-        # Add an action_listen event to create the right state for rule matching
         events = []
         
-        # Add a fake action_listen to help rule matching
+        # CRITICAL: Check for and deactivate any active forms
+        if tracker.active_loop:
+            form_name = tracker.active_loop.get("name")
+            logger.info(f"Found active form '{form_name}' from previous session - deactivating")
+            events.append(ActiveLoop(None))  # Deactivate the form
+        
+        # Reset all form-related slots to ensure clean state
+        form_slots = [
+            "medication_name", "medication_type", "medication_colour", 
+            "medication_dose", "medication_instructions", "form_prompt",
+            "fuzzy_result", "original_medication_input", 
+            "pending_medication_confirmation", "stock_level", "refill_day",
+            "frequency", "per_day_frequency", "quantity", "reminder_time",
+            "alert_type", "reminder_day", "current_step", "requested_slot"
+        ]
+        
+        for slot in form_slots:
+            current_value = tracker.get_slot(slot)
+            if current_value is not None:
+                logger.debug(f"Clearing slot '{slot}' (was: {current_value})")
+                events.append(SlotSet(slot, None))
+        
+        # Add action_listen for rule matching
         events.append(ActionExecuted("action_listen"))
         
-        logger.info("Session initialized with action_listen for rule matching")
+        logger.info(f"Session initialized - active forms cleared, {len(events)} events created")
         return events
     
     def run(self, dispatcher: CollectingDispatcher,
@@ -156,19 +177,17 @@ class ActionSessionStart(BaseAction):
         slot_loader = SlotLoader(tracker.sender_id)
         slot_events = slot_loader.load_all_slots(tracker)
         
-        # Log loaded slots WITHOUT isinstance check
+        # Log loaded slots
         for event in slot_events:
-            # Directly access attributes - assume they're SlotSet objects
             try:
                 logger.debug(f"Loaded slot: {event.key} = {event.value}")
             except AttributeError:
-                # If not a SlotSet, log what it is
-                logger.debug(f"Loaded event (not SlotSet): {type(event)} - {event}")
+                logger.debug(f"Loaded event: {type(event)} - {event}")
         
-        # Run the actual action logic
+        # Run the actual action logic (which now clears forms)
         action_events = self.run_with_slots(dispatcher, tracker, domain)
         
-        # Combine all events
+        # Combine all events - note: SessionStarted comes AFTER our cleanup
         all_events = slot_events + [SessionStarted()] + action_events
         logger.info(f"Session initialization complete with {len(all_events)} events")
         
