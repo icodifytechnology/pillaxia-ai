@@ -34,6 +34,7 @@ intents:
   - provide_reminder_time
   - provide_alert_type
   - provide_reminder_day
+  - app_closed
   
 actions:
   - action_session_start
@@ -79,6 +80,7 @@ actions:
   - action_ask_reminder_time
   - action_ask_reminder_day
   - action_ask_alert_type
+  - action_handle_app_closed
 
 entities:
   - period
