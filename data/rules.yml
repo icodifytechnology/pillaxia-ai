@@ -30,6 +30,11 @@ rules:
     - action: action_session_start
   wait_for_user_input: false
 
+- rule: Handle app closed
+  steps:
+    - intent: app_closed
+    - action: action_handle_app_closed
+
 - rule: Greet anytime the user Greets
   steps:
   - intent: greet

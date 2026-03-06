@@ -117,11 +117,9 @@ class BaseAction(Action, ABC):
         # Combine events
         return slot_events + action_events
 
-
 # Import helpers AFTER defining BaseAction to avoid circular imports
 from .helpers.response_builder import ResponseBuilder
 from .helpers.slot_loader import SlotLoader
-
 
 class ActionSessionStart(BaseAction):
     """Initializes session and loads user preferences"""
@@ -193,6 +191,35 @@ class ActionSessionStart(BaseAction):
         
         return all_events
 
+class ActionHandleAppClosed(BaseAction):
+    def name(self) -> Text:
+        return "action_handle_app_closed"
+    
+    def run_with_slots(self, dispatcher, tracker, domain):
+        logger.info(f"App closed for sender: {tracker.sender_id}")
+        
+        events = []
+        
+        # Deactivate any active forms
+        if tracker.active_loop:
+            events.append(ActiveLoop(None))
+        
+        # Clear form slots (same list as above)
+        form_slots = [
+            "medication_name", "medication_type", "medication_colour", 
+            "medication_dose", "medication_instructions", "form_prompt",
+            "fuzzy_result", "original_medication_input", 
+            "pending_medication_confirmation", "stock_level", "refill_day",
+            "frequency", "per_day_frequency", "quantity", "reminder_time",
+            "alert_type", "reminder_day", "current_step", "requested_slot"
+        ] 
+
+        for slot in form_slots:
+            if tracker.get_slot(slot) is not None:
+                events.append(SlotSet(slot, None))
+        
+        return events
+    
 class ActionGreet(BaseAction):
     """Personalized greeting action"""
     
@@ -1813,8 +1840,8 @@ class ActionAskPerDayFrequency(BaseAction):
             {"title": "Thrice", "payload": "/inform{\"per_day_frequency\":\"thrice\"}"},
         ]
 
-        attachment = send_response(response)
-        # attachment = send_response_with_buttons(response, buttons)
+        # attachment = send_response(response)
+        attachment = send_response_with_buttons(response, buttons)
         # Send the message with buttons
         dispatcher.utter_message(attachment=attachment)
 
@@ -2971,7 +2998,8 @@ class ActionListMedications(Action):
                 # Create structured data array with each medication as an item
                 medications_data = [
                     {
-                        "name": name
+                        "name": name,
+                        "value": "",
                     }
                     for idx, name in enumerate(medication_names)
                 ]
