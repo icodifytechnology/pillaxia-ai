@@ -1,0 +1,1618 @@
+[
+  {
+    "text": "works for me",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.5600929856300354
+    }
+  },
+  {
+    "text": "never",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.9759363532066345
+    }
+  },
+  {
+    "text": "maybe later",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.8439137935638428
+    }
+  },
+  {
+    "text": "hold off",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.9642958045005798
+    }
+  },
+  {
+    "text": "put it off",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.8891140818595886
+    }
+  },
+  {
+    "text": "exit",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.48575830459594727
+    }
+  },
+  {
+    "text": "halt",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.32528889179229736
+    }
+  },
+  {
+    "text": "back out",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.8190295696258545
+    }
+  },
+  {
+    "text": "greetings",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "provide_medication_colour",
+      "confidence": 0.9999979734420776
+    }
+  },
+  {
+    "text": "see you next time",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "next_dose_date",
+      "confidence": 0.9080218076705933
+    }
+  },
+  {
+    "text": "until next time",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "next_dose_date",
+      "confidence": 0.8527853488922119
+    }
+  },
+  {
+    "text": "gotta run",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.26305171847343445
+    }
+  },
+  {
+    "text": "exiting the chat",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.4830634295940399
+    }
+  },
+  {
+    "text": "is a human checking these messages?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.7131133675575256
+    }
+  },
+  {
+    "text": "what are the ethical guidelines you follow?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.9787550568580627
+    }
+  },
+  {
+    "text": "show medicines i've taken",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.5704602003097534
+    }
+  },
+  {
+    "text": "list medications i've taken",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.3776206970214844
+    }
+  },
+  {
+    "text": "What's my pill schedule looking like today?",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.7868972420692444
+    }
+  },
+  {
+    "text": "Today's medication check!",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.9561123847961426
+    }
+  },
+  {
+    "text": "i’m up to date with meds",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.44144782423973083
+    }
+  },
+  {
+    "text": "What's the count on my Lipitor tablets?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.6074508428573608
+    }
+  },
+  {
+    "text": "do i need a refill for Escitalopram?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "refill_due",
+      "confidence": 0.9557740688323975
+    }
+  },
+  {
+    "text": "remaining Bupropion doses?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "provide_stock_level",
+      "confidence": 0.9726665616035461
+    }
+  },
+  {
+    "text": "Check the refill status of my Amlodipine",
+    "intent": "refill_due",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.7286614179611206
+    }
+  },
+  {
+    "text": "I want to note that I have a sore throat.",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.857168436050415
+    }
+  },
+  {
+    "text": "please add that I have a mild fever",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.7257033586502075
+    }
+  },
+  {
+    "text": "What does of Cetamol do I take?",
+    "intent": "medication_dosage",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.5152754187583923
+    }
+  },
+  {
+    "text": "did i forget to take my Lisinopril today?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_taken_time",
+      "confidence": 0.6362649202346802
+    }
+  },
+  {
+    "text": "did i take my Gabapentin this morning?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_taken_time",
+      "confidence": 0.8936848044395447
+    }
+  },
+  {
+    "text": "can you check if i skipped my Sertraline today?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.7375264167785645
+    }
+  },
+  {
+    "text": "am I meeting my medication goals?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.6493498086929321
+    }
+  },
+  {
+    "text": "what's my medication performance?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.5556016564369202
+    }
+  },
+  {
+    "text": "have I been good with meds since last week?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.7282305359840393
+    }
+  },
+  {
+    "text": "I have headache",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9375488758087158
+    }
+  },
+  {
+    "text": "information on heart disease",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.42096832394599915
+    }
+  },
+  {
+    "text": "Can you diagnose my illness?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.20906080305576324
+    }
+  },
+  {
+    "text": "Can you interpret my lab results?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_health_records",
+      "confidence": 0.912956714630127
+    }
+  },
+  {
+    "text": "What are some fun activities to do on the weekend?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "provide_reminder_day",
+      "confidence": 0.3103151023387909
+    }
+  },
+  {
+    "text": "Will there be a thunderstorm this weekend?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "provide_reminder_day",
+      "confidence": 1.0
+    }
+  },
+  {
+    "text": "Can you tell me the weather for next week?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "next_dose_date",
+      "confidence": 0.6846233606338501
+    }
+  },
+  {
+    "text": "My knees ache whenever I stand up.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.6091030836105347
+    }
+  },
+  {
+    "text": "why not",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.9467907547950745
+    }
+  },
+  {
+    "text": "you got it",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.5030052065849304
+    }
+  },
+  {
+    "text": "sure, go ahead",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.7695832848548889
+    }
+  },
+  {
+    "text": "call it off",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.8576722741127014
+    }
+  },
+  {
+    "text": "ignore my last request",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.576318085193634
+    }
+  },
+  {
+    "text": "hey angela, got a minute?",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "medication_taken_time",
+      "confidence": 0.6199126243591309
+    }
+  },
+  {
+    "text": "gn",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.4523051083087921
+    }
+  },
+  {
+    "text": "have a good one",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.424931138753891
+    }
+  },
+  {
+    "text": "how does this work?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.4999195337295532
+    }
+  },
+  {
+    "text": "can you explain how your AI works?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.6562120318412781
+    }
+  },
+  {
+    "text": "how do i input a recently prescribed medicine to my list?",
+    "intent": "add_medication",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.8216282725334167
+    }
+  },
+  {
+    "text": "can I get a names of my medication?",
+    "intent": "list_medications",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.8391137719154358
+    }
+  },
+  {
+    "text": "Could you pull up my prescription record?",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.9070567488670349
+    }
+  },
+  {
+    "text": "how has my medication been tracked?",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.8615830540657043
+    }
+  },
+  {
+    "text": "show a summary of my past tests",
+    "intent": "get_health_records",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.9329771995544434
+    }
+  },
+  {
+    "text": "Tell me about my medications for the day",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.7655981183052063
+    }
+  },
+  {
+    "text": "i am notifying that I have taken my meds.",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.7210388779640198
+    }
+  },
+  {
+    "text": "Did I take my meds this morning?",
+    "intent": "medication_taken_time",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.619540810585022
+    }
+  },
+  {
+    "text": "Can you check how many doses of Synthroid I have?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.7195934653282166
+    }
+  },
+  {
+    "text": "Am I about to run out of Escitalopram?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.5844562649726868
+    }
+  },
+  {
+    "text": "Can you check if I need to refill my Citalopram?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "refill_due",
+      "confidence": 0.9133356213569641
+    }
+  },
+  {
+    "text": "record my back pain for today",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.2770504355430603
+    }
+  },
+  {
+    "text": "log my cold symptoms",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.8937892317771912
+    }
+  },
+  {
+    "text": "Have I been consistent with my doses this week?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.9770145416259766
+    }
+  },
+  {
+    "text": "have i been consistent with my meds this month?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.9833057522773743
+    }
+  },
+  {
+    "text": "have i been keeping up with my doses this week?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.9231548309326172
+    }
+  },
+  {
+    "text": "have i completed my medication for today?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.9861676096916199
+    }
+  },
+  {
+    "text": "I have a sore throat.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9434321522712708
+    }
+  },
+  {
+    "text": "What are the symptoms of menopause?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.8308201432228088
+    }
+  },
+  {
+    "text": "Can you tell me a joke?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.8388424515724182
+    }
+  },
+  {
+    "text": "Can you play some music for me?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.3885022699832916
+    }
+  },
+  {
+    "text": "What's the meaning of life?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.20387713611125946
+    }
+  },
+  {
+    "text": "What's the temperature outside right now?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.282710462808609
+    }
+  },
+  {
+    "text": "I feel dizzy and nauseous.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9829131960868835
+    }
+  },
+  {
+    "text": "My back has been sore for days.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.29498472809791565
+    }
+  },
+  {
+    "text": "My throat is sore, and I can't talk.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9041535258293152
+    }
+  },
+  {
+    "text": "I feel tired all the time.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.7828359603881836
+    }
+  },
+  {
+    "text": "I'm experiencing stomach cramps.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9611561894416809
+    }
+  },
+  {
+    "text": "I need advice for my migraines.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.6008859276771545
+    }
+  },
+  {
+    "text": "Inflammation Medicine",
+    "intent": "provide_medication_type",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.9013552665710449
+    }
+  },
+  {
+    "text": "it is an inflammation medicine",
+    "intent": "provide_medication_type",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.5233621597290039
+    }
+  },
+  {
+    "text": "all good",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.5437654256820679
+    }
+  },
+  {
+    "text": "right",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.5112529993057251
+    }
+  },
+  {
+    "text": "not interested",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "provide_medication_type",
+      "confidence": 0.7727041244506836
+    }
+  },
+  {
+    "text": "not today",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.33619850873947144
+    }
+  },
+  {
+    "text": "end this",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.6859180927276611
+    }
+  },
+  {
+    "text": "hi, I'd like some information please",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.24721601605415344
+    }
+  },
+  {
+    "text": "catch you later",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.8706902861595154
+    }
+  },
+  {
+    "text": "have a great day",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "provide_medication_colour",
+      "confidence": 1.0
+    }
+  },
+  {
+    "text": "can you make decisions?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.410770058631897
+    }
+  },
+  {
+    "text": "what's in my medicine cabinet?",
+    "intent": "list_medications",
+    "intent_prediction": {
+      "name": "add_medication",
+      "confidence": 0.30636247992515564
+    }
+  },
+  {
+    "text": "Bring up my medication chart",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.6531364917755127
+    }
+  },
+  {
+    "text": "Pull up my medication profile",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.9432379007339478
+    }
+  },
+  {
+    "text": "show my medication data",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.8001691102981567
+    }
+  },
+  {
+    "text": "what medication should i take right now?",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.5425028204917908
+    }
+  },
+  {
+    "text": "Just became a medication ninja!",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.5311089158058167
+    }
+  },
+  {
+    "text": "Meds are in my system now",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.7622952461242676
+    }
+  },
+  {
+    "text": "Dosed up for the day",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "provide_medication_instructions",
+      "confidence": 0.5994147658348083
+    }
+  },
+  {
+    "text": "all pills down",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.27214372158050537
+    }
+  },
+  {
+    "text": "daily medicine logged",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "add_medication",
+      "confidence": 0.4992537796497345
+    }
+  },
+  {
+    "text": "what did i report last?",
+    "intent": "get_symptoms",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.5990008115768433
+    }
+  },
+  {
+    "text": "Please record my symptoms of fatigue today.",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.7848851680755615
+    }
+  },
+  {
+    "text": "can you record my muscle cramps?",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.6061275005340576
+    }
+  },
+  {
+    "text": "did i take my medication as prescribed today?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.566973090171814
+    }
+  },
+  {
+    "text": "have i missed any doses recently?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.7941476702690125
+    }
+  },
+  {
+    "text": "give me a report of my medication consistency",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.9900898933410645
+    }
+  },
+  {
+    "text": "did i take all my meds on time this week?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.7846658229827881
+    }
+  },
+  {
+    "text": "show my compliance history over the last month",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.5073578953742981
+    }
+  },
+  {
+    "text": "summarize my medication consistency this week",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.5498508810997009
+    }
+  },
+  {
+    "text": "Is this bump on my skin normal?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.24498134851455688
+    }
+  },
+  {
+    "text": "Why do I have a runny nose?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.8437241911888123
+    }
+  },
+  {
+    "text": "Why do my joints ache?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.9236353635787964
+    }
+  },
+  {
+    "text": "How do I change a flat tire?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.34893837571144104
+    }
+  },
+  {
+    "text": "What are the rules of chess?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.38463181257247925
+    }
+  },
+  {
+    "text": "Is it going to snow tomorrow in New York?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "next_dose_date",
+      "confidence": 0.25952309370040894
+    }
+  },
+  {
+    "text": "What time is the sunset today?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.9384067058563232
+    }
+  },
+  {
+    "text": "My vision is blurry sometimes.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.9997385144233704
+    }
+  },
+  {
+    "text": "There's a bump on my neck.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.32122236490249634
+    }
+  },
+  {
+    "text": "once",
+    "intent": "provide_per_day_frequency",
+    "intent_prediction": {
+      "name": "provide_medication_instructions",
+      "confidence": 0.9994533658027649
+    }
+  },
+  {
+    "text": "until finished",
+    "intent": "provide_medication_instructions",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.9285557866096497
+    }
+  },
+  {
+    "text": "yep",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.48989835381507874
+    }
+  },
+  {
+    "text": "alright",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.9322236776351929
+    }
+  },
+  {
+    "text": "certainly",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.37782028317451477
+    }
+  },
+  {
+    "text": "indeed",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.3358711302280426
+    }
+  },
+  {
+    "text": "negative",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.999971866607666
+    }
+  },
+  {
+    "text": "nty",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.6344652771949768
+    }
+  },
+  {
+    "text": "delay it",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.29592594504356384
+    }
+  },
+  {
+    "text": "can wait",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.25738492608070374
+    }
+  },
+  {
+    "text": "pause for now",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.3946240544319153
+    }
+  },
+  {
+    "text": "let's do it another time",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "add_medication",
+      "confidence": 0.3259257674217224
+    }
+  },
+  {
+    "text": "pull the plug",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.8573604822158813
+    }
+  },
+  {
+    "text": "not anymore",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.9670391082763672
+    }
+  },
+  {
+    "text": "good evening, is now a good time to chat?",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.20199666917324066
+    }
+  },
+  {
+    "text": "hey, nice to meet you",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.9464446902275085
+    }
+  },
+  {
+    "text": "I'm off now",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.9457263946533203
+    }
+  },
+  {
+    "text": "I'm all set",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "get_health_records",
+      "confidence": 0.3128253221511841
+    }
+  },
+  {
+    "text": "I'll be going now",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.7536991238594055
+    }
+  },
+  {
+    "text": "appreciate it, bye",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 1.0
+    }
+  },
+  {
+    "text": "what can you not do?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.6286970376968384
+    }
+  },
+  {
+    "text": "can you pass the Turing test?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "get_health_records",
+      "confidence": 0.40701836347579956
+    }
+  },
+  {
+    "text": "Mind showing me my meds info?",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.28074732422828674
+    }
+  },
+  {
+    "text": "Meds for today?",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.4774181842803955
+    }
+  },
+  {
+    "text": "Gotta take my pills, what's on the list?",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.8517588973045349
+    }
+  },
+  {
+    "text": "Show me today's medication regimen",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.6914255023002625
+    }
+  },
+  {
+    "text": "What's the pharmaceutical plan for the day?",
+    "intent": "list_of_todays_medication",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.35181161761283875
+    }
+  },
+  {
+    "text": "Just downed my daily drugs",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.9366077184677124
+    }
+  },
+  {
+    "text": "Did I miss my Alprazolam dose this morning?",
+    "intent": "medication_taken_time",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.6034647822380066
+    }
+  },
+  {
+    "text": "Do I have a scheduled dose today or tomorrow?",
+    "intent": "next_dose_date",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.7132880091667175
+    }
+  },
+  {
+    "text": "add my sore throat symptom",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.7530808448791504
+    }
+  },
+  {
+    "text": "log my abdominal pain",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 1.0
+    }
+  },
+  {
+    "text": "log my symptom of heart palpitations",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.4086780846118927
+    }
+  },
+  {
+    "text": "did i take my Metformin on time?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.5836123824119568
+    }
+  },
+  {
+    "text": "What are the symptoms of diabetes?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_symptoms",
+      "confidence": 0.44177061319351196
+    }
+  },
+  {
+    "text": "How do I bake a chocolate cake?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "medication_stock_level",
+      "confidence": 0.4913102090358734
+    }
+  },
+  {
+    "text": "Can you help me with my math homework?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.8084964752197266
+    }
+  },
+  {
+    "text": "Do I need an umbrella for today?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.9429156184196472
+    }
+  },
+  {
+    "text": "Will there be heavy rain in the afternoon?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "provide_reminder_time",
+      "confidence": 0.9732248187065125
+    }
+  },
+  {
+    "text": "2capsule",
+    "intent": "provide_medication_dose",
+    "intent_prediction": {
+      "name": "provide_medication_type",
+      "confidence": 0.8932528495788574
+    }
+  },
+  {
+    "text": "okay",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.6949424743652344
+    }
+  },
+  {
+    "text": "absolutely",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.9215235710144043
+    }
+  },
+  {
+    "text": "affirmative",
+    "intent": "affirm",
+    "intent_prediction": {
+      "name": "cancel_form",
+      "confidence": 0.26576873660087585
+    }
+  },
+  {
+    "text": "I'm good",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.7136952877044678
+    }
+  },
+  {
+    "text": "next",
+    "intent": "deny",
+    "intent_prediction": {
+      "name": "next_dose_date",
+      "confidence": 0.7666826248168945
+    }
+  },
+  {
+    "text": "quit",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.47642409801483154
+    }
+  },
+  {
+    "text": "don't go ahead with it",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "affirm",
+      "confidence": 0.4216088652610779
+    }
+  },
+  {
+    "text": "put that on hold",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.6761828064918518
+    }
+  },
+  {
+    "text": "we can skip that",
+    "intent": "cancel_form",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.9686071872711182
+    }
+  },
+  {
+    "text": "morning",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "provide_medication_instructions",
+      "confidence": 0.9894796013832092
+    }
+  },
+  {
+    "text": "evening",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "goodbye",
+      "confidence": 0.21692289412021637
+    }
+  },
+  {
+    "text": "what's up?",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.7515411376953125
+    }
+  },
+  {
+    "text": "hi, I'm looking for help with my medications",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.36217597126960754
+    }
+  },
+  {
+    "text": "moin",
+    "intent": "greet",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.9999961853027344
+    }
+  },
+  {
+    "text": "see you around",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "greet",
+      "confidence": 0.4459112882614136
+    }
+  },
+  {
+    "text": "ttyl",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.9921139478683472
+    }
+  },
+  {
+    "text": "finished for today, thanks",
+    "intent": "goodbye",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.797942042350769
+    }
+  },
+  {
+    "text": "what are you allowed to do?",
+    "intent": "bot_challenge",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.5261754393577576
+    }
+  },
+  {
+    "text": "give me an overview of my medications",
+    "intent": "list_medications",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.6141725182533264
+    }
+  },
+  {
+    "text": "Can I see a list of medications I took",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.8400235772132874
+    }
+  },
+  {
+    "text": "get my medication information",
+    "intent": "medication_report",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.3157164454460144
+    }
+  },
+  {
+    "text": "Medication adherence achieved",
+    "intent": "notify_medication_taken",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.9586526155471802
+    }
+  },
+  {
+    "text": "Can you tell me if I took my [medication] today?",
+    "intent": "medication_taken_time",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.37910163402557373
+    }
+  },
+  {
+    "text": "what dose is coming up?",
+    "intent": "next_dose_date",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.8164510726928711
+    }
+  },
+  {
+    "text": "when is the following medication due?",
+    "intent": "next_dose_date",
+    "intent_prediction": {
+      "name": "medication_adherence",
+      "confidence": 0.9100768566131592
+    }
+  },
+  {
+    "text": "Am I close to finishing my Prednisone course?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.4625225067138672
+    }
+  },
+  {
+    "text": "am i close to finishing Prednisone?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.6394157409667969
+    }
+  },
+  {
+    "text": "do i need to top up Atorvastatin?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "medication_dosage",
+      "confidence": 0.3279000222682953
+    }
+  },
+  {
+    "text": "am i low on Gabapentin?",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "provide_medication_name",
+      "confidence": 0.569298267364502
+    }
+  },
+  {
+    "text": "check if i need a refill for Ibuprofen",
+    "intent": "medication_stock_level",
+    "intent_prediction": {
+      "name": "refill_due",
+      "confidence": 0.7439939975738525
+    }
+  },
+  {
+    "text": "log my stomach ache",
+    "intent": "get_new_symptoms",
+    "intent_prediction": {
+      "name": "out_of_scope",
+      "confidence": 0.6694633960723877
+    }
+  },
+  {
+    "text": "have i taken all my meds today?",
+    "intent": "check_medication_taken",
+    "intent_prediction": {
+      "name": "notify_medication_taken",
+      "confidence": 0.5774898529052734
+    }
+  },
+  {
+    "text": "am I taking my medications as prescribed?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.3731735944747925
+    }
+  },
+  {
+    "text": "show my pill-taking record",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "medication_report",
+      "confidence": 0.6252741813659668
+    }
+  },
+  {
+    "text": "am i taking all my medications as prescribed?",
+    "intent": "medication_adherence",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.22199106216430664
+    }
+  },
+  {
+    "text": "I need to find a doctor near me.",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "add_medication",
+      "confidence": 0.23929260671138763
+    }
+  },
+  {
+    "text": "What vaccinations do I need?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "list_medications",
+      "confidence": 0.7298761606216431
+    }
+  },
+  {
+    "text": "Is my child developing normally?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "check_medication_taken",
+      "confidence": 0.2866755723953247
+    }
+  },
+  {
+    "text": "Is my thyroid functioning normally?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "provide_medication_instructions",
+      "confidence": 0.304206520318985
+    }
+  },
+  {
+    "text": "Can you explain my MRI results?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_health_records",
+      "confidence": 0.36091551184654236
+    }
+  },
+  {
+    "text": "What's the latest news in technology?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.20734117925167084
+    }
+  },
+  {
+    "text": "What's the best way to learn a new language?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "get_new_symptoms",
+      "confidence": 0.5243644118309021
+    }
+  },
+  {
+    "text": "What's the humidity level today?",
+    "intent": "out_of_scope",
+    "intent_prediction": {
+      "name": "list_of_todays_medication",
+      "confidence": 0.6510884761810303
+    }
+  }
+]

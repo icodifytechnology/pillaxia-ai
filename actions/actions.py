@@ -291,7 +291,6 @@ class ActionGoodbye(BaseAction):
             response = "Goodbye! Take care."
             attachment = send_response(response)
             dispatcher.utter_message(attachment=attachment)
-        
         return []
     
 class ActionIamabot(Action):
@@ -501,7 +500,17 @@ class ActionAskMedicationType(BaseAction):
 
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_medication_type")
-        dispatcher.utter_message(attachment=response)
+        
+        # Buttons
+        buttons = [
+            {"title": "Antibiotic", "payload": "Antibiotic"},
+            {"title": "Antidepressant", "payload": "Antidepressant"},
+            {"title": "Painkiller", "payload": "Painkiller"},
+        ]
+
+        attachment = send_response(response)
+        # attachment = send_response_with_buttons(response, buttons)
+        dispatcher.utter_message(attachment=attachment)
         return []
 
 class ActionAskMedicationColour(BaseAction):
@@ -513,7 +522,18 @@ class ActionAskMedicationColour(BaseAction):
 
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_medication_colour")
-        dispatcher.utter_message(attachment=response)
+        
+        # Buttons
+        buttons = [
+            {"title": "Red", "payload": "Red"},
+            {"title": "Blue", "payload": "Blue"},
+            {"title": "Green", "payload": "Green"},
+        ]
+
+        attachment = send_response(response)
+        # attachment = send_response_with_buttons(response, buttons)
+
+        dispatcher.utter_message(attachment=attachment)
         return []
 
 class ActionAskMedicationDose(BaseAction):
@@ -1835,9 +1855,9 @@ class ActionAskPerDayFrequency(BaseAction):
         
         # Buttons
         buttons = [
-            {"title": "Once", "payload": "/inform{\"per_day_frequency\":\"once\"}"},
-            {"title": "Twice", "payload": "/inform{\"per_day_frequency\":\"twice\"}"},
-            {"title": "Thrice", "payload": "/inform{\"per_day_frequency\":\"thrice\"}"},
+            {"title": "Once", "payload": "once"},
+            {"title": "Twice", "payload": "twice"},
+            {"title": "Thrice", "payload": "thrice"},
         ]
 
         # attachment = send_response(response)
@@ -1880,7 +1900,17 @@ class ActionAskAlertType(BaseAction):
         
         builder = ResponseBuilder(tracker.sender_id, tracker)
         response = builder.build_response(intent="ask_alert_type")
-        dispatcher.utter_message(attachment=response)
+
+        # Buttons
+        buttons = [
+            {"title": "Voice", "payload": "Voice"},
+            {"title": "Alarm", "payload": "Alarm"}
+        ]
+
+        attachment = send_response(response)
+        # attachment = send_response_with_buttons(response, buttons)
+
+        dispatcher.utter_message(attachment=attachment)
         return []
     
 class ActionAskReminderDay(BaseAction):
@@ -2051,9 +2081,9 @@ class ValidateReminderForm(FormValidationAction):
                     normalized = self.normalize_time_unit(number, unit)
                     return {"frequency": normalized}
             
-            dispatcher.utter_message(
-                text="Please tell me for how long. For example: '30 days', '2 weeks', or '1 month'."
-            )
+            # dispatcher.utter_message(
+            #     text="Please tell me for how long. For example: '30 days', '2 weeks', or '1 month'."
+            # )
             return {"frequency": None}
 
         number = int(match.group(1))
@@ -2143,12 +2173,6 @@ class ValidateReminderForm(FormValidationAction):
             formatted = f"{quantity_num} {unit}"
             
             medication_dose = tracker.get_slot("medication_dose")
-            if medication_dose:
-                dispatcher.utter_message(
-                    text=f"Got it! {formatted} of {medication_dose} each time."
-                )
-            else:
-                dispatcher.utter_message(text=f"Got it! {formatted} each time.")
             
             return {"quantity": quantity_num}
         
@@ -2165,17 +2189,13 @@ class ValidateReminderForm(FormValidationAction):
             formatted = f"{quantity_num} {unit}"
             
             medication_dose = tracker.get_slot("medication_dose")
-            if medication_dose:
-                dispatcher.utter_message(text=f"Got it! {formatted} of {medication_dose} each time.")
-            else:
-                dispatcher.utter_message(text=f"Got it! {formatted} each time.")
             
             return {"quantity": quantity_num}
         
         # If nothing matches
-        dispatcher.utter_message(
-            text="Please enter a valid quantity with units. For example: '10 mg', '5 ml', or '1 tablet'."
-        )
+        # dispatcher.utter_message(
+        #     text="Please enter a valid quantity with units. For example: '10 mg', '5 ml', or '1 tablet'."
+        # )
         return {"quantity": None}
 
     async def validate_per_day_frequency(
@@ -2247,13 +2267,13 @@ class ValidateReminderForm(FormValidationAction):
         for key, normalized in frequency_map.items():
             if key in value or value == key:
                 logger.debug(f"Mapped '{value}' to '{normalized}'")
-                dispatcher.utter_message(text=f"Got it! I'll remind you {normalized} daily.")
+                # dispatcher.utter_message(text=f"Got it! I'll remind you {normalized} daily.")
                 return {"per_day_frequency": normalized}
         
         # If no match
-        dispatcher.utter_message(
-            text="How many times a day should I remind you? Please say 'once', 'twice', or 'thrice'."
-        )
+        # dispatcher.utter_message(
+        #     text="How many times a day should I remind you? Please say 'once', 'twice', or 'thrice'."
+        # )
         return {"per_day_frequency": None}
     
     # Mappings for spelled-out hours and minutes
@@ -2360,9 +2380,9 @@ class ValidateReminderForm(FormValidationAction):
                     continue
 
         if not normalized_times:
-            dispatcher.utter_message(
-                text="Please enter a valid time like '8 am', '20:30', '6 in the morning', or 'eight thirty am'."
-            )
+            # dispatcher.utter_message(
+            #     text="Please enter a valid time like '8 am', '20:30', '6 in the morning', or 'eight thirty am'."
+            # )
             return {"reminder_time": None}
 
         # Remove duplicates while preserving order
@@ -2370,34 +2390,6 @@ class ValidateReminderForm(FormValidationAction):
         normalized_times = [t for t in normalized_times if not (t in seen or seen.add(t))]
 
         return {"reminder_time": normalized_times}
-    
-    # async def validate_per_day_frequency(
-    #     self,
-    #     slot_value: Any,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: Dict[Text, Any],
-    # ) -> Dict[Text, Any]:
-    #     """Validate per-day frequency (once, twice, thrice)."""
-    #     logger.debug('VALIDATING PER DAY FREQUENCY')
-    #     if not slot_value:
-    #         return {"per_day_frequency": None}
-
-    #     value = str(slot_value).lower().strip()
-
-    #     valid_values = {
-    #         "once": "once",
-    #         "twice": "twice",
-    #         "thrice": "thrice",
-    #     }
-
-    #     if value in valid_values:
-    #         return {"per_day_frequency": valid_values[value]}
-
-    #     # dispatcher.utter_message(
-    #     #     text="Please choose once, twice, or thrice per day."
-    #     # )
-    #     return {"per_day_frequency": None}
 
     async def validate_reminder_day(
         self,
@@ -2922,7 +2914,6 @@ class ActionSubmitReminderForm(BaseAction):
             SlotSet("reminder_day", None)
         ]
 
-    
     def _format_reminder_confirmation(self, reminder_data: Dict) -> str:
         """Format reminder data for user confirmation."""
         lines = ["Here's your reminder setup:"]
@@ -3099,7 +3090,7 @@ class ActionMedicationReport(Action):
             logger.error(f"✗ Error generating report: {e}", exc_info=True)
             dispatcher.utter_message(text=f"Sorry, I couldn't generate your medication report.")
         
-        return []
+        return [SlotSet('period', None)]
     
 class ActionGetHealthRecords(Action):
     """Action to fetch and show health records."""
@@ -3244,6 +3235,149 @@ class ActionGetHealthRecords(Action):
         except Exception as e:
             logger.error(f"Error getting health records: {e}", exc_info=True)
             dispatcher.utter_message(attachment=builder.build_response("no_health_records"))
+            return []
+        
+class ActionSymptoms(Action):
+    """Action to fetch and show user's symptoms."""
+    
+    def name(self) -> Text:
+        return "action_symptoms"
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.info("Starting action_symptoms")
+        
+        try:
+            from .helpers.symptoms_manager import symptoms_manager
+            from .helpers.response_builder import ResponseBuilder
+            
+            # Create ResponseBuilder
+            builder = ResponseBuilder(tracker.sender_id, tracker)
+            
+            # Get period from slot
+            period = tracker.get_slot('period')
+            
+            # Handle different period values
+            days_map = {
+                "day": 1,
+                "week": 7,
+                "month": 30,
+                "3 months": 90,
+                "year": 365
+            }
+            
+            # Default to month if no period or invalid period
+            if not period or period not in days_map:
+                logger.debug(f"No valid period provided, defaulting to month")
+                period = "month"
+                days = 30
+            else:
+                days = days_map[period]
+                logger.debug(f"Period: {period}, looking back {days} days")
+            
+            # Handle special case for "day" - show today's symptoms
+            if period == "day":
+                time_context = "today"
+            else:
+                time_context = f"last {period}"
+            
+            logger.debug(f"Fetching symptoms for period: {period} ({time_context})")
+            
+            # Use symptoms_manager to get symptoms
+            symptoms_data = symptoms_manager.get_symptoms(tracker.sender_id)
+            
+            if not symptoms_data:
+                logger.info("No symptoms data returned from API")
+                attachment = {
+                    "query_response": f"You have no recorded symptoms.",
+                    "data": [],
+                    "type": "string",
+                    "status": "success"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                return [SlotSet("symptoms_available", False)]
+            
+            # Format symptoms for display, filtered by period
+            # Pass the actual days value for more precise filtering
+            formatted_symptoms = symptoms_manager.format_symptoms_list(
+                symptoms_data, 
+                period=period,
+                days=days
+            )
+            
+            if not formatted_symptoms:
+                logger.info(f"No symptoms found for {time_context}")
+                
+                # Custom message based on period
+                if period == "day":
+                    message = "You have no recorded symptoms for today."
+                elif period == "week":
+                    message = "You have no recorded symptoms for the last 7 days."
+                elif period == "month":
+                    message = "You have no recorded symptoms for the last 30 days."
+                elif period == "3 months":
+                    message = "You have no recorded symptoms for the last 3 months."
+                elif period == "year":
+                    message = "You have no recorded symptoms for the last year."
+                else:
+                    message = f"You have no recorded symptoms for the last {period}."
+                
+                attachment = {
+                    "query_response": message,
+                    "data": [],
+                    "type": "string",
+                    "status": "success"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                return [SlotSet("symptoms_available", True)]
+            
+            # Build response with appropriate message based on period
+            if period == "day":
+                reply = f"Here are the symptoms you experienced today:"
+            elif period == "week":
+                reply = f"Here are the symptoms you experienced in the last 7 days:"
+            elif period == "month":
+                reply = f"Here are the symptoms you experienced in the last 30 days:"
+            elif period == "3 months":
+                reply = f"Here are the symptoms you experienced in the last 3 months:"
+            elif period == "year":
+                reply = f"Here are the symptoms you experienced in the last year:"
+            else:
+                reply = f"Here are your symptoms:"
+            
+            attachment = {
+                "query_response": reply,
+                "data": formatted_symptoms,
+                "type": "array",
+                "status": "success"
+            }
+            
+            dispatcher.utter_message(attachment=attachment)
+            logger.info(f"Successfully returned {len(formatted_symptoms)} symptoms for {time_context}")
+            
+            # Clear the period slot after use
+            return [SlotSet("symptoms_available", True), 
+                    SlotSet('period', None)]
+            
+        except Exception as e:
+            logger.error(f"Error getting symptoms: {e}", exc_info=True)
+            
+            # Try to get period for error message, default to empty string
+            try:
+                period = tracker.get_slot('period') or "requested"
+            except:
+                period = "requested"
+                
+            reply = f"Failed to get your {period} symptoms. Please try again."
+            attachment = {
+                "query_response": reply,
+                "data": [],
+                "type": "string",
+                "status": "failed"
+            }
+            dispatcher.utter_message(attachment=attachment)
             return []
         
 class ActionTodaysMedication(Action):
@@ -3668,39 +3802,6 @@ class ActionRefillInformation(Action):
             dispatcher.utter_message(attachment=attachment)
         
             return [SlotSet("medication", None)]
-    
-# class actionSymtomsOccured(Action):
-#     def name(self):
-#         return "action_symtoms_occured"
-    
-#     def run(self, dispatcher: CollectingDispatcher, 
-#             tracker: Tracker, 
-#             domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-#         symptom = tracker.get_slot('symptom')
-#         period = tracker.get_slot('period')
-#         today = date.today()
-#         if period.lower() == "week":
-#                 date = today - timedelta(days = 7)
-#         elif period.lower() == "month":
-#                 date = today - timedelta(days = 30)
-
-
-#         url = 'https://api.pillaxia.com/api/v1/pxdiary'
-#         header = {
-#                     "Authorization" : f"Bearer {tracker.sender_id}"
-#                 }
-#         params = {
-#             "start_date" : date,
-#             "end_date" : date,
-#             "search_text" : symptom
-#         }
-
-#         try:
-#             response = requests.get(url, params=params, headers=header)
-#             response_data = response.json()
-#         except Exception as ex:
-#             pass
-        
         
 class ActionNewSymptom(Action):
     def name(self):
@@ -3729,69 +3830,6 @@ class ActionNewSymptom(Action):
 		    	"type":"string",
 		    	"status": "failed"
 		    }
-        dispatcher.utter_message(attachment=attachment)
-        return[]
-
-class ActionSymptoms(Action):
-    def name(self):
-        return "action_symptoms"
-    
-    def run(self, dispatcher: CollectingDispatcher, 
-            tracker: Tracker, 
-            domain: Dict[Text, Any])  -> List[Dict[Text, Any]]: 
-        period = tracker.get_slot('period')
-
-        if period == None:
-            periods = ("week", "month", "week", "month")
-            period = random.choice(periods)
-        today = date.today()
-        Date = today
-        if period.lower() == "week":
-                Date = today - timedelta(days = 7)
-        elif period.lower() == "month":
-                Date = today - timedelta(days = 30)
-                
-        url = f'https://api.pillaxia.com/api/v1/pxdiary?start_date={Date}&end_date={Date}'
-        header = {
-                    "Authorization" : f"Bearer {tracker.sender_id}"
-                }
-        
-        symptoms = {}
-        try:
-            response = requests.get(url, headers=header)
-            response_data = response.json()["result"]
-            if len(response_data) > 0:
-                for data in response_data:
-                    symptoms_info = {
-                        "name" : data["name"],
-                        "value" : f"Intensity: {data['intensity']}, Start Date: {data['start_date']}, End Date: {data['end_date']}, Note: {data['note']}"
-                    }
-                    symptoms.append(symptoms_info)
-
-                reply = f"Here's your list of symptoms you experienced last {period}"
-                attachment = {
-                    "query_response": reply,
-                    "data": symptoms,
-                    "type":"array",
-                    "status": "success"
-                }
-            else:
-                reply = f"You have no recorded symptoms for last {period}"
-                attachment = {
-                    "query_response": reply,
-                    "data": [],
-                    "type":"string",
-                    "status": "failed"
-                }
-
-        except Exception as ex:
-            reply = f"Failed to get your last {period} symptoms"
-            attachment = {
-                    "query_response": reply,
-                    "data": [],
-                    "type":"string",
-                    "status": "failed"
-                }
         dispatcher.utter_message(attachment=attachment)
         return[]
     
@@ -3847,7 +3885,7 @@ class ActionCheckMedication(Action):
                     "status": "failed"
                 }
         dispatcher.utter_message(attachment=attachment)
-        return[]
+        return[SlotSet("period", None)]
     
 class ActionMedicationAdherence(Action):
     """Provide medication adherence insights using analyzer and response builder."""
@@ -3897,7 +3935,7 @@ class ActionMedicationAdherence(Action):
             logger.error(f"✗ Adherence error: {e}", exc_info=True)
             dispatcher.utter_message(text="Sorry, I couldn't access your medication adherence.")
         
-        return []
+        return [SlotSet("period", None)]
     
         
 class ActionCustomFallback(Action):
@@ -3906,9 +3944,75 @@ class ActionCustomFallback(Action):
         self.medications_df = pd.read_csv('data/medications.csv')
         self.KNOWN_MEDICATIONS = self.medications_df['medication_name'].tolist()
 
+        # Pattern-based responses for non-intent matches
+        self.PATTERN_RESPONSES = [
+            {
+                "patterns": [
+                    r"what (can|ca)n? (you|u) do", 
+                    r"help", 
+                    r"features", 
+                    r"capabilities",
+                    r"what (?:do|does) (?:you|u) (?:do|have)"
+                ],
+                "response": "I can help you manage your medications! You can:\n• Add new medications\n• List your medications\n• Check today's medications\n• Request refills\n• Set reminders\n• Track symptoms\nWhat would you like to do?"
+            },
+            {
+                "patterns": [
+                    r"thank you|thanks|appreciate it|thankyou|thx"
+                ],
+                "response": "You're welcome! Let me know if you need anything else with your medications."
+            },
+            {
+                "patterns": [
+                    r"how (?:do|can|to) (?:i|you) (?:add|set up|create)",
+                    r"how (?:do|can|to) add medication"
+                ],
+                "response": "To add a medication, simply say 'add medication' and I'll guide you through the process step by step!"
+            },
+            {
+                "patterns": [
+                    r"how (?:do|can|to) (?:set|create) reminder",
+                    r"how (?:do|to) set up reminder"
+                ],
+                "response": "To set a reminder, just say 'set reminder' or 'remind me to take my medication' and I'll help you set it up!"
+            },
+            {
+                "patterns": [
+                    r"how (?:do|can|to) request refill",
+                    r"how (?:do|to) (?:get|ask for) refill"
+                ],
+                "response": "To request a refill, simply say 'request refill' or 'I need a refill' and I'll assist you!"
+            },
+            {
+                "patterns": [
+                    r"what is this bot|who are you|what are you"
+                ],
+                "response": "I'm Angela, your medical assistant! I'm here to help you manage your medications, set reminders, and track your health."
+            },
+            {
+                "patterns": [
+                    r"(?:good|great|excellent|awesome|nice) (?:job|work|bot)"
+                ],
+                "response": "Thank you! I'm glad I could help. Let me know if you need anything else!"
+            },
+            {
+                "patterns": [
+                    r"i (?:want|need|would like) to talk to (?:a|the) (?:human|person|agent|doctor)"
+                ],
+                "response": "I understand you'd like to speak with a human. While I'm here to help with medication management, for urgent medical concerns, please consult your doctor or pharmacist directly."
+            }
+        ]
+
+        # Medication name patterns for identifying potential medication mentions
+        self.MEDICATION_PATTERNS = [
+            r'\b[A-Z][a-z]+(?:[-\s][A-Z][a-z]+)*\b',  # Capitalized words
+            r'\b(?:ibuprofen|paracetamol|aspirin|amoxicillin|lisinopril|metformin|atorvastatin|omeprazole|levothyroxine|simvastatin)\b',
+            r'\b(?:lipitor|synthroid|norvasc|prinivil|glucophage|lasix|prednisone|zoloft|prozac|xanax)\b'  # Brand names
+        ]
+
     def name(self):
         return "action_custom_fallback"       
-    
+
     UNCERTAINTY_PHRASES = [
         "dont know", "don't know", "do not know", "dunno", "idk", "dk",
         "not sure", "no idea", "no clue", "forgot", "forget",
@@ -5124,8 +5228,122 @@ class ActionCustomFallback(Action):
         ]
         
     def handle_openai_fallback(self, dispatcher, tracker):
-        # If no form is active, use OpenAI fallback
-        logger.debug("No active form - using OpenAI fallback")
+        """Handle only cases that don't match existing intents"""
+        logger.debug("----------------------------------------")
+        logger.debug("🔧 CUSTOM FALLBACK - No intent matched")
+        
+        user_query = tracker.latest_message.get('text', '').strip()
+        user_query_lower = user_query.lower()
+        
+        # Get the intent that was matched (if any)
+        intent = tracker.latest_message.get('intent', {}).get('name')
+        intent_confidence = tracker.latest_message.get('intent', {}).get('confidence', 0)
+        
+        logger.debug(f"Original intent: {intent} (confidence: {intent_confidence})")
+        logger.debug(f"User query: '{user_query}'")
+        
+        # STRATEGY 1: Pattern matching for common questions
+        import re
+        for pattern_config in self.PATTERN_RESPONSES:
+            for pattern in pattern_config["patterns"]:
+                if re.search(pattern, user_query_lower):
+                    logger.debug(f"Pattern matched: '{pattern}'")
+                    return self._send_response(dispatcher, pattern_config["response"])
+        
+        # STRATEGY 2: Check if user might be mentioning a medication
+        if self._is_likely_medication_mention(user_query):
+            logger.debug("Potential medication mention detected")
+            response = self._handle_medication_mention(dispatcher, user_query)
+            return self._send_response(dispatcher, response)
+        
+        # STRATEGY 3: Very short queries (1-2 words) that aren't intents
+        word_count = len(user_query.split())
+        if word_count <= 2:
+            logger.debug("Short query with no intent match")
+            response = self._get_helpful_suggestion()
+            return self._send_response(dispatcher, response)
+        
+        # STRATEGY 4: Greeting-like phrases that might not match greet intent
+        greeting_words = ["hi", "hello", "hey", "howdy", "good morning", "good afternoon", "good evening"]
+        if any(greeting in user_query_lower for greeting in greeting_words):
+            logger.debug("Greeting-like phrase detected")
+            return self._send_response(dispatcher, "Hello! How can I help you with your medications today?")
+        
+        # STRATEGY 5: Check for questions about time/reminders
+        time_words = ["when", "what time", "schedule", "remind"]
+        if any(word in user_query_lower for word in time_words):
+            logger.debug("Time-related query detected")
+            response = "To manage reminders, you can say:\n• 'set reminder' to create a new reminder\n• 'my reminders' to see your current reminders\n• 'today's medications' to see today's schedule"
+            return self._send_response(dispatcher, response)
+        
+        # STRATEGY 6: Check for stock/refill related queries
+        stock_words = ["stock", "refill", "how many", "left", "running out", "low"]
+        if any(word in user_query_lower for word in stock_words):
+            logger.debug("Stock/refill related query detected")
+            response = "To check refills or stock levels, you can say:\n• 'refill due' to see what needs refilling\n• 'check stock' for a specific medication\n• 'request refill' to order more"
+            return self._send_response(dispatcher, response)
+        
+        # STRATEGY 7: Check for symptom reporting
+        symptom_words = ["symptom", "feeling", "pain", "hurt", "ache", "side effect"]
+        if any(word in user_query_lower for word in symptom_words):
+            logger.debug("Symptom-related query detected")
+            response = "To track symptoms, you can say:\n• 'record symptoms' to log new symptoms\n• 'my symptoms' to see your symptom history"
+            return self._send_response(dispatcher, response)
+        
+        # FINAL: If no patterns match, use OpenAI
+        logger.debug("No patterns matched - using OpenAI fallback")
+        return self._openai_fallback(dispatcher, tracker)
+
+    def _is_likely_medication_mention(self, text):
+        """Check if text might be mentioning a medication"""
+        text_lower = text.lower()
+        
+        # Check against known medications from CSV
+        for med in self.KNOWN_MEDICATIONS[:50]:  # Check first 50
+            if med.lower() in text_lower:
+                return True
+        
+        # Check against medication patterns
+        import re
+        for pattern in self.MEDICATION_PATTERNS:
+            if re.search(pattern, text):
+                return True
+        
+        # Check for common medication suffixes
+        med_suffixes = ['mycin', 'prazole', 'dipine', 'cillin', 'lol', 'sartan', 'vir', 'navir']
+        if any(suffix in text_lower for suffix in med_suffixes):
+            return True
+        
+        return False
+
+    def _handle_medication_mention(self, dispatcher, text):
+        """Generate response for medication mention"""
+        return f"I notice you mentioned '{text}'. If you'd like to manage this medication, you can say:\n• 'add medication' to add it to your list\n• 'check dosage' for dosage information\n• 'set reminder' to create a reminder\n• 'check refill' for refill status"
+
+    def _get_helpful_suggestion(self):
+        """Get a helpful suggestion for short/unclear queries"""
+        suggestions = [
+            "I'm not sure I understood. Here are some things you can ask me:\n• 'Add medication'\n• 'List my medications'\n• 'Today's medications'\n• 'Set reminder'\n• 'Request refill'",
+            "I didn't catch that. Would you like to:\n• Add a new medication?\n• Check your medication list?\n• Set up a reminder?\n• Track your symptoms?",
+            "I'm here to help with medication management! You can say things like:\n• 'Add aspirin'\n• 'Show my medications'\n• 'Remind me at 9am'\n• 'I need a refill'"
+        ]
+        import random
+        return random.choice(suggestions)
+
+    def _send_response(self, dispatcher, text):
+        """Send a text response"""
+        attachment = {
+            "query_response": text,
+            "data": [],
+            "type": "text",
+            "status": "success"
+        }
+        dispatcher.utter_message(attachment=attachment)
+        return []
+
+    def _openai_fallback(self, dispatcher, tracker):
+        """Your existing OpenAI fallback logic"""
+        logger.debug("Using OpenAI fallback")
         
         prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
                     1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
@@ -5138,12 +5356,12 @@ class ActionCustomFallback(Action):
                     8.Do not assist with non-medical queries.
                     9.Offer only relevant information, ensuring it aligns with the user's needs.
                     10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
-
                 """  
         
         try:
             user_query = tracker.latest_message['text']
-            response = client.chat.completions.create(
+            import openai
+            response = openai.chat.completions.create(
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": prompt},
@@ -5154,8 +5372,6 @@ class ActionCustomFallback(Action):
             )
             data = response.choices[0].message.content
 
-            reply = data  
-
             attachment = {
                 "query_response": data,
                 "data": [],
@@ -5163,29 +5379,10 @@ class ActionCustomFallback(Action):
                 "status": "success"
             }
 
-        except openai.OpenAIError as e:
-            error_message = e.args[0].split("message': '")[1].split("',")[0] if "message" in str(e) else "Unknown error occurred."
-            messages = [
-                "Sorry, I can't process your request right now due to high demand. Please try again later.",
-                "Apologies, but it seems we're experiencing a temporary issue and cannot process your request at the moment. Please try again shortly."
-            ]
-
-            reply = random.choice(messages)  
-
-            attachment = {
-                "query_response": reply,
-                "error": error_message,
-                "data": [],
-                "type": "text",
-                "status": "failed"
-            }
-
         except Exception as e:
-            reply = "Can you rephrase it."  
-
+            logger.error(f"OpenAI error: {e}")
             attachment = {
-                "query_response": reply,
-                "error": str(e),
+                "query_response": "I'm having trouble processing your request right now. Please try again later.",
                 "data": [],
                 "type": "text",
                 "status": "failed"

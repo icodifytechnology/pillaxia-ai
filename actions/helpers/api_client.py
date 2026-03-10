@@ -174,6 +174,8 @@ class PillaxiaAPIClient:
         Returns:
             Health records data with items list or None on error
         """
+        logger.debug(f"Fetching health records - page: {page}, page_size: {page_size}")
+        
         # Prepare request body matching API example
         request_body = {
             "page": page,
@@ -182,6 +184,7 @@ class PillaxiaAPIClient:
             "searchColumnFilters": []
         }
         
+        logger.debug("Making API request to /health-records/list")
         data, status_code, error = self._make_request(
             "POST",
             "/health-records/list",
@@ -190,9 +193,56 @@ class PillaxiaAPIClient:
         )
         
         if status_code == 200 and data:
-            return data.get("result")
-        return None
+            logger.debug(f"Health records fetched successfully, status: {status_code}")
+            result = data.get("result")
+            if result:
+                items = result.get("items", [])
+                logger.debug(f"Retrieved {len(items)} health records")
+            return result
         
+        logger.debug(f"Failed to fetch health records - status: {status_code}, error: {error}")
+        return None
+
+    def get_symptoms(self, token: str, page: int = 1, page_size: int = 10) -> Optional[Dict[str, Any]]:
+        """
+        Get user's medication symptoms from API.
+        
+        Args:
+            token: User authentication token
+            page: Page number (default: 1)
+            page_size: Records per page (default: 10)
+        
+        Returns:
+            Symptoms data with items list or None on error
+        """
+        logger.debug(f"Fetching symptoms - page: {page}, page_size: {page_size}")
+        
+        # Prepare request body matching API example
+        request_body = {
+            "page": page,
+            "pageSize": page_size,
+            "sorted": [],  # Note: API uses "sorted" not "sorts"
+            "searchColumnFilters": []
+        }
+        
+        logger.debug("Making API request to /medication-symptoms/list")
+        data, status_code, error = self._make_request(
+            "POST",
+            "/medication-symptoms/list",
+            headers=self._get_auth_headers(token),
+            json=request_body
+        )
+        
+        if status_code == 200 and data:
+            logger.debug(f"Symptoms fetched successfully, status: {status_code}")
+            result = data.get("result")
+            if result:
+                items = result.get("items", [])
+                logger.debug(f"Retrieved {len(items)} symptoms")
+            return result
+        
+        logger.debug(f"Failed to fetch symptoms - status: {status_code}, error: {error}")
+        return None   
     def health_check(self) -> bool:
         """Check if API is reachable (public endpoint)."""
         try:
