@@ -54,6 +54,7 @@ def send_response_with_buttons(response: str, buttons: list):
 
     buttons: list of dicts with 'title' and 'payload'
     Example: [{"title": "Once", "payload": "once"}]
+    
     """
     attachment = {
         "query_response": response,
