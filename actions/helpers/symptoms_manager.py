@@ -52,6 +52,7 @@ class SymptomsManager:
     def format_symptom_value(self, symptom: Dict[str, Any]) -> str:
         """
         Format a single symptom into a concise value string with most relevant information.
+        Shows dates instead of times for better readability.
         
         Args:
             symptom: Symptom data dictionary
@@ -75,57 +76,65 @@ class SymptomsManager:
         elif symptom.get("severity"):
             parts.append(f"Severity: {symptom['severity']}")
         
-        # Priority 2: Duration (if both start and end dates exist)
+        # Priority 2: Date information (showing dates instead of times)
+        date_info = []
+        
+        # Case 1: Both start and end dates exist
         if symptom.get("start_date") and symptom.get("end_date"):
             try:
                 start = datetime.fromisoformat(symptom['start_date'].replace('Z', '+00:00'))
                 end = datetime.fromisoformat(symptom['end_date'].replace('Z', '+00:00'))
                 
-                # Calculate duration
-                duration = end - start
-                hours = duration.total_seconds() / 3600
+                # Format dates (YYYY-MM-DD)
+                start_date_str = start.strftime('%Y-%m-%d')
+                end_date_str = end.strftime('%Y-%m-%d')
                 
-                # Format duration appropriately
-                if hours < 24:
-                    if hours < 1:
-                        minutes = int(duration.total_seconds() / 60)
-                        parts.append(f"Duration: {minutes} min")
-                    else:
-                        parts.append(f"Duration: {hours:.1f} hours")
+                # Calculate duration in days
+                duration_days = (end - start).days
+                
+                if start_date_str == end_date_str:
+                    # Same day
+                    date_info.append(f"Date: {start_date_str}")
+                    if duration_days == 0:
+                        # Same day, show duration in hours if less than 24h
+                        hours = (end - start).seconds / 3600
+                        if hours > 0:
+                            if hours < 1:
+                                minutes = int((end - start).seconds / 60)
+                                date_info.append(f"Duration: {minutes} min")
+                            else:
+                                date_info.append(f"Duration: {hours:.1f} hours")
                 else:
-                    days = duration.days
-                    if days == 1:
-                        parts.append("Duration: 1 day")
-                    else:
-                        parts.append(f"Duration: {days} days")
-                
-                # Also show the time range
-                start_time = start.strftime('%H:%M')
-                end_time = end.strftime('%H:%M')
-                parts.append(f"({start_time} to {end_time})")
-                
+                    # Different days
+                    date_info.append(f"From: {start_date_str} to {end_date_str}")
+                    if duration_days > 0:
+                        date_info.append(f"Duration: {duration_days} days")
+                        
             except (ValueError, TypeError) as e:
-                logger.debug(f"Could not calculate duration: {e}")
-                # Fallback to just start date
-                parts.append(f"Started: {symptom['start_date']}")
+                logger.debug(f"Could not parse dates: {e}")
+                date_info.append(f"Started: {symptom['start_date'][:10]}")  # Just show YYYY-MM-DD
         
-        # Priority 3: Only start date available
+        # Case 2: Only start date available
         elif symptom.get("start_date"):
             try:
                 start = datetime.fromisoformat(symptom['start_date'].replace('Z', '+00:00'))
-                parts.append(f"Started: {start.strftime('%Y-%m-%d %H:%M')}")
+                date_info.append(f"Started: {start.strftime('%Y-%m-%d')}")
             except (ValueError, TypeError):
-                parts.append(f"Started: {symptom['start_date']}")
+                date_info.append(f"Started: {symptom['start_date'][:10]}")
         
-        # Priority 4: Only created date available
+        # Case 3: Only created date available
         elif symptom.get("createdAt"):
             try:
                 created_at = datetime.fromisoformat(symptom['createdAt'].replace('Z', '+00:00'))
-                parts.append(f"Recorded: {created_at.strftime('%Y-%m-%d %H:%M')}")
+                date_info.append(f"Recorded: {created_at.strftime('%Y-%m-%d')}")
             except (ValueError, TypeError):
                 pass
         
-        # Priority 5: Brief note (truncated if too long)
+        # Add date information to parts
+        if date_info:
+            parts.extend(date_info)
+        
+        # Priority 3: Brief note (truncated if too long)
         if symptom.get("notes") or symptom.get("note"):
             note = symptom.get("notes") or symptom.get("note")
             if len(note) > 50:
