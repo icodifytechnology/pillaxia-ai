@@ -1,0 +1,1120 @@
+[
+  {
+    "text": "exit",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 0,
+        "end": 4,
+        "confidence_entity": 0.675032913684845,
+        "value": "exit",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "greetings",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_colour",
+        "start": 0,
+        "end": 9,
+        "confidence_entity": 0.9923731684684753,
+        "value": "greetings",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Did I take my pills for today yet?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 24,
+        "end": 29,
+        "confidence_entity": 0.9742013812065125,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Approximately how long until my next medication intake?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 0,
+        "end": 13,
+        "confidence_entity": 0.5969420671463013,
+        "value": "Approximately",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "When will my insurance allow a refill of Fluoxetine?",
+    "entities": [
+      {
+        "start": 41,
+        "end": 51,
+        "value": "Fluoxetine",
+        "entity": "medication"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 13,
+        "end": 22,
+        "confidence_entity": 0.9940173625946045,
+        "value": "insurance",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "medication",
+        "start": 41,
+        "end": 51,
+        "confidence_entity": 0.9999380111694336,
+        "value": "Fluoxetine",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Can you tell me if I missed a dose this afternoon?",
+    "entities": [
+      {
+        "start": 40,
+        "end": 49,
+        "value": "afternoon",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "Have I skipped any medication this today?",
+    "entities": [
+      {
+        "start": 35,
+        "end": 40,
+        "value": "today",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "have i taken everything i should this month?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 38,
+        "end": 43,
+        "confidence_entity": 0.7756208181381226,
+        "value": "month",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "did i skip any medication in the past week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 38,
+        "end": 42,
+        "confidence_entity": 0.9991505146026611,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "what's my med adherence for today?",
+    "entities": [
+      {
+        "start": 28,
+        "end": 33,
+        "value": "today",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "What are the signs of vitamin deficiency?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 22,
+        "end": 29,
+        "confidence_entity": 0.9372580051422119,
+        "value": "vitamin",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "What are some fun activities to do on the weekend?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "reminder_day",
+        "start": 42,
+        "end": 49,
+        "confidence_entity": 0.9993293285369873,
+        "value": "weekend",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Will there be a thunderstorm this weekend?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "reminder_day",
+        "start": 34,
+        "end": 41,
+        "confidence_entity": 0.9996874332427979,
+        "value": "weekend",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Can you tell me the weather for next week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 37,
+        "end": 41,
+        "confidence_entity": 0.971318781375885,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Please record 2g as my dose",
+    "entities": [
+      {
+        "start": 14,
+        "end": 16,
+        "value": "2g",
+        "entity": "medication_dosage"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 17,
+        "end": 19,
+        "confidence_entity": 0.6880780458450317,
+        "value": "as",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "it is an inhaler",
+    "entities": [
+      {
+        "start": 9,
+        "end": 16,
+        "value": "inhaler",
+        "entity": "medication_type"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 6,
+        "end": 8,
+        "confidence_entity": 0.9699046015739441,
+        "value": "an",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "medication_type",
+        "start": 9,
+        "end": 16,
+        "confidence_entity": 0.9929187893867493,
+        "value": "inhaler",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "it's in an Antipsychotic form",
+    "entities": [
+      {
+        "start": 11,
+        "end": 24,
+        "value": "Antipsychotic",
+        "entity": "medication_type"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 8,
+        "end": 10,
+        "confidence_entity": 0.5814154148101807,
+        "value": "an",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "medication_type",
+        "start": 11,
+        "end": 24,
+        "confidence_entity": 0.9974285960197449,
+        "value": "antipsychotic",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "it's in an antiviral form",
+    "entities": [
+      {
+        "start": 11,
+        "end": 20,
+        "value": "antiviral",
+        "entity": "medication_type"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 8,
+        "end": 10,
+        "confidence_entity": 0.5214192867279053,
+        "value": "an",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "medication_type",
+        "start": 11,
+        "end": 20,
+        "confidence_entity": 0.9983445405960083,
+        "value": "antiviral",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "it's in an ointment form",
+    "entities": [
+      {
+        "start": 11,
+        "end": 19,
+        "value": "ointment",
+        "entity": "medication_type"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 8,
+        "end": 10,
+        "confidence_entity": 0.8929567933082581,
+        "value": "an",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "medication_type",
+        "start": 11,
+        "end": 19,
+        "confidence_entity": 0.9969198107719421,
+        "value": "ointment",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "gn",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_colour",
+        "start": 0,
+        "end": 2,
+        "confidence_entity": 0.5083999037742615,
+        "value": "gn",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Medication taken as prescribed",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 17,
+        "end": 19,
+        "confidence_entity": 0.9965513944625854,
+        "value": "as",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "marked meds as taken",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 12,
+        "end": 14,
+        "confidence_entity": 0.9965747594833374,
+        "value": "as",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "did i take all my doses today?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 24,
+        "end": 29,
+        "confidence_entity": 0.7711919546127319,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "have i been consistent with my meds this month?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 41,
+        "end": 46,
+        "confidence_entity": 0.9989780187606812,
+        "value": "month",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "have i been keeping up with my doses this week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 42,
+        "end": 46,
+        "confidence_entity": 0.99928879737854,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "what does my pill compliance look like this [week] (period)?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 45,
+        "end": 49,
+        "confidence_entity": 0.9729229211807251,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "how well am i keeping up with my pills today?",
+    "entities": [
+      {
+        "start": 39,
+        "end": 44,
+        "value": "today",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "I need advice for my migraines.",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 7,
+        "end": 13,
+        "confidence_entity": 0.8503300547599792,
+        "value": "advice",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "I would like to be reminded once daily",
+    "entities": [
+      {
+        "start": 28,
+        "end": 32,
+        "value": "once",
+        "entity": "per_day_frequency"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "per_day_frequency",
+        "start": 28,
+        "end": 38,
+        "confidence_entity": 0.8321238160133362,
+        "value": "once daily",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "11:30, 9 in the morning and 8 at night",
+    "entities": [
+      {
+        "start": 0,
+        "end": 5,
+        "value": "11:30",
+        "entity": "reminder_time"
+      },
+      {
+        "start": 7,
+        "end": 23,
+        "value": "9 in the morning",
+        "entity": "reminder_time"
+      },
+      {
+        "start": 28,
+        "end": 38,
+        "value": "8 at night",
+        "entity": "reminder_time"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "reminder_time",
+        "start": 0,
+        "end": 5,
+        "confidence_entity": 0.9981662034988403,
+        "value": "11:30",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "reminder_time",
+        "start": 7,
+        "end": 15,
+        "confidence_entity": 0.9714612364768982,
+        "value": "9 in the",
+        "extractor": "DIETClassifier"
+      },
+      {
+        "entity": "reminder_time",
+        "start": 28,
+        "end": 38,
+        "confidence_entity": 0.9921417236328125,
+        "value": "8 at night",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "na",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 0,
+        "end": 2,
+        "confidence_entity": 0.4744413495063782,
+        "value": "na",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "have a great day",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_colour",
+        "start": 7,
+        "end": 12,
+        "confidence_entity": 0.9268550276756287,
+        "value": "great",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Just became a medication ninja!",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 25,
+        "end": 30,
+        "confidence_entity": 0.8987287878990173,
+        "value": "ninja",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Dosed up for the day",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 17,
+        "end": 20,
+        "confidence_entity": 0.5626127123832703,
+        "value": "day",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "pill taken",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_type",
+        "start": 0,
+        "end": 4,
+        "confidence_entity": 0.49148279428482056,
+        "value": "pill",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "am i almost out of Fluoxetine?",
+    "entities": [
+      {
+        "start": 19,
+        "end": 29,
+        "value": "Fluoxetine",
+        "entity": "medication"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 19,
+        "end": 29,
+        "confidence_entity": 0.5900875329971313,
+        "value": "fluoxetine",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Was there any dose I missed today?",
+    "entities": [
+      {
+        "start": 28,
+        "end": 33,
+        "value": "today",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "can you tell me if i missed a dose this week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 40,
+        "end": 44,
+        "confidence_entity": 0.9964974522590637,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "did i take all my prescribed medication this month?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 45,
+        "end": 50,
+        "confidence_entity": 0.778200626373291,
+        "value": "month",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "did i forget to take any pills this week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 36,
+        "end": 40,
+        "confidence_entity": 0.8800292611122131,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Is this mole cancerous?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 8,
+        "end": 12,
+        "confidence_entity": 0.6929789781570435,
+        "value": "mole",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "My vision is blurry sometimes.",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 20,
+        "end": 29,
+        "confidence_entity": 0.9875834584236145,
+        "value": "sometimes",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "once",
+    "entities": [
+      {
+        "start": 0,
+        "end": 4,
+        "value": "once",
+        "entity": "per_day_frequency"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 0,
+        "end": 4,
+        "confidence_entity": 0.5967475771903992,
+        "value": "once",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "as needed",
+    "entities": [
+      {
+        "start": 0,
+        "end": 9,
+        "value": "as needed",
+        "entity": "medication_instructions"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 3,
+        "end": 9,
+        "confidence_entity": 0.5426586866378784,
+        "value": "needed",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "until finished",
+    "entities": [
+      {
+        "start": 0,
+        "end": 14,
+        "value": "until finished",
+        "entity": "medication_instructions"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "yep",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_colour",
+        "start": 0,
+        "end": 3,
+        "confidence_entity": 0.387041300535202,
+        "value": "yep",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "negative",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 0,
+        "end": 8,
+        "confidence_entity": 0.9955419898033142,
+        "value": "negative",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "delay it",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_type",
+        "start": 0,
+        "end": 5,
+        "confidence_entity": 0.2810106575489044,
+        "value": "delay",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "log my abdominal pain",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 7,
+        "end": 16,
+        "confidence_entity": 0.9762110710144043,
+        "value": "abdominal",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "have i been consistent with my doses this week?",
+    "entities": [
+      {
+        "start": 42,
+        "end": 46,
+        "value": "week",
+        "entity": "period"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "morning",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_instructions",
+        "start": 0,
+        "end": 7,
+        "confidence_entity": 0.9282354116439819,
+        "value": "morning",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "moin",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 0,
+        "end": 4,
+        "confidence_entity": 0.9708378314971924,
+        "value": "moin",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "ttyl",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 0,
+        "end": 4,
+        "confidence_entity": 0.8984217643737793,
+        "value": "ttyl",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "are you monitored by humans?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 8,
+        "end": 17,
+        "confidence_entity": 0.9629984498023987,
+        "value": "monitored",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Time for my daily meds check, what's the lineup?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 41,
+        "end": 47,
+        "confidence_entity": 0.9953677654266357,
+        "value": "lineup",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Can you tell me if I took my [medication] today?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 42,
+        "end": 47,
+        "confidence_entity": 0.9616683721542358,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Can you log that I experienced chest pain today?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 42,
+        "end": 47,
+        "confidence_entity": 0.9315468072891235,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "How much carvedilol do I take twice daily?",
+    "entities": [
+      {
+        "start": 9,
+        "end": 19,
+        "value": "carvedilol",
+        "entity": "medication"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 9,
+        "end": 19,
+        "confidence_entity": 0.9997097253799438,
+        "value": "Carvedilol",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      },
+      {
+        "entity": "medication_instructions",
+        "start": 30,
+        "end": 35,
+        "confidence_entity": 0.5250167846679688,
+        "value": "twice",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "did i miss taking my meds this week?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 31,
+        "end": 35,
+        "confidence_entity": 0.9962913990020752,
+        "value": "week",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "What vaccinations do I need?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication_name",
+        "start": 5,
+        "end": 17,
+        "confidence_entity": 0.8895707130432129,
+        "value": "vaccinations",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "How can I treat my insomnia?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 19,
+        "end": 27,
+        "confidence_entity": 0.9985923171043396,
+        "value": "insomnia",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "Is my thyroid functioning normally?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "medication",
+        "start": 6,
+        "end": 13,
+        "confidence_entity": 0.9176786541938782,
+        "value": "thyroid",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  },
+  {
+    "text": "What's the humidity level today?",
+    "entities": [],
+    "predicted_entities": [
+      {
+        "entity": "period",
+        "start": 26,
+        "end": 31,
+        "confidence_entity": 0.510748028755188,
+        "value": "today",
+        "extractor": "DIETClassifier",
+        "processors": [
+          "EntitySynonymMapper"
+        ]
+      }
+    ]
+  }
+]

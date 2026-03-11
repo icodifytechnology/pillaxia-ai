@@ -1,0 +1,320 @@
+{
+  "provide_stock_level": {
+    "precision": 0.9996981587684878,
+    "recall": 1.0,
+    "f1-score": 0.9998490566037737,
+    "support": 3312,
+    "confused_with": {}
+  },
+  "provide_medication_instructions": {
+    "precision": 0.9868421052631579,
+    "recall": 0.9966777408637874,
+    "f1-score": 0.9917355371900826,
+    "support": 301,
+    "confused_with": {
+      "goodbye": 1
+    }
+  },
+  "medication_stock_level": {
+    "precision": 0.9076923076923077,
+    "recall": 0.8428571428571429,
+    "f1-score": 0.8740740740740741,
+    "support": 70,
+    "confused_with": {
+      "medication_dosage": 6,
+      "refill_due": 3
+    }
+  },
+  "check_medication_taken": {
+    "precision": 0.8260869565217391,
+    "recall": 0.7916666666666666,
+    "f1-score": 0.8085106382978724,
+    "support": 48,
+    "confused_with": {
+      "medication_adherence": 3,
+      "notify_medication_taken": 3
+    }
+  },
+  "get_health_records": {
+    "precision": 0.8518518518518519,
+    "recall": 0.9583333333333334,
+    "f1-score": 0.9019607843137256,
+    "support": 24,
+    "confused_with": {
+      "medication_report": 1
+    }
+  },
+  "get_new_symptoms": {
+    "precision": 0.7346938775510204,
+    "recall": 0.782608695652174,
+    "f1-score": 0.7578947368421053,
+    "support": 46,
+    "confused_with": {
+      "out_of_scope": 6,
+      "get_symptoms": 3
+    }
+  },
+  "list_of_todays_medication": {
+    "precision": 0.9142857142857143,
+    "recall": 0.9014084507042254,
+    "f1-score": 0.9078014184397163,
+    "support": 71,
+    "confused_with": {
+      "list_medications": 3,
+      "notify_medication_taken": 2
+    }
+  },
+  "provide_reminder_day": {
+    "precision": 0.9964476021314387,
+    "recall": 1.0,
+    "f1-score": 0.998220640569395,
+    "support": 561,
+    "confused_with": {}
+  },
+  "provide_per_day_frequency": {
+    "precision": 1.0,
+    "recall": 0.9523809523809523,
+    "f1-score": 0.975609756097561,
+    "support": 21,
+    "confused_with": {
+      "provide_medication_instructions": 1
+    }
+  },
+  "add_medication": {
+    "precision": 0.9333333333333333,
+    "recall": 0.9824561403508771,
+    "f1-score": 0.9572649572649572,
+    "support": 57,
+    "confused_with": {
+      "list_medications": 1
+    }
+  },
+  "medication_adherence": {
+    "precision": 0.9,
+    "recall": 0.8674698795180723,
+    "f1-score": 0.8834355828220859,
+    "support": 83,
+    "confused_with": {
+      "medication_report": 5,
+      "list_medications": 4
+    }
+  },
+  "provide_alert_type": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 54,
+    "confused_with": {}
+  },
+  "provide_time_period": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 333,
+    "confused_with": {}
+  },
+  "notify_medication_taken": {
+    "precision": 0.8767123287671232,
+    "recall": 0.8648648648648649,
+    "f1-score": 0.870748299319728,
+    "support": 74,
+    "confused_with": {
+      "list_medications": 2,
+      "medication_stock_level": 1
+    }
+  },
+  "bot_challenge": {
+    "precision": 0.9054054054054054,
+    "recall": 0.8933333333333333,
+    "f1-score": 0.8993288590604026,
+    "support": 75,
+    "confused_with": {
+      "out_of_scope": 4,
+      "cancel_form": 1
+    }
+  },
+  "out_of_scope": {
+    "precision": 0.9136690647482014,
+    "recall": 0.7514792899408284,
+    "f1-score": 0.8246753246753247,
+    "support": 169,
+    "confused_with": {
+      "get_new_symptoms": 13,
+      "bot_challenge": 5
+    }
+  },
+  "affirm": {
+    "precision": 0.72,
+    "recall": 0.5806451612903226,
+    "f1-score": 0.6428571428571428,
+    "support": 31,
+    "confused_with": {
+      "deny": 4,
+      "greet": 3
+    }
+  },
+  "get_symptoms": {
+    "precision": 0.8793103448275862,
+    "recall": 0.9807692307692307,
+    "f1-score": 0.9272727272727272,
+    "support": 52,
+    "confused_with": {
+      "medication_report": 1
+    }
+  },
+  "list_medications": {
+    "precision": 0.7674418604651163,
+    "recall": 0.9565217391304348,
+    "f1-score": 0.8516129032258064,
+    "support": 69,
+    "confused_with": {
+      "medication_report": 2,
+      "add_medication": 1
+    }
+  },
+  "next_dose_date": {
+    "precision": 0.9242424242424242,
+    "recall": 0.953125,
+    "f1-score": 0.9384615384615383,
+    "support": 64,
+    "confused_with": {
+      "medication_dosage": 1,
+      "medication_adherence": 1
+    }
+  },
+  "medication_taken_time": {
+    "precision": 0.9647058823529412,
+    "recall": 0.9647058823529412,
+    "f1-score": 0.9647058823529412,
+    "support": 85,
+    "confused_with": {
+      "check_medication_taken": 3
+    }
+  },
+  "provide_medication_type": {
+    "precision": 0.9906976744186047,
+    "recall": 0.9906976744186047,
+    "f1-score": 0.9906976744186047,
+    "support": 215,
+    "confused_with": {
+      "provide_medication_name": 2
+    }
+  },
+  "greet": {
+    "precision": 0.8611111111111112,
+    "recall": 0.8611111111111112,
+    "f1-score": 0.8611111111111112,
+    "support": 72,
+    "confused_with": {
+      "goodbye": 2,
+      "medication_stock_level": 1
+    }
+  },
+  "medication_report": {
+    "precision": 0.9137931034482759,
+    "recall": 0.9137931034482759,
+    "f1-score": 0.9137931034482759,
+    "support": 116,
+    "confused_with": {
+      "list_medications": 7,
+      "medication_adherence": 2
+    }
+  },
+  "deny": {
+    "precision": 0.7254901960784313,
+    "recall": 0.7254901960784313,
+    "f1-score": 0.7254901960784313,
+    "support": 51,
+    "confused_with": {
+      "affirm": 4,
+      "cancel_form": 3
+    }
+  },
+  "refill_due": {
+    "precision": 0.96,
+    "recall": 0.9863013698630136,
+    "f1-score": 0.9729729729729729,
+    "support": 73,
+    "confused_with": {
+      "medication_stock_level": 1
+    }
+  },
+  "goodbye": {
+    "precision": 0.8955223880597015,
+    "recall": 0.8,
+    "f1-score": 0.8450704225352113,
+    "support": 75,
+    "confused_with": {
+      "greet": 3,
+      "deny": 3
+    }
+  },
+  "provide_medication_name": {
+    "precision": 0.9966777408637874,
+    "recall": 1.0,
+    "f1-score": 0.9983361064891847,
+    "support": 3000,
+    "confused_with": {}
+  },
+  "provide_reminder_time": {
+    "precision": 0.9977324263038548,
+    "recall": 1.0,
+    "f1-score": 0.9988649262202043,
+    "support": 440,
+    "confused_with": {}
+  },
+  "provide_medication_colour": {
+    "precision": 0.9950248756218906,
+    "recall": 1.0,
+    "f1-score": 0.9975062344139651,
+    "support": 400,
+    "confused_with": {}
+  },
+  "provide_medication_dose": {
+    "precision": 1.0,
+    "recall": 0.9983333333333333,
+    "f1-score": 0.9991659716430359,
+    "support": 600,
+    "confused_with": {
+      "provide_medication_type": 1
+    }
+  },
+  "medication_dosage": {
+    "precision": 0.8764044943820225,
+    "recall": 0.9873417721518988,
+    "f1-score": 0.9285714285714286,
+    "support": 79,
+    "confused_with": {
+      "medication_stock_level": 1
+    }
+  },
+  "cancel_form": {
+    "precision": 0.8636363636363636,
+    "recall": 0.76,
+    "f1-score": 0.8085106382978724,
+    "support": 50,
+    "confused_with": {
+      "deny": 5,
+      "affirm": 2
+    }
+  },
+  "accuracy": 0.9812459381673011,
+  "macro avg": {
+    "precision": 0.9114699876403604,
+    "recall": 0.9104355171034503,
+    "f1-score": 0.9095791104830684,
+    "support": 10771
+  },
+  "weighted avg": {
+    "precision": 0.981277586870886,
+    "recall": 0.9812459381673011,
+    "f1-score": 0.9809465066677139,
+    "support": 10771
+  },
+  "micro avg": {
+    "precision": 0.9812459381673011,
+    "recall": 0.9812459381673011,
+    "f1-score": 0.9812459381673011,
+    "support": 10771
+  }
+}

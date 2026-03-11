@@ -381,13 +381,36 @@
 
   "ask_medication_type": {
     "casual": [
-      "What type of medication is it? (e.g., antidepressant, painkiller, antibiotic)"
+      "What type of medication is it?"
     ],
     "formal": [
-      "What type of medication is this? (e.g., Antidepressant, Painkiller, Antibiotic, etc.)"
+      "What type of medication is this?"
     ]
   },
-
+"no_symptoms": {
+    "query_response": "You have no recorded symptoms.",
+    "data": [],
+    "type": "string",
+    "status": "success"
+},
+"no_symptoms_period": {
+    "query_response": "You have no recorded symptoms for the last {period}.",
+    "data": [],
+    "type": "string",
+    "status": "success"
+},
+"symptoms_list": {
+    "query_response": "Here {count|is|are} your {count} {count|symptom|symptoms} from the last {period}:",
+    "data": "{symptoms}",
+    "type": "array",
+    "status": "success"
+},
+"error_symptoms": {
+    "query_response": "Failed to retrieve your symptoms. Please try again later.",
+    "data": [],
+    "type": "string",
+    "status": "failed"
+},
   "ask_medication_colour": {
     "casual": [
       "What color should we associate with it? (red, blue, white, yellow, green, orange, purple, pink, black, grey, brown)"

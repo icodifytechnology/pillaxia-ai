@@ -1,6 +1,50 @@
 version: "3.1"
 
 nlu:
+- synonym: week
+  examples: |
+    - weekly
+    - this week
+    - last week
+    - past week
+    - previous week
+    - 7 days
+
+- synonym: month
+  examples: |
+    - monthly
+    - this month
+    - last month
+    - past month
+    - previous month
+    - 30 days
+
+- synonym: day
+  examples: |
+    - daily
+    - today
+    - yesterday
+    - past 24 hours
+
+- synonym: 3 months
+  examples: |
+    - quarterly
+    - last 3 months
+    - past 3 months
+    - previous 3 months
+    - last quarter
+    - 90 days
+
+- synonym: year
+  examples: |
+    - yearly
+    - this year
+    - last year
+    - past year
+    - previous year
+    - 12 months
+    - 365 days
+
 - intent: app_closed
   examples: |
     - /app_closed
@@ -1129,58 +1173,123 @@ nlu:
 
 - intent: get_symptoms
   examples: |
-    - What was the last symptom I logged?
-    - Can you tell me the time period for my last symptom entry?
-    - When did I last report my headache?
-    - What was the most recent symptom I recorded?
-    - How long ago did I log my last symptom?
-    - Can you remind me of the last symptom I noted and when?
-    - What was the last symptom I mentioned in my records?
-    - When did I last report feeling nauseous?
-    - What time period did I log my last fatigue symptom?
-    - Can you show me the last symptom I logged and its date?
-    - What symptoms did I log last [week](period)?
-    - Can you tell me the symptoms I recorded during the last [month](period)?
-    - What symptoms have I reported in the last [month](period)?
-    - Please show me the symptoms I logged this [week](period).
-    - What were the symptoms I noted last [month](period)?
-    - Can you list the symptoms I experienced over the last [week](period)?
-    - How many symptoms did I log in the previous [month](period)?
-    - What symptoms did I report last [week](period)?
-    - Can you summarize the symptoms I recorded in the last [week](period)?
-    - What symptoms did I document during the past [month](period)?
-    - show me my last symptom
-    - what was the last symptom i logged?
-    - when did i last log a symptom?
-    - what did i report last?
-    - can you tell me my most recent symptom?
-    - remind me of my last symptom entry
-    - what symptoms did i record last?
-    - when did i last report feeling unwell?
-    - what was the last symptom i mentioned?
-    - what did i log for symptoms last [week](period)?
-    - show my symptoms for the past [month](period)
-    - what symptoms did i log this [week](period)?
-    - can you summarize my symptoms from last [month](period)?
-    - list the symptoms i reported in the last [week](period)
-    - what symptoms did i have last [month](period)?
-    - what symptoms have i recorded over the past [month](period)?
-    - show me the symptoms i experienced in the last [week](period)
-    - can you remind me what i reported last [month](period)?
-    - how many symptoms did i log this [week](period)?
-    - what symptoms were recorded in the previous [month](period)?
-    - what symptoms did i note over the last [week](period)?
-    - summarize the symptoms i logged last [month](period)
-    - can you show all symptoms from last [week](period)?
-    - give me my last symptom and when it was logged
-    - show the last symptom i recorded and its date
-    - can you tell me when i logged my last symptom?
-    - what symptoms did i document last [month](period)?
-    - what symptoms did i note this [week](period)?
-    - show all symptoms i logged in the last [month](period)
-    - can you give me an overview of symptoms recorded last [week](period)?
-    - remind me what my last symptom was
-    - list all symptoms i reported this [week](period)
+    - what symptoms have i logged
+    - can you show me my symptoms
+    - i want to see my symptom history
+    - list all my symptoms
+    - show me the symptoms i've recorded
+    - what have i reported
+    - can i see my symptom log
+    - give me my symptom records
+    - what symptoms do i have
+    - show my symptom diary
+    - i need to check my symptoms
+    - can you display my symptoms
+    - what did i record
+    - let me see my symptom history
+    - pull up my symptom list
+    - what was the last symptom i logged
+    - show me my most recent symptom
+    - what's my latest symptom entry
+    - can you tell me the last symptom i reported
+    - what did i last log
+    - show my newest symptom
+    - what was my most recent symptom
+    - when was my last symptom
+    - give me my last symptom record
+    - what symptom did i just log
+    - can i see my latest symptom
+    - what's the most recent thing i logged
+    - show me the last thing i reported
+    - what did i just report
+    - what symptoms did i log last [week](period)
+    - show me my symptoms from this [week](period)
+    - what did i report this [week](period)
+    - list my symptoms for the past [week](period)
+    - can you show me symptoms from the last [week](period)
+    - what symptoms have i had this [week](period)
+    - give me my [weekly](period) symptom report
+    - show symptoms from the previous [week](period)
+    - what symptoms did i experience last [week](period)
+    - pull up my symptoms from this past [week](period)
+    - can i see what i logged over the last [week](period)
+    - what symptoms occurred in the last 7 days
+    - show me symptoms from the past 7 days
+    - what did i log in the last 7 days
+    - symptoms from this [week](period) so far
+    - what symptoms this [week](period)
+    - what symptoms did i log last [month](period)
+    - show me my symptoms from this [month](period)
+    - what did i report this [month](period)
+    - list my symptoms for the past [month](period)
+    - can you show me symptoms from the last [month](period)
+    - what symptoms have i had this [month](period)
+    - give me my [monthly](period) symptom summary
+    - show symptoms from the previous [month](period)
+    - what symptoms did i experience last [month](period)
+    - pull up my symptoms from this past [month](period)
+    - can i see what i logged over the last [month](period)
+    - what symptoms occurred in the last 30 days
+    - show me symptoms from the past 30 days
+    - what did i log in the last 30 days
+    - symptoms from this [month](period) so far
+    - what symptoms this [month](period)
+    - what symptoms did i log [today](period)
+    - show me my symptoms from [today](period)
+    - what did i report [today](period)
+    - list my symptoms for [today](period)
+    - can you show me symptoms from [today](period)
+    - what symptoms have i had [today](period)
+    - give me my [daily](period) symptom report
+    - show symptoms from [yesterday](period)
+    - what symptoms did i experience [yesterday](period)
+    - pull up my symptoms from [today](period)
+    - can i see what i logged [today](period)
+    - what symptoms occurred [today](period)
+    - show me symptoms from the past 24 hours
+    - what did i log in the last 24 hours
+    - symptoms from earlier today
+    - what symptoms today
+    - what symptoms did i log in the last [3 months](period)
+    - show me my symptoms from the past [3 months](period)
+    - what did i report over the last [3 months](period)
+    - list my symptoms for the past [3 months](period)
+    - can you show me symptoms from the last [3 months](period)
+    - what symptoms have i had in the last [quarter](period)
+    - give me a [3 month](period) symptom overview
+    - show symptoms from the previous [3 months](period)
+    - what symptoms did i experience in the last [3 months](period)
+    - pull up my symptoms from the past [3 months](period)
+    - can i see what i logged over the last 90 days
+    - what symptoms occurred in the last 90 days
+    - show me symptoms from the past 3 months
+    - what did i log in the last [quarter](period)
+    - symptoms from the last [3 months](period)
+    - what symptoms did i log last [year](period)
+    - show me my symptoms from this [year](period)
+    - what did i report this [year](period)
+    - list my symptoms for the past [year](period)
+    - can you show me symptoms from the last [year](period)
+    - what symptoms have i had this [year](period)
+    - give me my [yearly](period) symptom report
+    - show symptoms from the previous [year](period)
+    - what symptoms did i experience last [year](period)
+    - pull up my symptoms from this past [year](period)
+    - can i see what i logged over the last [year](period)
+    - what did i log in the last [year](period)
+    - symptoms from this [year](period) so far
+    - what's new symptom-wise
+    - show me what i logged recently
+    - let me see my recent symptoms
+    - what have i been logging
+    - give me the symptom rundown
+    - what's in my symptom log
+    - show me my history
+    - what symptoms lately
+    - what have i been feeling
+    - show my recent entries
+    - let me check my symptom tracker
+    - what's the symptom situation
 
 
 - intent: get_new_symptoms
