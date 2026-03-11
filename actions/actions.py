@@ -508,8 +508,8 @@ class ActionAskMedicationType(BaseAction):
             {"title": "Painkiller", "payload": "Painkiller"},
         ]
 
-        attachment = send_response(response)
-        # attachment = send_response_with_buttons(response, buttons)
+        # attachment = send_response(response)
+        attachment = send_response_with_buttons(response, buttons)
         dispatcher.utter_message(attachment=attachment)
         return []
 
@@ -530,8 +530,8 @@ class ActionAskMedicationColour(BaseAction):
             {"title": "Green", "payload": "Green"},
         ]
 
-        attachment = send_response(response)
-        # attachment = send_response_with_buttons(response, buttons)
+        # attachment = send_response(response)
+        attachment = send_response_with_buttons(response, buttons)
 
         dispatcher.utter_message(attachment=attachment)
         return []
@@ -1907,8 +1907,8 @@ class ActionAskAlertType(BaseAction):
             {"title": "Alarm", "payload": "Alarm"}
         ]
 
-        attachment = send_response(response)
-        # attachment = send_response_with_buttons(response, buttons)
+        # attachment = send_response(response)
+        attachment = send_response_with_buttons(response, buttons)
 
         dispatcher.utter_message(attachment=attachment)
         return []
