@@ -1493,7 +1493,9 @@ class ActionGetMedicationId(Action):
         elif pending_flow == "reminder":
             is_refill_flow = False
             is_reminder_flow = True
-
+        else:
+            is_refill_flow = False
+            is_reminder_flow = False
         logger.debug(f'is_refill_flow: {is_refill_flow}, is_reminder_flow: {is_reminder_flow}')
         # Get medication name from different sources
         medication_name = None
@@ -1517,9 +1519,9 @@ class ActionGetMedicationId(Action):
         if not medication_name:
             logger.debug('No medication name provided')
             if is_refill_flow:
-                response = "Which medication would you like to request a refill for?"
+                response = "Which medication would you like to set up the refill information for?"
             elif is_reminder_flow:
-                response = "Which medication would you like to set a reminder for?"
+                response = "Which medication would you like to set up the reminder for?"
             else:
                 response = "Which medication are you referring to?"
             
@@ -5659,7 +5661,7 @@ class ActionCustomFallback(Action):
         if intent == "deny":
             logger.debug(f"User denied pending {pending_flow} flow")
             
-            if pending_flow == 'refill' | 'reminder' | 'medication_form':
+            if pending_flow == 'refill' or pending_flow == 'reminder' or pending_flow == 'medication_form':
                 # Clear the pending flow and ask what they want to do next
                 response = "Okay, what would you like me to help you with next?"
                 attachment = {

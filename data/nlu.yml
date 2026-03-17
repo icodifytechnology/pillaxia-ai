@@ -1181,6 +1181,8 @@ nlu:
 
 - intent: add_refill
   examples: |
+    - add refill
+    - I want to add refill
     - I need to request a refill for [Lisinopril](medication)
     - Can you refill my [Metformin](medication) prescription?
     - I want to order more [Atorvastatin](medication)
