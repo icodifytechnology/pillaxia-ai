@@ -83,6 +83,15 @@ class MedicationManager:
             self._medications_cache = None  # Clear cache
         logger.debug(f'save_reminder result: success = {success}, message={message}')
         return success, message 
+
+    def update_reminder(self, reminder_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+        """Save new or update existing reminder (clears cache)."""
+        success, message = api_client.update_medication_reminder(self.token, reminder_data)
+        
+        if success:
+            self._medications_cache = None  # Clear cache
+        logger.debug(f'save_reminder result: success = {success}, message={message}')
+        return success, message 
     
     def get_medication_tracking(self, start_date: str = None, end_date: str = None) -> Optional[Dict[str, Any]]:
         """Get tracking data with optional date filtering."""

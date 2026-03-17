@@ -17,7 +17,7 @@ x-interruption-intents: &interruption_intents
   - intent: get_symptoms
   - intent: get_new_symptoms
   - intent: medication_dosage
-  - intent: medication_stock_level
+  # - intent: medication_stock_level
   - intent: check_medication_taken
   - intent: medication_adherence
   - intent: add_medication
@@ -56,6 +56,16 @@ rules:
   - action: action_initialize_medication_list
   - action: medication_form
   - active_loop: medication_form
+
+- rule: Activate refill form when user wants to add refill information
+  steps:
+  - intent: add_refill
+  - action: action_get_medication_id
+
+- rule: Activate reminder form when user wants to add reminder
+  steps:
+  - intent: add_reminder
+  - action: action_get_medication_id
 
 - rule: Cancel medication form
   condition:
@@ -286,10 +296,10 @@ rules:
    - intent: medication_dosage
    - action: action_medication_dosage
 
-- rule: Medication left dose
-  steps:
-   - intent: medication_stock_level
-   - action: action_stock_level
+# - rule: Medication left dose
+#   steps:
+#    - intent: medication_stock_level
+#    - action: action_stock_level
 
 - rule: Last symptom logged
   steps: 
@@ -314,7 +324,7 @@ rules:
   steps:
     - or:
       - intent: affirm
-      - intent: cancel
+      - intent: cancel_form
     - action: action_cancel_form
 
 - rule: Handle affirm after form interruption - cancel the form - refill form
@@ -325,7 +335,7 @@ rules:
   steps:
     - or:
       - intent: affirm
-      - intent: cancel
+      - intent: cancel_form
     - action: action_cancel_form
 
 - rule: Handle affirm after form interruption - cancel the form - reminder form
@@ -336,7 +346,7 @@ rules:
   steps:
     - or:
       - intent: affirm
-      - intent: cancel
+      - intent: cancel_form
     - action: action_cancel_form
 
 - rule: Handle deny after form interruption - continue with the form - medication_form

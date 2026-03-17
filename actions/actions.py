@@ -1307,7 +1307,9 @@ class ActionCancelForm(BaseAction):
                 SlotSet("stock_level", None),
                 SlotSet("refill_day", None),
                 SlotSet("current_step", None),
-                SlotSet('form_interrupted', False)
+                SlotSet('form_interrupted', False),
+                SlotSet('medication', None),
+                SlotSet('pending_flow_type', None)
             ]
 
 class ActionSubmitMedicationForm(BaseAction):
@@ -1404,7 +1406,7 @@ class ActionSubmitMedicationForm(BaseAction):
         return [
             ActiveLoop(None),  # Deactivate medication form
             SlotSet("current_step", "ask_refill"),
-            SlotSet("user_medication_id", medication_id),
+            SlotSet("medication_id", medication_id),
             # Clear all medication slots for next time
             SlotSet("medication_name", None),
             SlotSet("medication_type", None),
@@ -1468,6 +1470,187 @@ class ActionHandleFormInterruption(BaseAction):
                 SlotSet("form_interrupted", True)
             ]
 
+class ActionGetMedicationId(Action):
+    def name(self):
+        return "action_get_medication_id"
+    
+    def run(self, dispatcher: CollectingDispatcher, 
+            tracker: Tracker, 
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        logger.debug('Running Action_get_medication_id')
+        
+        # Check if we're returning with a medication name from a previous question
+        pending_flow = tracker.get_slot("pending_flow_type")
+        logger.debug(f'pending_flow: {pending_flow}')
+        intent = tracker.latest_message.get('intent', {}).get('name')
+        if pending_flow == None: 
+            is_refill_flow = intent == "add_refill"
+            is_reminder_flow = intent == "add_reminder"
+        elif pending_flow == "refill":
+            is_refill_flow = True
+            is_reminder_flow = False
+        elif pending_flow == "reminder":
+            is_refill_flow = False
+            is_reminder_flow = True
+
+        logger.debug(f'is_refill_flow: {is_refill_flow}, is_reminder_flow: {is_reminder_flow}')
+        # Get medication name from different sources
+        medication_name = None
+        
+        if pending_flow:
+            # Get medication name from slot (set by _handle_medication_mention) or entities
+            medication_name = tracker.get_slot("medication")
+            if not medication_name:
+                medication_name = next(tracker.get_latest_entity_values('medication'), None)
+            if not medication_name:
+                medication_name = tracker.latest_message.get('text', '').strip()
+            logger.debug(f"Processing response for pending {pending_flow} flow: {medication_name}")
+            
+        # 1. Check if medication was provided in the current message
+        medication_entity = next(tracker.get_latest_entity_values('medication'), None)
+        if medication_entity:
+            medication_name = medication_entity
+            logger.debug(f"Found medication in entities: {medication_name}")
+        
+        # 2. If no medication found, ask for it
+        if not medication_name:
+            logger.debug('No medication name provided')
+            if is_refill_flow:
+                response = "Which medication would you like to request a refill for?"
+            elif is_reminder_flow:
+                response = "Which medication would you like to set a reminder for?"
+            else:
+                response = "Which medication are you referring to?"
+            
+            attachment = {
+                "query_response": response,
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+            
+            # Store the flow type in a slot so we know what to do when user responds
+            return [
+                SlotSet("pending_flow_type", "refill" if is_refill_flow else "reminder"),
+                FollowupAction("action_listen")  # Wait for user response
+            ]
+        
+        # We have a medication name, now find it in the user's medications
+        try:           
+            token = tracker.sender_id
+            manager = MedicationManager(token)
+            
+            # Try to find the medication by name
+            medication = manager.get_medication_by_name(medication_name)
+            
+            if medication:
+                # Medication exists - get its ID
+                medication_id = medication.get("id")
+                medication_name = medication.get("name")  # Use the exact name from system
+                
+                logger.debug(f"Found medication: {medication_name} with ID: {medication_id}")
+                
+                # Check if there's existing refill info (for refill flow)
+                if is_refill_flow and medication.get("refill_periods"):
+                    logger.debug("Checking if there's existing refill information")
+                    # Medication has refill periods - inform user
+                    if len(medication["refill_periods"]) > 0:
+                        logger.debug('Found refill information')
+                        refill_date = medication["refill_periods"][0].get("refill_date", "Unknown")
+                        response = f"You already have refill information for {medication_name}. The next refill is due on {refill_date}. Would you like to update it?"
+                        
+                        attachment = {
+                            "query_response": response,
+                            "type": "text",
+                            "status": "success"
+                        }
+                        dispatcher.utter_message(attachment=attachment)
+                        
+                        # Still proceed to refill form to allow updates
+                        return [
+                            SlotSet("medication_id", medication_id),
+                            SlotSet("pending_flow_type", 'refill'),
+                            FollowupAction("action_listen")
+                        ]
+                logger.debug(medication.get('reminder'))
+                # Check if there's existing reminder info (for reminder flow)
+                if is_reminder_flow:
+                    logger.debug('Inside reminder flow')
+                    reminder_data = medication.get("reminder")
+                    
+                    id = reminder_data['id']
+                    logger.debug(f'Reminder id: {id}')
+                    # Check if reminder exists and has required fields
+                    if reminder_data and isinstance(reminder_data, dict) and reminder_data.get("id"):
+                        logger.debug('Found existing reminder information')
+                        response = f"You already have reminders set up for {medication_name}. Would you like to update existing one?"
+                        
+                        attachment = {
+                            "query_response": response,
+                            "type": "text",
+                            "status": "success"
+                        }
+                        dispatcher.utter_message(attachment=attachment)
+                        
+                        # Still proceed to reminder form to allow additions
+                        return [
+                            SlotSet("medication_id", medication_id),
+                            SlotSet('reminder_id', id),
+                            SlotSet("pending_flow_type", 'reminder'),
+                            FollowupAction("action_listen")
+                        ]
+                    else:
+                        logger.debug('No existing reminder found')
+                
+                # No existing info or proceeding with new entry
+                if is_refill_flow:
+                    logger.debug('No refill information found')
+                    return [
+                        SlotSet("medication_id", medication_id),
+                        SlotSet('pending_flow_type', None),
+                        SlotSet('medication', None),
+                        FollowupAction("refill_form")
+                    ]
+                elif is_reminder_flow:
+                    return [
+                        SlotSet("medication_id", medication_id),
+                        SlotSet("pending_flow_type", None),
+                        SlotSet('medication', None),
+                        FollowupAction("reminder_form")
+                    ]
+                else:
+                    return [FollowupAction("action_listen")]
+            
+            else:
+                # Medication not found in user's list
+                response = f"I couldn't find {medication_name} in your medication list. Would you like to add it first?"
+                
+                attachment = {
+                    "query_response": response,
+                    "type": "text",
+                    "status": "success"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                
+                # Set the medication name slot and activate medication form
+                return [
+                    SlotSet("medication_name", medication_name),
+                    SlotSet("pending_flow_type", "medication_form"),
+                    FollowupAction("action_listen")
+                ]
+                
+        except Exception as e:
+            logger.error(f"Error in ActionGetMedicationId: {e}")
+            response = "I'm having trouble finding that medication. Please try again."
+            attachment = {
+                "query_response": response,
+                "type": "text",
+                "status": "success"
+            }
+            dispatcher.utter_message(attachment=attachment)
+            return [FollowupAction("action_listen")]
+        
 class ActionHandleRefillDeny(BaseAction):
     def name(self) -> Text:
         return "action_handle_refill_deny"
@@ -1641,7 +1824,7 @@ class ActionSubmitRefillForm(BaseAction):
         logger.debug("ACTION_SUBMIT_REFILL_FORM IS RUNNING!")
         logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
         logger.debug("="*80)
-
+        logger.debug(f"Current step: {tracker.get_slot('current_step')}")
         # Helper function to extract refill days 
         def extract_refill_days(value):
             """
@@ -1722,7 +1905,7 @@ class ActionSubmitRefillForm(BaseAction):
         # Get raw slot values
         raw_stock_level = tracker.get_slot("stock_level")
         raw_refill_day = tracker.get_slot("refill_day")
-        user_medication_id = tracker.get_slot("user_medication_id")
+        medication_id = tracker.get_slot("medication_id")
         
         logger.debug(f"Raw stock_level: '{raw_stock_level}' (type: {type(raw_stock_level)})")
         logger.debug(f"Raw refill_day: '{raw_refill_day}' (type: {type(raw_refill_day)})")
@@ -1764,7 +1947,7 @@ class ActionSubmitRefillForm(BaseAction):
 
         # Collect cleaned refill data
         refill_data = {
-            "user_medication_id": user_medication_id,
+            "user_medication_id": medication_id,
             "stock_level": stock_level,
             "refill_day": refill_day
         }
@@ -1788,16 +1971,23 @@ class ActionSubmitRefillForm(BaseAction):
                 SlotSet("current_step", None)
             ]
         
-        # Success - move to reminders
-        builder = ResponseBuilder(token=tracker.sender_id)
-        response = builder.build_response(intent='submit_refill')
+        # Success   
+        builder = ResponseBuilder(token=tracker.sender_id) 
+        current_step = tracker.get_slot('current_step')
+        if current_step == None:
+            current_step = None
+            response = builder.build_response(intent='submit_refill_no_reminder')
+        else:
+            current_step = 'ask_reminder'
+            response = builder.build_response(intent='submit_refill')
         dispatcher.utter_message(attachment=response)
-        
+
         return [
             ActiveLoop(None),  # Deactivate refill form
-            SlotSet("current_step", "ask_reminder"),
+            SlotSet("current_step", current_step),
             SlotSet('stock_level', None),
-            SlotSet('refill_day', None)
+            SlotSet('refill_day', None),
+            SlotSet('pending_flow_type', None)
         ]
 
 class ActionHandleReminderDeny(BaseAction):
@@ -2576,8 +2766,8 @@ class ActionSubmitReminderForm(BaseAction):
         logger.debug("RUNNING ACTION SUBMIT REMINDER FORM")
         logger.debug(f"Latest intent: {tracker.latest_message.get('intent', {}).get('name')}")
         logger.debug("="*80)
-        
-        user_medication_id = tracker.get_slot("user_medication_id")
+        logger.debug(f"current_step: {tracker.get_slot('current_step')}")
+        medication_id = tracker.get_slot("medication_id")
         frequency = tracker.get_slot("frequency")
         per_day_frequency = tracker.get_slot("per_day_frequency")
         quantity = tracker.get_slot("quantity")
@@ -2858,7 +3048,7 @@ class ActionSubmitReminderForm(BaseAction):
         # Build final reminder data
         # -----------------------------
         reminder_data = {
-            "user_medication_id": user_medication_id,
+            "user_medication_id": medication_id,
             "frequency_type": frequency_type,
             "frequency_period": frequency_period,
             "reminder_day": reminder_day,
@@ -2873,7 +3063,14 @@ class ActionSubmitReminderForm(BaseAction):
 
         # Save reminder data
         medmanager = MedicationManager(token=tracker.sender_id)
-        success, message = medmanager.save_reminder(reminder_data)
+
+        current_step = tracker.get_slot('current_step')
+        id = tracker.get_slot('reminder_id')
+        if current_step == None or id != None:
+            reminder_data['id'] = id
+            success, message = medmanager.update_reminder(reminder_data)
+        else:
+            success, message = medmanager.save_reminder(reminder_data)
 
         if not success:
             response = "Sorry, I couldn't save your reminder information. Would you like to try again?"
@@ -2890,7 +3087,8 @@ class ActionSubmitReminderForm(BaseAction):
                 SlotSet("quantity", None),
                 SlotSet("reminder_time", None),
                 SlotSet("alert_type", None),
-                SlotSet("reminder_day", None)
+                SlotSet("reminder_day", None),
+                SlotSet('pending_flow_type', None)
             ]
         
         # Success 
@@ -3298,7 +3496,7 @@ class ActionSymptoms(Action):
                     "status": "success"
                 }
                 dispatcher.utter_message(attachment=attachment)
-                return [SlotSet("symptoms_available", False)]
+                return []
             
             # Format symptoms for display, filtered by period
             # Pass the actual days value for more precise filtering
@@ -3753,24 +3951,32 @@ class ActionRefillInformation(Action):
     def run(self, dispatcher: CollectingDispatcher, 
             tracker: Tracker, 
             domain: Dict[Text, Any])  -> List[Dict[Text, Any]]:
-            medication_name = tracker.get_slot('medication')
-            url = 'https://api.pillaxia.com/api/v1/user-medications/list'
-            header = {
-                        "Authorization" : f"Bearer {tracker.sender_id}"
-                    }
-            refill_info = {}
-        # try:
-            response = requests.post(url,headers=header)
+        
+        medication_name = tracker.get_slot('medication')
+        url = 'https://api.pillaxia.com/api/v1/user-medications/list'
+        header = {
+            "Authorization": f"Bearer {tracker.sender_id}"
+        }
+        
+        # Initialize date variable to None
+        date = None
+        
+        try:
+            response = requests.post(url, headers=header)
             response_data = response.json()["result"]["items"]
+            
             for data in response_data:
                 if data["name"].lower() == medication_name.lower() and len(data["refill_periods"]) > 0:
-                        date = data["refill_periods"][0]["refill_date"],
+                    # Remove the trailing comma which was creating a tuple
+                    date = data["refill_periods"][0]["refill_date"]
+                    break  # Exit loop once found
+            
             if date:
                 messages = ["Refill date of your medication ", 
-                            "Refill date for your prescription ",
-                            "Refill date regarding your medication "]
+                           "Refill date for your prescription ",
+                           "Refill date regarding your medication "]
                 response = random.choice(messages)
-                reply = f"{response} {medication_name} is {' '.join(date)}"
+                reply = f"{response} {medication_name} is {date}"
                 attachment = {
                     "query_response": reply,
                     "data": [],
@@ -3779,10 +3985,10 @@ class ActionRefillInformation(Action):
                 }
             else:
                 messages = [f"I'm sorry, but I don't have any recorded refill information for {medication_name}.",
-                            f"Unfortunately, there's no refill data available for {medication_name} in your records.",
-                            f"I couldn't find any refill details for {medication_name}.",
-                            f"There are no recorded refills in your records for {medication_name}.",
-                            f"Your records don't show any refill information for {medication_name}."]
+                           f"Unfortunately, there's no refill data available for {medication_name} in your records.",
+                           f"I couldn't find any refill details for {medication_name}.",
+                           f"There are no recorded refills in your records for {medication_name}.",
+                           f"Your records don't show any refill information for {medication_name}."]
                 reply = random.choice(messages)
                 attachment = {
                     "query_response": reply,
@@ -3790,20 +3996,20 @@ class ActionRefillInformation(Action):
                     "type": "text",
                     "status": "failed"
                 }
-            
-        # except Exception as ex:
-        #     reply = "Failed to get information about medication refill. Please try again!!"
-        #     attachment = {
-        #         "query_response": reply,
-		#     	"data":[],
-		#     	"type":"string",
-		#     	"status": "failed"
-        #     }
-        # finally:
-            dispatcher.utter_message(attachment=attachment)
+                
+        except Exception as ex:
+            reply = "Failed to get information about medication refill. Please try again!!"
+            attachment = {
+                "query_response": reply,
+                "data": [],
+                "type": "string",
+                "status": "failed"
+            }
         
-            return [SlotSet("medication", None)]
+        dispatcher.utter_message(attachment=attachment)
         
+        return [SlotSet("medication", None)]
+    
 class ActionNewSymptom(Action):
     def name(self):
         return "action_new_symptom"
@@ -4132,6 +4338,84 @@ class ActionCustomFallback(Action):
         requested_slot = tracker.get_slot("requested_slot")
         user_text = tracker.latest_message.get('text', '').strip()
         user_text_lower = user_text.lower()
+        
+        # Check if we're waiting for a medication name after asking for it
+        pending_flow = tracker.get_slot("pending_flow_type")
+        if pending_flow and not form_name:
+            logger.debug(f"Have pending flow: {pending_flow} - processing medication name")
+            
+            # The user just provided a medication name - process it
+            try:
+                
+                token = tracker.sender_id
+                manager = MedicationManager(token)
+                
+                # Try to find the medication by name
+                medication = manager.get_medication_by_name(user_text)
+                
+                if medication:
+                    # Medication exists - get its ID
+                    medication_id = medication.get("id")
+                    medication_name = medication.get("name")
+                    
+                    logger.debug(f"Found medication: {medication_name} with ID: {medication_id}")
+                    
+                    # Check existing info and activate appropriate form
+                    if pending_flow == "refill":
+                        if medication.get("refill_periods") and len(medication["refill_periods"]) > 0:
+                            refill_date = medication["refill_periods"][0].get("refill_date", "Unknown")
+                            response = f"You already have refill information for {medication_name}. The next refill is due on {refill_date}. Would you like to update it?"
+                            
+                            attachment = {
+                                "query_response": response,
+                                "data": [],
+                                "type": "text",
+                                "status": "question"
+                            }
+                            dispatcher.utter_message(attachment=attachment)
+                        
+                        return [
+                            SlotSet("medication_id", medication_id),
+                            SlotSet("pending_flow_type", None),
+                            FollowupAction("refill_form")
+                        ]
+                        
+                    elif pending_flow == "reminder":
+                        if medication.get("reminders") and len(medication["reminders"]) > 0:
+                            response = f"You already have reminders set up for {medication_name}. Would you like to add another reminder?"
+                            
+                            attachment = {
+                                "query_response": response,
+                                "data": [],
+                                "type": "text",
+                                "status": "question"
+                            }
+                            dispatcher.utter_message(attachment=attachment)
+                        
+                        return [
+                            SlotSet("medication_id", medication_id),
+                            SlotSet("pending_flow_type", None),
+                            FollowupAction("reminder_form")
+                        ]
+                else:
+                    # Medication not found
+                    response = f"I couldn't find {user_text} in your medication list. Would you like to add it first?"
+                    attachment = {
+                        "query_response": response,
+                        "data": [],
+                        "type": "text",
+                        "status": "question"
+                    }
+                    dispatcher.utter_message(attachment=attachment)
+                    
+                    return [
+                        SlotSet("medication_name", user_text),
+                        SlotSet("pending_flow_type", "medication_form"), 
+                        FollowupAction("action_listen")
+                    ]
+            except Exception as e:
+                logger.error(f"Error processing pending flow: {e}")
+                return [FollowupAction("action_listen")]
         
         # DEBUG: Check ALL pending-related slots
         pending = tracker.get_slot("pending_medication_confirmation")
@@ -5243,6 +5527,54 @@ class ActionCustomFallback(Action):
         logger.debug(f"Original intent: {intent} (confidence: {intent_confidence})")
         logger.debug(f"User query: '{user_query}'")
         
+        # ========== HANDLE AFFIRM/DENY INTENTS WITH PENDING FLOW ==========
+        if intent in ["affirm", "deny"]:
+            result = self._handle_affirm_deny(dispatcher, tracker, intent)
+            if result:
+                return result
+            
+        # CRITICAL FIX: Check if this is actually a refill query
+        # Look for refill-related keywords in the query
+        refill_keywords = ['refill', 'due', 'when', 'date', 'eligible', 'available', 'time', 'soon', 'ready']
+        has_refill_keywords = any(keyword in user_query_lower for keyword in refill_keywords)
+        
+        # If it has refill keywords and contains a medication mention, it's likely a refill query
+        if has_refill_keywords and self._is_likely_medication_mention(user_query):
+            logger.debug("Detected refill query with medication - redirecting to action_refill_information")
+            
+            # Extract medication name if present in entities
+            medication_slot = tracker.get_slot('medication')
+            medication_entity = next(tracker.get_latest_entity_values('medication'), None)
+            medication_name = medication_slot or medication_entity
+            
+            if medication_name:
+                # Set the medication slot and trigger refill action
+                return [
+                    SlotSet("medication", medication_name),
+                    FollowupAction("action_refill_information")
+                ]
+            else:
+                # Try to extract medication from text
+                # This is a simplified extraction - you might want to enhance this
+                words = user_query.split()
+                for word in words:
+                    if word[0].isupper() and len(word) > 2:  # Likely a medication name
+                        return [
+                            SlotSet("medication", word),
+                            FollowupAction("action_refill_information")
+                        ]
+                
+                # If we can't extract medication, ask for it
+                response = "Which medication would you like to check the refill date for?"
+                attachment = {
+                    "query_response": response,
+                    "data": [],
+                    "type": "text",
+                    "status": "question"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                return [FollowupAction("action_listen")]
+        
         # STRATEGY 1: Pattern matching for common questions
         import re
         for pattern_config in self.PATTERN_RESPONSES:
@@ -5251,12 +5583,18 @@ class ActionCustomFallback(Action):
                     logger.debug(f"Pattern matched: '{pattern}'")
                     return self._send_response(dispatcher, pattern_config["response"])
         
-        # STRATEGY 2: Check if user might be mentioning a medication
+        # STRATEGY 2: Check if user might be mentioning a medication (but not for refill)
         if self._is_likely_medication_mention(user_query):
-            logger.debug("Potential medication mention detected")
-            response = self._handle_medication_mention(dispatcher, user_query)
-            return self._send_response(dispatcher, response)
+            logger.debug("Potential medication mention detected (non-refill)")
+            result = self._handle_medication_mention(dispatcher, tracker, user_query)  # Pass tracker here
+            
+            # Check if result is a string (menu) or list of actions (redirect)
+            if isinstance(result, str):
+                return self._send_response(dispatcher, result)
+            else:
+                return result  # Return the actions directly
         
+        # Rest of your existing fallback logic...
         # STRATEGY 3: Very short queries (1-2 words) that aren't intents
         word_count = len(user_query.split())
         if word_count <= 2:
@@ -5295,6 +5633,50 @@ class ActionCustomFallback(Action):
         logger.debug("No patterns matched - using OpenAI fallback")
         return self._openai_fallback(dispatcher, tracker)
 
+    def _handle_affirm_deny(self, dispatcher, tracker, intent):
+        """Handle affirm and deny intents when there's a pending flow"""
+        
+        pending_flow = tracker.get_slot("pending_flow_type")
+        
+        if not pending_flow:
+            return None  # No pending flow to handle
+        
+        # Handle AFFIRM intent
+        if intent == "affirm":
+            logger.debug(f"User affirmed pending {pending_flow} flow")
+            
+            if pending_flow == "refill":
+                return [FollowupAction("refill_form")]
+            elif pending_flow == "reminder":
+                return [FollowupAction("reminder_form")]
+            elif pending_flow == "medication_form":
+                return[FollowupAction("medication_form")]
+            else:
+                # Clear pending flow if unknown
+                return [SlotSet("pending_flow_type", None), FollowupAction("action_listen")]
+        
+        # Handle DENY intent
+        if intent == "deny":
+            logger.debug(f"User denied pending {pending_flow} flow")
+            
+            if pending_flow == 'refill' | 'reminder' | 'medication_form':
+                # Clear the pending flow and ask what they want to do next
+                response = "Okay, what would you like me to help you with next?"
+                attachment = {
+                    "query_response": response,
+                    "data": [],
+                    "type": "text",
+                    "status": "question"
+                }
+                dispatcher.utter_message(attachment=attachment)
+                
+                return [
+                    SlotSet("pending_flow_type", None),
+                    FollowupAction("action_listen")
+                ]
+        
+        return None  # Not affirm or deny
+
     def _is_likely_medication_mention(self, text):
         """Check if text might be mentioning a medication"""
         text_lower = text.lower()
@@ -5316,9 +5698,33 @@ class ActionCustomFallback(Action):
             return True
         
         return False
-
-    def _handle_medication_mention(self, dispatcher, text):
-        """Generate response for medication mention"""
+    
+    def _handle_medication_mention(self, dispatcher, tracker, text):
+        """Generate response for medication mention, checking for pending flows first"""
+        
+        # Check if we have a pending flow (user was asked for medication name)
+        pending_flow = tracker.get_slot("pending_flow_type")
+        
+        if pending_flow in ["refill", "reminder"]:
+            logger.debug(f"Medication mention detected with pending {pending_flow} flow")
+            
+            # Extract medication name from the text
+            # You might want to enhance this extraction logic
+            medication_name = text.strip()
+            logger.debug(f'medication_name = {medication_name}')
+            # Check if there's a medication entity in the message
+            medication_entity = next(tracker.get_latest_entity_values('medication'), None)
+            if medication_entity:
+                medication_name = medication_entity
+            
+            # The user is responding to our question about which medication
+            # Set the medication slot and let action_get_medication_id handle it
+            return [
+                SlotSet("medication", medication_name),  # Set the medication slot
+                FollowupAction("action_get_medication_id")
+            ]
+        
+        # No pending flow - show the generic menu
         return f"I notice you mentioned '{text}'. If you'd like to manage this medication, you can say:\n• 'add medication' to add it to your list\n• 'check dosage' for dosage information\n• 'set reminder' to create a reminder\n• 'check refill' for refill status"
 
     def _get_helpful_suggestion(self):

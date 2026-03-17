@@ -526,6 +526,14 @@
     ]
   },
 
+  "submit_refill_no_reminder": {
+    "casual": [
+      "I have added the refill information for you. What would you like my help with next?"
+    ],
+    "formal": [
+      "The refill information has been successfully set. "
+    ]
+  },
   "greet-form": {
     "casual": [
       "Hello {name}! We are in the process of {current_action}. Would you like to cancel it?"

@@ -429,6 +429,7 @@ nlu:
     - add medicine to my list
     - add a new med
     - add another medicine
+    - add med
     - add meds
     - add medication please
     - add medicine now
@@ -1009,78 +1010,78 @@ nlu:
     - what medication comes next?
     - when is my next intake?
 
-- intent: medication_stock_level
-  examples: |
-    - How many pills do I have left of [Lisinopril](medication)?
-    - What's my current stock of [Metformin](medication)?
-    - How much [Advil](medication) do I have remaining?
-    - Can you check how many doses of [Synthroid](medication) I have?
-    - What's the count on my [Lipitor](medication) tablets?
-    - Do I have any [Amoxicillin](medication) left?
-    - How many capsules of [Omeprazole](medication) are remaining?
-    - Check my [Sertraline](medication) supply please
-    - What's the status of my [Losartan](medication) stock?
-    - How many more doses of [Atorvastatin](medication) do I have?
-    - Are we running low on [Gabapentin](medication)?
-    - How many doses of [Mirtazapine](medication) do I have left?
-    - How much [Amlodipine](medication) is left in my prescription?
-    - Can you tell me the remaining quantity of [Levothyroxine](medication)?
-    - What's the current level of my [Metoprolol](medication) supply?
-    - How many [Simvastatin](medication) pills do I have on hand?
-    - Am I about to run out of [Escitalopram](medication)?
-    - What's left of my [Albuterol](medication) inhaler?
-    - How many days worth of [Metformin](medication) do I have?
-    - Is my [Pantoprazole](medication) supply getting low?
-    - Can you check if I need to refill my [Citalopram](medication)?
-    - How many tablets of [Ibuprofen](medication) are left in the bottle?
-    - What's the remaining count for my [Hydrocodone](medication)?
-    - Do I need to reorder [Fluoxetine](medication) soon?
-    - How many more doses of [Duloxetine](medication) can I take before running out?
-    - What's the status of my [Venlafaxine](medication) prescription?
-    - How much [Tramadol](medication) do I have left?
-    - Can you check the remaining quantity of [Bupropion](medication)?
-    - How many pills of [Alprazolam](medication) do I still have?
-    - What's my current supply of [Warfarin](medication) like?
-    - Am I close to finishing my [Prednisone](medication) course?
-    - how many pills of [Lisinopril](medication) do i have left?
-    - how many doses of [Metformin](medication) are left?
-    - what's left of my [Advil](medication)?
-    - check my remaining [Synthroid](medication)
-    - how many tablets of [Lipitor](medication) are left?
-    - do i have enough [Amoxicillin](medication)?
-    - how many capsules of [Omeprazole](medication) remain?
-    - show me my [Sertraline](medication) stock
-    - how much [Losartan](medication) is left?
-    - do i have enough [Atorvastatin](medication) for the week?
-    - am i running low on [Gabapentin](medication)?
-    - how many [Mirtazapine](medication) pills are left?
-    - how much [Amlodipine](medication) do i have left?
-    - check the remaining [Levothyroxine](medication)
-    - what's my [Metoprolol](medication) supply like?
-    - how many [Simvastatin](medication) tablets are on hand?
-    - do i need a refill for [Escitalopram](medication)?
-    - how much [Albuterol](medication) do i have left?
-    - how many days of [Metformin](medication) remain?
-    - is my [Pantoprazole](medication) supply low?
-    - do i need to reorder [Citalopram](medication)?
-    - how many [Ibuprofen](medication) tablets do i have left?
-    - what's remaining for my [Hydrocodone](medication)?
-    - am i almost out of [Fluoxetine](medication)?
-    - how many more [Duloxetine](medication) doses can i take?
-    - check my [Venlafaxine](medication) stock
-    - how much [Tramadol](medication) do i have?
-    - remaining [Bupropion](medication) doses?
-    - how many [Alprazolam](medication) pills are left?
-    - what's my [Warfarin](medication) supply like?
-    - am i close to finishing [Prednisone](medication)?
-    - do i have enough [Metformin](medication) to last the week?
-    - how many [Levothyroxine](medication) doses do i still have?
-    - can you check my [Lisinopril](medication) remaining quantity?
-    - do i need to top up [Atorvastatin](medication)?
-    - am i low on [Gabapentin](medication)?
-    - show remaining doses of [Mirtazapine](medication)
-    - how much [Omeprazole](medication) do i have left for today?
-    - check if i need a refill for [Ibuprofen](medication)
+# - intent: medication_stock_level
+#   examples: |
+#     - How many pills do I have left of [Lisinopril](medication)?
+#     - What's my current stock of [Metformin](medication)?
+#     - How much [Advil](medication) do I have remaining?
+#     - Can you check how many doses of [Synthroid](medication) I have?
+#     - What's the count on my [Lipitor](medication) tablets?
+#     - Do I have any [Amoxicillin](medication) left?
+#     - How many capsules of [Omeprazole](medication) are remaining?
+#     - Check my [Sertraline](medication) supply please
+#     - What's the status of my [Losartan](medication) stock?
+#     - How many more doses of [Atorvastatin](medication) do I have?
+#     - Are we running low on [Gabapentin](medication)?
+#     - How many doses of [Mirtazapine](medication) do I have left?
+#     - How much [Amlodipine](medication) is left in my prescription?
+#     - Can you tell me the remaining quantity of [Levothyroxine](medication)?
+#     - What's the current level of my [Metoprolol](medication) supply?
+#     - How many [Simvastatin](medication) pills do I have on hand?
+#     - Am I about to run out of [Escitalopram](medication)?
+#     - What's left of my [Albuterol](medication) inhaler?
+#     - How many days worth of [Metformin](medication) do I have?
+#     - Is my [Pantoprazole](medication) supply getting low?
+#     - Can you check if I need to refill my [Citalopram](medication)?
+#     - How many tablets of [Ibuprofen](medication) are left in the bottle?
+#     - What's the remaining count for my [Hydrocodone](medication)?
+#     - Do I need to reorder [Fluoxetine](medication) soon?
+#     - How many more doses of [Duloxetine](medication) can I take before running out?
+#     - What's the status of my [Venlafaxine](medication) prescription?
+#     - How much [Tramadol](medication) do I have left?
+#     - Can you check the remaining quantity of [Bupropion](medication)?
+#     - How many pills of [Alprazolam](medication) do I still have?
+#     - What's my current supply of [Warfarin](medication) like?
+#     - Am I close to finishing my [Prednisone](medication) course?
+#     - how many pills of [Lisinopril](medication) do i have left?
+#     - how many doses of [Metformin](medication) are left?
+#     - what's left of my [Advil](medication)?
+#     - check my remaining [Synthroid](medication)
+#     - how many tablets of [Lipitor](medication) are left?
+#     - do i have enough [Amoxicillin](medication)?
+#     - how many capsules of [Omeprazole](medication) remain?
+#     - show me my [Sertraline](medication) stock
+#     - how much [Losartan](medication) is left?
+#     - do i have enough [Atorvastatin](medication) for the week?
+#     - am i running low on [Gabapentin](medication)?
+#     - how many [Mirtazapine](medication) pills are left?
+#     - how much [Amlodipine](medication) do i have left?
+#     - check the remaining [Levothyroxine](medication)
+#     - what's my [Metoprolol](medication) supply like?
+#     - how many [Simvastatin](medication) tablets are on hand?
+#     - do i need a refill for [Escitalopram](medication)?
+#     - how much [Albuterol](medication) do i have left?
+#     - how many days of [Metformin](medication) remain?
+#     - is my [Pantoprazole](medication) supply low?
+#     - do i need to reorder [Citalopram](medication)?
+#     - how many [Ibuprofen](medication) tablets do i have left?
+#     - what's remaining for my [Hydrocodone](medication)?
+#     - am i almost out of [Fluoxetine](medication)?
+#     - how many more [Duloxetine](medication) doses can i take?
+#     - check my [Venlafaxine](medication) stock
+#     - how much [Tramadol](medication) do i have?
+#     - remaining [Bupropion](medication) doses?
+#     - how many [Alprazolam](medication) pills are left?
+#     - what's my [Warfarin](medication) supply like?
+#     - am i close to finishing [Prednisone](medication)?
+#     - do i have enough [Metformin](medication) to last the week?
+#     - how many [Levothyroxine](medication) doses do i still have?
+#     - can you check my [Lisinopril](medication) remaining quantity?
+#     - do i need to top up [Atorvastatin](medication)?
+#     - am i low on [Gabapentin](medication)?
+#     - show remaining doses of [Mirtazapine](medication)
+#     - how much [Omeprazole](medication) do i have left for today?
+#     - check if i need a refill for [Ibuprofen](medication)
 
 - intent: refill_due
   examples: |
@@ -1157,6 +1158,314 @@ nlu:
     - what's the earliest i can refill my [Mirtazapine](medication)?
     - do i need to refill [Hydrocodone](medication) soon?
     - when can i get my [Levothyroxine](medication) prescription refilled?
+    - tell me when [Lisinopril](medication) needs refilling
+    - i need to know the refill date for [Metformin](medication)
+    - can you check the refill status of [Atorvastatin](medication)
+    - when is the next time i can get [Levothyroxine](medication)
+    - refill date check for [Amlodipine](medication)
+    - is [Omeprazole](medication) due for refill
+    - how many refills left for [Sertraline](medication)
+    - refill reminder for [Gabapentin](medication)
+    - check when [Metoprolol](medication) can be refilled
+    - losartan refill eligibility date
+    - when does escitalopram prescription expire
+    - albuterol refill availability
+    - pantoprazole next refill date
+    - fluoxetine refill schedule
+    - simvastatin refill due date
+    - metformin prescription refill date
+    - lisinopril refill status
+    - atorvastatin refill reminder
+    - levothyroxine refill time
+    - amlodipine next refill
+
+- intent: add_refill
+  examples: |
+    - I need to request a refill for [Lisinopril](medication)
+    - Can you refill my [Metformin](medication) prescription?
+    - I want to order more [Atorvastatin](medication)
+    - Please request a refill for [Levothyroxine](medication)
+    - I need a refill on [Amlodipine](medication)
+    - Can you help me refill [Omeprazole](medication)?
+    - I'm running low on [Sertraline](medication), need a refill
+    - Request refill for [Gabapentin](medication) please
+    - I need to reorder [Metoprolol](medication)
+    - Can you put in a refill request for [Losartan](medication)?
+    - I'd like to refill my [Escitalopram](medication) prescription
+    - Need to get more [Albuterol](medication)
+    - Please order a refill for [Pantoprazole](medication)
+    - I want to request a refill for [Fluoxetine](medication)
+    - Can you refill [Simvastatin](medication) for me?
+    - I need a prescription refill for [Warfarin](medication)
+    - Requesting a refill for [Citalopram](medication)
+    - Please refill my [Duloxetine](medication)
+    - I need to replenish my [Tramadol](medication) supply
+    - Can you order more [Bupropion](medication)?
+    - I'd like to get a refill for [Venlafaxine](medication)
+    - Please process a refill for [Carvedilol](medication)
+    - Need to refill [Meloxicam](medication)
+    - Request refill for [Furosemide](medication) please
+    - I need a refill on my blood pressure medication [Lisinopril](medication)
+    - Can you refill my diabetes medication [Metformin](medication)?
+    - I need more of my cholesterol medicine [Atorvastatin](medication)
+    - Requesting refill for thyroid medication [Levothyroxine](medication)
+    - Please refill my [Amlodipine](medication) for blood pressure
+    - I need a refill of my acid reflux medicine [Omeprazole](medication)
+    - Can you order more of my antidepressant [Sertraline](medication)?
+    - I need to request a refill for my pain medication [Gabapentin](medication)
+    - Please refill my heart medication [Metoprolol](medication)
+    - I need more [Losartan](medication) for my blood pressure
+    - Requesting a refill for my anxiety medication [Escitalopram](medication)
+    - I need to refill my rescue inhaler [Albuterol](medication)
+    - Please order more [Pantoprazole](medication) for my GERD
+    - I need a refill of my antidepressant [Fluoxetine](medication)
+    - Can you refill my cholesterol medication [Simvastatin](medication)?
+    - I need more blood thinner [Warfarin](medication)
+    - Requesting refill for my antidepressant [Citalopram](medication)
+    - Please refill my nerve pain medication [Duloxetine](medication)
+    - I need a refill for my pain medication [Tramadol](medication)
+    - Can you order more of my antidepressant [Bupropion](medication)?
+    - I need to refill my [Venlafaxine](medication) prescription
+    - Please process a refill for my heart medication [Carvedilol](medication)
+    - I need more arthritis medication [Meloxicam](medication)
+    - Requesting a refill for my water pill [Furosemide](medication)
+    - I want to place a refill order for [Lisinopril](medication)
+    - Can you submit a refill request for [Metformin](medication)?
+    - I need to request a prescription refill for [Atorvastatin](medication)
+    - Please help me refill [Levothyroxine](medication)
+    - I'd like to reorder [Amlodipine](medication) please
+    - Need to request more [Omeprazole](medication)
+    - Can you put through a refill for [Sertraline](medication)?
+    - I need to order a refill of [Gabapentin](medication)
+    - Please request a refill for my [Metoprolol](medication)
+    - I want to refill my [Losartan](medication) prescription
+    - Can you help me request a refill for [Escitalopram](medication)?
+    - I need to get a refill on [Albuterol](medication)
+    - Please order a refill of [Pantoprazole](medication)
+    - I need to request more [Fluoxetine](medication)
+    - Can you refill my [Simvastatin](medication) prescription?
+    - I need a refill order for [Warfarin](medication)
+    - Requesting more [Citalopram](medication) please
+    - Please refill my [Duloxetine](medication) prescription
+    - I need to order a refill of [Tramadol](medication)
+    - Can you request a refill for [Bupropion](medication)?
+    - I need to refill my [Venlafaxine](medication) medication
+    - Please process a refill request for [Carvedilol](medication)
+    - I need more [Meloxicam](medication) for my arthritis
+    - Requesting a refill for [Furosemide](medication) please
+    - I need to request a refill
+    - Can you refill my prescription?
+    - I want to order more medication
+    - Please request a refill for me
+    - I need a refill on my medicine
+    - Can you help me refill my prescription?
+    - I'm running low on my medication, need a refill
+    - Request refill please
+    - I need to reorder my prescription
+    - Can you put in a refill request?
+    - I'd like to refill my prescription
+    - Need to get more of my medication
+    - Please order a refill for me
+    - I want to request a refill
+    - Can you refill my medicine for me?
+    - I need a prescription refill
+    - Requesting a refill for my medication
+    - Please refill my prescription
+    - I need to replenish my medication supply
+    - Can you order more of my medicine?
+    - I'd like to get a refill please
+    - Please process a refill for me
+    - Need to refill my medication
+    - Request refill for my prescription please
+    - I need a refill on my prescription
+    - Can you refill my medication please?
+    - I need more of my medicine
+    - Requesting refill for my medication
+    - Please refill my medicine
+    - I need to request a refill for my prescription
+    - Can you order more of my medication?
+    - I need to refill my prescription please
+    - I'd like to request a refill for my medication
+    - Please help me refill my prescription
+    - Need to request more medication
+    - Can you put through a refill for my medicine?
+    - I need to order a refill of my prescription
+    - Please request a refill for my medication
+    - I want to refill my prescription please
+    - Can you help me request a refill for my medicine?
+    - I need to get a refill on my prescription
+    - Please order a refill of my medication
+    - I need to request more of my medicine
+    - Can you refill my prescription for me?
+    - I need a refill order for my medication
+    - Requesting more of my prescription please
+    - Please refill my medication prescription
+    - I need to order a refill of my medicine
+    - Can you request a refill for my prescription?
+    - I need to refill my medication please
+    - Please process a refill request for my prescription
+
+- intent: add_reminder
+  examples: |
+    - add reminder
+    - I want to add a reminder 
+    - I need to set a reminder for [Lisinopril](medication)
+    - Can you remind me to take [Metformin](medication)?
+    - Set up a reminder for [Atorvastatin](medication) please
+    - I want a reminder for my [Levothyroxine](medication)
+    - Please remind me to take [Amlodipine](medication)
+    - Can you create a medication reminder for [Omeprazole](medication)?
+    - I need to be reminded about [Sertraline](medication)
+    - Set a reminder for [Gabapentin](medication)
+    - Remind me to take my [Metoprolol](medication)
+    - I'd like a reminder for [Losartan](medication) please
+    - Can you set up a reminder for [Escitalopram](medication)?
+    - I need a reminder to take [Albuterol](medication)
+    - Please set a reminder for [Pantoprazole](medication)
+    - Remind me about [Fluoxetine](medication) daily
+    - I want to set a reminder for [Simvastatin](medication)
+    - Can you remind me when to take [Warfarin](medication)?
+    - Set up a medication reminder for [Citalopram](medication)
+    - I need a reminder for my [Duloxetine](medication)
+    - Please remind me to take [Tramadol](medication)
+    - Create a reminder for [Bupropion](medication)
+    - I'd like to set a reminder for [Venlafaxine](medication)
+    - Can you set a reminder for my [Carvedilol](medication)?
+    - Remind me to take [Meloxicam](medication) in the morning
+    - I need a reminder for [Furosemide](medication)
+    - Set a medication reminder for [Lisinopril](medication) please
+    - Can you remind me to take my blood pressure medication?
+    - I need a reminder for my diabetes medicine
+    - Set up a reminder for my cholesterol medication
+    - Please remind me to take my thyroid medicine
+    - I want a reminder for my antidepressant
+    - Can you create a reminder for my pain medication?
+    - I need to be reminded about my heart medication
+    - Set a reminder for my allergy medicine
+    - Remind me to take my acid reflux medication
+    - I'd like a reminder for my anxiety medication
+    - Can you set up a reminder for my inhaler?
+    - I need a reminder to take my blood thinner
+    - Please set a reminder for my arthritis medication
+    - Remind me about my water pill daily
+    - I want to set a reminder for my nerve pain medication
+    - Set up a reminder for [Lisinopril](medication) at [8 AM](reminder_time)
+    - Remind me to take [Metformin](medication) [twice a day](per_day_frequency)
+    - I need a reminder for [Atorvastatin](medication) [every evening](reminder_time)
+    - Set a reminder for [Levothyroxine](medication) [in the morning](reminder_time)
+    - Please remind me to take [Amlodipine](medication) [daily](frequency)
+    - Can you create a reminder for [Omeprazole](medication) [before breakfast](reminder_time)?
+    - I need to be reminded about [Sertraline](medication) at [9 AM and 9 PM](reminder_time)
+    - Set a reminder for [Gabapentin](medication) [three times a day](per_day_frequency)
+    - Remind me to take my [Metoprolol](medication) [with food](medication_instructions)
+    - I'd like a reminder for [Losartan](medication) [every morning](reminder_time) please
+    - Can you set up a reminder for [Escitalopram](medication) [at bedtime](reminder_time)?
+    - I need a reminder to take [Albuterol](medication) [as needed](medication_instructions)
+    - Please set a reminder for [Pantoprazole](medication) [30 minutes before meals](reminder_time)
+    - Remind me about [Fluoxetine](medication) [once daily](per_day_frequency)
+    - I want to set a reminder for [Simvastatin](medication) [at night](reminder_time)
+    - Can you remind me when to take [Warfarin](medication) [at the same time each day](medication_instructions)?
+    - Set up a medication reminder for [Citalopram](medication) [in the morning](reminder_time)
+    - I need a reminder for my [Duloxetine](medication) [every day at 8am](reminder_time)
+    - Please remind me to take [Tramadol](medication) [every 6 hours](frequency)
+    - Create a reminder for [Bupropion](medication) [in the morning](reminder_time)
+    - I'd like to set a reminder for [Venlafaxine](medication) [with breakfast](medication_instructions)
+    - Can you set a reminder for my [Carvedilol](medication) [twice daily](per_day_frequency)?
+    - Remind me to take [Meloxicam](medication) [once a day](per_day_frequency)
+    - I need a reminder for [Furosemide](medication) [in the morning](reminder_time)
+    - Set a reminder for [Lisinopril](medication) [10mg](medication_dose) [daily](frequency)
+    - Can you remind me to take my [Metformin](medication) [500mg](medication_dose) [twice a day](per_day_frequency)?
+    - I need to set a reminder
+    - Can you remind me to take my medication?
+    - Set up a medication reminder please
+    - I want a reminder for my medicine
+    - Please remind me to take my pills
+    - Can you create a medication reminder for me?
+    - I need to be reminded about my prescription
+    - Set a reminder for my medication
+    - Remind me to take my medicine
+    - I'd like a reminder for my prescription please
+    - Can you set up a reminder for my pills?
+    - I need a reminder to take my medication
+    - Please set a reminder for my medicine
+    - Remind me about my prescription daily
+    - I want to set a reminder for my medication
+    - Can you remind me when to take my medicine?
+    - Set up a pill reminder for me
+    - I need a reminder for my daily medication
+    - Please remind me to take my prescription
+    - Create a reminder for my medicine
+    - I'd like to set a medication reminder
+    - Can you set a reminder for my daily pills?
+    - Remind me to take my medication on time
+    - I need a reminder system for my meds
+    - Set a daily reminder for my prescription
+    - Can you help me remember to take my medicine?
+    - I want to be reminded about my medications
+    - Please set up a reminder schedule for me
+    - I need medication reminders
+    - Can you remind me daily to take my pills?
+    - Set up a reminder for my prescription refill
+    - I need a reminder to order more medication
+    - Remind me when to request a refill
+    - Set a refill reminder for [Lisinopril](medication)
+    - Can you remind me to order [Metformin](medication) refill?
+    - I need a reminder to refill my [Atorvastatin](medication) prescription
+    - Please remind me when it's time to refill [Levothyroxine](medication)
+    - I want a refill reminder for [Amlodipine](medication)
+    - Set up a reminder to request [Omeprazole](medication) refill
+    - Can you remind me to refill [Sertraline](medication) in 30 days?
+    - I need a reminder to order more [Gabapentin](medication)
+    - Remind me to refill [Metoprolol](medication) next week
+    - Set a refill reminder for [Losartan](medication) please
+    - I want to set a reminder for my medication schedule
+    - Can you help me set up medication times?
+    - I need to organize my medication reminders
+    - Please set up a daily medication schedule for me
+    - I'd like to create a medication routine with reminders
+    - Can you remind me at specific times for my meds?
+    - I need multiple reminders for different medications
+    - Set up reminders for all my prescriptions
+    - I want to manage my medication schedule with reminders
+    - Please help me set up a reminder system for my meds
+    - I need reminders for morning and evening medications
+    - Can you set different reminders for different pills?
+    - I want to be reminded at [9am](reminder_time) for my morning meds
+    - Set an [evening](reminder_time) reminder for my medication
+    - I need a [nighttime](reminder_time) reminder to take my pills
+    - Remind me [before meals](reminder_time) to take my medication
+    - Set a reminder [after dinner](reminder_time) for my medicine
+    - I need a reminder [first thing in the morning](reminder_time)
+    - Remind me [right before bed](reminder_time) to take my meds
+    - Set a reminder for [every Monday, Wednesday, Friday](reminder_day)
+    - I need reminders on [weekdays only](reminder_day)
+    - Remind me on [weekends](reminder_day) to take my medication
+    - Set reminders for [every other day](frequency)
+    - I need a reminder [every 8 hours](frequency)
+    - Remind me [three times daily](per_day_frequency)
+    - Set a reminder [with an alarm](alert_type)
+    - I prefer [voice](alert_type) reminders for my medication
+    - Use [notification](alert_type) reminders please
+    - I want [sound](alert_type) alerts for my meds
+    - Set up a reminder with [voice](alert_type) notification
+    - Can you remind me to take my medication with [alarm](alert_type) sound?
+    - I need a reminder with a [spoken message](alert_type)
+    - Set [vibration](alert_type) reminders for me
+    - I want to create a new medication reminder
+    - Add a reminder for my new prescription
+    - Set up reminders for my recently prescribed medication
+    - I need to add a reminder for a new medicine
+    - Can you create a reminder for my newly prescribed drug?
+    - Please add a reminder for my latest medication
+    - I want to schedule reminders for my new meds
+    - Set up a reminder for my recently started medication
+    - I need to add another medication reminder
+    - Can you help me set up a reminder for a new pill?
+    - Remind me to start my new medication tomorrow
+    - I need a reminder for a medication I just started
+    - Set up a reminder for my new prescription please
+    - I want to be reminded about my recently prescribed medicine
+    - Add a reminder for the medication I just got
 
 # - intent: number_of_times_symptom_occurred
 #   examples: |
