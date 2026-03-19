@@ -13,7 +13,7 @@ class ResponseBuilder:
         self.user_profile = UserProfile(token)
         self.template_manager = TemplateManager()
         self.tracker = tracker
-        logger.debug(f"ResponseBuilder initialized for token: {token[:20]}...")
+        logger.debug(f"ResponseBuilder initialized for token: {token}")
     
     def build_response(self, intent: str, data: Optional[List[Dict[str, Any]]] = None, **context: Any) -> Dict[str, Any]:
         """

@@ -162,6 +162,7 @@ class ActionSessionStart(BaseAction):
         events.append(ActionExecuted("action_listen"))
         
         logger.info(f"Session initialized - active forms cleared, {len(events)} events created")
+        logger.info(f"ActionSessionStart fired for sender: {tracker.sender_id}")
         return events
     
     def run(self, dispatcher: CollectingDispatcher,
@@ -236,7 +237,7 @@ class ActionGreet(BaseAction):
         logger.info(debug_separator("ActionGreet"))
         
         token = tracker.sender_id
-        
+        logger.info(f"sender_id received: '{tracker.sender_id}'")
         # Debug: Show what we have in slots
         logger.debug(f"Slots for greeting:")
         logger.debug(f"  user_name: '{tracker.get_slot('user_name')}'")
@@ -5703,7 +5704,7 @@ class ActionCustomFallback(Action):
         ]
         
         response = random.choice(responses)
-        
+
         attachment = {
             "query_response": response,
             "type": "text",
