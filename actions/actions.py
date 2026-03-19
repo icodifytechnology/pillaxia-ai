@@ -207,7 +207,8 @@ class ActionHandleAppClosed(BaseAction):
             "fuzzy_result", "original_medication_input", 
             "pending_medication_confirmation", "stock_level", "refill_day",
             "frequency", "per_day_frequency", "quantity", "reminder_time",
-            "alert_type", "reminder_day", "current_step", "requested_slot"
+            "alert_type", "reminder_day", "current_step", "requested_slot",
+            "pending_flow_type"
         ] 
 
         for slot in form_slots:
@@ -5571,31 +5572,38 @@ class ActionCustomFallback(Action):
         if pending_flow in ["refill", "reminder"]:
             logger.debug(f"Pending flow detected: {pending_flow}")
 
-            # Try entity first
-            medication_name = next(tracker.get_latest_entity_values("medication"), None)
+            medication_name = None
 
-            # fallback to slot
+            # 1. Try BOTH entity types (medication + medication_name)
+            for entity_key in ["medication", "medication_name"]:
+                medication_name = next(tracker.get_latest_entity_values(entity_key), None)
+                if medication_name:
+                    logger.debug(f"Medication found via entity: {entity_key} = {medication_name}")
+                    break
+
+            # 2. STRICT: fallback ONLY to current message text (no memory, no slot)
             if not medication_name:
-                medication_name = tracker.get_slot("medication")
+                if self._is_likely_medication_mention(user_query):
+                    medication_name = user_query.strip()
+                    logger.debug(f"Medication inferred from text: {medication_name}")
 
-            # fallback to text detection
-            if not medication_name and self._is_likely_medication_mention(user_query):
-                words = user_query.split()
-                medication_name = next(
-                    (w for w in words if w[0].isupper() or w.lower() in self.KNOWN_MEDICATIONS),
-                    user_query.strip()
-                )
-
+            # 3. FINAL SAFETY CHECK: prevent stale slot reuse
             if medication_name:
-                logger.debug(f"Extracted medication: {medication_name}")
+                # ensure it actually appears in current message
+                if medication_name.lower() not in user_query.lower():
+                    logger.debug("Rejecting stale or mismatched medication value")
+                    medication_name = None
 
+            # 4. If valid medication found → continue flow
+            if medication_name:
                 return [
                     SlotSet("medication", medication_name),
                     FollowupAction("action_get_medication_id")
                 ]
 
-            # If still not found → ask user
+            # 5. If still not found → ask user clearly
             response = "Which medication are you referring to?"
+
             dispatcher.utter_message(
                 attachment={
                     "query_response": response,
@@ -5604,6 +5612,7 @@ class ActionCustomFallback(Action):
                     "status": "question"
                 }
             )
+
             return [FollowupAction("action_listen")]
 
         # STRATEGY 1: Pattern matching for common questions
