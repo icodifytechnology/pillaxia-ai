@@ -162,6 +162,18 @@ class PillaxiaAPIClient:
             return True, message
         return False, error
     
+    def update_medication_reminder(self, token: str, reminder_data: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
+        """Save or update a medication reminder."""
+        data, status_code, error = self._make_request(
+            "PUT", "/medication-reminders/update",
+            headers=self._get_auth_headers(token),
+            json=reminder_data
+        )
+        if status_code == 200:
+            message = data.get("message") if data else "Medication reminder updated successfully"
+            return True, message
+        return False, error
+    
     def get_health_records(self, token: str, page: int = 1, page_size: int = 10) -> Optional[Dict[str, Any]]:
         """
         Get user's health records from API.

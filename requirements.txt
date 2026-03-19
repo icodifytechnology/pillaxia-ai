@@ -1,4 +1,5 @@
 absl-py==1.4.0
+absl-py==1.4.0
 aio-pika==8.2.3
 aiofiles==23.2.1
 aiogram==2.15

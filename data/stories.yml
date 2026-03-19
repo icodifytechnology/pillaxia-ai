@@ -327,12 +327,12 @@ stories:
   - intent: next_dose_date
   - action: action_next_dose
 
-- story: Check refill and stock level
-  steps:
-  - intent: refill_due
-  - action: action_refill_information
-  - intent: medication_stock_level
-  - action: action_stock_level
+# - story: Check refill and stock level
+#   steps:
+#   - intent: refill_due
+#   - action: action_refill_information
+#   - intent: medication_stock_level
+#   - action: action_stock_level
 
 - story: Get symptoms and add new ones
   steps:
@@ -363,12 +363,12 @@ stories:
   - action: action_refill_information
 
 
-- story: Check medication stock and symptoms
-  steps:
-  - intent: medication_stock_level
-  - action: action_stock_level
-  - intent: get_symptoms
-  - action: action_symptoms
+# - story: Check medication stock and symptoms
+#   steps:
+#   - intent: medication_stock_level
+#   - action: action_stock_level
+#   - intent: get_symptoms
+#   - action: action_symptoms
 
 - story: medication adherence check without period
   steps:
