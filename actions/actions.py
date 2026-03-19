@@ -164,33 +164,28 @@ class ActionSessionStart(BaseAction):
         logger.info(f"ActionSessionStart fired for sender: {tracker.sender_id}")
         return events
     
-    def run(self, dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        """
-        Override run to handle session start specially
-        """
+    def run(self, dispatcher, tracker, domain):
         logger.info("Starting session initialization")
         
-        # Load all user slots at session start
+        # SessionStarted MUST be first — it resets slots, 
+        # so anything before it gets wiped
+        events = [SessionStarted()]
+        
+        # Now load slots AFTER SessionStarted
         slot_loader = SlotLoader(tracker.sender_id)
         slot_events = slot_loader.load_all_slots(tracker)
         
-        # Log loaded slots
         for event in slot_events:
-            try:
-                logger.debug(f"Loaded slot: {event.key} = {event.value}")
-            except AttributeError:
-                logger.debug(f"Loaded event: {type(event)} - {event}")
+            logger.debug(f"Loaded slot: {event}")
         
-        # Run the actual action logic (which now clears forms)
+        events.extend(slot_events)
+        
+        # Run form cleanup and other session logic
         action_events = self.run_with_slots(dispatcher, tracker, domain)
+        events.extend(action_events)
         
-        # Combine all events - note: SessionStarted comes AFTER our cleanup
-        all_events = slot_events + [SessionStarted()] + action_events
-        logger.info(f"Session initialization complete with {len(all_events)} events")
-        
-        return all_events
+        logger.info(f"Session initialization complete with {len(events)} events")
+        return events
 
 class ActionHandleAppClosed(BaseAction):
     def name(self) -> Text:
