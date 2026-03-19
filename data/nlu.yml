@@ -855,93 +855,108 @@ nlu:
 
 - intent: medication_taken_time
   examples: |
-    - Hey Angela, have I taken my meds today?
-    - Hi Angela, did I take my medication already?
-    - Angela, do you know if I took my pills this morning?
-    - Angela, did I miss a dose today?
-    - Hey, any idea when I last took my meds?
-    - Angela, was I on time with my meds today?
-    - Can you tell me if I remembered my medication, Angela?
-    - Hey Angela, did I forget my pills again?
-    - Angela, have I taken my dose today?
-    - Was it today I took my meds, Angela?
-    - Angela, when was my last dose?
-    - Angela, is it time for my next pill?
-    - Hey Angela, did I take my medication yesterday?
-    - Angela, have I taken anything in the last 24 hours?
-    - Angela, when did I last take my medication?
-    - Did I take my [Lisinopril](medication) today, Angela?
-    - Angela, what time did I have my [Mirtazapine](medication)?
-    - Angela, can you check if I took my [Metformin](medication)?
-    - Did I take [Prednisone](medication) earlier, Angela?
-    - Angela, did I already have my [Atorvastatin](medication)?
-    - Hey Angela, when was my last [Ibuprofen](medication)?
-    - Angela, did I take my [Amlodipine](medication) on time?
-    - Did I take [Omeprazole](medication) this morning, Angela?
-    - Angela, have I taken [Levothyroxine](medication) yet today?
-    - When was my last [Simvastatin](medication), Angela?
-    - Angela, did I take my [Gabapentin](medication) this afternoon?
-    - Did I remember my [Losartan](medication), Angela?
-    - Angela, did I take [Hydrochlorothiazide](medication) last night?
-    - Hey Angela, when did I last have my [Citalopram](medication)?
-    - Angela, did I take [Clopidogrel](medication) yesterday?
-    - Did I miss [Alprazolam](medication) this morning, Angela?
-    - Angela, when was my last [Lisinopril](medication) dose?
-    - Angela, have I taken [Metoprolol](medication) today?
-    - Angela, did I take [Sertraline](medication) in the past 24 hours?
-    - Angela, was my last [Bupropion](medication) dose last night?
-    - Did I already take [Zolpidem](medication) today, Angela?
-    - Angela, did I remember my [Warfarin](medication) yesterday?
-    - When did I take [Meloxicam](medication), Angela?
-    - Angela, did I have [Furosemide](medication) yesterday?
-    - Can you check if I had [Enalapril](medication) today, Angela?
-    - Angela, when did I last take [Escitalopram](medication)?
-    - Hey Angela, did I take my meds today?
-    - Hi Angela, did I remember my medication?
-    - Angela, have I taken my pills yet?
-    - Angela, did I forget my dose today?
-    - Hey, do you know if I took my meds?
-    - Angela, when did I last take my meds?
-    - Can you tell me if I took my medication today, Angela?
-    - Did I take my meds this morning?
-    - Angela, was I on schedule with my pills?
-    - Did I already take my [Lisinopril](medication) today?
-    - Angela, did I miss my [Metformin](medication) dose?
-    - When did I last take my [Atorvastatin](medication), Angela?
-    - Angela, can you check if I took my [Mirtazapine](medication) this morning?
-    - Did I take my [Prednisone](medication) this afternoon?
-    - Angela, did I already have my [Ibuprofen](medication) today?
-    - Hey Angela, what time did I take my [Amlodipine](medication)?
-    - Angela, did I take my [Omeprazole](medication) on time?
-    - Did I remember my [Levothyroxine](medication) today?
-    - Angela, have I missed any [Simvastatin](medication) doses?
-    - Angela, what time was my last [Gabapentin](medication)?
-    - Did I take my [Losartan](medication) earlier today?
-    - Angela, did I take my [Hydrochlorothiazide](medication) last night?
-    - Hey Angela, did I have my [Citalopram](medication) dose today?
-    - Angela, did I already take my [Clopidogrel](medication)?
-    - Did I miss my [Alprazolam](medication) dose this morning?
-    - Angela, what time did I take my last [Lisinopril](medication)?
-    - Angela, did I take my [Metoprolol](medication) today?
-    - Did I take my [Sertraline](medication) in the last 24 hours?
-    - Was my last [Bupropion](medication) dose yesterday night, Angela?
-    - Did I already take my [Zolpidem](medication) today?
-    - Angela, did I remember my [Warfarin](medication) yesterday?
-    - When was my last [Meloxicam](medication) dose?
-    - Angela, did I take my [Furosemide](medication) yesterday?
-    - Can you check if I had my [Enalapril](medication) today?
-    - Angela, when did I last take [Escitalopram](medication)?
-    - Did I take my pills for today yet?
-    - Angela, what doses have I taken today?
-    - Did I take my morning meds already?
-    - Angela, have I taken all my meds today?
-    - Did I take my afternoon pills yet?
-    - Angela, check if I took my evening meds
-    - Did I miss any doses today, Angela?
-    - Angela, confirm if I took my [medication] today
-    - When was my last dose of [medication], Angela?
-    - Angela, did I take my [medication] on schedule?
-    - Can you tell me if I took my [medication] today?
+    - have I taken my meds today
+    - did I take my medication already
+    - do you know if I took my pills this morning
+    - did I miss a dose today
+    - when did I last take my meds
+    - was I on time with my meds today
+    - can you check if I took my medication
+    - did I forget my pills again
+    - have I taken my dose today
+    - when was my last dose
+    - is it time for my next pill
+    - did I take my medication yesterday
+    - have I taken anything in the last 24 hours
+    - when did I last take my medication
+    - did I take my meds this morning
+    - have I taken my pills yet
+    - did I forget my dose today
+    - do you know if I took my meds
+    - was I on schedule with my pills
+    - did I take my pills for today yet
+    - what doses have I taken today
+    - did I take my morning meds already
+    - have I taken all my meds today
+    - did I take my afternoon pills yet
+    - check if I took my evening meds
+    - did I miss any doses today
+    - did I already take today's dose
+    - did I take anything today
+    - have I taken my medication so far today
+    - did I take my pills already or not
+    - can you remind me if I took my meds
+    - I can't remember if I took my medication today
+    - did I skip my meds today
+    - did I take my medication earlier today
+    - have I taken my meds this evening
+    - did I take my night dose yet
+    - did I take my meds before bed
+    - did I already have my morning dose
+    - did I take my meds after lunch
+    - did I take anything this afternoon
+    - when did I last have my pills
+    - did I already log my medication today
+    - is my medication already taken for today
+    - did I take all my scheduled meds today
+    - did I complete my doses today
+    - am I up to date with my medication
+    - did I miss taking anything today
+    - have I skipped any medication today
+    - did I take my meds too late today
+    - did I take my meds within the correct time
+    - did I take my pills at the right time today
+    - did I already check off my meds
+    - did I log my dose for today
+    - what time did I last take any meds
+    - did I take something in the last few hours
+    - did I take my meds recently
+    - did I just take my medication
+    - did I take my meds a while ago
+    - did I already take today's pills or not
+    - did I take my medication properly today
+    - did I follow my medication schedule today
+    - have I taken my meds like I was supposed to
+    - did I forget to take anything today
+    - did I remember all my doses today
+    - did I finish today's medication
+    - did I take any pills today so far
+    - what was the last medication I took and when
+    - did I take something earlier or am I mistaken
+    - can you confirm if I took my meds today
+    - did I take my [Lisinopril](medication) today
+    - what time did I have my [Mirtazapine](medication)
+    - check if I took my [Metformin](medication)
+    - did I take [Prednisone](medication) earlier
+    - did I already have my [Atorvastatin](medication)
+    - when was my last [Ibuprofen](medication)
+    - did I take my [Amlodipine](medication) on time
+    - did I take [Omeprazole](medication) this morning
+    - have I taken [Levothyroxine](medication) yet today
+    - when was my last [Simvastatin](medication)
+    - did I take my [Gabapentin](medication) this afternoon
+    - did I remember my [Losartan](medication)
+    - did I take [Hydrochlorothiazide](medication) last night
+    - when did I last have my [Citalopram](medication)
+    - did I take [Clopidogrel](medication) yesterday
+    - did I miss [Alprazolam](medication) this morning
+    - when was my last [Lisinopril](medication) dose
+    - have I taken [Metoprolol](medication) today
+    - did I take [Sertraline](medication) in the last 24 hours
+    - was my last [Bupropion](medication) dose last night
+    - did I already take [Zolpidem](medication) today
+    - did I remember my [Warfarin](medication) yesterday
+    - when did I take [Meloxicam](medication)
+    - did I have [Furosemide](medication) yesterday
+    - check if I had [Enalapril](medication) today
+    - when did I last take [Escitalopram](medication)
+    - did I take my [medication] today
+    - when was my last dose of [medication]
+    - did I take my [medication] on schedule
+    - can you tell me if I took my [medication] today
+    - did I already take my [medication]
+    - have I taken my [medication] yet
+    - did I miss my [medication] dose
 
 - intent: next_dose_date
   examples: |

@@ -4173,13 +4173,6 @@ class ActionCustomFallback(Action):
             },
             {
                 "patterns": [
-                    r"how (?:do|can|to) (?:i|you) (?:add|set up|create)",
-                    r"how (?:do|can|to) add medication"
-                ],
-                "response": "To add a medication, simply say 'add medication' and I'll guide you through the process step by step!"
-            },
-            {
-                "patterns": [
                     r"how (?:do|can|to) (?:set|create) reminder",
                     r"how (?:do|to) set up reminder"
                 ],
@@ -5537,7 +5530,7 @@ class ActionCustomFallback(Action):
             
         # CRITICAL FIX: Check if this is actually a refill query
         # Look for refill-related keywords in the query
-        refill_keywords = ['refill', 'due', 'when', 'date', 'eligible', 'available', 'time', 'soon', 'ready']
+        refill_keywords = ['refill', 'due']
         has_refill_keywords = any(keyword in user_query_lower for keyword in refill_keywords)
         
         # If it has refill keywords and contains a medication mention, it's likely a refill query
@@ -5584,56 +5577,10 @@ class ActionCustomFallback(Action):
                 if re.search(pattern, user_query_lower):
                     logger.debug(f"Pattern matched: '{pattern}'")
                     return self._send_response(dispatcher, pattern_config["response"])
-        
-        # STRATEGY 2: Check if user might be mentioning a medication (but not for refill)
-        if self._is_likely_medication_mention(user_query):
-            logger.debug("Potential medication mention detected (non-refill)")
-            result = self._handle_medication_mention(dispatcher, tracker, user_query)  # Pass tracker here
-            
-            # Check if result is a string (menu) or list of actions (redirect)
-            if isinstance(result, str):
-                return self._send_response(dispatcher, result)
-            else:
-                return result  # Return the actions directly
-        
-        # Rest of your existing fallback logic...
-        # STRATEGY 3: Very short queries (1-2 words) that aren't intents
-        word_count = len(user_query.split())
-        if word_count <= 2:
-            logger.debug("Short query with no intent match")
-            response = self._get_helpful_suggestion()
-            return self._send_response(dispatcher, response)
-        
-        # STRATEGY 4: Greeting-like phrases that might not match greet intent
-        greeting_words = ["hi", "hello", "hey", "howdy", "good morning", "good afternoon", "good evening"]
-        if any(greeting in user_query_lower for greeting in greeting_words):
-            logger.debug("Greeting-like phrase detected")
-            return self._send_response(dispatcher, "Hello! How can I help you with your medications today?")
-        
-        # STRATEGY 5: Check for questions about time/reminders
-        time_words = ["when", "what time", "schedule", "remind"]
-        if any(word in user_query_lower for word in time_words):
-            logger.debug("Time-related query detected")
-            response = "To manage reminders, you can say:\n• 'set reminder' to create a new reminder\n• 'my reminders' to see your current reminders\n• 'today's medications' to see today's schedule"
-            return self._send_response(dispatcher, response)
-        
-        # STRATEGY 6: Check for stock/refill related queries
-        stock_words = ["stock", "refill", "how many", "left", "running out", "low"]
-        if any(word in user_query_lower for word in stock_words):
-            logger.debug("Stock/refill related query detected")
-            response = "To check refills or stock levels, you can say:\n• 'refill due' to see what needs refilling\n• 'check stock' for a specific medication\n• 'request refill' to order more"
-            return self._send_response(dispatcher, response)
-        
-        # STRATEGY 7: Check for symptom reporting
-        symptom_words = ["symptom", "feeling", "pain", "hurt", "ache", "side effect"]
-        if any(word in user_query_lower for word in symptom_words):
-            logger.debug("Symptom-related query detected")
-            response = "To track symptoms, you can say:\n• 'record symptoms' to log new symptoms\n• 'my symptoms' to see your symptom history"
-            return self._send_response(dispatcher, response)
-        
-        # FINAL: If no patterns match, use OpenAI
+
+        # If no patterns match, use OpenAI
         logger.debug("No patterns matched - using OpenAI fallback")
-        return self._openai_fallback(dispatcher, tracker)
+        return self._fallback_response(dispatcher, tracker)
 
     def _handle_affirm_deny(self, dispatcher, tracker, intent):
         """Handle affirm and deny intents when there's a pending flow"""
@@ -5729,73 +5676,88 @@ class ActionCustomFallback(Action):
         # No pending flow - show the generic menu
         return f"I notice you mentioned '{text}'. If you'd like to manage this medication, you can say:\n• 'add medication' to add it to your list\n• 'check dosage' for dosage information\n• 'set reminder' to create a reminder\n• 'check refill' for refill status"
 
-    def _get_helpful_suggestion(self):
-        """Get a helpful suggestion for short/unclear queries"""
-        suggestions = [
-            "I'm not sure I understood. Here are some things you can ask me:\n• 'Add medication'\n• 'List my medications'\n• 'Today's medications'\n• 'Set reminder'\n• 'Request refill'",
-            "I didn't catch that. Would you like to:\n• Add a new medication?\n• Check your medication list?\n• Set up a reminder?\n• Track your symptoms?",
-            "I'm here to help with medication management! You can say things like:\n• 'Add aspirin'\n• 'Show my medications'\n• 'Remind me at 9am'\n• 'I need a refill'"
-        ]
-        import random
-        return random.choice(suggestions)
-
     def _send_response(self, dispatcher, text):
         """Send a text response"""
         attachment = {
             "query_response": text,
-            "data": [],
+            "type": "text",
+            "status": "success"
+        }
+        dispatcher.utter_message(attachment=attachment)
+        return []
+    
+    def _fallback_response(self, dispatcher, tracker ):
+        """Send a text response"""
+        
+        responses = [
+            "I’m a medical assistant, and that’s currently outside my scope of support.",
+            "As a medical assistant, I’m not able to help with that request right now.",
+            "I’m here as a medical assistant, so I’m limited in what I can assist with, and this falls outside that.",
+            "I’m a medical assistant, and I’m not equipped to handle that request at the moment.",
+            "That seems to be beyond what I can support as a medical assistant right now.",
+            "I’m currently limited in my role as a medical assistant, so I can’t assist with that.",
+            "As a medical assistant, I can only help with certain types of queries, and this is outside my scope.",
+            "I’m here to support as a medical assistant, but I’m unable to help with that request.",
+            "That’s outside what I can currently assist with in my role as a medical assistant.",
+            "I’m a medical assistant, so I have some limitations, and I can’t help with that right now."
+        ]
+        
+        response = random.choice(responses)
+        
+        attachment = {
+            "query_response": response,
             "type": "text",
             "status": "success"
         }
         dispatcher.utter_message(attachment=attachment)
         return []
 
-    def _openai_fallback(self, dispatcher, tracker):
-        """Your existing OpenAI fallback logic"""
-        logger.debug("Using OpenAI fallback")
+    # def _openai_fallback(self, dispatcher, tracker):
+    #     """Your existing OpenAI fallback logic"""
+    #     logger.debug("Using OpenAI fallback")
         
-        prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
-                    1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
-                    2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
-                    3.If a user asks for medication recommendations, respond with: "I'm a simple medical assistant chatbot, and I'm not allowed to suggest any medication. Please consult a doctor or pharmacist for proper guidance."
-                    4.Keep responses short, precise, and conversational, mimicking natural human interactions.
-                    5.Emphasize the importance of consulting a doctor or pharmacist for medication advice.
-                    6.Avoid giving specific dosages to prevent misuse.
-                    7.Provide general information about side effects but direct users to reliable sources like medication leaflets or healthcare professionals for detailed guidance.
-                    8.Do not assist with non-medical queries.
-                    9.Offer only relevant information, ensuring it aligns with the user's needs.
-                    10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
-                """  
+    #     prompt = """You are 'Angela,' a helpful, trustworthy, and informative medical assistant. Follow these guidelines:
+    #                 1.Respond to users’ health-related queries by providing clear, concise, and accurate information in a simple text to help them understand their concerns and direct them to appropriate resources.
+    #                 2.Offer general health information and symptom assessments, but do not diagnose illnesses or prescribe medications.
+    #                 3.If a user asks for medication recommendations, respond with: "I'm a simple medical assistant chatbot, and I'm not allowed to suggest any medication. Please consult a doctor or pharmacist for proper guidance."
+    #                 4.Keep responses short, precise, and conversational, mimicking natural human interactions.
+    #                 5.Emphasize the importance of consulting a doctor or pharmacist for medication advice.
+    #                 6.Avoid giving specific dosages to prevent misuse.
+    #                 7.Provide general information about side effects but direct users to reliable sources like medication leaflets or healthcare professionals for detailed guidance.
+    #                 8.Do not assist with non-medical queries.
+    #                 9.Offer only relevant information, ensuring it aligns with the user's needs.
+    #                 10. If a user asks a non-medical question, respond with: "I'm a medical assistant, and I'm unable to help with your query."
+    #             """  
         
-        try:
-            user_query = tracker.latest_message['text']
-            import openai
-            response = openai.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": prompt},
-                    {"role": "user", "content": "What's the best medication for my cough?"},
-                    {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
-                    {"role": "user", "content": user_query}
-                ]
-            )
-            data = response.choices[0].message.content
+    #     try:
+    #         user_query = tracker.latest_message['text']
+    #         import openai
+    #         response = openai.chat.completions.create(
+    #             model="gpt-4o",
+    #             messages=[
+    #                 {"role": "system", "content": prompt},
+    #                 {"role": "user", "content": "What's the best medication for my cough?"},
+    #                 {"role": "assistant", "content": "I understand you're looking for relief from your cough. While I can't recommend specific medications, I suggest consulting a doctor if your cough persists."},
+    #                 {"role": "user", "content": user_query}
+    #             ]
+    #         )
+    #         data = response.choices[0].message.content
 
-            attachment = {
-                "query_response": data,
-                "data": [],
-                "type": "text",
-                "status": "success"
-            }
+    #         attachment = {
+    #             "query_response": data,
+    #             "data": [],
+    #             "type": "text",
+    #             "status": "success"
+    #         }
 
-        except Exception as e:
-            logger.error(f"OpenAI error: {e}")
-            attachment = {
-                "query_response": "I'm having trouble processing your request right now. Please try again later.",
-                "data": [],
-                "type": "text",
-                "status": "failed"
-            }
+    #     except Exception as e:
+    #         logger.error(f"OpenAI error: {e}")
+    #         attachment = {
+    #             "query_response": "I'm having trouble processing your request right now. Please try again later.",
+    #             "data": [],
+    #             "type": "text",
+    #             "status": "failed"
+    #         }
 
-        dispatcher.utter_message(attachment=attachment)
-        return []
+    #     dispatcher.utter_message(attachment=attachment)
+    #     return []
