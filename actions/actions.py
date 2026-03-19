@@ -88,9 +88,8 @@ class BaseAction(Action, ABC):
                 
                 # Import locally to avoid circular issues
                 from .helpers.slot_loader import SlotLoader
-                if not hasattr(self, '_slot_loader'):
-                    self._slot_loader = SlotLoader(tracker.sender_id)
-                return self._slot_loader.load_all_slots(tracker)
+                slot_loader = SlotLoader(tracker.sender_id)
+                return slot_loader.load_all_slots(tracker)
         
         logger.debug("All slots already loaded")
         return []
