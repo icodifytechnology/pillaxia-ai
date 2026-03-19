@@ -5565,6 +5565,47 @@ class ActionCustomFallback(Action):
                 dispatcher.utter_message(attachment=attachment)
                 return [FollowupAction("action_listen")]
         
+        # ========== HANDLE PENDING FLOW + MEDICATION ==========
+        pending_flow = tracker.get_slot("pending_flow_type")
+
+        if pending_flow in ["refill", "reminder"]:
+            logger.debug(f"Pending flow detected: {pending_flow}")
+
+            # Try entity first
+            medication_name = next(tracker.get_latest_entity_values("medication"), None)
+
+            # fallback to slot
+            if not medication_name:
+                medication_name = tracker.get_slot("medication")
+
+            # fallback to text detection
+            if not medication_name and self._is_likely_medication_mention(user_query):
+                words = user_query.split()
+                medication_name = next(
+                    (w for w in words if w[0].isupper() or w.lower() in self.KNOWN_MEDICATIONS),
+                    user_query.strip()
+                )
+
+            if medication_name:
+                logger.debug(f"Extracted medication: {medication_name}")
+
+                return [
+                    SlotSet("medication", medication_name),
+                    FollowupAction("action_get_medication_id")
+                ]
+
+            # If still not found → ask user
+            response = "Which medication are you referring to?"
+            dispatcher.utter_message(
+                attachment={
+                    "query_response": response,
+                    "data": [],
+                    "type": "text",
+                    "status": "question"
+                }
+            )
+            return [FollowupAction("action_listen")]
+
         # STRATEGY 1: Pattern matching for common questions
         import re
         for pattern_config in self.PATTERN_RESPONSES:
