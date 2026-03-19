@@ -1326,6 +1326,7 @@ nlu:
   examples: |
     - add reminder
     - I want to add a reminder 
+    - I want to add a reminder for Sinex
     - I need to set a reminder for [Lisinopril](medication)
     - Can you remind me to take [Metformin](medication)?
     - Set up a reminder for [Atorvastatin](medication) please

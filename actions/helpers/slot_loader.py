@@ -27,7 +27,7 @@ class SlotLoader:
     def __init__(self, token: str):
         """Initialize with user token for profile access."""
         self.profile = UserProfile(token)
-        logger.debug(f"SlotLoader initialized for token: {token[:20]}...")
+        logger.debug(f"SlotLoader initialized for token: {token}...")
     
     def load_all_slots(self, tracker: Tracker) -> List[SlotSet]:
         """Load name, timezone, and tone slots from profile."""
@@ -47,6 +47,8 @@ class SlotLoader:
         events.append(SlotSet("user_timezone", self._extract_timezone(profile_data)))
         events.append(SlotSet("preferred_tone", self._extract_tone(profile_data)))
         
+        logger.info(f"Profile fetched for token: {self.profile.token}...")
+        logger.info(f"Name extracted: {self._extract_name(profile_data)}")
         logger.info(f"Loaded {len(events)} slots")
         return events
     
