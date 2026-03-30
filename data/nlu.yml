@@ -50,6 +50,11 @@ nlu:
     - /app_closed
     - /app_closed{"event": "closed"}
 
+- intent: inactive_user
+  examples: |
+    - /inactive_user
+    - /inactive_user{"event": "inactive"}
+
 - intent: affirm
   examples: |
     - yes

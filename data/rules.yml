@@ -35,6 +35,11 @@ rules:
     - intent: app_closed
     - action: action_handle_app_closed
 
+# - rule: Handle inactive user
+#   steps:
+#     - intent: inactive_user
+#     - action: action_handle_inactive_user
+
 - rule: Greet anytime the user Greets
   steps:
   - intent: greet

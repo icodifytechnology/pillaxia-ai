@@ -216,6 +216,36 @@ class ActionHandleAppClosed(BaseAction):
                 events.append(SlotSet(slot, None))
         
         return events
+
+# class ActionHandleInactiveUser(BaseAction):
+#     def name(self) -> Text:
+#         return "action_handle_inactive_user"
+    
+#     def run_with_slots(self, dispatcher, tracker, domain):
+#         logger.info(f"User: {tracker.sender_id}")
+        
+#         events = []
+        
+#         # Deactivate any active forms
+#         if tracker.active_loop:
+#             events.append(ActiveLoop(None))
+        
+#         # Clear form slots (same list as above)
+#         form_slots = [
+#             "medication_name", "medication_type", "medication_colour", 
+#             "medication_dose", "medication_instructions", "form_prompt",
+#             "fuzzy_result", "original_medication_input", 
+#             "pending_medication_confirmation", "stock_level", "refill_day",
+#             "frequency", "per_day_frequency", "quantity", "reminder_time",
+#             "alert_type", "reminder_day", "current_step", "requested_slot",
+#             "pending_flow_type"
+#         ] 
+
+#         for slot in form_slots:
+#             if tracker.get_slot(slot) is not None:
+#                 events.append(SlotSet(slot, None))
+        
+#         return events
     
 class ActionGreet(BaseAction):
     """Personalized greeting action"""
